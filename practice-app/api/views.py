@@ -12,6 +12,7 @@ from rest_framework.renderers import JSONRenderer
 import urllib.parse as urlparse
 from urllib.parse import urlencode
 import requests
+import json
 
 class StoryList(APIView):
     """
@@ -68,7 +69,47 @@ class StoryListDetail(APIView):
         story.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-def location(request, pk, format=None):
+def location(request, format=None):
+    story = Story.objects.all()
+    dic = {}
+    for s in story:
+        location = s.location
+        location = location.split(' ')
+        location = "+".join(location)
+        url = "https://maps.googleapis.com/maps/api/geocode/json"
+        params = {"address":location, "key":"AIzaSyAD2l090z5SVkvr6hKxjwr-2h4jA-neLhA"}
+        url_parse = urlparse.urlparse(url)
+        query = url_parse.query
+        url_dict = dict(urlparse.parse_qsl(query))
+        url_dict.update(params)
+        url_new_query = urlparse.urlencode(url_dict)
+        url_parse = url_parse._replace(query=url_new_query)
+        new_url = urlparse.urlunparse(url_parse)
+        response = requests.get(new_url)
+        json_data = json.loads(response.content)
+        dic[s.id] = json_data
+    return JsonResponse(dic)
+
+
+def locationID(request, pk, format=None):
+    story = Story.objects.get(pk=pk)
+    location = story.location
+    location = location.split(' ')
+    location = "+".join(location)
+    url = "https://maps.googleapis.com/maps/api/geocode/json"
+    params = {"address":location, "key":"AIzaSyAD2l090z5SVkvr6hKxjwr-2h4jA-neLhA"}
+    url_parse = urlparse.urlparse(url)
+    query = url_parse.query
+    url_dict = dict(urlparse.parse_qsl(query))
+    url_dict.update(params)
+    url_new_query = urlparse.urlencode(url_dict)
+    url_parse = url_parse._replace(query=url_new_query)
+    new_url = urlparse.urlunparse(url_parse)
+    response = requests.get(new_url)
+    json_data = json.loads(response.content)
+    return JsonResponse({story.id:json_data})
+
+def locationMap(request, pk, format=None):
     story = Story.objects.get(pk=pk)
     location = story.location
     location = location.split(' ')
@@ -84,4 +125,3 @@ def location(request, pk, format=None):
     new_url = urlparse.urlunparse(url_parse)
     response = requests.get(new_url)
     return HttpResponse(response.content, content_type="image/png")
-    # return JsonResponse({"url":new_url})
