@@ -1,4 +1,2 @@
 .vscode/*
-.practice_app/api/__pycache__/*
-.practice_app/api/migrations/__pycache__/*
-.practice_app/practice/__pycache__/*
+__pycache__
