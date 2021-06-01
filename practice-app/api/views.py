@@ -24,8 +24,8 @@ def weather(request,post_id):
     timezone=weather['timezone']/3600
     return JsonResponse({
         'condition':condition,
-        'temperature':temperature-(273.15),
-        'feel':feel-(273.15),
+        'temperature':round(temperature-(273.15),2),
+        'feel':round(feel-(273.15),2),
         'wind':wind,
         'country':country,
         'time_zone':timezone
