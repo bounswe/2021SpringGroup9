@@ -1,15 +1,20 @@
 from django.shortcuts import render
 import requests
 from django.views.decorators.csrf import csrf_exempt
-from "./models.py" import Post
+from .models import Post
+from django.http import JsonResponse
 import json
+import environ
 
 # Create your views here.
+env = environ.Env(DEBUG=(bool, False))
+environ.Env.read_env()
+WEATHER_API_KEY=env('WEATHER_API_KEY')
 
 @csrf_exempt
 def weather(request,post_id):
-    post=Post.objects.filter(id__exact=post_id).get()
-    resp=requests.get("http://api.openweathermap.org/data/2.5/weather?lat=%s&lon=%s&appid=%s" % (post.latitude,post.longitude,"168f38507b873881df14be6e27c4326c"))
+    post=Post.objects.get(id=post_id)
+    resp=requests.get("http://api.openweathermap.org/data/2.5/weather?lat=%s&lon=%s&appid=%s" % (post.latitude,post.longitude,WEATHER_API_KEY))
     weather=resp.json()
     condition=weather['weather'][0]['main']
     temperature=weather['main']['temp']
@@ -17,7 +22,7 @@ def weather(request,post_id):
     wind=weather['wind']['speed']
     country=weather['sys']['country']
     timezone=weather['timezone']/3600
-    return json.dumps({
+    return JsonResponse({
         'condition':condition,
         'temperature':temperature-(273.15),
         'feel':feel-(273.15),
