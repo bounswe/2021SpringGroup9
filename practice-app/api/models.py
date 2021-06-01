@@ -1,14 +1,17 @@
 from django.db import models
 
 # Create your models here.
-from django.db import models
 
-# Create your models here.
-class Post(models.Model):
-    title = models.CharField(max_length = 30)
-    story = models.CharField(max_length = 2500)
-    location_long = models.FloatField()
-    location_lat = models.FloatField()
-    notify_admin = models.BooleanField(default = False)
+class Story(models.Model):
+    title = models.CharField(max_length=200)
+    story = models.CharField(max_length=1000)
+    name = models.CharField(max_length=200)
+    longitude = models.FloatField()
+    latitude = models.FloatField()
+    location = models.CharField(max_length=200)
+    tag = models.CharField(max_length=200)
+    date = models.DateTimeField(auto_now_add=True)
+    notifyAdmin = models.BooleanField(default=False)
+
     def __str__(self):
-        return "%s Where: %f %f \n\n %s" % (self.title, self.location_long, self.location_lat, self.story)
+        return self.title

@@ -1,8 +1,16 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from api.models import Post
+from api.models import Story
 import json
 import http.client, urllib.request, urllib.parse, urllib.error, base64
+
+
+import environ
+
+env = environ.Env(DEBUG=(bool, False))
+environ.Env.read_env()
+tisane_key = env('TISANE_API_KEY')
+
 
 
 # This endpoint adds a post to the database.
@@ -20,7 +28,7 @@ def post_story(request):
 
     headers = {
         'Content-Type': 'application/json',
-        'Ocp-Apim-Subscription-Key': 'e80d208310e94db58b7acb94254b3177',
+        'Ocp-Apim-Subscription-Key': tisane_key,
     }
 
     tisane_body = json.dumps({ "language":"en", "content": request_body['story'], "settings":{} })
@@ -37,9 +45,9 @@ def post_story(request):
 
         #Create and save a post object. 
         #If there was some possible abuse in the text, set the notify_admin flag.
-        created_post = Post(title = request_body['title'], story = request_body['story'], 
-            location_long = request_body['long'], location_lat = request_body['lat'], 
-            notify_admin = ('abuse' in data) )
+        created_post = Story(title = request_body['title'], story = request_body['story'], name = request_body['name'], 
+            longitude = request_body['long'], latitude = request_body['lat'], location = request_body['location'], tag =" ", 
+            notifyAdmin = ('abuse' in data) )
         created_post.save()
 
         #If there was no error, just respond with id.
