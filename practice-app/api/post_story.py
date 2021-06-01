@@ -30,19 +30,20 @@ def post_story(request):
         conn.request("POST", "/parse", tisane_body, headers)
         response = conn.getresponse()
         data = json.loads(response.read())
+        conn.close()
 
-        if('abuse' in data):
-            print(data['abuse'])
+        #if('abuse' in data):
+        #    print(data['abuse'])
 
         #Create and save a post object. 
         #If there was some possible abuse in the text, set the notify_admin flag.
-        Post(title = request_body['title'], story = request_body['story'], 
+        created_post = Post(title = request_body['title'], story = request_body['story'], 
             location_long = request_body['long'], location_lat = request_body['lat'], 
-            notify_admin = ('abuse' in data) ).save()
-        conn.close()
+            notify_admin = ('abuse' in data) )
+        created_post.save()
 
-        #If there was no error, just respond with OK (this is a POST request).
-        return HttpResponse(status = 200)
+        #If there was no error, just respond with id.
+        return JsonResponse(data = {'id' : created_post.id})
     except Exception as e:
         print("[Errno {0}] {1}".format(e.errno, e.strerror))
         return HttpResponse(status = 400)
