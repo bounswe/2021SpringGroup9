@@ -1,3 +1,12 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 
-# Create your tests here.
+
+class GettingPlacesTestCase(TestCase):
+    def test_get_places(self):
+        c = Client()
+        response1 = c.get('nearbyplaces/123123')
+        self.assertEqual(response1.status_code, 404)
+
+        response2 = c.get('nearbyplaces/1')
+        self.assertNotIn(response2.status_code, (404, 500))
+        self.assertNotEqual(response2.json(), [])
