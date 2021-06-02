@@ -1,3 +1,20 @@
-from django.shortcuts import render
+import requests
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
+import environ
 
-# Create your views here.
+@csrf_exempt
+
+def joke(request,category):
+    resp=requests.get("https://api.chucknorris.io/jokes/random?category=%s" % (category))
+    if resp.status_code == 200:
+        resp = resp.json()
+        joke = resp["value"]
+        return JsonResponse({
+            'joke':joke
+        })
+    else: 
+        return JsonResponse({
+            'note' : 'No joke for the given category.'
+        })
