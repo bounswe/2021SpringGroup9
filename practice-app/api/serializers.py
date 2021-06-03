@@ -1,7 +1,15 @@
 from rest_framework import serializers
 from .models import Story
+from .models import Location
 
-class StorySerializer(serializers.HyperlinkedModelSerializer):
+class StorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Story
-        fields = ['id','date', 'user', 'tag', 'location', 'title', 'story']
+        fields = ['id' ,'date', 'name', 'location', 'tag', 'title', 'story', 'notifyAdmin','latitude', 'longitude']
+        read_only_fields = ['notifyAdmin','latitude', 'longitude']
+
+
+class LocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Location
+        fields = ['story_id', 'location_name', 'location_latitude', 'location_longitude']
