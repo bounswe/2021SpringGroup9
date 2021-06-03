@@ -33,4 +33,10 @@ class PostStoryTestCase(TestCase):
     def test_gets_flagged_post(self):
         response = self.client.get('/api/flagged_stories/')
         self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content)['flagged_stories']
+        found_flag = 2 in [story['id'] for story in data] # Post with id = 2 was flagged.
+        self.assertEqual(found_flag, True)
 
+    def test_post_no_data(self):
+        response = self.client.post('/api/story/', data = {}, content_type="application/json")
+        self.assertEqual(response.status_code, 400)

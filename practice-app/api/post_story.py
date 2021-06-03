@@ -24,6 +24,10 @@ def post_story(request):
     # Seting various request parameters.
     request_body = json.loads(request.body)
 
+    for field in ['title', 'story', 'name', 'longitude', 'latitude', 'location']:
+        if field not in request_body.keys():
+            return HttpResponse("Please add field %s in your request" % field, status = 400)
+
     headers = {
         'Content-Type': 'application/json',
         'Ocp-Apim-Subscription-Key': tisane_key,
@@ -50,7 +54,7 @@ def post_story(request):
         return JsonResponse(data = {'id' : created_post.id})
     except Exception as e:
         print("[Errno {0}] {1}".format(e.errno, e.strerror))
-        return HttpResponse(status = 400)
+        return HttpResponse(e.strerror, status = 400)
 
 # Gets flagged stories (notifyAdmin == True) from the database.
 # Only used with get.
