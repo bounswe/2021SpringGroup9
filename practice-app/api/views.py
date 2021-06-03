@@ -1,6 +1,8 @@
 import requests
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from rest_framework import status    
+from rest_framework.response import Response
 import json
 import environ
 
@@ -16,5 +18,5 @@ def joke(request,category):
         })
     else: 
         return JsonResponse({
-            'note' : 'No joke for the given category.'
-        })
+            'status' : 'non-existent'
+        },status = 404) 
