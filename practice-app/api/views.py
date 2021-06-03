@@ -6,26 +6,32 @@ import environ
 from .models import Story
 import requests
 
-def get_covid_numbers(request, post_id):
-    """Returns the new covid cases of the country from which the post is posted"""
+def get_covid_numbers(request, story_id):
+    """
+    Takes a story_id as a parameter and makes a call to Covid API to get 
+    the covid metrics for the location of the Story instance with given story_id.
 
-    # Get the post object
+    Returns the country, current day, new Covid cases, new Covid deaths and total
+    active cases for that country in JSON format.
+    """
+
+    # Get the story object
 
     env = environ.Env(DEBUG=(bool, False))
     environ.Env.read_env()
     COVID_API_KEY = env('COVID_API_KEY')
 
     try:
-        post = Story.objects.get(pk=post_id)
+        story = Story.objects.get(pk=story_id)
     except Story.DoesNotExist:
-        return HttpResponseNotFound(f"Post object with post_id: {post_id} does not exist!")
+        return HttpResponseNotFound(f"Story object with story_id: {story_id} does not exist!")
 
     # Get the covid cases from Covid Api
 
     try:
         url = "https://covid-193.p.rapidapi.com/statistics"
 
-        querystring = {"country":post.location}
+        querystring = {"country":story.location}
 
         headers = {
             'x-rapidapi-key': COVID_API_KEY,
