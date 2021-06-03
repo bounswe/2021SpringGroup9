@@ -27,9 +27,19 @@ class WeatherTest(TestCase):
             notifyAdmin = True
         )
 
-    def test_only_get_requests(self):
+    def test_post_requests(self):
         c=Client()
         resp=c.post("/api/weather/1")
+        self.assertEqual(resp.status_code,400)
+    
+    def test_put_requests(self):
+        c=Client()
+        resp=c.put("/api/weather/1")
+        self.assertEqual(resp.status_code,400)
+    
+    def test_delete_requests(self):
+        c=Client()
+        resp=c.delete("/api/weather/1")
         self.assertEqual(resp.status_code,400)
 
     def test_when_story_does_not_exist(self):
@@ -46,3 +56,9 @@ class WeatherTest(TestCase):
         c=Client()  
         resp=c.get("/api/weather/1")
         self.assertEqual(resp.status_code,200)
+
+    def test_string_type_parameter(self):  
+        c=Client()  
+        resp=c.get("/api/weather/mert")
+        self.assertEqual(resp.status_code,400)
+    
