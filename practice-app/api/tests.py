@@ -3,7 +3,7 @@ from django.test import TestCase, Client
 
 
 class JokesTestCase(TestCase):
-    def test_get_places(self):
+    def test_get_jokes_for_category(self):
         c = Client()
     
         response = c.get('/api/joke/ani')
