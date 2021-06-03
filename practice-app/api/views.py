@@ -5,7 +5,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from django.http import Http404
 import environ
 
 from .serializers import QuoteSerializer
@@ -16,13 +15,16 @@ env = environ.Env(DEBUG=(bool, False))
 environ.Env.read_env() 
 QUOTE_API_KEY = env('QUOTE_API_KEY')
 
-class GetQuote(APIView):        
-    def get(self, request, pid):
+class GetQuoteTag(APIView):    
+    """
+    Get quotes that is tagged with the tag of the given story. 
+    """    
+    def get(self, request, pk):
         likemax = -1
         likeselect = -1
-        post=Story.objects.get(id=pid)
-        tag = post.tag
-        param = {'filter': tag}
+        story=Story.objects.get(id=pk)
+        tag = story.tag
+        param = {'filter': tag, 'type': "tag"}
         url = "https://favqs.com/api/quotes/"
         headers = {"Authorization": 'Token token="{}"'.format(QUOTE_API_KEY)}
         response = requests.get(url, headers=headers, params=param)
@@ -32,10 +34,43 @@ class GetQuote(APIView):
                 likemax = quote['quotes'][i]['favorites_count']
                 likeselect = i
         q = quote['quotes'][likeselect]
+        if q['body'] == 'No quotes found':
+            return Response(q['body']+" tagged with " + tag)
+        
+        qselect = {'id': q['id'],'Quote': q['body'], 'Author': q['author'], 'Likes': q['favorites_count']}
+        return Response(qselect)
+        
+
+class GetQuoteLoc(APIView):
+    """
+    Get quotes that contains the location of the given story. 
+    """    
+    def get(self, request, pk):
+        likemax = -1
+        likeselect = -1
+        story=Story.objects.get(id=pk)
+        location = story.location
+        param = {'filter': location}
+        url = "https://favqs.com/api/quotes/"
+        headers = {"Authorization": 'Token token="{}"'.format(QUOTE_API_KEY)}
+        response = requests.get(url, headers=headers, params=param)
+        quote = response.json()
+        for i in range(len(quote['quotes'])):
+            if quote['quotes'][i]['favorites_count'] > likemax:
+                likemax = quote['quotes'][i]['favorites_count']
+                likeselect = i
+        q = quote['quotes'][likeselect]
+        if q['body'] == 'No quotes found':
+            return Response(q['body']+" with location " + location)
+        
         qselect = {'id': q['id'],'Quote': q['body'], 'Author': q['author'], 'Likes': q['favorites_count']}
         return Response(qselect)
 
+
 class FavQuote(APIView):
+    """
+    Add the quote to the database if it is liked. 
+    """
     def post(self, request, pk):
         quote = {}
         try:
