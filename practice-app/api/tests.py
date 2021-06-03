@@ -1,9 +1,8 @@
 from django.test import TestCase, SimpleTestCase
 from django.urls import reverse, resolve
 from django.test.client import Client
-from .models import Post
+from .models import Story
 from .views import get_covid_numbers
-import json
 
 class TestUrls(SimpleTestCase):
 
@@ -18,9 +17,16 @@ class TestViews(TestCase):
 	def setUp(self):
 		self.client = Client()
 		self.url = reverse('covid_numbers', args=[1])
-		self.post1 = Post.objects.create(
-			post_id = 1,
-			country = 'Australia')
+		self.post1 = Story.objects.create(
+			id = 1,
+			title = 'TestTitle',
+    		story = 'TestStory',
+    		name = 'TestName',
+    		longitude = 1.0,
+    		latitude = 1.0,
+    		location = 'Turkey',
+    		tag = 'TestTag'
+			)
 
 	def test_get_covid_numbers(self):
 

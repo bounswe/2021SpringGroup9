@@ -1,10 +1,9 @@
-from django.shortcuts import render
-from django.http import HttpResponse
 from django.http import HttpResponseServerError
 from django.http import HttpResponseNotFound
 from django.http import JsonResponse
 import json
-from .models import Post
+import environ
+from .models import Story
 import requests
 
 def get_covid_numbers(request, post_id):
@@ -12,9 +11,13 @@ def get_covid_numbers(request, post_id):
 
     # Get the post object
 
+    env = environ.Env(DEBUG=(bool, False))
+    environ.Env.read_env()
+    COVID_API_KEY = env('COVID_API_KEY')
+
     try:
-        post = Post.objects.get(pk=post_id)
-    except Post.DoesNotExist:
+        post = Story.objects.get(pk=post_id)
+    except Story.DoesNotExist:
         return HttpResponseNotFound(f"Post object with post_id: {post_id} does not exist!")
 
     # Get the covid cases from Covid Api
@@ -22,10 +25,10 @@ def get_covid_numbers(request, post_id):
     try:
         url = "https://covid-193.p.rapidapi.com/statistics"
 
-        querystring = {"country":post.country}
+        querystring = {"country":post.location}
 
         headers = {
-            'x-rapidapi-key': "a56619ce73mshdeb6d094975d298p119a08jsn43e51763a65a",
+            'x-rapidapi-key': COVID_API_KEY,
             'x-rapidapi-host': "covid-193.p.rapidapi.com"
             }
 
