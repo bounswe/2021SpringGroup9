@@ -54,29 +54,29 @@ class TranslationTest(TestCase):
 
     def test_only_get_requests(self):
         c=Client()
-        resp_1=c.post("/api/story/2/translate_es")
-        resp_2=c.put("/api/story/2/translate_es")
-        resp_3=c.delete("/api/story/2/translate_es")
+        resp_1=c.post("/api/story/2/translate_es/")
+        resp_2=c.put("/api/story/2/translate_es/")
+        resp_3=c.delete("/api/story/2/translate_es/")
         self.assertEqual(resp_1.status_code,405)
         self.assertEqual(resp_2.status_code,405)
         self.assertEqual(resp_3.status_code,405)
 
     def test_when_story_does_not_exist(self):
         c=Client()
-        resp=c.get("/api/story/3/translate_ne")
+        resp=c.get("/api/story/3/translate_ne/")
         self.assertEqual(resp.status_code,404)
     
     def test_when_translator_api_fails(self):
         c=Client()
-        resp=c.get("/api/story/2/translate_nosuchlanguage")
+        resp=c.get("/api/story/2/translate_nosuchlanguage/")
         self.assertEqual(resp.status_code,404)
 
     def test_short_story(self):
         c=Client()
-        resp=c.get("/api/story/1/translate_jp")
+        resp=c.get("/api/story/1/translate_jp/")
         self.assertEqual(resp.status_code,400)
         
     def test_works_correct(self):  
         c=Client()  
-        resp=c.get("/api/story/2/translate_tr")
+        resp=c.get("/api/story/2/translate_tr/")
         self.assertEqual(resp.status_code,200)
