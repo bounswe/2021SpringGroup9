@@ -10,14 +10,14 @@ environ.Env.read_env()
 GOOGLE_MAPS_API_KEY = env('GOOGLE_MAPS_API_KEY')
 
 
-def get_places_near_story_location(request, story_id):
+def get_places_near_story_location(request, pk):
     """ Returns places near location of the story with given story_id."""
 
     # Get the story object
     try:
-        story = Story.objects.get(id=story_id)
+        story = Story.objects.get(id=pk)
     except Story.DoesNotExist:
-        return HttpResponseNotFound(f"Story object with story_id {story_id} does not exist.")
+        return HttpResponseNotFound(f"Story object with story_id {pk} does not exist.")
 
     # Get list of nearby places using Google Maps API.
     try:
