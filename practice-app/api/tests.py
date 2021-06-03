@@ -12,4 +12,4 @@ class GettingPlacesTestCase(TestCase):
         self.assertNotEqual(response2.json(), [])
 
         response3 = c.get('/api/nearbyplaces/asdfgh')
-        self.assertEqual(response1.status_code, 404)
+        self.assertEqual(response3.status_code, 404)
