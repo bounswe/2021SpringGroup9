@@ -42,7 +42,7 @@ def post_story(request):
         #Create and save a post object. 
         #If there was some possible abuse in the text, set the notifyAdmin flag.
         created_post = Story(title = request_body['title'], story = request_body['story'], name = request_body['name'], 
-            longitude = request_body['long'], latitude = request_body['lat'], location = request_body['location'], tag =" ", 
+            longitude = request_body['longitude'], latitude = request_body['latitude'], location = request_body['location'], tag =" ", 
             notifyAdmin = ('abuse' in data) )
         created_post.save()
 
