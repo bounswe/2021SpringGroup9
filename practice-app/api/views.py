@@ -6,10 +6,15 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from django.http import Http404
+import environ
 
 from .serializers import QuoteSerializer
 from .models import Story
 from .models import Quote
+
+env = environ.Env(DEBUG=(bool, False))
+environ.Env.read_env() 
+QUOTE_API_KEY = env('QUOTE_API_KEY')
 
 class GetQuote(APIView):        
     def get(self, request, pid):
@@ -18,7 +23,9 @@ class GetQuote(APIView):
         post=Story.objects.get(id=pid)
         tag = post.tag
         param = {'filter': tag}
-        response = requests.get("https://favqs.com/api/quotes/", headers={"Authorization": 'Token token="dbfccf589f2ede9fcacfc549d2ec999c"'}, params=param)
+        url = "https://favqs.com/api/quotes/"
+        headers = {"Authorization": 'Token token="{}"'.format(QUOTE_API_KEY)}
+        response = requests.get(url, headers=headers, params=param)
         quote = response.json()
         for i in range(len(quote['quotes'])):
             if quote['quotes'][i]['favorites_count'] > likemax:
@@ -39,7 +46,7 @@ class FavQuote(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Quote.DoesNotExist:
             url = "https://favqs.com/api/quotes/"+str(pk)
-            headers={"Authorization": 'Token token="dbfccf589f2ede9fcacfc549d2ec999c"'}
+            headers={"Authorization": 'Token token="{}"'.format(QUOTE_API_KEY)}
             response = requests.get(url, headers=headers).json()
             print(response)
 
