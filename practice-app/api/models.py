@@ -1,4 +1,7 @@
+from typing import Callable
+
 import datetime
+
 from django.db import models
 from django.db.models.fields.related import ForeignKey
 
@@ -26,6 +29,18 @@ class Story(models.Model):
     def __str__(self):
         return self.title
 
+class Translation(models.Model):
+    story_id = models.ForeignKey('Story', on_delete=models.CASCADE)
+    language = models.CharField(max_length=3)
+    title_trans = models.CharField(max_length=200)
+    story_trans = models.CharField(max_length=1000)
+    
+    class Meta:
+        unique_together = (("story_id", "language"),)
+    
+    def __str__(self):
+        return self.title_trans
+
 
 class Location(models.Model):
     story_id = models.IntegerField()
@@ -35,3 +50,4 @@ class Location(models.Model):
     
     class Meta:
         managed = False
+

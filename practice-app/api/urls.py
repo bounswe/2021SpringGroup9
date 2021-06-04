@@ -1,4 +1,6 @@
 from django.urls import path, include
+from .views import view_translationAPI_niyazi
+from rest_framework.urlpatterns import format_suffix_patterns
 from .views import view_locationAPI
 from .views import jokeAPI_view 
 from .views import view_nearbyplaces
@@ -7,8 +9,9 @@ from .views import views_weatherAPI_mertlkn
 from .views import views_quote
 from .views import views_covidAPI as views
 
-
 urlpatterns = [
+    path('story/<int:pk>/translate_<str:target>/', view_translationAPI_niyazi.TranslationView.as_view()),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('story/', view_locationAPI.StoryList.as_view(), name="list_story"),
     path('story/<int:pk>/', view_locationAPI.StoryListDetail.as_view(), name="detail_story"),
     path('location/', view_locationAPI.Locations.as_view(), name="location_story"),
@@ -25,5 +28,5 @@ urlpatterns = [
     path('posts/covid/<int:story_id>', views.get_covid_numbers, name='covid_numbers'),
 
 ]
-
+urlpatterns = format_suffix_patterns(urlpatterns)
 
