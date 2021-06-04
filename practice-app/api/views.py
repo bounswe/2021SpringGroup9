@@ -36,22 +36,6 @@ class StoryList(GenericAPIView):
         return Response(serializer.data)
 
 
-class StoryPost(GenericAPIView):
-    """
-    Create a story.
-    """
-    queryset = Story.objects.all()
-    serializer_class = StorySerializer
-
-    def post(self, request, format=None):
-        serializer = StorySerializer(data=request.data)
-        if serializer.is_valid():
-            lat, lng = find_coordinates(serializer.validated_data['location'])
-            serializer.save(latitude=lat, longitude=lng)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 class StoryListDetail(GenericAPIView):
     """
     Retrieve, update or delete a story instance.
