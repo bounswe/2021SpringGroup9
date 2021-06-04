@@ -1,15 +1,11 @@
 from django.urls import path, include
-from . import views
+from .views import view_locationAPI
 
 
 urlpatterns = [
-    # path('location/', views.location),
-    path('story/', views.StoryList.as_view(), name="list_story"),
-    path('storypost/', views.StoryPost.as_view(), name="post_story"),
-    path('story/<int:pk>/', views.StoryListDetail.as_view(), name="detail_story"),
-    path('location/', views.Locations.as_view(), name="location_story"),
-    # path('location/<int:pk>/', views.locationID),
-    path('location/<int:pk>/', views.LocationDetail.as_view(), name="location_detail_story"),
-    path('location/map/<int:pk>/', views.locationMap, name="location_map_story")
-    
+    path('story/', view_locationAPI.StoryList.as_view(), name="list_story"),
+    path('story/<int:pk>/', view_locationAPI.StoryListDetail.as_view(), name="detail_story"),
+    path('location/', view_locationAPI.Locations.as_view(), name="location_story"),
+    path('location/<int:pk>/', view_locationAPI.LocationDetail.as_view(), name="location_detail_story"),
+    path('location/map/<int:pk>/', view_locationAPI.locationMap, name="location_map_story")
 ]

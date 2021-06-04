@@ -6,8 +6,8 @@ from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from rest_framework.decorators import api_view
 
-from .serializers import StorySerializer, LocationSerializer 
-from .models import Story, Location
+from ..serializers import StorySerializer, LocationSerializer 
+from ..models import Story, Location
 
 import urllib.parse as urlparse
 from urllib.parse import urlencode
