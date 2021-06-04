@@ -15,3 +15,13 @@ class Story(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Location(models.Model):
+    story_id = models.IntegerField()
+    location_name = models.CharField(max_length=200)
+    location_longitude = models.FloatField()
+    location_latitude = models.FloatField()
+    
+    class Meta:
+        managed = False
