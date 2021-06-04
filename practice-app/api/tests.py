@@ -9,8 +9,8 @@ class GettingPlacesTestCase(TestCase):
             story="Story body",
             name="John",
             latitude=37.184,
-            longitude=-123.798,
-            location="California",
+            longitude=-3,
+            location="Home",
             tag="Travel",
             notifyAdmin=False
         )
@@ -20,8 +20,8 @@ class GettingPlacesTestCase(TestCase):
             story="Your Story body",
             name="Johanna",
             latitude=37.184,
-            longitude=-123.798,
-            location="California",
+            longitude=-3,
+            location="Home",
             tag="Travel",
             notifyAdmin=False
         )
