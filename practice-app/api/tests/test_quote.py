@@ -1,8 +1,8 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from ..views import *
-from ..models import *
+from ..views import views_quote
+from ..models import Quote, Story
 
 
 class TestViews(TestCase):
