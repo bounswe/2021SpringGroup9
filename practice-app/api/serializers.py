@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import *
+from .models.model_translationAPI_niyazi import *
 
 class StorySerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,5 +1,5 @@
 from django.test import TestCase,Client
-from .views import *
+from ..views.view_translationAPI_niyazi import * 
 
 
 class CheckStoryLengthTest(TestCase):

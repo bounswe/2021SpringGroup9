@@ -1,11 +1,11 @@
 from django.http.response import HttpResponse
 from rest_framework.response import Response
-from .models import Story, Translation
+from ..models.model_translationAPI_niyazi import *
 import requests
 import environ
 import json
 from rest_framework import status
-from .serializers import *
+from ..serializers import *
 from rest_framework.generics import GenericAPIView
 
 env = environ.Env()
