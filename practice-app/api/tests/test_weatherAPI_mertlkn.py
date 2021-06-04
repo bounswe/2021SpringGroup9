@@ -1,7 +1,7 @@
 from django.test import TestCase,Client
-from .models import Story
+from ..models import Story
 import requests
-from .views import weather
+from ..views import views_weatherAPI_mertlkn
 # Create your tests here.
 
 class WeatherTest(TestCase):

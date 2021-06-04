@@ -2,7 +2,7 @@ from django.http.response import HttpResponse
 from django.shortcuts import render
 import requests
 from django.views.decorators.csrf import csrf_exempt
-from .models import Story
+from ..models import Story
 from django.http import JsonResponse
 import json
 import environ
