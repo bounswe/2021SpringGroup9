@@ -1,8 +1,8 @@
 from django.test import TestCase, SimpleTestCase
 from django.urls import reverse, resolve
 from django.test.client import Client
-from .models import Story
-from .views import get_covid_numbers
+from ..models import Story
+from ..views import views_covidAPI as views
 
 class TestUrls(SimpleTestCase):
 
@@ -11,7 +11,7 @@ class TestUrls(SimpleTestCase):
 		Tests whether the url is working correctly or not
 		"""
 		url = reverse('covid_numbers', args=[1])
-		self.assertEquals(resolve(url).func, get_covid_numbers)
+		self.assertEquals(resolve(url).func, views.get_covid_numbers)
 
 class TestViews(TestCase):
 

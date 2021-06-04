@@ -3,7 +3,7 @@ from django.http import HttpResponseNotFound
 from django.http import JsonResponse
 import json
 import environ
-from .models import Story
+from ..models import Story
 import requests
 
 def get_covid_numbers(request, story_id):
@@ -55,5 +55,4 @@ def get_covid_numbers(request, story_id):
         return JsonResponse(final_data)
     except:
         return HttpResponseServerError("Error")
-
 
