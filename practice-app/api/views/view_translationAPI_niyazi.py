@@ -1,6 +1,6 @@
 from django.http.response import HttpResponse
 from rest_framework.response import Response
-from ..models.model_translationAPI_niyazi import *
+from ..models import *
 import requests
 import environ
 import json

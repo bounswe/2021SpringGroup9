@@ -1,7 +1,6 @@
 from django.contrib import admin
 
-
-from .models.model_translationAPI_niyazi import *
+from .models import *
 # Register your models here.
 
 admin.site.register(Story)
