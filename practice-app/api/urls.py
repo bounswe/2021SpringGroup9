@@ -1,6 +1,6 @@
 from django.urls import path, include
-from . import views
+from .views import jokeAPI_view 
 
 urlpatterns = [
-    path('joke/<str:category>', views.joke,name = "jokes")
+    path('joke/<str:category>', jokeAPI_view.joke,name = "jokes")
 ] 
