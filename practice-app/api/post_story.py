@@ -11,56 +11,62 @@ env = environ.Env(DEBUG=(bool, False))
 environ.Env.read_env()
 tisane_key = env('TISANE_API_KEY')
 
-
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.generics import GenericAPIView
+from rest_framework.decorators import api_view
 
 # This endpoint adds a post to the database.
 # Also, using a third party api it will do semantic analysis for potential abuse.
-@csrf_exempt 
-def post_story(request):
+class StoryPost(GenericAPIView):
+    """
+    Create a story.
+    """
+    def post(self, request, format=None):
+        # Seting various request parameters.
+        request_body = json.loads(request.body)
 
-    if request.method != 'POST':
-        return HttpResponse('Please use this end point with POST.', status = 400)
+        for field in ['title', 'story', 'name', 'longitude', 'latitude', 'location']:
+            if field not in request_body.keys():
+                return HttpResponse("Please add field %s in your request" % field, status = 400)
 
-    # Seting various request parameters.
-    request_body = json.loads(request.body)
+        headers = {
+            'Content-Type': 'application/json',
+            'Ocp-Apim-Subscription-Key': tisane_key,
+        }
 
-    for field in ['title', 'story', 'name', 'longitude', 'latitude', 'location']:
-        if field not in request_body.keys():
-            return HttpResponse("Please add field %s in your request" % field, status = 400)
+        tisane_body = json.dumps({ "language":"en", "content": request_body['story'], "settings":{} })
 
-    headers = {
-        'Content-Type': 'application/json',
-        'Ocp-Apim-Subscription-Key': tisane_key,
-    }
-
-    tisane_body = json.dumps({ "language":"en", "content": request_body['story'], "settings":{} })
-
-    try:
-        conn = http.client.HTTPSConnection('api.tisane.ai')
-        conn.request("POST", "/parse", tisane_body, headers)
-        response = conn.getresponse()
-        data = json.loads(response.read())
-        conn.close()
+        try:
+            conn = http.client.HTTPSConnection('api.tisane.ai')
+            conn.request("POST", "/parse", tisane_body, headers)
+            response = conn.getresponse()
+            data = json.loads(response.read())
+            conn.close()
 
 
-        #Create and save a post object. 
-        #If there was some possible abuse in the text, set the notifyAdmin flag.
-        created_post = Story(title = request_body['title'], story = request_body['story'], name = request_body['name'], 
-            longitude = request_body['longitude'], latitude = request_body['latitude'], location = request_body['location'], tag =" ", 
-            notifyAdmin = ('abuse' in data) )
-        created_post.save()
+            #Create and save a post object. 
+            #If there was some possible abuse in the text, set the notifyAdmin flag.
+            created_post = Story(title = request_body['title'], story = request_body['story'], name = request_body['name'], 
+                longitude = request_body['longitude'], latitude = request_body['latitude'], location = request_body['location'], tag =" ", 
+                notifyAdmin = ('abuse' in data) )
+            created_post.save()
 
-        #If there was no error, just respond with id.
-        return JsonResponse(data = {'id' : created_post.id})
-    except Exception as e:
-        print("[Errno {0}] {1}".format(e.errno, e.strerror))
-        return HttpResponse(e.strerror, status = 400)
+            #If there was no error, just respond with id.
+            return JsonResponse(data = {'id' : created_post.id})
+        except Exception as e:
+            print("[Errno {0}] {1}".format(e.errno, e.strerror))
+            return HttpResponse(e.strerror, status = 400)
+
+
+
+    
 
 # Gets flagged stories (notifyAdmin == True) from the database.
 # Only used with get.
 def flagged_stories(request):
     if request.method != 'GET':
-        return HttpResponse('Please use this end point with GET.')
+        return HttpResponse('Please use this end point with GET.', 400)
     query = Story.objects.filter(notifyAdmin = True)
     response = {'flagged_stories': []}
     for q in query:
