@@ -30,11 +30,11 @@ class GetQuoteTag(APIView):
         response = requests.get(url, headers=headers, params=param)
         quote = response.json()
         for i in range(len(quote['quotes'])):
-            if quote['quotes'][i]['favorites_count'] > likemax:
+            if quote['quotes'][i]['favorites_count'] > likemax: # get the quote with the most likes tagged with the story's tag in the Favqs API
                 likemax = quote['quotes'][i]['favorites_count']
                 likeselect = i
         q = quote['quotes'][likeselect]
-        if q['body'] == 'No quotes found':
+        if q['body'] == 'No quotes found': # If a quote with that tag doesn't exist
             return Response(q['body']+" tagged with " + tag)
         
         qselect = {'id': q['id'],'Quote': q['body'], 'Author': q['author'], 'Likes': q['favorites_count']}
@@ -56,11 +56,11 @@ class GetQuoteLoc(APIView):
         response = requests.get(url, headers=headers, params=param)
         quote = response.json()
         for i in range(len(quote['quotes'])):
-            if quote['quotes'][i]['favorites_count'] > likemax:
+            if quote['quotes'][i]['favorites_count'] > likemax: # get the quote with the most likes containing the location of the story
                 likemax = quote['quotes'][i]['favorites_count']
                 likeselect = i
         q = quote['quotes'][likeselect]
-        if q['body'] == 'No quotes found':
+        if q['body'] == 'No quotes found': # if no quote contains the location name
             return Response(q['body']+" with location " + location)
         
         qselect = {'id': q['id'],'Quote': q['body'], 'Author': q['author'], 'Likes': q['favorites_count']}
@@ -69,13 +69,13 @@ class GetQuoteLoc(APIView):
 
 class FavQuote(APIView):
     """
-    Add the quote to the database if it is liked. 
+    Add the quote to the database if it is liked. Only the quotes that are retrieved from the Favqs API using a story can be posted.
     """
     def post(self, request, pk):
         quote = {}
         try:
             quote = Quote.objects.get(id=pk)
-            quote.likes += 1
+            quote.likes += 1  # if it is already in the database, increase the number of likes after post request
             quote.save()
             serializer = QuoteSerializer(quote)
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -83,7 +83,6 @@ class FavQuote(APIView):
             url = "https://favqs.com/api/quotes/"+str(pk)
             headers={"Authorization": 'Token token="{}"'.format(QUOTE_API_KEY)}
             response = requests.get(url, headers=headers).json()
-            print(response)
 
             if 'status' in response and response["status"] == 404:
                 return Response(response, status=status.HTTP_404_NOT_FOUND)
