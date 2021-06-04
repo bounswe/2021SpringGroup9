@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from rest_framework.decorators import api_view
-from .serializers import StorySerializer
+from ..serializers import StorySerializer
 import urllib.parse as urlparse
 from urllib.parse import urlencode
 import requests

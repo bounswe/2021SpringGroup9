@@ -1,8 +1,6 @@
 from django.test import TestCase
-from .models import Story
-from .post_story import *
-from unittest import skip
-
+from ..models import Story
+import json
 
 class PostStoryTestCase(TestCase):
 

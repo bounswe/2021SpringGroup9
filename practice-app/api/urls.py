@@ -1,7 +1,7 @@
 from django.urls import include, path
-from . import views
+from .views import view_post_story
 
 urlpatterns = [
-    path('storypost/', views.StoryPost.as_view(), name="post_story"),
-    path('flagged_stories/', views.flagged_stories)
+    path('storypost/', view_post_story.StoryPost.as_view(), name="post_story"),
+    path('flagged_stories/', view_post_story.flagged_stories)
 ]
