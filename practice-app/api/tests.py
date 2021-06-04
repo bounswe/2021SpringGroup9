@@ -6,6 +6,9 @@ from .views import weather
 
 class WeatherTest(TestCase):
     def setUp(self):
+        """
+        An instance that works
+        """
         Story.objects.create(
             title = "Title1",
             story = "Story1",
@@ -16,6 +19,9 @@ class WeatherTest(TestCase):
             tag = "Tag1",
             notifyAdmin = False
         )
+        """
+        An instance with wrong longitude.
+        """
         Story.objects.create(
             title = "Title2",
             story = "Story2",
@@ -27,36 +33,57 @@ class WeatherTest(TestCase):
             notifyAdmin = True
         )
 
+    """
+    Send post request. Should not be allowed.
+    """
     def test_post_requests(self):
         c=Client()
         resp=c.post("/api/weather/1")
         self.assertEqual(resp.status_code,405)
     
+    """
+    Send put request. Should not be allowed.
+    """
     def test_put_requests(self):
         c=Client()
         resp=c.put("/api/weather/1")
         self.assertEqual(resp.status_code,405)
     
+    """
+    Send delete request. Should not be allowed.
+    """
     def test_delete_requests(self):
         c=Client()
         resp=c.delete("/api/weather/1")
         self.assertEqual(resp.status_code,405)
 
+    """
+    Test when an instance does not exists.
+    """
     def test_when_story_does_not_exist(self):
         c=Client()
         resp=c.get("/api/weather/3")
         self.assertEqual(resp.status_code,404)
     
+    """
+    OpenWeather API fails with wrong longitude or latitude.
+    """
     def test_when_openweather_api_fails(self):
         c=Client()
         resp=c.get("/api/weather/2")
         self.assertEqual(resp.status_code,400)
     
+    """
+    This is an instance that works.
+    """
     def test_works_correct(self):  
         c=Client()  
         resp=c.get("/api/weather/1")
         self.assertEqual(resp.status_code,200)
 
+    """
+    When parameter is not an integer type.
+    """
     def test_string_type_parameter(self):  
         c=Client()  
         resp=c.get("/api/weather/mert")
