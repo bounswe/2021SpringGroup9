@@ -3,7 +3,14 @@ from django.views.decorators.csrf import csrf_exempt
 from api.models import Story
 import json
 import http.client, urllib.request, urllib.parse, urllib.error, base64
-
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.generics import GenericAPIView
+from rest_framework.decorators import api_view
+from .serializers import StorySerializer
+import urllib.parse as urlparse
+from urllib.parse import urlencode
+import requests
 
 import environ
 
@@ -11,56 +18,49 @@ env = environ.Env(DEBUG=(bool, False))
 environ.Env.read_env()
 tisane_key = env('TISANE_API_KEY')
 
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.generics import GenericAPIView
-from rest_framework.decorators import api_view
 
 # This endpoint adds a post to the database.
 # Also, using a third party api it will do semantic analysis for potential abuse.
 class StoryPost(GenericAPIView):
-    """
-    Create a story.
-    """
+    queryset = Story.objects.all()
+    serializer_class = StorySerializer
     def post(self, request, format=None):
-        # Seting various request parameters.
-        request_body = json.loads(request.body)
+        serializer = StorySerializer(data=request.data)
+        if serializer.is_valid():
+            lat, lng = find_coordinates(serializer.validated_data['location'])
+            abuse = check_abuse(serializer.validated_data['story'], serializer)
+            if abuse != True and abuse != False:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            serializer.save(notifyAdmin = abuse, latitude=lat, longitude=lng)
+            return Response(serializer.data, status=200)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 
-        for field in ['title', 'story', 'name', 'longitude', 'latitude', 'location']:
-            if field not in request_body.keys():
-                return HttpResponse("Please add field %s in your request" % field, status = 400)
+def check_abuse(story, serializer):
+    #Using a third party api, check if there is possible abuse in text.
+    #If runs correctly will return a boolean variable denoting abuse.
+    #If exception occurs return a HttpResponse of 400.
 
-        headers = {
-            'Content-Type': 'application/json',
-            'Ocp-Apim-Subscription-Key': tisane_key,
-        }
+    # Seting various request parameters.
+    headers = {
+        'Content-Type': 'application/json',
+        'Ocp-Apim-Subscription-Key': tisane_key,
+    }
 
-        tisane_body = json.dumps({ "language":"en", "content": request_body['story'], "settings":{} })
+    tisane_body = json.dumps({ "language":"en", "content": story, "settings":{} })
 
-        try:
-            conn = http.client.HTTPSConnection('api.tisane.ai')
-            conn.request("POST", "/parse", tisane_body, headers)
-            response = conn.getresponse()
-            data = json.loads(response.read())
-            conn.close()
+    try:
+        conn = http.client.HTTPSConnection('api.tisane.ai')
+        conn.request("POST", "/parse", tisane_body, headers)
+        response = conn.getresponse()
+        data = json.loads(response.read())
+        conn.close()
+        
+        return 'abuse' in data
+    except Exception as e:
+        print(e)
+        return HttpResponse(e.strerror, status = 400)
 
-
-            #Create and save a post object. 
-            #If there was some possible abuse in the text, set the notifyAdmin flag.
-            created_post = Story(title = request_body['title'], story = request_body['story'], name = request_body['name'], 
-                longitude = request_body['longitude'], latitude = request_body['latitude'], location = request_body['location'], tag =" ", 
-                notifyAdmin = ('abuse' in data) )
-            created_post.save()
-
-            #If there was no error, just respond with id.
-            return JsonResponse(data = {'id' : created_post.id})
-        except Exception as e:
-            print("[Errno {0}] {1}".format(e.errno, e.strerror))
-            return HttpResponse(e.strerror, status = 400)
-
-
-
-    
 
 # Gets flagged stories (notifyAdmin == True) from the database.
 # Only used with get.
@@ -76,4 +76,32 @@ def flagged_stories(request):
             'story': q.story,
         })
     return JsonResponse(data = response)
-    
+
+
+
+
+
+
+# This part taken from @melihaydogd.
+
+def create_url(url, params):
+    url_parse = urlparse.urlparse(url)
+    query = url_parse.query
+    url_dict = dict(urlparse.parse_qsl(query))
+    url_dict.update(params)
+    url_new_query = urlparse.urlencode(url_dict)
+    url_parse = url_parse._replace(query=url_new_query)
+    new_url = urlparse.urlunparse(url_parse)
+    return new_url
+
+
+def find_coordinates(location):
+    location = location.split(' ')
+    location = "+".join(location)
+    url = "https://maps.googleapis.com/maps/api/geocode/json"
+    params = {"address":location, "key":env('GOOGLE_MAPS_API_KEY')}
+    new_url = create_url(url,params)
+    response = requests.get(new_url)
+    json_data = json.loads(response.content)
+    location = json_data['results'][0]['geometry']['location']
+    return location['lat'], location['lng']

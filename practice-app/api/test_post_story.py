@@ -17,14 +17,14 @@ class PostStoryTestCase(TestCase):
         self.assertEqual(Story.objects.get(notifyAdmin = True).story, "This notifies the admin.")
 
     def test_creates_post(self): 
-        dummy_body = json.dumps({'title':'TEST', 'story': 'STILL TESTING.', 'name':'USER', 
-            'longitude':0, 'latitude': 0 ,'location' : 'somwhere'})
+        dummy_body = json.dumps({'title':'TEST', 'story': 'STILL TESTING.', 'name':'USER',  
+            'longitude':0, 'latitude': 0 ,'location' : 'somwhere', 'tag': 'TESTTAG'})
         response = self.client.post('/api/storypost/', data = dummy_body, content_type="application/json")
         self.assertEqual(response.status_code, 200)
     
     def test_creates_flagged_post(self):
-        dummy_body = json.dumps({'title':'TEST', 'story': 'Just shut up!', 'name':'USER', 
-            'longitude':0, 'latitude': 0 ,'location' : 'somwhere'})
+        dummy_body = json.dumps({'title':'TEST', 'story': 'Just shut up!', 'name':'USER',
+            'longitude':0, 'latitude': 0 ,'location' : 'somwhere', 'tag': 'TESTTAG'})
         response = self.client.post('/api/storypost/', data = dummy_body, content_type="application/json")
         self.assertEqual(response.status_code, 200)
         notify_flag = Story.objects.get(id = response.json()['id']).notifyAdmin
