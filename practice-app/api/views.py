@@ -39,6 +39,6 @@ def get_places_near_story_location(request, pk):
             "location": place["geometry"]["location"],
             "vicinity": place["vicinity"]
         } for place in response.json()["results"]]
-        return JsonResponse(places)
+        return JsonResponse(places, safe=False)
     except:
         return HttpResponseServerError("Unknown error.")
