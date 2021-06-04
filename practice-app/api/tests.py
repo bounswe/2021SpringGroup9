@@ -1,3 +1,72 @@
+from django.test import TestCase, SimpleTestCase
+from django.urls import reverse, resolve
+from django.test.client import Client
+from .models import Story
+from .views import get_covid_numbers
+
+class TestUrls_COVID(SimpleTestCase):
+
+	def test_urls(self):
+		"""
+		Tests whether the url is working correctly or not
+		"""
+		url = reverse('covid_numbers', args=[1])
+		self.assertEquals(resolve(url).func, get_covid_numbers)
+
+class TestViews_COVID(TestCase):
+
+	def setUp(self):
+		"""
+		Sets up the common Client object to use it for GET responses.
+		Also creates the URLs and the Story objects to use later to get responses and also
+		to make comparisons.
+		"""
+		self.client = Client()
+		self.url_valid = reverse('covid_numbers', args=[1])
+		self.url_not_exists = reverse('covid_numbers', args=[5])
+		self.url_invalid = reverse('covid_numbers', args=[2])
+		self.post_valid = Story.objects.create(
+			id = 1,
+			title = 'TestTitle',
+    		story = 'TestStory',
+    		name = 'TestName',
+    		longitude = 1.0,
+    		latitude = 1.0,
+    		location = 'Turkey',
+    		tag = 'TestTag'
+			)
+		self.post_invalid = Story.objects.create(
+			id = 2,
+			title = 'TestTitle',
+    		story = 'TestStory',
+    		name = 'TestName',
+    		longitude = 1.0,
+    		latitude = 1.0,
+    		location = 'Country Not Exists',
+    		tag = 'TestTag'
+			)
+
+	def test_get_covid_numbers_success(self):
+		"""
+		Working test case, URL is as it should be
+		"""
+		response = self.client.get(self.url_valid)
+		self.assertEquals(response.status_code, 200)
+
+	def test_get_covid_numbers_id_not_exists(self):
+		"""
+		Test case for the URL maps to non existing Story instance
+		"""
+		response = self.client.get(self.url_not_exists)
+		self.assertEquals(response.status_code, 404)
+
+	def test_get_covid_numbers_response_fails(self):
+		"""
+		Requests with an invalid country to Covid-19 API
+		"""
+		response = self.client.get(self.url_invalid)
+		self.assertEquals(response.status_code, 500)
+
 from django.test import TestCase,Client
 from .models import *
 import requests
@@ -34,15 +103,11 @@ class CityTest(TestCase):
         self.assertEqual(resp.status_code,404)
 
 
-class TestUrls(TestCase):
+class TestUrls_LOCATION(TestCase):
 
     def test_list_story_url_resolve(self):
         url = reverse('list_story')
         self.assertEqual(resolve(url).func.view_class, StoryList)
-
-    def test_post_story_url_resolve(self):
-        url = reverse('post_story')
-        self.assertEqual(resolve(url).func.view_class, StoryPost)
         
     def test_detail_story_url_resolve(self):
         url = reverse('detail_story', args=[1])
@@ -60,7 +125,7 @@ class TestUrls(TestCase):
         url = reverse('location_map_story', args=[1])
         self.assertEqual(resolve(url).func, locationMap)
 
-class TestViews(TestCase):
+class TestViews_101(TestCase):
 
     def setUp(self):
         self.client = Client()
@@ -81,11 +146,6 @@ class TestViews(TestCase):
         response = self.client.get(reverse('list_story'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content)[0]['name'], 'emre')
-
-    def test_story_POST(self):
-        response = self.client.post(reverse('post_story'), self.mock_data)
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.data['name'], 'melih')
 
     def test_story_GET_detail_1(self):
         response = self.client.get(reverse('detail_story', args = [2]))
@@ -131,7 +191,7 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.headers['Content-type'], 'image/png')
 
-class TestModels(TestCase):
+class TestModels_LOCATION(TestCase):
 
     def setUp(self):
         self.mock_data = Story.objects.create(title = "Çay",
