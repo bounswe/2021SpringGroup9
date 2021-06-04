@@ -1,4 +1,5 @@
-from django.urls import path, include
+from django.urls import include, path
+from .views import view_post_story
 from .views import view_translationAPI_niyazi
 from rest_framework.urlpatterns import format_suffix_patterns
 from .views import view_locationAPI
@@ -10,6 +11,8 @@ from .views import views_quote
 from .views import views_covidAPI as views
 
 urlpatterns = [
+    path('storypost/', view_post_story.StoryPost.as_view(), name="post_story"),
+    path('flagged_stories/', view_post_story.flagged_stories),
     path('story/<int:pk>/translate_<str:target>/', view_translationAPI_niyazi.TranslationView.as_view()),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('story/', view_locationAPI.StoryList.as_view(), name="list_story"),
