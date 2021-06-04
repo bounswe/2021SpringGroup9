@@ -4,6 +4,7 @@ from django.test.client import Client
 from ..models import Story
 from ..views import views_covidAPI as views
 
+
 class TestUrls(SimpleTestCase):
 
 	def test_urls(self):

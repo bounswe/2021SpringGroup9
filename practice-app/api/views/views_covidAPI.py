@@ -10,7 +10,6 @@ def get_covid_numbers(request, story_id):
     """
     Takes a story_id as a parameter and makes a call to Covid API to get 
     the covid metrics for the location of the Story instance with given story_id.
-
     Returns the country, current day, new Covid cases, new Covid deaths and total
     active cases for that country in JSON format.
     """
