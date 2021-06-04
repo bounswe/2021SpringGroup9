@@ -30,17 +30,17 @@ class WeatherTest(TestCase):
     def test_post_requests(self):
         c=Client()
         resp=c.post("/api/weather/1")
-        self.assertEqual(resp.status_code,400)
+        self.assertEqual(resp.status_code,405)
     
     def test_put_requests(self):
         c=Client()
         resp=c.put("/api/weather/1")
-        self.assertEqual(resp.status_code,400)
+        self.assertEqual(resp.status_code,405)
     
     def test_delete_requests(self):
         c=Client()
         resp=c.delete("/api/weather/1")
-        self.assertEqual(resp.status_code,400)
+        self.assertEqual(resp.status_code,405)
 
     def test_when_story_does_not_exist(self):
         c=Client()

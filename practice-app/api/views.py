@@ -17,7 +17,7 @@ def weather(request,story_id):
 
     if(request.method!='GET'):
         httpresponse=HttpResponse('Only GET method is available for this API')
-        httpresponse.status_code=400
+        httpresponse.status_code=405
         return httpresponse
 
     if(not isinstance(story_id,int)):
