@@ -1,7 +1,6 @@
 from django.urls import include, path
 from .views import view_post_story
 from .views import view_translationAPI_niyazi
-from rest_framework.urlpatterns import format_suffix_patterns
 from .views import view_locationAPI
 from .views import jokeAPI_view 
 from .views import view_nearbyplaces
@@ -31,5 +30,4 @@ urlpatterns = [
     path('posts/covid/<int:story_id>', views.get_covid_numbers, name='covid_numbers'),
 
 ]
-urlpatterns = format_suffix_patterns(urlpatterns)
 
