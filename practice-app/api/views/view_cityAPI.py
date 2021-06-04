@@ -5,7 +5,7 @@ from django.http import HttpResponseServerError
 from django.http import HttpResponseNotFound
 from django.http import JsonResponse
 import json
-from .models import Story
+from ..models import Story
 import requests
 import environ
 

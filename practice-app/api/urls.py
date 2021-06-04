@@ -1,8 +1,8 @@
 from django.urls import path
 
-from . import views
+from .views import view_cityAPI
 
 urlpatterns = [
-    path('city/<int:story_id>', views.get_cityinfo, name="city"),
+    path('city/<int:story_id>', view_cityAPI.get_cityinfo, name="city"),
 ]
 
