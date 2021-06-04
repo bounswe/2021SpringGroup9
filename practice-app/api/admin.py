@@ -1,7 +1,8 @@
 from django.contrib import admin
 
+from .models import *
 
-from .models import Story
-# Register your models here.
 
 admin.site.register(Story)
+admin.site.register(Translation)
+admin.site.register(Quote)
