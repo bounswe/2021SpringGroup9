@@ -9,6 +9,7 @@ from .views import view_cityAPI
 from .views import views_weatherAPI_mertlkn
 from .views import views_quote
 from .views import views_covidAPI as views
+from .views import view_frontend
 
 urlpatterns = [
     path('storypost/', view_post_story.StoryPost.as_view(), name="post_story"),
@@ -29,7 +30,8 @@ urlpatterns = [
     path('postquote/<int:pk>', views_quote.FavQuote.as_view(), name="fav_quote"),
     path('quote/location/<int:pk>', views_quote.GetQuoteLoc.as_view(), name="get_quote_loc"),
     path('posts/covid/<int:story_id>', views.get_covid_numbers, name='covid_numbers'),
-
+    path('home',view_frontend.homepage, name='homepage'),
+    path('view/<int:story_id>', view_frontend.view_story, name='view_story'),
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)
 
