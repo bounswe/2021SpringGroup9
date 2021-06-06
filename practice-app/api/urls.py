@@ -32,6 +32,7 @@ urlpatterns = [
     path('posts/covid/<int:story_id>', views.get_covid_numbers, name='covid_numbers'),
     path('home',view_frontend.homepage, name='homepage'),
     path('view/<int:story_id>', view_frontend.view_story, name='view_story'),
+    path('create',view_frontend.create_story, name='create_story'),
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)
 
