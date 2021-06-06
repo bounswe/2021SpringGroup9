@@ -1,0 +1,37 @@
+<body>
+    <div>
+        <title id='title'/>
+        </title>
+        <h1 id='header'>
+        </h1>
+        <h4 id='location'>
+
+        </h4>
+        <h5 id='date'>
+
+        </h5>
+        <h5 id='name'>
+            Written by:
+        </h5>
+        <p id='story'>
+        
+        </p>
+    </div>
+</body>
+
+<script type='text/javascript'>
+    fetch("http://127.0.0.1:8000/api/story/"+{{story_id}},{method:'get'}).then(response => {
+        return response.json()
+    }).then(data => {
+        document.getElementById('title').innerHTML+=data['title']
+        document.getElementById('header').innerHTML+=data['title']
+        document.getElementById('location').innerHTML+=data['location']
+        document.getElementById('date').innerHTML+=data['date']
+        document.getElementById('name').innerHTML+=data['name']
+        document.getElementById('story').innerHTML+=data['story']
+    })
+
+    fetch("http://127.0.0.1:8000/api/weather/"+{{story_id}},{method:'get'}).then(response => {
+        
+    })
+</script>

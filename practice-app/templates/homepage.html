@@ -1,0 +1,20 @@
+<body>
+    <ol id="list">
+    
+    </ol>
+</body>
+
+<script type='text/javascript'>
+    fetch("http://127.0.0.1:8000/api/story",{method:'get'}).then(response => {
+        return response.json()
+    }).then(data => {
+        for(i=0; i<data.length; i++) {
+            document.getElementById("list").innerHTML+='<li><button onclick=\'clicked("'+data[i]['id']+'")\'>'+data[i]['title']+'</button></li>'
+        }
+    })
+    
+    function clicked(storyID) {
+        storyUrl="http://127.0.0.1:8000/api/view/"+storyID
+        location.href=storyUrl
+    }
+</script>
