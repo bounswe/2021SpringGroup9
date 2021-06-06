@@ -14,7 +14,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-
+from django.views.generic.base import RedirectView
 import rest_framework.schemas
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -39,4 +39,5 @@ urlpatterns = [
         description="API for all things …",
         version="1.0.0"
     ), name='openapi-schema'),
+    path('', RedirectView.as_view(url='/api/home'), name='index'),
 ]
