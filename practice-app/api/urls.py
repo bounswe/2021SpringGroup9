@@ -8,6 +8,19 @@ from .views import view_cityAPI
 from .views import views_weatherAPI_mertlkn
 from .views import views_quote
 from .views import views_covidAPI as views
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+   openapi.Info(
+      title="Story API",
+      default_version='v1',
+      description="Test description",
+      terms_of_service="https://www.google.com/policies/terms/",
+      license=openapi.License(name="BSD License"),
+   ),
+   public=True,
+)
 
 urlpatterns = [
     path('storypost/', view_post_story.StoryPost.as_view(), name="post_story"),
@@ -27,7 +40,7 @@ urlpatterns = [
     path('quote/<int:pk>', views_quote.GetQuoteTag.as_view(), name="get_quote_tag"),
     path('postquote/<int:pk>', views_quote.FavQuote.as_view(), name="fav_quote"),
     path('quote/location/<int:pk>', views_quote.GetQuoteLoc.as_view(), name="get_quote_loc"),
-    path('posts/covid/<int:story_id>', views.get_covid_numbers, name='covid_numbers'),
-
+    path('covid/<int:story_id>', views.get_covid_numbers, name='covid_numbers'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]
 
