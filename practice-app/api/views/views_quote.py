@@ -11,8 +11,8 @@ from ..serializers import QuoteSerializer
 from ..models import Story
 from ..models import Quote
 
-env = environ.Env(DEBUG=(bool, False))
-environ.Env.read_env() 
+env = environ.Env()
+environ.Env.read_env('.env')
 QUOTE_API_KEY = env('QUOTE_API_KEY')
 
 class GetQuoteTag(APIView):    
