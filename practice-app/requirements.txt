@@ -3,3 +3,5 @@ django-environ==0.4.0
 djangorestframework==3.12.4
 drf-yasg==1.20.0
 urllib3==1.26.5
+mysqlclient==2.0.3
+django-mysql==3.11.1
