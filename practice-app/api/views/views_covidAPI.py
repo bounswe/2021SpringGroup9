@@ -5,7 +5,9 @@ import json
 import environ
 from ..models import Story
 import requests
+from rest_framework.decorators import api_view
 
+@api_view(['GET'])
 def get_covid_numbers(request, story_id):
     """
     Takes a story_id as a parameter and makes a call to Covid API to get 
@@ -16,8 +18,8 @@ def get_covid_numbers(request, story_id):
 
     # Get the story object
 
-    env = environ.Env(DEBUG=(bool, False))
-    environ.Env.read_env()
+    env = environ.Env()
+    environ.Env.read_env('.env')
     COVID_API_KEY = env('COVID_API_KEY')
 
     try:
