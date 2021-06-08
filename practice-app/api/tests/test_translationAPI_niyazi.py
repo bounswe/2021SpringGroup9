@@ -31,7 +31,7 @@ class CheckStoryLengthTest(TestCase):
 
 class TranslationTest(TestCase):
     def setUp(self):
-        Story.objects.create(
+        Story.objects.create(id = 1,
             title = "Title",
             story = "Story",
             name = "User1",
@@ -41,7 +41,7 @@ class TranslationTest(TestCase):
             tag = "Tag1",
             notifyAdmin = False
         )
-        Story.objects.create(
+        Story.objects.create(id = 2,
             title = "Hello World!",
             story = "I am very happy today!",
             name = "User2",

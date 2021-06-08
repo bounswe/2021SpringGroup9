@@ -39,7 +39,8 @@ class TestViews(TestCase):
                           "tag":"Chilling",
                           "title":"Kahve",
                           "story":"Kahve Keyfi"}
-        self.mock_data_1 = view_locationAPI.Story.objects.create(title = "Çay",
+        self.mock_data_1 = view_locationAPI.Story.objects.create(id = 1,
+                                title = "Çay",
                                story="Çay keyfi",
                                name ="emre",
                                longitude=10,
@@ -99,7 +100,8 @@ class TestViews(TestCase):
 class TestModels(TestCase):
 
     def setUp(self):
-        self.mock_data = view_locationAPI.Story.objects.create(title = "Çay",
+        self.mock_data = view_locationAPI.Story.objects.create(id = 1,
+                               title = "Çay",
                                story="Çay keyfi",
                                name ="emre",
                                longitude=10,
