@@ -54,8 +54,8 @@
     }).then(data => {
         document.getElementById('weather').innerHTML+='<p>Condition: '+data['condition']
                                                       +', Temperature: '+data['temperature']
-                                                      +', Feeling: '+data['feel']
-                                                      +', Wind speed: '+data['wind']
+                                                      +' °C, Feeling: '+data['feel']
+                                                      +' °C, Wind speed: '+data['wind']
                                                       +', Time Zone: '+data['time_zone']
                                                       +'. '+data['comment']
                                                       +'</p>'
