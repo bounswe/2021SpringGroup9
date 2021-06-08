@@ -17,7 +17,7 @@ QUOTE_API_KEY = env('QUOTE_API_KEY')
 
 class GetQuoteTag(APIView):    
     """
-    Get quotes that is tagged with the tag of the given story. 
+    Get quotes that are tagged with the tag of the given story. 
     """    
     def get(self, request, pk):
         likemax = -1
@@ -49,7 +49,7 @@ class GetQuoteTag(APIView):
 
 class GetQuoteLoc(APIView):
     """
-    Get quotes that contains the location of the given story. 
+    Get quotes that contain the location of the given story. 
     """    
     def get(self, request, pk):
         likemax = -1
@@ -81,7 +81,7 @@ class GetQuoteLoc(APIView):
 
 class FavQuote(APIView):
     """
-    Add the quote to the database if it is liked. Only the quotes that are retrieved from the Favqs API using a story can be posted.
+    Add the quote to the database if it is liked. Only the quotes that are retrieved from the Favqs API can be posted.
     """
     def post(self, request, pk):
         quote = {}
