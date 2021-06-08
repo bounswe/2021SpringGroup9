@@ -31,7 +31,18 @@
 				credentials: 'include'	
 			}).then(response=>response.json())
 				.then(data=>{ 
-                    console.log(data);
+                    console.log(data['id']);
+                    // Check if this story is flagged (notify_admin flag is set).
+                    fetch('./flagged_stories/', {
+                        method: 'get',
+                        credentials: 'include'	
+                    }).then(response=>response.json()).then(data2=>{
+                        if(((data2['flagged_stories']).map((x) => { return x['id']})).includes(data['id']) ){
+                            
+                            alert('This story was flagged for review. It probably contains abusive text.')
+                        }
+
+                    });
 			})
 			return true;
         }
