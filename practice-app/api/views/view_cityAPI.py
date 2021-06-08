@@ -29,7 +29,9 @@ def true_location_from(latitude,longitude):    # in order to get locaiton in ISO
 
 @api_view(['GET'])
 def get_cityinfo(request, story_id):
-  
+    """ 
+    This API gets location with latitude and longitude and finds nearby cities. It can also take parameters such as the maximum population of the searched city and radius which is the maximum search distance from a location. 
+    """
    
 
     try:

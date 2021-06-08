@@ -16,7 +16,11 @@ WEATHER_API_KEY=env('WEATHER_API_KEY')
 # @csrf_exempt
 @api_view(['GET'])
 def weather(request,story_id):
-
+    """
+    This API gets information about Story's locations weather.
+    Filters the gathered information and returns it.
+    It also adds a comment about the weather.
+    """
     if(request.method!='GET'):
         httpresponse=HttpResponse('Only GET method is available for this API')
         httpresponse.status_code=405

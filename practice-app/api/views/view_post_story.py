@@ -22,6 +22,10 @@ tisane_key = env('TISANE_API_KEY')
 # This endpoint adds a post to the database.
 # Also, using a third party api it will do semantic analysis for potential abuse.
 class StoryPost(GenericAPIView):
+    """ 
+    This endpoint adds a post to the database.
+    Also, using a third party api it will do semantic analysis for potential abuse.
+    """
     queryset = Story.objects.all()
     serializer_class = StorySerializer
     def post(self, request, format=None):
@@ -66,6 +70,10 @@ def check_abuse(story, serializer):
 # Only used with get.
 @api_view(['GET'])
 def flagged_stories(request):
+    """ 
+    Gets flagged stories (notifyAdmin == True) from the database.
+    Only used with get.
+    """
     if request.method != 'GET':
         return HttpResponse('Please use this end point with GET.', 400)
     query = Story.objects.filter(notifyAdmin = True)
