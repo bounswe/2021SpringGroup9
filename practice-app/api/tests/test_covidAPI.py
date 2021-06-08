@@ -31,8 +31,8 @@ class TestViews(TestCase):
 			title = 'TestTitle',
     		story = 'TestStory',
     		name = 'TestName',
-    		longitude = 1.0,
-    		latitude = 1.0,
+    		longitude = 30.0,
+    		latitude = 40.0,
     		location = 'Turkey',
     		tag = 'TestTag'
 			)

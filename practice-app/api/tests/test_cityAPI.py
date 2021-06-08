@@ -9,7 +9,7 @@ class CityTest(TestCase):
    
     def setUp(self):
         self.client = Client()
-        self.story = Story.objects.create(
+        self.story = Story.objects.create(id = 1,
             title = 'titlex',
     		story = 'storyy',
     		name = 'namez',

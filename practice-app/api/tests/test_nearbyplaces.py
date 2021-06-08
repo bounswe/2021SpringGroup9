@@ -4,7 +4,7 @@ from ..models import Story
 
 class GettingPlacesTestCase(TestCase):
     def setUp(self):
-        Story.objects.create(
+        Story.objects.create(id = 1,
             title="My Story",
             story="Story body",
             name="John",
@@ -15,7 +15,7 @@ class GettingPlacesTestCase(TestCase):
             notifyAdmin=False
         )
 
-        Story.objects.create(
+        Story.objects.create(id = 2,
             title="Your Story",
             story="Your Story body",
             name="Johanna",

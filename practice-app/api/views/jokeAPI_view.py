@@ -5,9 +5,10 @@ from rest_framework import status
 from rest_framework.response import Response
 import json
 import environ
+from rest_framework.decorators import api_view
 
-@csrf_exempt
-
+# @csrf_exempt
+@api_view(['GET'])
 def joke(request,category):
     resp=requests.get("https://api.chucknorris.io/jokes/random?category=%s" % (category))
     if resp.status_code == 200:

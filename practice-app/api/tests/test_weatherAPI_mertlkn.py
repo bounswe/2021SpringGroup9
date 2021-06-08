@@ -9,7 +9,7 @@ class WeatherTest(TestCase):
         """
         An instance that works
         """
-        Story.objects.create(
+        Story.objects.create(id = 1,
             title = "Title1",
             story = "Story1",
             name = "User1",
@@ -22,7 +22,7 @@ class WeatherTest(TestCase):
         """
         An instance with wrong longitude.
         """
-        Story.objects.create(
+        Story.objects.create(id = 2,
             title = "Title2",
             story = "Story2",
             name = "User2",

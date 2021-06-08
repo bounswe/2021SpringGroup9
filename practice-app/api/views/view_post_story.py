@@ -14,8 +14,8 @@ import requests
 
 import environ
 
-env = environ.Env(DEBUG=(bool, False))
-environ.Env.read_env()
+env = environ.Env()
+environ.Env.read_env('.env')
 tisane_key = env('TISANE_API_KEY')
 
 
@@ -64,6 +64,7 @@ def check_abuse(story, serializer):
 
 # Gets flagged stories (notifyAdmin == True) from the database.
 # Only used with get.
+@api_view(['GET'])
 def flagged_stories(request):
     if request.method != 'GET':
         return HttpResponse('Please use this end point with GET.', 400)

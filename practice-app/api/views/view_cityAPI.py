@@ -8,9 +8,10 @@ import json
 from ..models import Story
 import requests
 import environ
+from rest_framework.decorators import api_view
 
-env = environ.Env(DEBUG=(bool, False))
-environ.Env.read_env()
+env = environ.Env()
+environ.Env.read_env('.env')
 CITY_API_KEY = env('CITY_API_KEY')
 
 def true_location_from(latitude,longitude):    # in order to get locaiton in ISO form
@@ -26,7 +27,7 @@ def true_location_from(latitude,longitude):    # in order to get locaiton in ISO
     return(latlon)    
     
 
-
+@api_view(['GET'])
 def get_cityinfo(request, story_id):
   
    
@@ -45,7 +46,7 @@ def get_cityinfo(request, story_id):
 
         locationinISOform=true_location_from(story.latitude, story.longitude)
         
-        querystring = {"location":locationinISOform,"radius":"100" }
+        querystring = {"location":locationinISOform,"radius":"100", "minPopulation":"1000000" }
 
         headers = {
             'x-rapidapi-key': CITY_API_KEY,
@@ -54,18 +55,19 @@ def get_cityinfo(request, story_id):
 
         response = requests.request("GET", url, headers=headers, params=querystring)
 
-        info = json.loads(response.text)
+        
     except:
         return HttpResponseServerError("Could not establish connection")
 
     try:
-        cityinfo = {
+        cityinfo =[ {
             
-            "name": info["data"][0]["name"],
-            "country": info["data"][0]["country"],
+            "name": info["name"], "country": info["country"]
             
-        }
-        return JsonResponse(cityinfo)
+        }for info in response.json()["data"]]
+        return JsonResponse(cityinfo, safe=False)
     except:
-        return HttpResponseServerError("Error")
+        return HttpResponseServerError("City not found.", status = 404)
+    
+    
 

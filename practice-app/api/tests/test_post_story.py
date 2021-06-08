@@ -6,9 +6,9 @@ class PostStoryTestCase(TestCase):
 
     def setUp(self):
         
-        Story.objects.create(title = "Testing Story", story= "Once upon a time ...", name = "USER", longitude = 
+        Story.objects.create(id = 1, title = "Testing Story", story= "Once upon a time ...", name = "USER", longitude = 
         3.14, latitude = 4.13, location = "somewhere", tag =" ", notifyAdmin  = False)
-        Story.objects.create(title = "Testing Story2", story= "This notifies the admin.", name = "USER", longitude = 
+        Story.objects.create(id = 2, title = "Testing Story2", story= "This notifies the admin.", name = "USER", longitude = 
         3.14, latitude = 4.13, location = "somewhere", tag =" ", notifyAdmin = True)
 
     def test_can_find_notify_admin(self):

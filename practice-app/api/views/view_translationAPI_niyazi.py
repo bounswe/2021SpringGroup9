@@ -9,9 +9,10 @@ from ..serializers import *
 from rest_framework.generics import GenericAPIView
 
 env = environ.Env()
-environ.Env.read_env()
+environ.Env.read_env('.env')
 
 class TranslationView(GenericAPIView):
+    queryset = Story.objects.all()
     serializer_class = StorySerializer
     def retrieve_translation(story_id, target):
         """ Retrieves translation if it exists in the database."""
