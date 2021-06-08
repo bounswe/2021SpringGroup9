@@ -11,65 +11,77 @@ from ..serializers import QuoteSerializer
 from ..models import Story
 from ..models import Quote
 
-env = environ.Env(DEBUG=(bool, False))
-environ.Env.read_env() 
+env = environ.Env()
+environ.Env.read_env('.env')
 QUOTE_API_KEY = env('QUOTE_API_KEY')
 
 class GetQuoteTag(APIView):    
     """
-    Get quotes that is tagged with the tag of the given story. 
+    Get quotes that are tagged with the tag of the given story. 
     """    
     def get(self, request, pk):
         likemax = -1
         likeselect = -1
-        story=Story.objects.get(id=pk)
+        try:
+            story=Story.objects.get(id=pk)
+        except: 
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         tag = story.tag
         param = {'filter': tag, 'type': "tag"}
         url = "https://favqs.com/api/quotes/"
         headers = {"Authorization": 'Token token="{}"'.format(QUOTE_API_KEY)}
-        response = requests.get(url, headers=headers, params=param)
-        quote = response.json()
-        for i in range(len(quote['quotes'])):
-            if quote['quotes'][i]['favorites_count'] > likemax: # get the quote with the most likes tagged with the story's tag in the Favqs API
-                likemax = quote['quotes'][i]['favorites_count']
-                likeselect = i
-        q = quote['quotes'][likeselect]
-        if q['body'] == 'No quotes found': # If a quote with that tag doesn't exist
-            return Response(q['body']+" tagged with " + tag)
-        
-        qselect = {'id': q['id'],'Quote': q['body'], 'Author': q['author'], 'Likes': q['favorites_count']}
-        return Response(qselect)
+        try:
+            response = requests.get(url, headers=headers, params=param)
+            quote = response.json()
+            for i in range(len(quote['quotes'])):
+                if quote['quotes'][i]['favorites_count'] > likemax: # get the quote with the most likes tagged with the story's tag in the Favqs API
+                    likemax = quote['quotes'][i]['favorites_count']
+                    likeselect = i
+            q = quote['quotes'][likeselect]
+            if q['body'] == 'No quotes found': # If a quote with that tag doesn't exist
+                return Response(q['body']+" tagged with " + tag)
+            
+            qselect = {'id': q['id'],'Quote': q['body'], 'Author': q['author'], 'Likes': q['favorites_count']}
+            return Response(qselect, status=status.HTTP_200_OK)
+        except:
+            return Response(response.status)
         
 
 class GetQuoteLoc(APIView):
     """
-    Get quotes that contains the location of the given story. 
+    Get quotes that contain the location of the given story. 
     """    
     def get(self, request, pk):
         likemax = -1
         likeselect = -1
-        story=Story.objects.get(id=pk)
+        try:
+            story=Story.objects.get(id=pk)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         location = story.location
         param = {'filter': location}
         url = "https://favqs.com/api/quotes/"
         headers = {"Authorization": 'Token token="{}"'.format(QUOTE_API_KEY)}
-        response = requests.get(url, headers=headers, params=param)
-        quote = response.json()
-        for i in range(len(quote['quotes'])):
-            if quote['quotes'][i]['favorites_count'] > likemax: # get the quote with the most likes containing the location of the story
-                likemax = quote['quotes'][i]['favorites_count']
-                likeselect = i
-        q = quote['quotes'][likeselect]
-        if q['body'] == 'No quotes found': # if no quote contains the location name
-            return Response(q['body']+" with location " + location)
-        
-        qselect = {'id': q['id'],'Quote': q['body'], 'Author': q['author'], 'Likes': q['favorites_count']}
-        return Response(qselect)
+        try:
+            response = requests.get(url, headers=headers, params=param)
+            quote = response.json()
+            for i in range(len(quote['quotes'])):
+                if quote['quotes'][i]['favorites_count'] > likemax: # get the quote with the most likes containing the location of the story
+                    likemax = quote['quotes'][i]['favorites_count']
+                    likeselect = i
+            q = quote['quotes'][likeselect]
+            if q['body'] == 'No quotes found': # if no quote contains the location name
+                return Response(q['body']+" with location " + location, status=status.HTTP_400_BAD_REQUEST)
+            
+            qselect = {'id': q['id'],'Quote': q['body'], 'Author': q['author'], 'Likes': q['favorites_count']}
+            return Response(qselect, status=status.HTTP_200_OK)
+        except:
+            return Response(response.status)
 
 
 class FavQuote(APIView):
     """
-    Add the quote to the database if it is liked. Only the quotes that are retrieved from the Favqs API using a story can be posted.
+    Add the quote to the database if it is liked. Only the quotes that are retrieved from the Favqs API can be posted.
     """
     def post(self, request, pk):
         quote = {}

@@ -12,3 +12,5 @@ def homepage(request):
 def view_story(request,story_id):
     return render(request,'story.html',{'story_id':story_id})
 
+def create_story(request):
+    return render(request, 'create_story.html')
