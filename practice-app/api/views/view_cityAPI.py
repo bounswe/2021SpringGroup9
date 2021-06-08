@@ -8,9 +8,10 @@ import json
 from ..models import Story
 import requests
 import environ
+from rest_framework.decorators import api_view
 
-env = environ.Env(DEBUG=(bool, False))
-environ.Env.read_env()
+env = environ.Env()
+environ.Env.read_env('.env')
 CITY_API_KEY = env('CITY_API_KEY')
 
 def true_location_from(latitude,longitude):    # in order to get locaiton in ISO form
@@ -26,7 +27,7 @@ def true_location_from(latitude,longitude):    # in order to get locaiton in ISO
     return(latlon)    
     
 
-
+@api_view(['GET'])
 def get_cityinfo(request, story_id):
   
    
@@ -67,6 +68,4 @@ def get_cityinfo(request, story_id):
         return JsonResponse(cityinfo, safe=False)
     except:
         return HttpResponseServerError("City not found.", status = 404)
-    
-    
 
