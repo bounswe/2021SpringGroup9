@@ -2,14 +2,15 @@ import requests
 from django.http import JsonResponse, HttpResponseNotFound, HttpResponseServerError
 from ..models import Story
 import environ
+from rest_framework.decorators import api_view
 
-env = environ.Env(DEBUG=(bool, False))
-environ.Env.read_env()
+env = environ.Env()
+environ.Env.read_env('.env')
 
 # Get Google Maps API key
 GOOGLE_MAPS_API_KEY = env('GOOGLE_MAPS_API_KEY')
 
-
+@api_view(['GET'])
 def get_places_near_story_location(request, pk):
     """ Returns places near location of the story with given story_id."""
 
@@ -41,4 +42,4 @@ def get_places_near_story_location(request, pk):
         } for place in response.json()["results"]]
         return JsonResponse(places, safe=False)
     except:
-        return HttpResponseServerError("Unknown error.")
+        return HttpResponseServerError("Place not found.", status = 404)
