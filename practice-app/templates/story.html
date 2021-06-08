@@ -38,7 +38,7 @@
 </body>
 
 <script type='text/javascript'>
-    fetch("http://127.0.0.1:8000/api/story/"+{{story_id}},{method:'get'}).then(response => {
+    fetch("/api/story/"+{{story_id}},{method:'get'}).then(response => {
         return response.json()
     }).then(data => {
         document.getElementById('title').innerHTML+=data['title']
@@ -49,7 +49,7 @@
         document.getElementById('story').innerHTML+=data['story']
     })
     
-    fetch("http://127.0.0.1:8000/api/weather/"+{{story_id}},{method:'get'}).then(response => {
+    fetch("/api/weather/"+{{story_id}},{method:'get'}).then(response => {
         return response.json()
     }).then(data => {
         document.getElementById('weather').innerHTML+='<p>Condition: '+data['condition']
@@ -63,7 +63,7 @@
 
     document.getElementById('de').onclick = (event) => {
         event.preventDefault();
-        fetch("http://127.0.0.1:8000/api/story/"+{{story_id}}+"/translate_de",{method:'get'}).then(response => {
+        fetch("/api/story/"+{{story_id}}+"/translate_de",{method:'get'}).then(response => {
             return response.json()
         }).then(data => {
             document.getElementById('translation').innerHTML=data['story']
@@ -72,7 +72,7 @@
 
     document.getElementById('es').onclick = (event) => {
         event.preventDefault();
-        fetch("http://127.0.0.1:8000/api/story/"+{{story_id}}+"/translate_es",{method:'get'}).then(response => {
+        fetch("/api/story/"+{{story_id}}+"/translate_es",{method:'get'}).then(response => {
             return response.json()
         }).then(data => {
             document.getElementById('translation').innerHTML=data['story']
@@ -81,14 +81,14 @@
 
     document.getElementById('tr').onclick = (event) => {
         event.preventDefault();
-        fetch("http://127.0.0.1:8000/api/story/"+{{story_id}}+"/translate_tr",{method:'get'}).then(response => {
+        fetch("/api/story/"+{{story_id}}+"/translate_tr",{method:'get'}).then(response => {
             return response.json()
         }).then(data => {
             document.getElementById('translation').innerHTML=data['story']
         })
     }
 
-    fetch("http://127.0.0.1:8000/api/quote/"+{{story_id}},{method:'get'}).then(response => {
+    fetch("/api/quote/"+{{story_id}},{method:'get'}).then(response => {
             return response.json()
         }).then(data => {
             document.getElementById('quote').innerHTML=data['Quote']+' -'+data['Author']
