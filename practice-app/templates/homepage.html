@@ -1,10 +1,24 @@
 <body>
+    <p id='joke'>
+
+    </p>
+    
     <ol id="list">
     
     </ol>
 </body>
 
 <script type='text/javascript'>
+
+    fetch("http://127.0.0.1:8000/api/joke/animal",{method:'get'}).then(response => {
+        return response.json()
+    }).then(data => {
+        
+            document.getElementById("joke").innerHTML+='<p>Joke of the Day: '+data["joke"]  +'</p>'
+            
+        
+       
+    }) 
     fetch("http://127.0.0.1:8000/api/story",{method:'get'}).then(response => {
         return response.json()
     }).then(data => {
@@ -17,4 +31,5 @@
         storyUrl="http://127.0.0.1:8000/api/view/"+storyID
         location.href=storyUrl
     }
+       
 </script>
