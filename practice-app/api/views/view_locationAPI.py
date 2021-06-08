@@ -15,8 +15,8 @@ import requests
 import json
 import environ
 
-env = environ.Env(DEBUG=(bool, False))
-environ.Env.read_env()
+env = environ.Env()
+environ.Env.read_env('.env')
 
 class StoryList(GenericAPIView):
     """
