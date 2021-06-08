@@ -33,7 +33,7 @@ def get_covid_numbers(request, story_id):
     try:
         url = "https://wft-geo-db.p.rapidapi.com/v1/geo/cities"
         locationinISOform=true_location_from(story.latitude, story.longitude)      
-        querystring = {"location":locationinISOform,"radius":"100", "minPopulation":"1000000" }
+        querystring = {"location":locationinISOform,"radius":"100", "minPopulation":"10" }
         headers = {
             'x-rapidapi-key': CITY_API_KEY,
             'x-rapidapi-host': "wft-geo-db.p.rapidapi.com"
@@ -69,5 +69,5 @@ def get_covid_numbers(request, story_id):
         }
         return JsonResponse(final_data)
     except:
-        return HttpResponseServerError("Error")
+        return HttpResponseServerError("No data available.", status= 404)
 
