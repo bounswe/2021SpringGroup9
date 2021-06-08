@@ -6,13 +6,15 @@ from ..models import Story
 from django.http import JsonResponse
 import json
 import environ
+from rest_framework.decorators import api_view
 
 # Create your views here.
-env = environ.Env(DEBUG=(bool, False))
-
+env = environ.Env()
+environ.Env.read_env('.env')
 WEATHER_API_KEY=env('WEATHER_API_KEY')
 
-@csrf_exempt
+# @csrf_exempt
+@api_view(['GET'])
 def weather(request,story_id):
 
     if(request.method!='GET'):
