@@ -23,11 +23,11 @@ class GetQuoteTag(APIView):
         likemax = -1
         likeselect = -1
         try:
-            story=Story.objects.get(id=pk)
+            story=Story.objects.get(pk=pk)
         except: 
             return Response(status=status.HTTP_400_BAD_REQUEST)
         tag = story.tag
-        param = {'filter': tag, 'type': "tag"}
+        param = {'filter': tag.lower(), 'type': "tag"}
         url = "https://favqs.com/api/quotes/"
         headers = {"Authorization": 'Token token="{}"'.format(QUOTE_API_KEY)}
         try:
@@ -39,7 +39,7 @@ class GetQuoteTag(APIView):
                     likeselect = i
             q = quote['quotes'][likeselect]
             if q['body'] == 'No quotes found': # If a quote with that tag doesn't exist
-                return Response(q['body']+" tagged with " + tag)
+                return Response(q['body']+" tagged with " + tag.lower())
             
             qselect = {'id': q['id'],'Quote': q['body'], 'Author': q['author'], 'Likes': q['favorites_count']}
             return Response(qselect, status=status.HTTP_200_OK)
@@ -55,7 +55,7 @@ class GetQuoteLoc(APIView):
         likemax = -1
         likeselect = -1
         try:
-            story=Story.objects.get(id=pk)
+            story=Story.objects.get(pk=pk)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         location = story.location
@@ -86,7 +86,7 @@ class FavQuote(APIView):
     def post(self, request, pk):
         quote = {}
         try:
-            quote = Quote.objects.get(id=pk)
+            quote = Quote.objects.get(pk=pk)
             quote.likes += 1  # if it is already in the database, increase the number of likes after post request
             quote.save()
             serializer = QuoteSerializer(quote)
@@ -106,4 +106,3 @@ class FavQuote(APIView):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
