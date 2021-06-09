@@ -11,7 +11,8 @@ class TestViews(TestCase):
     """
     def setUp(self):
         self.client = Client()
-        self.story = Story.objects.create(
+        self.story1 = Story.objects.create(
+                id = 1, 
                 title = "A Wonderful Day in Istanbul", 
                 story = "It was my first time visiting Istanbul. It is full of places to see and enjoy. Can't wait to visit Istanbul again!",
                 name = "Leyla", 
@@ -20,6 +21,18 @@ class TestViews(TestCase):
                 location = "Istanbul",
                 tag = "Joy"
         )
+        
+        self.story2 = Story.objects.create(
+                id = 2,
+                title = "A Wonderful Day in Istanbul", 
+                story = "It was my first time visiting Istanbul. It is full of places to see and enjoy. Can't wait to visit Istanbul again!",
+                name = "Leyla", 
+                longitude = 41,
+                latitude = 28,
+                location = "",
+                tag = "Joy"
+        )
+
         self.quote = Quote.objects.create(
                 id = 700,
                 author = "John Keats",
@@ -31,42 +44,42 @@ class TestViews(TestCase):
     Test whether a request according to tag doesn't give error. 
     """
     def test_get_quote_tag(self):
-        response = self.client.get(reverse('get_quote_tag', args=(self.story.id,)))
+        response = self.client.get(reverse('get_quote_tag', args=(self.story1.id,)))
         self.assertNotEqual(response.status_code, 400)
     
     """
     Test whether a request according to tag is returned succesfully. 
     """
     def test_get_quote_tag_success(self):
-        response = self.client.get(reverse('get_quote_tag', args=(self.story.id,)))
+        response = self.client.get(reverse('get_quote_tag', args=(self.story1.id,)))
         self.assertEqual(response.status_code, 200)
 
     """
     Test whether if a quote according to tag doesn't exist, it returns a string with a message. 
     """
     def test_quote_tag_exist(self):
-        response = self.client.get(reverse('get_quote_tag', args=(self.story.id,)))
-        self.assertEquals(response.data, "No quotes found tagged with " + self.story.tag)
+        response = self.client.get(reverse('get_quote_tag', args=(self.story1.id,)))
+        self.assertEquals(response.data, "No quotes found tagged with " + self.story1.tag.lower())
 
     """
     Test whether a request according to location doesn't give error. 
     """
     def test_get_quote_loc(self):
-        response = self.client.get(reverse('get_quote_loc', args=(self.story.id,)))
+        response = self.client.get(reverse('get_quote_loc', args=(self.story1.id,)))
         self.assertNotEqual(response.status_code, 400)
     
     """
     Test whether a request according to location is returned successfully. 
     """
     def test_get_quote_loc_success(self):
-        response = self.client.get(reverse('get_quote_loc', args=(self.story.id,)))
+        response = self.client.get(reverse('get_quote_loc', args=(self.story1.id,)))
         self.assertEqual(response.status_code, 200)
 
     """
     Test whether a quote according to location exists. 
     """
     def test_quote_loc_exist(self):
-        response = self.client.get(reverse('get_quote_loc', args=(self.story.id,)))
+        response = self.client.get(reverse('get_quote_loc', args=(self.story1.id,)))
         self.assertIsNotNone(response.data['Quote'])
 
     """
@@ -83,3 +96,17 @@ class TestViews(TestCase):
         response = self.client.post(reverse('fav_quote', args=(self.quote.id,)))
         self.assertEqual(response.status_code, 200)
 
+    """
+    Test whether the posted quote's likes is increased by 1 or not.
+    """
+    def test_post_like(self):
+        likes = self.quote.likes
+        response = self.client.post(reverse('fav_quote', args=(self.quote.id,)))
+        self.assertEquals(likes+1, response.data['likes'])
+
+    """
+    Test whether the request GET quote/lcoation returns 400 status code when location of the story is empty
+    """
+    def test_loc_not_empty(self):
+        response = self.client.get(reverse('get_quote_loc', args=(self.story2.id,)))
+        self.assertEquals(response.status_code, 400)
