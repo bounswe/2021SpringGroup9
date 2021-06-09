@@ -45,8 +45,8 @@ class TranslationTest(TestCase):
             title = "Hello World!",
             story = "I am very happy today!",
             name = "User2",
-            longitude = 4100,
-            latitude = 28,
+            longitude = 33,
+            latitude = 40,
             location = "Ankara",
             tag = "Tag2",
             notifyAdmin = True
