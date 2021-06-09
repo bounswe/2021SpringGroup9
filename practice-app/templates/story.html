@@ -1,0 +1,204 @@
+<body>
+    <div align='center'>
+        <p id='joke'>
+
+        </p>
+        <hr>
+        <title id='title'/>
+        </title>
+        <h1 id='header'>
+        </h1>
+        <h4 id='location'>
+            
+        </h4>
+
+        <p id='weather'>
+
+        </p>
+
+        <h5 id='date'>
+
+        </h5>
+
+        <p id='covid'>
+
+        </p>
+
+        <h5 id='name'>
+            Written by:
+        </h5>
+        <p id='story'>
+        </p>
+        <img id ="map"/>
+        <hr>
+        <p id='nearbyplaces'>
+        
+        </p>
+
+        <hr>
+
+        <p id='city'>
+
+        </p>
+        <hr>
+        <button class="translate" id='de'>
+            German
+        </button>
+        <button class="translate" id='es'>
+            Spanish
+        </button>
+        <button class="translate" id='tr'>
+            Turkish
+        </button>
+        <p id='translation'>
+
+        </p>
+        <hr>
+        <q id='quote'>
+
+        </q>
+
+    </div>
+</body>
+
+<script type='text/javascript'>
+    fetch("/api/story/"+{{story_id}},{method:'get'}).then(response => {
+        return response.json()
+    }).then(data => {
+        document.getElementById('title').innerHTML+=data['title']
+        document.getElementById('header').innerHTML+=data['title']
+        document.getElementById('location').innerHTML+=data['location']
+        document.getElementById('date').innerHTML+=data['date']
+        document.getElementById('name').innerHTML+=data['name']
+        document.getElementById('story').innerHTML+=data['story']
+    })
+    
+    fetch("/api/weather/"+{{story_id}},{method:'get'}).then(response => {
+        return response.json()
+    }).then(data => {
+        document.getElementById('weather').innerHTML+='<p>Condition: '+data['condition']
+                                                      +', Temperature: '+data['temperature']
+                                                      +' °C, Feeling: '+data['feel']
+                                                      +' °C, Wind speed: '+data['wind']
+                                                      +', Time Zone: '+data['time_zone']
+                                                      +'. '+data['comment']
+                                                      +'</p>'
+    })
+
+    
+    fetch("/api/joke/animal",{method:'get'}).then(response => {
+        return response.json()
+    }).then(data => {
+        
+            document.getElementById("joke").innerHTML+='<p>Joke of the Day: '+data["joke"]  +'</p>'
+            
+        
+       
+    })    
+
+
+    fetch("/api/covid/"+{{story_id}},{method:'get'}).then(response => {
+        return response.json()
+    }).then(data => {
+        document.getElementById('covid').innerHTML+='<p>Country: '+data['country']
+                                                      +', Day: '+data['day']
+                                                      +', New Cases: '+data['new cases']
+                                                      +', New Deaths: '+data['new deaths']
+                                                      +', Total Active Cases: '+data['active cases']
+                                                      +'</p>'
+    })
+
+    fetch("/api/location/map/"+{{story_id}},{method:'get'}).then(response => {
+            return response.blob()
+        }).then(blob => {
+            var img = URL.createObjectURL(blob);
+            document.getElementById('map').src=img
+    })
+
+    fetch("/api/nearbyplaces/"+{{story_id}},{method:'get'}).then(response => {
+        return response.json()
+    }).then(data => { {if(data.length==0){document.getElementById("nearbyplaces").innerHTML+='<p>There are no nearby places with these parameters'  +'</p>' }}
+        for(i=0; i<3; i++) {
+                document.getElementById("nearbyplaces").innerHTML+='<p>Nearby Place '+(i+1)+' Name: '+data[i]["name"]
+                    +' , Vicinity of the Place: '+data[i]["vicinity"]  
+                    +'</p>'
+                {if(data[i+1]==null){break}}
+            }
+        
+       
+    })     
+
+
+    
+    
+    
+    fetch("/api/city/"+{{story_id}},{method:'get'}).then(response => {
+        return response.json()
+    }).then(data => { {if(data.length==0){document.getElementById("city").innerHTML+='<p>There are no nearby cities with these parameters'  +'</p>' }}
+        for(i=0; i<3; i++) {
+                document.getElementById("city").innerHTML+='<p>Nearby City '+(i+1)+': ' +data[i]["name"]  +'</p>'
+                {if(data[i+1]==null){break}}
+            }
+        
+       
+    })           
+                                  
+    document.getElementById('de').onclick = (event) => {
+        event.preventDefault();
+        fetch("/api/story/"+{{story_id}}+"/translate_de",{method:'get'}).then(response => {
+            return response.json()
+        }).then(data => {
+            document.getElementById('translation').innerHTML=data['story']
+        })
+    }
+
+    document.getElementById('es').onclick = (event) => {
+        event.preventDefault();
+        fetch("/api/story/"+{{story_id}}+"/translate_es",{method:'get'}).then(response => {
+            return response.json()
+        }).then(data => {
+            document.getElementById('translation').innerHTML=data['story']
+        })
+    }
+
+    document.getElementById('tr').onclick = (event) => {
+        event.preventDefault();
+        fetch("/api/story/"+{{story_id}}+"/translate_tr",{method:'get'}).then(response => {
+            return response.json()
+        }).then(data => {
+            document.getElementById('translation').innerHTML=data['story']
+        })
+    }
+
+    fetch("/api/quote/"+{{story_id}},{method:'get'}).then(response => {
+            return response.json()
+        }).then(data => {
+            document.getElementById('quote').innerHTML=data['Quote']+' -'+data['Author']
+    })
+</script>
+
+<style>
+    html {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+    h1 {
+        color:crimson
+    }
+    #joke {
+        font-size: small;
+    }
+    #quote {
+        font-family: 'Courier New', monospace;
+        font-size:larger;
+    }
+    
+    .translate {
+        background-color:darksalmon;
+        color:white;
+        font-size:large;
+    }
+    .translate:hover {
+        background-color: lightgreen;
+    }
+
+</style>

@@ -70,6 +70,4 @@ def get_cityinfo(request, story_id):
         return JsonResponse(cityinfo, safe=False)
     except:
         return HttpResponseServerError("City not found.", status = 404)
-    
-    
 

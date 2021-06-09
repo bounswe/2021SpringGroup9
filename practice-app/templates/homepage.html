@@ -1,0 +1,74 @@
+<body align='center'>
+    <p id='joke'>
+
+    </p>
+    <hr>
+    <h1>
+        Welcome to our app!
+    </h1>
+    <h2>
+        Group 9
+    </h2>
+    
+    <p>
+        Here are the stories we have so far:
+    </p>
+    <div id="list">
+    
+    </div>
+    <hr>
+    <h3>
+        Or do you want to post a story?
+    </h3>
+    <button class="create" onclick="redirectPost()">
+        Send us a story!
+    </button>
+</body>
+
+<script type='text/javascript'>
+
+    fetch("/api/joke/animal",{method:'get'}).then(response => {
+        return response.json()
+    }).then(data => {
+            document.getElementById("joke").innerHTML+='<p>Joke of the Day: '+data["joke"]  +'</p>'
+    }) 
+
+    fetch("/api/story",{method:'get'}).then(response => {
+        return response.json()
+    }).then(data => {
+        for(i=0; i<data.length; i++) {
+            document.getElementById("list").innerHTML+='<button class="story" onclick=\'clicked("'+data[i]['id']+'")\'>'+data[i]['title']+'</button><br/>'
+        }
+    })
+    
+    function clicked(storyID) {
+        storyUrl="/api/view/"+storyID
+        location.href=storyUrl
+    }
+
+    function redirectPost() {
+        location.href="/api/create"
+    }
+       
+</script>
+
+<style>
+    html {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+    .story {
+        background-color:darksalmon;
+        color:white;
+    }
+    .story:hover {
+        background-color: lightgreen;
+    }
+    .create {
+        background-color:steelblue;
+        color:white;
+    }
+    .create:hover {
+        background-color:lightgreen;
+    }
+
+</style>

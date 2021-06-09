@@ -8,6 +8,7 @@ from .views import view_cityAPI
 from .views import views_weatherAPI_mertlkn
 from .views import views_quote
 from .views import views_covidAPI as views
+from .views import view_frontend
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
@@ -40,6 +41,9 @@ urlpatterns = [
     path('quote/<int:pk>', views_quote.GetQuoteTag.as_view(), name="get_quote_tag"),
     path('postquote/<int:pk>', views_quote.FavQuote.as_view(), name="fav_quote"),
     path('quote/location/<int:pk>', views_quote.GetQuoteLoc.as_view(), name="get_quote_loc"),
+    path('home',view_frontend.homepage, name='homepage'),
+    path('view/<int:story_id>', view_frontend.view_story, name='view_story'),
+    path('create',view_frontend.create_story, name='create_story'),
     path('covid/<int:story_id>', views.get_covid_numbers, name='covid_numbers'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]
