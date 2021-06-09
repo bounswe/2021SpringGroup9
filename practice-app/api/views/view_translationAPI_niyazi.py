@@ -12,6 +12,10 @@ env = environ.Env()
 environ.Env.read_env('.env')
 
 class TranslationView(GenericAPIView):
+    """ 
+    Retrieves translation of a story 
+    Target is specified as a language code: 'de', 'en','tr' etc.
+    """
     queryset = Story.objects.all()
     serializer_class = StorySerializer
     def retrieve_translation(story_id, target):
