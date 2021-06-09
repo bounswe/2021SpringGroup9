@@ -2,7 +2,7 @@ from django.urls import include, path
 from .views import view_post_story
 from .views import view_translationAPI_niyazi
 from .views import view_locationAPI
-from .views import jokeAPI_view 
+from .views import view_jokeAPI
 from .views import view_nearbyplaces
 from .views import view_cityAPI
 from .views import views_weatherAPI_mertlkn
@@ -33,7 +33,7 @@ urlpatterns = [
     path('location/', view_locationAPI.Locations.as_view(), name="location_story"),
     path('location/<int:pk>/', view_locationAPI.LocationDetail.as_view(), name="location_detail_story"),
     path('location/map/<int:pk>/', view_locationAPI.locationMap, name="location_map_story"),
-    path('joke/<str:category>', jokeAPI_view.joke,name = "jokes"),
+    path('joke/<str:category>', view_jokeAPI.joke,name = "jokes"),
     path('nearbyplaces/<int:pk>', view_nearbyplaces.get_places_near_story_location),
     path('city/<int:story_id>', view_cityAPI.get_cityinfo, name="city"),
     path('weather/<int:story_id>', views_weatherAPI_mertlkn.weather, name="weather"),

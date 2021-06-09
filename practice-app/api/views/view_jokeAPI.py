@@ -10,6 +10,11 @@ from rest_framework.decorators import api_view
 # @csrf_exempt
 @api_view(['GET'])
 def joke(request,category):
+    """
+    Takes a category name as an argument and makes a call to the Chuck Norris Jokes API and gets 
+    a random joke related to that category. This joke is then returned as a JsonResponse which is
+    used to display it in the frontend.
+    """
     resp=requests.get("https://api.chucknorris.io/jokes/random?category=%s" % (category))
     if resp.status_code == 200:
         resp = resp.json()
