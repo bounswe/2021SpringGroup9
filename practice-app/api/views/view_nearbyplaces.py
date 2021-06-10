@@ -38,7 +38,7 @@ def get_places_near_story_location(request, pk):
         places = [{
             "name": place["name"],
             "location": place["geometry"]["location"],
-            "vicinity": place["vicinity"]
+            "vicinity": place.get("vicinity", None)
         } for place in response.json()["results"]]
         return JsonResponse(places, safe=False)
     except:

@@ -48,7 +48,7 @@ def get_cityinfo(request, story_id):
 
         locationinISOform=true_location_from(story.latitude, story.longitude)
         
-        querystring = {"location":locationinISOform,"radius":"100", "minPopulation":"1000000" }
+        querystring = {"location":locationinISOform,"radius":"100", "minPopulation":"100000" }
 
         headers = {
             'x-rapidapi-key': CITY_API_KEY,
