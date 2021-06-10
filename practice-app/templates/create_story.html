@@ -10,9 +10,7 @@
 			<label for="title">Title</label>
             <input type="text" id="title" name = "title">
             <label for="story">Story</label>
-            <textarea id="story" name="story" rows="4" cols="50">
-                
-            </textarea>
+            <textarea id="story" name="story" rows="4" cols="50"></textarea>
             <input type = "submit">
         </form>
     </body>
@@ -24,26 +22,37 @@
 			for (const pair of new FormData(form)) {
 				data.append(pair[0], pair[1]);
 			}
+            
+            fetch('./storypost/', {
+                    method: 'post',
+                    body: data,
+                    credentials: 'include'	
+                }).then(response=>{
+                    if(response.status == 400)
+                            throw Error;
+                    return response.json()})
+                    .then(data=>{ 
+                        console.log(data);
+                        
+                        // Check if this story is flagged (notify_admin flag is set).
+                        fetch('./flagged_stories/', {
+                            method: 'get',
+                            credentials: 'include'	
+                        }).then(response=>response.json()).then(data2=>{
+                            if(((data2['flagged_stories']).map((x) => { return x['id']})).includes(data['id']) ){
+                                
+                                alert(`The story is added with id:${data['id']}. But it is flagged for review. It probably contains abusive text.`);
+                                window.location.href = '/api/home';
+                            }else {
+                                alert(`Your story was successfully added with id:${data['id']}.`);
+                                window.location.href = '/api/home';
+                            }
 
-			fetch('./storypost/', {
-				method: 'post',
-				body: data,
-				credentials: 'include'	
-			}).then(response=>response.json())
-				.then(data=>{ 
-                    console.log(data['id']);
-                    // Check if this story is flagged (notify_admin flag is set).
-                    fetch('./flagged_stories/', {
-                        method: 'get',
-                        credentials: 'include'	
-                    }).then(response=>response.json()).then(data2=>{
-                        if(((data2['flagged_stories']).map((x) => { return x['id']})).includes(data['id']) ){
-                            
-                            alert('This story was flagged for review. It probably contains abusive text.')
-                        }
-
-                    });
-			})
+                        });
+                }).catch((err) => {
+                    alert('We were not able to add your story. Please try again.')
+                });
+            
 			return true;
         }
     </script>
