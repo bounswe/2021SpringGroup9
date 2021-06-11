@@ -22,7 +22,7 @@ def get_covid_numbers(request, story_id):
     env = environ.Env()
     environ.Env.read_env('.env')
     COVID_API_KEY = env('COVID_API_KEY')
-    CITY_API_KEY = env('CITY_API_KEY')
+    CITY_API_KEY = env('COVID_API_KEY')
 
     try:
         story = Story.objects.get(pk=story_id)
