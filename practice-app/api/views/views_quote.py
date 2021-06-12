@@ -22,24 +22,38 @@ class GetQuoteTag(APIView):
     def get(self, request, pk):
         likemax = -1
         likeselect = -1
+
         try:
             story=Story.objects.get(pk=pk)
         except: 
             return Response(status=status.HTTP_400_BAD_REQUEST)
         tag = story.tag
+
         param = {'filter': tag.lower(), 'type': "tag"}
         url = "https://favqs.com/api/quotes/"
         headers = {"Authorization": 'Token token="{}"'.format(QUOTE_API_KEY)}
+
         try:
             response = requests.get(url, headers=headers, params=param)
             quote = response.json()
+
             for i in range(len(quote['quotes'])):
                 if quote['quotes'][i]['favorites_count'] > likemax: # get the quote with the most likes tagged with the story's tag in the Favqs API
                     likemax = quote['quotes'][i]['favorites_count']
                     likeselect = i
             q = quote['quotes'][likeselect]
-            if q['body'] == 'No quotes found': # If a quote with that tag doesn't exist
-                return Response(q['body']+" tagged with " + tag.lower())
+
+            if q['body'] == 'No quotes found': # If a quote with that tag doesn't exist return the quote of the day
+
+                url ="https://favqs.com/api/qotd"
+                headers = {"Authorization": 'Token token="{}"'.format(QUOTE_API_KEY)}
+
+                try:
+                    response = requests.get(url, headers=headers, params=param)
+                    quote = response.json()
+                    q = quote['quote']
+                except: 
+                    return Response(response.status)
             
             qselect = {'id': q['id'],'Quote': q['body'], 'Author': q['author'], 'Likes': q['favorites_count']}
             return Response(qselect, status=status.HTTP_200_OK)
