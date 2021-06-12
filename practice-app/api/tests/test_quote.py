@@ -96,10 +96,3 @@ class TestViews(TestCase):
         likes = self.quote.likes
         response = self.client.post(reverse('fav_quote', args=(self.quote.id,)))
         self.assertEquals(likes+1, response.data['likes'])
-
-    """
-    Test whether the request GET quote/lcoation returns 400 status code when location of the story is empty
-    """
-    def test_loc_not_empty(self):
-        response = self.client.get(reverse('get_quote_loc', args=(self.story2.id,)))
-        self.assertEquals(response.status_code, 400)
