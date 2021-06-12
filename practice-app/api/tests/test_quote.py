@@ -55,13 +55,6 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 200)
 
     """
-    Test whether if a quote according to tag doesn't exist, it returns a string with a message. 
-    """
-    def test_quote_tag_exist(self):
-        response = self.client.get(reverse('get_quote_tag', args=(self.story1.id,)))
-        self.assertEquals(response.data, "No quotes found tagged with " + self.story1.tag.lower())
-
-    """
     Test whether a request according to location doesn't give error. 
     """
     def test_get_quote_loc(self):
@@ -103,10 +96,3 @@ class TestViews(TestCase):
         likes = self.quote.likes
         response = self.client.post(reverse('fav_quote', args=(self.quote.id,)))
         self.assertEquals(likes+1, response.data['likes'])
-
-    """
-    Test whether the request GET quote/lcoation returns 400 status code when location of the story is empty
-    """
-    def test_loc_not_empty(self):
-        response = self.client.get(reverse('get_quote_loc', args=(self.story2.id,)))
-        self.assertEquals(response.status_code, 400)
