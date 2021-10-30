@@ -1,4 +1,5 @@
-# Group 9 - CMPE 352 2021 Spring
+# POSTORY 🗺️
+**CmpE 352/451 - Group 9**
 
 We are a group of Boğaziçi University students taking the course Fundamentals of Software Engineering. For more information about us or the project please visit our [wiki](https://github.com/bounswe/2021SpringGroup9/wiki).
 
