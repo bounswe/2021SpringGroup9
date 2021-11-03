@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingTop="20dp"
+    >
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/op_info_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <ImageView
+            android:layout_width="100dp"
+            android:src="@drawable/post_picture_example"
+            android:layout_height="match_parent">
+
+        </ImageView>
+
+        <TextView
+            android:id="@+id/op_name_field"
+            android:text="Ahmet Gülmez"
+            android:layout_marginStart="5dp"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </TextView>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_marginTop="10dp"
+        android:id="@+id/post_photo"
+        android:src="@drawable/post_picture_example"
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+
+    </ImageView>
+    <TextView
+        android:layout_marginTop="20dp"
+        android:id="@+id/post_story_text_field"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus rutrum aliquet eleifend. Maecenas ligula magna, luctus id nulla eu, feugiat ultrices velit. Vestibulum lacinia urna at turpis pharetra venenatis. Donec metus metus, dapibus eu lorem non, auctor feugiat augue. Sed blandit vestibulum dui, ac dignissim nibh tincidunt vel. Pellentesque dignissim erat libero, ac condimentum leo convallis id. Nam condimentum sem id sapien ultricies, id finibus orci sagittis. Donec at mi mollis, faucibus orci vel, aliquet leo.
+
+Donec pharetra justo vel pulvinar pulvinar. Aenean placerat est id consequat vestibulum. Suspendisse potenti. Nullam felis purus, porta non nulla nec, efficitur volutpat metus. Phasellus ut laoreet orci. Donec ac dolor hendrerit diam consequat convallis. Proin suscipit velit non purus viverra, vel tristique neque sodales. Pellentesque fermentum imperdiet eros, a tincidunt tellus molestie id. Integer iaculis ullamcorper ligula, ac efficitur velit facilisis quis. Vivamus neque turpis, interdum eu elit eget, malesuada posuere lectus. Phasellus fermentum lacus at porta luctus. Praesent egestas a turpis et congue.
+
+"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </TextView>
+
+
+</LinearLayout>
