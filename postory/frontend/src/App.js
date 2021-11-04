@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+import PostButtons from './PostButtons';
 
 function App() {
   return (
@@ -9,8 +10,8 @@ function App() {
         <p>
           POSTORY
         </p>
-        <a
-        >
+        <PostButtons></PostButtons>;
+        <a>
           POSTORY app
         </a>
       </header>
