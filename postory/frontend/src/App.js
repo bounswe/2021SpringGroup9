@@ -6,9 +6,9 @@ import './App.css';
 class App extends React.Component{
   constructor(props){
     super(props);
-    //Should fetch from the backend, needs post content, username, profile picture, post media
+    //Should fetch from the backend, needs post content, username, profile picture, post media, location, time, tags
     let dummyPost = {content : "Praesent eu libero et diam mollis placerat sed eget eros. Curabitur commodo purus in lorem fermentum, a suscipit tellus faucibus. Morbi justo nibh, iaculis sed porttitor id, faucibus in lorem. Aenean porttitor imperdiet velit id laoreet. Mauris tortor urna, fermentum eu eros vel, vestibulum malesuada mi. Vivamus venenatis magna nec eleifend hendrerit. Morbi lacinia ligula a quam varius, ac pretium libero semper. Fusce ultrices arcu ut augue sodales vehicula. Fusce pellentesque urna vel arcu facilisis, sed consectetur enim mollis. Nam suscipit euismod elit, ac cursus ex tempor eget. Curabitur aliquet ante orci, at vestibulum leo finibus vel. Praesent ullamcorper pharetra rhoncus. Vestibulum euismod nulla in ligula bibendum aliquam. Curabitur nec varius ligula. Duis feugiat mi risus, eget auctor lacus scelerisque sit amet.",
-  author : {username: "Daniel Jones"}};
+  author : {username: "Daniel Jones"}, location: "The World", time: "2021", tags: ["Cool"]};
     let posts = []
     for(let i = 0; i<10;i++){
       posts.push(dummyPost);
@@ -28,7 +28,7 @@ class App extends React.Component{
             POSTORY
           </p>
           {this.state.posts.map((obj, i) => {
-            return <Post key = {i} content = {obj.content} author = {obj.author}></Post>;
+            return <Post key = {i} {...obj}></Post>;
           })}
           <a
           >

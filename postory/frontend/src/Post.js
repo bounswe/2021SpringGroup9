@@ -7,7 +7,7 @@ class Post extends React.Component{
       this.props = props;
     }
     render(){
-      return (<div class= "Post" ><PostUpper content = {this.props.content} author = {this.props.author}/></div>);
+      return (<div class= "Post" ><PostUpper {...this.props}/></div>);
     }
 }
 
@@ -16,12 +16,11 @@ class PostUpper extends React.Component{
     super(props);
 
     this.state = {
-      content : props.content,
+      ...props,
       contentSmall : props.content.slice(0,200),
-      author: props.author,
-      continueReading: props.content.length > 200
+      continueReading: props.content.length > 200,
     };
-    
+    console.log(this.state.tags);
     this.getMoreContent = this.getMoreContent.bind(this);
   }
 
@@ -39,6 +38,13 @@ class PostUpper extends React.Component{
       <div class= "row">
         <img class = "circle" width = "50px" height = "50px" src = "https://images.emojiterra.com/google/android-11/512px/1f9cd.png" />
         <p>{this.props.author.username}</p>
+      </div>
+      <div class= "row">
+        <a class = "tag">{this.state.location}</a>
+        <a class = "tag">{this.state.time}</a>
+        {this.state.tags.map((obj,i) => {
+          return <a key = {i} class = "tag"> {obj}</a>;
+        })}
       </div>
       <a class = "mainContent" >{this.state.contentSmall}</a>
       {this.state.continueReading && <a class = "mainContent" onClick = {this.getMoreContent}><b> ...Continue Reading</b></a>}
