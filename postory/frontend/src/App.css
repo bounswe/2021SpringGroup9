@@ -1,7 +1,7 @@
 .Post{
   border:1px solid black;
   border-radius: 25px;
-  width : 400px;
+  width : 410px;
   margin: 10px;
   padding: 10px;
   background-color: rgb(235, 235, 235);
@@ -10,6 +10,7 @@
 .row{
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 
 .mainContent{
@@ -18,23 +19,27 @@
   width: -moz-fit-content;    
   width: -webkit-fit-content; 
 
-  
   display: inline-block; 
   font-size: small;
 }
 
 .tag{
   margin: 5px;
-  background-color: #206bff;
+  background-color: #07686E;
   font-size: small;
+  align-items: center;
 }
 
 .circle {
   background-color:#fff;
-  border:1px solid red;    
+  border:2px solid #FF8F49;    
   border-radius:50%;
   -moz-border-radius:50%;
   -webkit-border-radius:50%;
+}
+
+.image{
+  justify-content: space-between;
 }
 
 .App {
