@@ -3,6 +3,7 @@ import React from 'react'
 import Post  from './Post'
 import './App.css';
 import PostButtons from './PostButtons';
+import TopBar from './TopBar';
 
 
 class App extends React.Component{
@@ -24,8 +25,8 @@ class App extends React.Component{
   render() {
     return (
       <div className="App">
+        <TopBar/>
         <header className="App-header">
-          <img src="https://user-images.githubusercontent.com/52619088/139734287-271be973-fb00-44c1-a1bc-d561cb6e8e42.jpeg" className="App-logo" alt="logo" />
           <p>
             POSTORY
           </p>
