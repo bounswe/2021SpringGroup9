@@ -1,6 +1,7 @@
 import React from 'react'
 import Icon from '@mdi/react'
 import { mdiMapMarker, mdiClockTimeEight, mdiTag, mdiCardsHeartOutline, mdiCardsHeart, mdiShareVariant} from '@mdi/js'
+import PostButtons from './PostButtons';
 
 class Post extends React.Component{
     constructor(props){
@@ -8,7 +9,7 @@ class Post extends React.Component{
       this.props = props;
     }
     render(){
-      return (<div class= "Post" ><PostUpper {...this.props}/> <PostLower /></div>);
+      return (<div class= "Post" ><PostUpper {...this.props}/> <PostButtons/></div>);
     }
 }
 
