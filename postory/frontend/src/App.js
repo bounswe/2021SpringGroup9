@@ -2,6 +2,8 @@ import logo from './logo.svg';
 import React from 'react'
 import Post  from './Post'
 import './App.css';
+import PostButtons from './PostButtons';
+
 
 class App extends React.Component{
   constructor(props){
@@ -38,6 +40,7 @@ class App extends React.Component{
       </div>
     );
   }
+
 }
 
 
