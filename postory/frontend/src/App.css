@@ -1,17 +1,51 @@
+.Post{
+  border:1px solid black;
+  border-radius: 25px;
+  width : 410px;
+  margin: 10px;
+  padding: 10px;
+  background-color: rgb(235, 235, 235);
+}
+
+.row{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.mainContent{
+  /* Fit Text */
+  width: intrinsic;           
+  width: -moz-fit-content;    
+  width: -webkit-fit-content; 
+
+  display: inline-block; 
+  font-size: small;
+}
+
+.tag{
+  margin: 5px;
+  background-color: #07686E;
+  font-size: small;
+  align-items: center;
+}
+
+.circle {
+  background-color:#fff;
+  border:2px solid #FF8F49;    
+  border-radius:50%;
+  -moz-border-radius:50%;
+  -webkit-border-radius:50%;
+}
+
+.image{
+  justify-content: space-between;
+}
+
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
 
 .App-header {
   background-color: #282c34;
@@ -21,23 +55,7 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
-}
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
 
-.row{
-  display: flex;
-  flex-direction: row;
-}
