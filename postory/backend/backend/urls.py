@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from post_endpoint.urls import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/post/', include('post_endpoint.urls')),
 ]
