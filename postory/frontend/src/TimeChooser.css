@@ -1,0 +1,21 @@
+#timechooser-div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#timechooser-s-date-label,
+#timechooser-s-time-label,
+#timechooser-e-date-label,
+#timechooser-e-time-label
+{
+    align-self: flex-start;
+}
+
+#timechooser-date-label {
+    align-self: flex-start;
+}
+
+#timechooser-plus-button {
+    align-self: flex-end;
+}
