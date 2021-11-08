@@ -4,14 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
+
+    <ListView
+        android:id="@+id/list_view_posts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    </ListView>
 
 <ScrollView
+    android:visibility="gone"
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
+
     <LinearLayout
+        android:visibility="gone"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -20,6 +31,7 @@
         <include layout="@layout/single_post" />
 
     </LinearLayout>
+
 
 
 
