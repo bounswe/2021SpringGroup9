@@ -1,0 +1,13 @@
+#tagchooser-div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#tagchooser-title-label {
+    align-self: flex-start;
+}
+
+#tagchooser-plus-button {
+    align-self: flex-end;
+}

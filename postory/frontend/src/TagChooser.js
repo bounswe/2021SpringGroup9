@@ -6,12 +6,19 @@ import './TagChooser.css'
 class TagChooser extends React.Component{
     constructor(props){
         super(props);
+
+        this.parentHandler = props.parentHandler;
+        this.sendParent = this.sendParent.bind(this);
         
         this.state = {
             value: '',
             selectedTags: [] 
         };
 
+    }
+
+    sendParent() {
+        this.props.parentHandler('textChooser', this.state)
     }
 
     onChangeValue = event => {
@@ -45,7 +52,8 @@ class TagChooser extends React.Component{
 
     render(){
         return(
-            <div>
+            <div id={'tagchooser-div'}>
+                <label htmlFor={'tagchooser-title'} id={'textchooser-title-label'}>#Tags</label>
                 <div class= "row">
                 <input
                     type="text"
@@ -78,7 +86,10 @@ class TagChooser extends React.Component{
                             </button>
                         </li>
                     ))}
-                 </ul>  
+                 </ul>
+                 <button id={'tagchooser-plus-button'} onClick={this.sendParent}>
+                    <Icon path={mdiPlus} size={1} id={'tagchooser-plus-icon'}/>
+                </button>  
             </div>
         );
     }
