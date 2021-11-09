@@ -7,9 +7,39 @@
   background-color: rgb(235, 235, 235);
 }
 
+.createPostBtn{
+  width: 200px;
+  height : 50px;
+  margin: 10px;
+}
+
+.buttons{
+  margin-left: 100px;
+}
+.someSpacing{
+  justify-content: space-evenly;
+}
+
+.inputArea{
+  border:1px solid black;
+  border-radius: 25px;
+  width : 800px;
+  height: 500px;
+  margin-top: 60px;
+  margin-left: 0px;
+  padding: 10px;
+  background-color: rgb(235, 235, 235);
+}
+
 .row{
   display: flex;
   flex-direction: row;
+  align-items: center;
+}
+
+.col{
+  display: flex;
+  flex-direction: column;
   align-items: center;
 }
 

@@ -45,16 +45,27 @@ class CreatePost extends React.Component{
     render(){
 
         return(
-            <div>
-                {this.state['selected'] == 'Title' && <TestComponent parentHandler = {this.handleChildObjectSend}>Text</TestComponent >}
-                <button onClick = {() => {this.select('Title')}}>Title</button>
-                <button onClick = {() => {this.select('Story')}}>Story</button>
-                <button onClick = {() => {this.select('Location')}}>Location</button>
-                <button onClick = {() => {this.select('Time')}}>Time</button>
-                <button onClick = {() => {this.select('People')}}>People</button>
-                <button onClick = {() => {this.select('Tags')}}>Tags</button>
-                <button onClick = { this.sendToBackend}> Send</button>
+            <header className="App-header">
+            <div class = "row someSpacing">
+                <div class = "inputArea">
+                    {this.state['selected'] == 'Title' && <TestComponent parentHandler = {this.handleChildObjectSend}>Text</TestComponent >}
+                    {this.state['selected'] == 'Story' && <TestComponent parentHandler = {this.handleChildObjectSend}>Text</TestComponent >}
+                    {this.state['selected'] == 'Location' && <TestComponent parentHandler = {this.handleChildObjectSend}>Text</TestComponent >}
+                    {this.state['selected'] == 'Time' && <TestComponent parentHandler = {this.handleChildObjectSend}>Text</TestComponent >}
+                    {this.state['selected'] == 'People' && <TestComponent parentHandler = {this.handleChildObjectSend}>Text</TestComponent >}
+                    {this.state['selected'] == 'Tags' && <TestComponent parentHandler = {this.handleChildObjectSend}>Text</TestComponent >}
+                </div>
+                <div class = "buttons col">
+                    <button class = "createPostBtn" onClick = {() => {this.select('Title')}}>Title</button>
+                    <button class = "createPostBtn" onClick = {() => {this.select('Story')}}>Story</button>
+                    <button class = "createPostBtn" onClick = {() => {this.select('Location')}}>Location</button>
+                    <button class = "createPostBtn" onClick = {() => {this.select('Time')}}>Time</button>
+                    <button class = "createPostBtn" onClick = {() => {this.select('People')}}>People</button>
+                    <button class = "createPostBtn" onClick = {() => {this.select('Tags')}}>Tags</button>
+                    <button class = "createPostBtn" onClick = { this.sendToBackend}> Send</button>
+                </div>
             </div>
+            </header>
         );
     }
 

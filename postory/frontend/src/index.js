@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import CreatePost from './CreatePost';
 import reportWebVitals from './reportWebVitals';
-
+import TopBar from './TopBar';
 
 import {
   BrowserRouter,
@@ -14,9 +14,10 @@ import {
 
 ReactDOM.render(
   <BrowserRouter>
+    
     <Routes>
-    <Route path="/" element={<App />} />
-    <Route path="/createPost" element={<CreatePost />} />
+    <Route path="/" element={<div><TopBar/> <App /></div>} />
+    <Route path="/createPost" element={<div><TopBar/> <CreatePost /></div>} />
     </Routes>
   </BrowserRouter>,
   document.getElementById('root')
