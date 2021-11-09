@@ -6,6 +6,7 @@ import { mdiSend } from '@mdi/js';
 import { Link } from "react-router-dom";
 import TextChooser from './TextChooser'
 import TimeChooser from './TimeChooser';
+import TagChooser from './TagChooser';
 
 class CreatePost extends React.Component{
     constructor(props){
@@ -59,7 +60,7 @@ class CreatePost extends React.Component{
                     {this.state['selected'] == 'Location' && <TestComponent parentHandler = {this.handleChildObjectSend}>Text</TestComponent >}
                     {this.state['selected'] == 'Time' && <TimeChooser parentHandler = {this.handleChildObjectSend}>Text</TimeChooser >}
                     {this.state['selected'] == 'People' && <TestComponent parentHandler = {this.handleChildObjectSend}>Text</TestComponent >}
-                    {this.state['selected'] == 'Tags' && <TestComponent parentHandler = {this.handleChildObjectSend}>Text</TestComponent >}
+                    {this.state['selected'] == 'Tags' && <TagChooser parentHandler = {this.handleChildObjectSend}>Text</TagChooser >}
                 </div>
                 <div class = "buttons col">
                     <button class = "createPostBtn" onClick = {() => {this.select('Story')}}>Story</button>
