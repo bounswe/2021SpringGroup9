@@ -7,6 +7,14 @@
   background-color: rgb(235, 235, 235);
 }
 
+.homePageCreatePostButton{
+  position: fixed;
+  float: right;
+  right:10%;
+  bottom:10%;
+  padding: 1%;
+}
+
 .createPostBtn{
   width: 200px;
   height : 50px;
@@ -14,7 +22,8 @@
 }
 
 .buttons{
-  margin-left: 100px;
+  margin-left: 10%;
+  margin-bottom: 10%;
 }
 .someSpacing{
   justify-content: space-evenly;
@@ -23,7 +32,7 @@
 .inputArea{
   border:1px solid black;
   border-radius: 25px;
-  width : 800px;
+  width : 700px;
   height: 500px;
   margin-top: 60px;
   margin-left: 0px;

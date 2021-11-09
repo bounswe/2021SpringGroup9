@@ -1,5 +1,10 @@
 import React from 'react';
 
+import Icon from '@mdi/react';
+import { mdiSend } from '@mdi/js';
+
+import { Link } from "react-router-dom";
+
 class CreatePost extends React.Component{
     constructor(props){
         super(props);
@@ -62,8 +67,15 @@ class CreatePost extends React.Component{
                     <button class = "createPostBtn" onClick = {() => {this.select('Time')}}>Time</button>
                     <button class = "createPostBtn" onClick = {() => {this.select('People')}}>People</button>
                     <button class = "createPostBtn" onClick = {() => {this.select('Tags')}}>Tags</button>
-                    <button class = "createPostBtn" onClick = { this.sendToBackend}> Send</button>
                 </div>
+
+                <Link to= "/createPost" variant = "v6">
+                    <Icon onClick = { this.sendToBackend} class = "circle homePageCreatePostButton" path={mdiSend}
+                        title="Location"
+                        size={2}
+                        color="black"
+                    />
+                </Link>
             </div>
             </header>
         );
