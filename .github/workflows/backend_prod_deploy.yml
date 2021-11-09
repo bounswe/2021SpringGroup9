@@ -1,9 +1,6 @@
 name: Prod Deployment
 
 on:
-  pull_request:
-    branches: 
-      - master
   workflow_dispatch:
 
 jobs:
@@ -52,6 +49,6 @@ jobs:
             sudo docker run -d --restart always -p 80:80 --link mongo_prod --name backend_prod \
               --env MONGO_USERNAME=${{ secrets.MONGO_USERNAME }} \
               --env MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} \
-              --env SECRET_KEY=${{ secrets.SECRET_KEY }} \
+              --env SECRET_KEY="${{ secrets.SECRET_KEY }}" \
               --env GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }} \
               ${{ secrets.DOCKERHUB_USERNAME }}/backend_prod:latest bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:80" || true
