@@ -52,7 +52,8 @@ class PeopleChooser extends React.Component{
 
     render(){
         return(
-            <div>
+            <div id={'peoplechooser-div'}>
+                <label htmlFor={'peoplechooser-title'} id={'peoplechooser-title-label'}>People</label>
                 <div class= "row">
                 <input
                     type="text"
@@ -86,8 +87,8 @@ class PeopleChooser extends React.Component{
                         </li>
                     ))}
                 </ul>
-                <button  onClick={this.sendParent}>
-                    <Icon path={mdiPlus} size={1} />
+                <button id={'peoplechooser-plus-button'} onClick={this.sendParent}>
+                    <Icon path={mdiPlus} size={1} id={'peoplechooser-plus-icon'}/>
                 </button>  
             </div>
         );
