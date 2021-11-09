@@ -18,7 +18,7 @@ class TagChooser extends React.Component{
     }
 
     sendParent() {
-        this.props.parentHandler('textChooser', this.state)
+        this.props.parentHandler('tagChooser', this.state)
     }
 
     onChangeValue = event => {
