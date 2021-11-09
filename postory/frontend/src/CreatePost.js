@@ -8,6 +8,7 @@ import TextChooser from './TextChooser'
 import TimeChooser from './TimeChooser';
 import TagChooser from './TagChooser';
 import PeopleChooser from './PeopleChooser'
+import LocationChooser from './LocationChooser'
 
 class CreatePost extends React.Component{
     constructor(props){
@@ -58,7 +59,7 @@ class CreatePost extends React.Component{
             <div class = "row someSpacing">
                 <div class = "inputArea">
                     {this.state['selected'] == 'Story' && <TextChooser parentHandler = {this.handleChildObjectSend}>Text</TextChooser>}
-                    {this.state['selected'] == 'Location' && <TestComponent parentHandler = {this.handleChildObjectSend}>Text</TestComponent >}
+                    {this.state['selected'] == 'Location' && <LocationChooser parentHandler = {this.handleChildObjectSend}>Text</LocationChooser >}
                     {this.state['selected'] == 'Time' && <TimeChooser parentHandler = {this.handleChildObjectSend}>Text</TimeChooser >}
                     {this.state['selected'] == 'People' && <PeopleChooser parentHandler = {this.handleChildObjectSend}>Text</PeopleChooser >}
                     {this.state['selected'] == 'Tags' && <TagChooser parentHandler = {this.handleChildObjectSend}>Text</TagChooser >}
