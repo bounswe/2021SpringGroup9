@@ -18,7 +18,9 @@ class LocationChooser extends React.Component{
     }
 
     sendParent() {
-        this.props.parentHandler('locationChooser', this.state)
+        {/* Called when user clicks on plus button plcaed below the selected locations.
+            It sends all of the entered locations to the parent component (Create Post)*/}
+        this.props.parentHandler('locationChooser', this.state.selectedLocations)
     }
 
     clearAllSelectedLocations = () => {
@@ -59,7 +61,8 @@ class LocationChooser extends React.Component{
 
     render(){
         return(
-            <div>
+            <div id={'locationchooser-div'}>
+                <label htmlFor={'locationchooser-title'} id={'locationchooser-title-label'}>Location</label>
                 <div class= "row">
                 <input
                     type="text"
@@ -93,8 +96,8 @@ class LocationChooser extends React.Component{
                         </li>
                     ))}
                  </ul>
-                 <button  onClick={this.sendParent}>
-                    <Icon path={mdiPlus} size={1} />
+                 <button id={'locationchooser-plus-button'} onClick={this.sendParent}>
+                    <Icon path={mdiPlus} size={1} id={'locationchooser-plus-icon'}/>
                 </button>   
             </div>
         );
