@@ -1,15 +1,24 @@
 import React from 'react'
 import './LocationChooser.css'
+import Icon from '@mdi/react'
+import { mdiPlus } from '@mdi/js';
 
 class LocationChooser extends React.Component{
     constructor(props){
         super(props);
+
+        this.parentHandler = props.parentHandler;
+        this.sendParent = this.sendParent.bind(this);
 
         this.state = {
             value: '', // Holds the last entered location as an input
             selectedLocations: [] // Holds all the locations that are entered by the user
         };
 
+    }
+
+    sendParent() {
+        this.props.parentHandler('locationChooser', this.state)
     }
 
     clearAllSelectedLocations = () => {
@@ -83,7 +92,10 @@ class LocationChooser extends React.Component{
                             </button>
                         </li>
                     ))}
-                 </ul>  
+                 </ul>
+                 <button  onClick={this.sendParent}>
+                    <Icon path={mdiPlus} size={1} />
+                </button>   
             </div>
         );
     }
