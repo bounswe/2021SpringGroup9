@@ -11,25 +11,31 @@ class PeopleChooser extends React.Component{
         this.sendParent = this.sendParent.bind(this);
 
         this.state = {
-            value: '',
-            selectedPeople: [] 
+            value: '', // Holds the last entered tag as an input
+            selectedPeople: [] // Holds all the tags that are entered by the user
         };
 
     }
 
     sendParent() {
+        {/* Called when user clicks on the plus button placed below the selected people.
+            It sends all of the entered people to the parent component (Create Post)*/}
         this.props.parentHandler('peopleChooser', this.state)
     }
 
     onChangeValue = event => {
+        {/* Called when when there is change in the input box allows user to enter a person*/}
         this.setState({ value: event.target.value });
       };
 
     clearAllSelectedPeople = () => {
+        {/* Called when user clicks on clear all button to clear all the people that added to the post before*/}
         this.setState({ selectedPeople: [] });
     };
 
     removePeople= i => {
+        {/* Called when user clicks on x button next to each person added previously to the post.
+            It filters the person that wanted to be removed from selectedPeople array returns it */}
         this.setState(state => {
           const selectedPeople = state.selectedPeople.filter((item, j) => i !== j);
 
@@ -40,6 +46,8 @@ class PeopleChooser extends React.Component{
       };
 
     addTagToSelectedPeople = () => {
+        {/* Called when user clicks on add button to add the last entered person (state.value) to the post.
+            It then concats the previous selectedPeople list with the last entered person and returns */}
         this.setState(state => {
           const selectedPeople = state.selectedPeople.concat(state.value);
 
