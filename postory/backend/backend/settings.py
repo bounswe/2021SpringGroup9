@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'post_endpoint'
 ]
 
 MIDDLEWARE = [
@@ -81,7 +82,7 @@ DATABASES = {
         'ENGINE': 'djongo',
         'NAME': 'mongo-test',
         'CLIENT': {
-           'host': f'mongodb://{env("MONGO_USERNAME")}:{env("MONGO_PASSWORD")}@0.0.0.0:2717/',
+           'host': f'mongodb://{env("MONGO_USERNAME")}:{env("MONGO_PASSWORD")}@mongo:27017/',
         }
     }
 }
