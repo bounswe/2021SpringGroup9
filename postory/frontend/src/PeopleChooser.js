@@ -16,6 +16,20 @@ class PeopleChooser extends React.Component{
         this.setState({ value: event.target.value });
       };
 
+    clearAllSelectedPeople = () => {
+        this.setState({ selectedPeople: [] });
+    };
+
+    removePeople= i => {
+        this.setState(state => {
+          const selectedPeople = state.selectedPeople.filter((item, j) => i !== j);
+
+          return {
+            selectedPeople,
+          };
+        });
+      };
+
     addTagToSelectedPeople = () => {
         this.setState(state => {
           const selectedPeople = state.selectedPeople.concat(state.value);
@@ -42,14 +56,27 @@ class PeopleChooser extends React.Component{
                     disabled={!this.state.value}
                 >
                 Add
-                </button>     
+                </button>
+                <button 
+                    type="button" 
+                    onClick={this.clearAllSelectedPeople}
+                >
+                Clear All 
+                </button>    
                 </div>
                 Selected People
                 <ul>
-                    {this.state.selectedPeople.map(item => (
-                        <li key={item}>{item}</li>
+                    {this.state.selectedPeople.map((item, index) => (
+                        <li key={item}>{item}
+                            <button
+                                type="button"
+                                onClick={() => this.removePeople(index)}
+                            >
+                                x
+                            </button>
+                        </li>
                     ))}
-                 </ul>  
+                </ul>  
             </div>
         );
     }
