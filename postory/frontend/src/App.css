@@ -7,6 +7,11 @@
   background-color: rgb(235, 235, 235);
 }
 
+.hide{
+  display: none !important;
+  color: rgb(255, 0, 0) !important;
+}
+
 .homePageCreatePostButton{
   position: fixed;
   float: right;

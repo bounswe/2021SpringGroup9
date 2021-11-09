@@ -8,6 +8,9 @@ import TextChooser from './TextChooser'
 import TimeChooser from './TimeChooser';
 import TagChooser from './TagChooser';
 import PeopleChooser from './PeopleChooser'
+import LocationChooser from './LocationChooser'
+
+import styles from './App.css';
 
 class CreatePost extends React.Component{
     constructor(props){
@@ -57,11 +60,11 @@ class CreatePost extends React.Component{
             <header className="App-header">
             <div class = "row someSpacing">
                 <div class = "inputArea">
-                    {this.state['selected'] == 'Story' && <TextChooser parentHandler = {this.handleChildObjectSend}>Text</TextChooser>}
-                    {this.state['selected'] == 'Location' && <TestComponent parentHandler = {this.handleChildObjectSend}>Text</TestComponent >}
-                    {this.state['selected'] == 'Time' && <TimeChooser parentHandler = {this.handleChildObjectSend}>Text</TimeChooser >}
-                    {this.state['selected'] == 'People' && <PeopleChooser parentHandler = {this.handleChildObjectSend}>Text</PeopleChooser >}
-                    {this.state['selected'] == 'Tags' && <TagChooser parentHandler = {this.handleChildObjectSend}>Text</TagChooser >}
+                    <div class = {(this.state['selected'] != 'Story')? "hide": ""}><TextChooser parentHandler = {this.handleChildObjectSend}/> </div>
+                    <div class = {(this.state['selected'] != 'Location')? "hide": ""}><LocationChooser  parentHandler = {this.handleChildObjectSend}/></div>
+                    <div class = {(this.state['selected'] != 'Time')? "hide": ""}><TimeChooser  parentHandler = {this.handleChildObjectSend}/></div>
+                    <div class = {(this.state['selected'] != 'People')? "hide": ""}><PeopleChooser  parentHandler = {this.handleChildObjectSend}/></div>
+                    <div class = {(this.state['selected'] != 'Tags')? "hide": ""}><TagChooser  parentHandler = {this.handleChildObjectSend}/></div>
                 </div>
                 <div class = "buttons col">
                     <button class = "createPostBtn" onClick = {() => {this.select('Story')}}>Story</button>
