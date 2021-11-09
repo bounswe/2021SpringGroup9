@@ -1,15 +1,24 @@
 import React from 'react'
 import './PeopleChooser.css'
+import Icon from '@mdi/react'
+import { mdiPlus } from '@mdi/js';
 
 class PeopleChooser extends React.Component{
     constructor(props){
         super(props);
+
+        this.parentHandler = props.parentHandler;
+        this.sendParent = this.sendParent.bind(this);
 
         this.state = {
             value: '',
             selectedPeople: [] 
         };
 
+    }
+
+    sendParent() {
+        this.props.parentHandler('peopleChooser', this.state)
     }
 
     onChangeValue = event => {
@@ -76,7 +85,10 @@ class PeopleChooser extends React.Component{
                             </button>
                         </li>
                     ))}
-                </ul>  
+                </ul>
+                <button  onClick={this.sendParent}>
+                    <Icon path={mdiPlus} size={1} />
+                </button>  
             </div>
         );
     }
