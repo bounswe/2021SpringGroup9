@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import TextChooser from './TextChooser'
 import TimeChooser from './TimeChooser';
 import TagChooser from './TagChooser';
+import PeopleChooser from './PeopleChooser'
 
 class CreatePost extends React.Component{
     constructor(props){
@@ -59,7 +60,7 @@ class CreatePost extends React.Component{
                     {this.state['selected'] == 'Story' && <TextChooser parentHandler = {this.handleChildObjectSend}>Text</TextChooser>}
                     {this.state['selected'] == 'Location' && <TestComponent parentHandler = {this.handleChildObjectSend}>Text</TestComponent >}
                     {this.state['selected'] == 'Time' && <TimeChooser parentHandler = {this.handleChildObjectSend}>Text</TimeChooser >}
-                    {this.state['selected'] == 'People' && <TestComponent parentHandler = {this.handleChildObjectSend}>Text</TestComponent >}
+                    {this.state['selected'] == 'People' && <PeopleChooser parentHandler = {this.handleChildObjectSend}>Text</PeopleChooser >}
                     {this.state['selected'] == 'Tags' && <TagChooser parentHandler = {this.handleChildObjectSend}>Text</TagChooser >}
                 </div>
                 <div class = "buttons col">
