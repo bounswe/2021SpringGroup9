@@ -51,4 +51,5 @@ jobs:
               --env MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} \
               --env SECRET_KEY="${{ secrets.SECRET_KEY }}" \
               --env GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }} \
+              --env MONGO_CONTAINER_NAME=mongo_prod \
               ${{ secrets.DOCKERHUB_USERNAME }}/backend_prod:latest bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:80" || true

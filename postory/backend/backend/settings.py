@@ -80,9 +80,9 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'mongo-test',
+        'NAME': 'postory',
         'CLIENT': {
-           'host': f'mongodb://{env("MONGO_USERNAME")}:{env("MONGO_PASSWORD")}@mongo:27017/',
+           'host': f'mongodb://{env("MONGO_USERNAME")}:{env("MONGO_PASSWORD")}@{env("MONGO_CONTAINER_NAME")}:27017/',
         }
     }
 }
