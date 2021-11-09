@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Post
+from .models import Location, Post, Tag
 from .serializers import PostSerializer
 import environ
 import requests
@@ -14,19 +14,43 @@ env = environ.Env(DEBUG=(bool, True))
 environ.Env.read_env('.env')
 
 class PostCreate(GenericAPIView):
-    
-    queryset = Post.objects.all()
+
     serializer_class = PostSerializer
 
     def post(self, request, format=None):
-        serializer = PostSerializer(data=request.data)
+
+        data = request.data
+        locations = data['locations']
+        locationsList = []
+        for location in locations:
+            location = str(location).lower() 
+            search = Location.objects.filter(name=location).first()
+            if(search):
+                locationsList.append(search)
+                continue
+            name = location
+            coordsLatitude, coordsLongitude = find_coordinates(location)
+            locationObject = Location(name=name, coordsLatitude=coordsLatitude, coordsLongitude=coordsLongitude)
+            locationsList.append(locationObject)
+            locationObject.save()
+        data['locations'] = [location.id for location in locationsList]
+
+        tags = data['tags']
+        tagsList = []
+        for tag in tags:
+            tag = str(tag).lower()
+            search = Tag.objects.filter(content=tag).first()
+            if(search):
+                tagsList.append(search)
+                continue
+            tagObject = Tag(content=tag)
+            tagObject.save()
+            tagsList.append(tagObject)
+        data['tags'] = [tag.id for tag in tagsList]
+
+        serializer = PostSerializer(data=data)
         if serializer.is_valid():
-            try:
-                lat, lng = find_coordinates(serializer.validated_data['location'])
-            except:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            print(serializer.validated_data['location'])
-            serializer.save(latitude=lat,longitude=lng)
+            serializer.save()
             return Response(serializer.data, status=200)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -38,9 +62,7 @@ def find_coordinates(location):
     new_url = create_url(url,params)
     response = requests.get(new_url)
     json_data = json.loads(response.content)
-    print(json_data)
     location = json_data['results'][0]['geometry']['location']
-    print(location['lat'],location['lng'])
     return location['lat'], location['lng']
 
 def create_url(url, params):

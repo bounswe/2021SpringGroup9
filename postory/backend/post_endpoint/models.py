@@ -1,13 +1,19 @@
 from django.db import models
 
+class Location(models.Model):
+    name = models.CharField(max_length=200)
+    coordsLatitude = models.FloatField()
+    coordsLongitude = models.FloatField()
+
+class Tag(models.Model):
+    content = models.CharField(max_length=50)
+
 class Post(models.Model):
     title = models.CharField(max_length=200)
     story = models.CharField(max_length=1000)
     owner = models.CharField(max_length=200)
-    longitude = models.FloatField()
-    latitude = models.FloatField()
-    location = models.CharField(max_length=200)
-    tags = models.CharField(max_length=200) # models.ListField
+    locations = models.ManyToManyField(Location)
+    tags = models.ManyToManyField(Tag)
     postDate = models.DateTimeField(auto_now_add=True)
     # multimedia 
     # comments = models.ListField
@@ -15,7 +21,6 @@ class Post(models.Model):
     storyDate = models.DateTimeField()
     viewCount = models.IntegerField(default=0)
     # likeList = models.ListField
-
 
 class Comment(models.Model):
     pass
