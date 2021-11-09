@@ -3,7 +3,10 @@ import React from 'react'
 import Post  from './Post'
 import './App.css';
 import PostButtons from './PostButtons';
-import TopBar from './TopBar';
+import Icon from '@mdi/react';
+import {mdiPencilPlusOutline } from '@mdi/js';
+
+import { Link } from "react-router-dom";
 
 
 class App extends React.Component{
@@ -25,7 +28,6 @@ class App extends React.Component{
   render() {
     return (
       <div className="App">
-        <TopBar/>
         <header className="App-header">
           <p>
             POSTORY
@@ -33,11 +35,16 @@ class App extends React.Component{
           {this.state.posts.map((obj, i) => {
             return <Post key = {i} {...obj}></Post>;
           })}
-          <a
-          >
-            POSTORY app
-          </a>
+          <Link to= "/createPost" variant = "v6">
+            <Icon class = "circle homePageCreatePostButton" path={mdiPencilPlusOutline}
+            title="Location"
+            size={2}
+            color="black"
+            />
+          </Link>
+
         </header>
+        
       </div>
     );
   }

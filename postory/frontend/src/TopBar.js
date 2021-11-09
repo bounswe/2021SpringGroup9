@@ -5,6 +5,8 @@ import globeIcon from './globe_icon.png'
 import menuIcon from './menu_icon.png'
 import SearchBar from './SearchBar'
 
+import { Link } from "react-router-dom";
+
 const topBarColor = 'rgb(235, 235, 235)'
 
 const topBarStyle = {
@@ -71,9 +73,11 @@ class TopBar extends React.Component {
             <a href={'/discover'} style={itemStyleRight}>
                 <img src={globeIcon} alt={'Discover'} style={imageStyle}/>
             </a>
-            <a href={'/'} style={itemStyleRight}>
-                <img src={homeIcon} alt={'Postory'} style={imageStyle}/>
-            </a>
+            <Link to="/" ariant = "v6">
+                <a href={'/'} style={itemStyleRight}>
+                    <img src={homeIcon} alt={'Postory'} style={imageStyle}/>
+                </a>
+            </Link>
         </div>)
 
     }
