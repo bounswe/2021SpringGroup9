@@ -18,6 +18,10 @@ class TagChooser extends React.Component{
         this.setState({ value: event.target.value });
       };
 
+    clearSelectedTags = () => {
+        this.setState({ selectedTags: [] });
+    };
+
     addTagToSelectedTags = () => {
         this.setState(state => {
           const selectedTags = state.selectedTags.concat(state.value);
@@ -44,6 +48,12 @@ class TagChooser extends React.Component{
                     disabled={!this.state.value}
                 >
                 Add
+                </button>
+                <button 
+                    type="button" 
+                    onClick={this.clearSelectedTags}
+                >
+                Clear All
                 </button>     
                 </div>
                 Selected Tags
