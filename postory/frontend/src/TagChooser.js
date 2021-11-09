@@ -18,9 +18,19 @@ class TagChooser extends React.Component{
         this.setState({ value: event.target.value });
       };
 
-    clearSelectedTags = () => {
+    clearAllSelectedTags = () => {
         this.setState({ selectedTags: [] });
     };
+
+    removeTag = i => {
+        this.setState(state => {
+          const selectedTags = state.selectedTags.filter((item, j) => i !== j);
+     
+          return {
+            selectedTags,
+          };
+        });
+      };
 
     addTagToSelectedTags = () => {
         this.setState(state => {
@@ -51,15 +61,22 @@ class TagChooser extends React.Component{
                 </button>
                 <button 
                     type="button" 
-                    onClick={this.clearSelectedTags}
+                    onClick={this.clearAllSelectedTags}
                 >
                 Clear All
                 </button>     
                 </div>
                 Selected Tags
                 <ul>
-                    {this.state.selectedTags.map(item => (
-                        <li key={item}>{item}</li>
+                    {this.state.selectedTags.map((item, index) => (
+                        <li key={item}>{item}
+                            <button
+                                type="button"
+                                onClick={() => this.removeTag(index)}
+                            >
+                                x
+                            </button>
+                        </li>
                     ))}
                  </ul>  
             </div>
