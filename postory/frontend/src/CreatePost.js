@@ -4,6 +4,7 @@ import Icon from '@mdi/react';
 import { mdiSend } from '@mdi/js';
 
 import { Link } from "react-router-dom";
+import TextChooser from './TextChooser'
 
 class CreatePost extends React.Component{
     constructor(props){
@@ -54,14 +55,14 @@ class CreatePost extends React.Component{
             <div class = "row someSpacing">
                 <div class = "inputArea">
                     {this.state['selected'] == 'Title' && <TestComponent parentHandler = {this.handleChildObjectSend}>Text</TestComponent >}
-                    {this.state['selected'] == 'Story' && <TestComponent parentHandler = {this.handleChildObjectSend}>Text</TestComponent >}
+                    {this.state['selected'] == 'Story' && <TextChooser parentHandler = {this.handleChildObjectSend}>Text</TextChooser>}
                     {this.state['selected'] == 'Location' && <TestComponent parentHandler = {this.handleChildObjectSend}>Text</TestComponent >}
                     {this.state['selected'] == 'Time' && <TestComponent parentHandler = {this.handleChildObjectSend}>Text</TestComponent >}
                     {this.state['selected'] == 'People' && <TestComponent parentHandler = {this.handleChildObjectSend}>Text</TestComponent >}
                     {this.state['selected'] == 'Tags' && <TestComponent parentHandler = {this.handleChildObjectSend}>Text</TestComponent >}
                 </div>
                 <div class = "buttons col">
-                    <button class = "createPostBtn" onClick = {() => {this.select('Title')}}>Title</button>
+                    {/*<button class = "createPostBtn" onClick = {() => {this.select('Title')}}>Title</button>*/}
                     <button class = "createPostBtn" onClick = {() => {this.select('Story')}}>Story</button>
                     <button class = "createPostBtn" onClick = {() => {this.select('Location')}}>Location</button>
                     <button class = "createPostBtn" onClick = {() => {this.select('Time')}}>Time</button>
