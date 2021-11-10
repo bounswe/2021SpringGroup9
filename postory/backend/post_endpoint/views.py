@@ -17,14 +17,10 @@ import json
 import environ
 
 class GetAllPosts(GenericAPIView):
-    queryset = Post.objects.all()
     serializer_class = PostSerializer
 
     def get(self, request, format=None):
-        if self.request.query_params is None:
-            posts = Post.objects.all()
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        posts = Post.objects.all()
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
 
