@@ -61,8 +61,7 @@ class PostListDetail(GenericAPIView):
     """
     Retrieve, update or delete a story instance.
     """
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
+
     def get_object(self, pk):
         try:
             return Post.objects.get(pk=pk)
@@ -81,7 +80,18 @@ class PostListDetail(GenericAPIView):
         serializer['tags'] = tags
         serializer['locations'] = locations
         return Response(serializer)
+    
+class PostUpdate(GenericAPIView):
+    """
+    Retrieve, update or delete a story instance.
+    """
 
+    def get_object(self, pk):
+        try:
+            return Post.objects.get(pk=pk)
+        except Post.DoesNotExist:
+            raise Http404
+    
     def put(self, request, pk, format=None):
         story = self.get_object(pk)
         data = request.data
@@ -118,11 +128,24 @@ class PostListDetail(GenericAPIView):
             serializer.save(editDate=datetime.datetime.now())
             return Response(serializer.data, status=200)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class PostDelete(GenericAPIView):
+    """
+    Retrieve, update or delete a story instance.
+    """
 
+    def get_object(self, pk):
+        try:
+            return Post.objects.get(pk=pk)
+        except Post.DoesNotExist:
+            raise Http404
+    
     def delete(self, request, pk, format=None):
         story = self.get_object(pk)
         story.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    
 
 def find_coordinates(location):
     location = location.split(' ')
