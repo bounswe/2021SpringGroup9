@@ -1,3 +1,5 @@
+from django.http import Http404
+
 from django.shortcuts import render
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
@@ -8,6 +10,7 @@ import environ
 import requests
 import urllib.parse as urlparse
 import json
+import datetime
 
 
 env = environ.Env(DEBUG=(bool, True))
@@ -53,6 +56,65 @@ class PostCreate(GenericAPIView):
             serializer.save()
             return Response(serializer.data, status=200)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class PostListDetail(GenericAPIView):
+    """
+    Retrieve, update or delete a story instance.
+    """
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    def get_object(self, pk):
+        try:
+            return Post.objects.get(pk=pk)
+        except Post.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        story = self.get_object(pk)
+        serializer = PostSerializer(story)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        story = self.get_object(pk)
+        data = request.data
+        locations = data['locations']
+        locationsList = []
+        for location in locations:
+            location = str(location).lower() 
+            search = Location.objects.filter(name=location).first()
+            if(search):
+                locationsList.append(search)
+                continue
+            name = location
+            coordsLatitude, coordsLongitude = find_coordinates(location)
+            locationObject = Location(name=name, coordsLatitude=coordsLatitude, coordsLongitude=coordsLongitude)
+            locationsList.append(locationObject)
+            locationObject.save()
+        data['locations'] = [location.id for location in locationsList]
+
+        tags = data['tags']
+        tagsList = []
+        for tag in tags:
+            tag = str(tag).lower()
+            search = Tag.objects.filter(content=tag).first()
+            if(search):
+                tagsList.append(search)
+                continue
+            tagObject = Tag(content=tag)
+            tagObject.save()
+            tagsList.append(tagObject)
+        data['tags'] = [tag.id for tag in tagsList]
+
+        serializer = PostSerializer(story, data=data)
+        if serializer.is_valid():
+            serializer.save(editDate=datetime.datetime.now())
+            return Response(serializer.data, status=200)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        story = self.get_object(pk)
+        story.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 def find_coordinates(location):
     location = location.split(' ')
