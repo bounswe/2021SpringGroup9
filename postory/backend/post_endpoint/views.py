@@ -17,6 +17,9 @@ import json
 import environ
 
 class GetAllPosts(GenericAPIView):
+    """
+    Get all posts from the database. 
+    """
     serializer_class = PostSerializer
 
     def get(self, request, format=None):
