@@ -71,8 +71,16 @@ class PostListDetail(GenericAPIView):
 
     def get(self, request, pk, format=None):
         story = self.get_object(pk)
-        serializer = PostSerializer(story)
-        return Response(serializer.data)
+        tags = []
+        for tag in story.tags.all():
+            tags.append(tag.content)
+        locations = []
+        for location in story.locations.all():
+            locations.append(location.name)
+        serializer = dict(PostSerializer(story).data)
+        serializer['tags'] = tags
+        serializer['locations'] = locations
+        return Response(serializer)
 
     def put(self, request, pk, format=None):
         story = self.get_object(pk)
