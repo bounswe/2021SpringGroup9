@@ -82,7 +82,7 @@ DATABASES = {
         'ENGINE': 'djongo',
         'NAME': 'postory',
         'CLIENT': {
-           'host': f'mongodb://{env("MONGO_USERNAME")}:{env("MONGO_PASSWORD")}@{env("MONGO_CONTAINER_NAME")}:27017/',
+           'host': f'mongodb://{env("MONGO_USERNAME")}:{env("MONGO_PASSWORD")}@{env("MONGO_CONTAINER_NAME")}:{env("MONGO_PORT")}/',
         }
     }
 }
