@@ -1,5 +1,12 @@
 from django.db import models
 
+from backend.storage import ImageStorage
+
+class Image(models.Model):
+    uploadDate = models.DateTimeField(auto_now_add=True)
+    file = models.FileField(storage=ImageStorage())
+    url = models.CharField(max_length=200)
+
 class Location(models.Model):
     name = models.CharField(max_length=200)
     coordsLatitude = models.FloatField()
@@ -14,6 +21,7 @@ class Post(models.Model):
     owner = models.CharField(max_length=200)
     locations = models.ManyToManyField(Location)
     tags = models.ManyToManyField(Tag)
+    images = models.ManyToManyField(Image)
     postDate = models.DateTimeField(auto_now_add=True)
     # multimedia 
     # comments = models.ListField
