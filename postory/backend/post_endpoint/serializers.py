@@ -7,7 +7,7 @@ from .models import *
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ['title', 'story', 'owner', 'tags', 'locations', 'postDate', 'editDate', 'storyDate', 'viewCount']
+        fields = ['id', 'title', 'story', 'owner', 'tags', 'locations', 'postDate', 'editDate', 'storyDate', 'viewCount']
         read_only_fields = []
 
 
