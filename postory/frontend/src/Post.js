@@ -19,8 +19,8 @@ class PostUpper extends React.Component{
 
     this.state = {
       ...props,
-      contentSmall : props.content.slice(0,200),
-      continueReading: props.content.length > 200,
+      contentSmall : (props.story.length > 200) ? props.story.slice(0,200): props.story,
+      continueReading: props.story.length > 200,
     };
     console.log(this.state.tags);
     this.getMoreContent = this.getMoreContent.bind(this);
@@ -29,7 +29,7 @@ class PostUpper extends React.Component{
   getMoreContent(){
     this.setState(state =>{
       let newState = JSON.parse(JSON.stringify(state));
-      newState.contentSmall = state.content;
+      newState.contentSmall = state.story;
       newState.continueReading = false;
       return newState;
     });
@@ -39,18 +39,22 @@ class PostUpper extends React.Component{
     return (<div >
       <div class= "row" style = {{paddingBottom: "10px"}}>
         <img class = "circle" width = "50px" height = "50px" src = "https://images.emojiterra.com/google/android-11/512px/1f9cd.png" />
-        <a style = {{margin: "10px"}}>{this.props.author.username}</a>
+        <a style = {{margin: "10px"}}>{this.state.owner}</a>
       </div>
       <div class= "row">
       
-        <a class = "tag">
-          <Icon path={mdiMapMarker}
+        
+        {this.state.locations.map((obj,i) => {
+          return(
+          <a key = {i} class = "tag">
+              <Icon path={mdiMapMarker}
           title="Location"
           size={0.7}
           color="#53BEC6"
           />
-          {this.state.location}
-        </a>
+             {obj}
+          </a>);
+        })}
 
         <a class = "tag">
           <Icon path={mdiClockTimeEight}
@@ -58,7 +62,7 @@ class PostUpper extends React.Component{
           size={0.7}
           color="#53BEC6"
           />
-          {this.state.time}
+          {this.state.storyDate}
         </a>
         {this.state.tags.map((obj,i) => {
           return(
