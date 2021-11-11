@@ -1,5 +1,7 @@
 import React from 'react'
 import Icon from '@mdi/react'
+import {Snackbar} from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import { mdiShareVariantOutline } from '@mdi/js';
 import { mdiCardsHeartOutline } from '@mdi/js';
 import { mdiCardsHeart } from '@mdi/js';
@@ -49,6 +51,21 @@ function VerticalSeperator() {
 }
 
 class PostButtons extends React.Component {
+  constructor(props){
+    super(props);
+
+    this.state = {
+      popupState: false
+    }
+  }
+
+  showPopup = () => {
+    this.setState({ popupState: true });
+  };
+
+  closePopup = () => {
+    this.setState({ popupState: false });
+  };
 
   render(){
     return(
@@ -59,23 +76,32 @@ class PostButtons extends React.Component {
           <Icon 
             path={mdiCommentTextOutline} 
             size={2}
+            onClick={this.showPopup} 
           />
           <VerticalSeperator></VerticalSeperator>
           <Icon 
             path={mdiShareVariantOutline} 
             size={2}
+            onClick={this.showPopup} 
           />
           <VerticalSeperator></VerticalSeperator>
           <Icon 
             path={mdiBookmarkOutline} 
             size={2}
+            onClick={this.showPopup} 
           />
           <VerticalSeperator></VerticalSeperator>
           <Icon 
             path={mdiAlertCircleOutline} 
             size={2}
+            onClick={this.showPopup} 
           />
         </div>
+        <Snackbar open={this.state.popupState} autoHideDuration={3000} onClose={this.closePopup} >
+            <Alert onClose={this.closePopup} severity="info" sx={{ width: '100%' }}>
+              This feature is not available now and coming soon, thanks heaps for your patience!
+            </Alert>
+        </Snackbar>
       </div>);
   }
 
