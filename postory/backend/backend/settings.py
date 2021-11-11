@@ -44,8 +44,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'drf_yasg',
-    'post_endpoint',
-    'storages'
+    'post_endpoint'
 ]
 
 MIDDLEWARE = [
