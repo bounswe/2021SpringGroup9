@@ -50,7 +50,9 @@ Donec pharetra justo vel pulvinar pulvinar. Aenean placerat est id consequat ves
 
 "
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:maxLines="10"
+        >
 
     </TextView>
 
