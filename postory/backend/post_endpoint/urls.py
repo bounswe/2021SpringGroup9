@@ -5,5 +5,8 @@ from .views import *
 
 urlpatterns = [
     path('create', PostCreate.as_view(), name="create_post"),
+    path('get/<int:pk>', PostListDetail.as_view(), name="get_post"),
+    path('put/<int:pk>', PostUpdate.as_view(), name="update_post"),
+    path('delete/<int:pk>', PostDelete.as_view(), name="delete_post"),
     path('all', GetAllPosts.as_view(), name="get_all_posts"),
 ]
