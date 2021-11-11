@@ -53,4 +53,4 @@ jobs:
               --env GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }} \
               --env MONGO_CONTAINER_NAME=mongo_prod \
               --env MONGO_PORT=27018 \
-              ${{ secrets.DOCKERHUB_USERNAME }}/backend_prod:latest bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8001" || true
+              ${{ secrets.DOCKERHUB_USERNAME }}/backend_prod:latest bash -c "python manage.py makemigrations post_endpoint && python manage.py migrate && python manage.py runserver 0.0.0.0:8001" || true
