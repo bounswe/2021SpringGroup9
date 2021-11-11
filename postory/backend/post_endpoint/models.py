@@ -10,7 +10,7 @@ class Tag(models.Model):
 
 class Post(models.Model):
     title = models.CharField(max_length=200)
-    story = models.CharField(max_length=1000)
+    story = models.TextField()
     owner = models.CharField(max_length=200)
     locations = models.ManyToManyField(Location)
     tags = models.ManyToManyField(Tag)
