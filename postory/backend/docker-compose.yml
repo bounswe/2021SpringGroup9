@@ -10,13 +10,13 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
 
-  web:
-    build: .
-    restart: always
-    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
-    volumes:
-      - .:/code
-    ports:
-      - 8000:8000
-    depends_on:
-      - mongo
+  # web:
+  #   build: .
+  #   restart: always
+  #   command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+  #   volumes:
+  #     - .:/code
+  #   ports:
+  #     - 8000:8000
+  #   depends_on:
+  #     - mongo

@@ -75,7 +75,11 @@ class PostListDetail(GenericAPIView):
             tags.append(tag.content)
         locations = []
         for location in story.locations.all():
-            locations.append(location.name)
+            temp = []
+            temp.append(location.name)
+            temp.append(location.coordsLatitude)
+            temp.append(location.coordsLongitude)
+            locations.append(temp)
         serializer = dict(PostSerializer(story).data)
         serializer['tags'] = tags
         serializer['locations'] = locations
