@@ -5,5 +5,5 @@ from .views import *
 
 urlpatterns = [
     path('create', PostCreate.as_view(), name="create_post"),
+    path('all', GetAllPosts.as_view(), name="get_all_posts"),
 ]
-
