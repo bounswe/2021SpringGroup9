@@ -9,7 +9,7 @@ from rest_framework.decorators import api_view
 import urllib.parse as urlparse
 from urllib.parse import urlencode
 
-from .models import Post
+from .models import Post, Location, Tag
 from .serializers import PostSerializer
 
 import requests
@@ -24,8 +24,18 @@ class GetAllPosts(GenericAPIView):
 
     def get(self, request, format=None):
         posts = Post.objects.all()
-        serializer = PostSerializer(posts, many=True)
-        return Response(serializer.data, status=200)
+        serializer = {}
+        for story in posts:
+            tags = []
+            locations = []
+            serializer[story.id] = dict(PostSerializer(story).data)
+            for tag in story.tags.all():
+                tags.append(tag.content)
+            for location in story.locations.all():
+                locations.append(location.name)
+            serializer[story.id]['tags'] = tags
+            serializer[story.id]['locations'] = locations
+        return Response(serializer, status=200)
 
 class PostCreate(GenericAPIView):
     pass
