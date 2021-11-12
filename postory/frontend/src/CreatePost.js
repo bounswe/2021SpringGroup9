@@ -10,7 +10,7 @@ import TagChooser from './TagChooser';
 import PeopleChooser from './PeopleChooser'
 import LocationChooser from './LocationChooser'
 import Post from './Post';
-import {Snackbar} from '@material-ui/core';
+import {TextField, Snackbar} from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 
 
@@ -25,6 +25,7 @@ class CreatePost extends React.Component{
                 locationChooser: [],
                 timeChooser: {startDate : " "},
                 tagChooser: {selectedTags: []},
+                owner:"USER"
             }
         };
 
@@ -47,6 +48,11 @@ class CreatePost extends React.Component{
         this.setState(state => {
             let newObj =  JSON.parse(JSON.stringify(state));
             newObj.postData[whichComponent] = childObj;
+
+            //problem code
+            if(whichComponent == 'locationChooser')
+                newObj.postData[whichComponent] = childObj.map((obj) => [obj]);
+            //problem code
             newObj['addedInformation'] = true;
             newObj['whichInfo'] = infoDict[whichComponent];
             console.log(newObj);
@@ -86,9 +92,11 @@ class CreatePost extends React.Component{
         return ({
             title: this.state.postData["textChooser"]["title"],
             story: this.state.postData["textChooser"]["body"],
-            owner: "yourUserName",
+            owner: this.state.postData["owner"],
             locations: this.state.postData["locationChooser"],
-            storyDate: this.state.postData["timeChooser"]["startDate"],
+            storyDate: this.state.postData["timeChooser"]["startDate"] + "T" +this.state.postData["timeChooser"]["startTime"] + ":0.0Z" ,
+            editDate: this.state.postData["timeChooser"]["startDate"] + "T" +this.state.postData["timeChooser"]["startTime"] + ":0.0Z",
+            postDate: this.state.postData["timeChooser"]["startDate"] + "T" +this.state.postData["timeChooser"]["startTime"] + ":0.0Z",
             tags: this.state.postData["tagChooser"]["selectedTags"],
         });
     }
@@ -135,7 +143,20 @@ class CreatePost extends React.Component{
                     <button class = "createPostBtn" onClick = {() => {this.select('People')}}>People</button>
                     <button class = "createPostBtn" onClick = {() => {this.select('Tags')}}>Tags</button>
                     <button class = "createPostBtn" onClick = {() => {this.select('Preview')}}>Preview</button>
+                    <TextField id="userNameField" label="Enter Your Name" variant="filled" focused 
+                        onChange = {(e) => this.setState(state => {
+                            let postData = state.postData;
+                            return {
+                                ...state,
+                                postData: {
+                                    ...postData,
+                                    owner: e.target.value
+                                }
+                            };
+                        
+                        })}/>
                 </div>
+                
 
 
                 <Snackbar open={this.state.addedInformation} autoHideDuration={1000} onClose={this.handleInfoClose} >

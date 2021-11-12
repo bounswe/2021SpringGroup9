@@ -22,6 +22,14 @@ class App extends React.Component{
     this.state = {
       posts: posts
     };
+    fetch('http://35.158.95.81:8000/api/post/all').then(resp => resp.json()).then(data => this.setState(state => {
+      let newState = JSON.parse(JSON.stringify(state));
+      newState.posts = data;
+      newState['fetched'] = true;
+      console.log(newState);
+      console.log(data);
+      return newState;
+    }))
     
   }
 
@@ -32,7 +40,7 @@ class App extends React.Component{
           <p>
             POSTORY
           </p>
-          {this.state.posts.map((obj, i) => {
+          {this.state.fetched && this.state.posts.map((obj, i) => {
             return <Post key = {i} {...obj}></Post>;
           })}
           <Link to= "/createPost" variant = "v6">

@@ -41,7 +41,7 @@ class PostUpper extends React.Component{
         <img class = "circle" width = "50px" height = "50px" src = "https://images.emojiterra.com/google/android-11/512px/1f9cd.png" />
         <a style = {{margin: "10px"}}>{this.state.owner}</a>
       </div>
-      <div class= "row">
+      <div class= "row fitText">
       
         
         {this.state.locations.map((obj,i) => {
@@ -52,7 +52,7 @@ class PostUpper extends React.Component{
           size={0.7}
           color="#53BEC6"
           />
-             {obj}
+             {obj[0]}
           </a>);
         })}
 
@@ -62,7 +62,7 @@ class PostUpper extends React.Component{
           size={0.7}
           color="#53BEC6"
           />
-          {this.state.storyDate}
+          {this.state.storyDate.slice(0,10)}
         </a>
         {this.state.tags.map((obj,i) => {
           return(
