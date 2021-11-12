@@ -44,7 +44,7 @@ class GetAllPosts(GenericAPIView):
                 values.append(location.coordsLongitude)
                 locations.append(values)
             for image in story.images.all():
-                images.append(image.url)
+                images.append(image.file.url)
             serializer[story.id]['tags'] = tags
             serializer[story.id]['locations'] = locations
             serializer[story.id]['images'] = images
@@ -69,9 +69,8 @@ class PostCreate(GenericAPIView):
         imagesList = []
         for image in images:
             imageObject = Image(file=image)
-            imageObject.url = imageObject.file.url
-            imagesList.append(imageObject)
             imageObject.save()
+            imagesList.append(imageObject)
         data['images'] = [image.id for image in imagesList]
          
         locations = data['locations']
@@ -117,7 +116,7 @@ class PostCreate(GenericAPIView):
                 locations.append(temp)
             images = []
             for image in imagesList:
-                images.append(image.url)
+                images.append(image.file.url)
             serializer = dict(serializer.data)
             serializer['tags'] = tags
             serializer['locations'] = locations
@@ -150,7 +149,7 @@ class PostListDetail(GenericAPIView):
             locations.append(temp)
         images = []
         for image in story.images.all():
-            images.append(image.url)
+            images.append(image.file.url)
         serializer = dict(PostSerializer(story).data)
         serializer['tags'] = tags
         serializer['locations'] = locations
@@ -170,7 +169,20 @@ class PostUpdate(GenericAPIView):
     
     def put(self, request, pk, format=None):
         story = self.get_object(pk)
-        data = request.data
+        data = dict(request.data)
+        data['title'] = data['title'][0]
+        data['story'] = data['story'][0]
+        data['owner'] = data['owner'][0]
+        data['storyDate'] = data['storyDate'][0]
+        
+        images = data['images']
+        imagesList = []
+        for image in images:
+            imageObject = Image(file=image)
+            imageObject.save()
+            imagesList.append(imageObject)
+        data['images'] = [image.id for image in imagesList]
+        
         locations = data['locations']
         locationsList = []
         for location in locations:
@@ -202,7 +214,24 @@ class PostUpdate(GenericAPIView):
         serializer = PostSerializer(story, data=data)
         if serializer.is_valid():
             serializer.save(editDate=datetime.datetime.now())
-            return Response(serializer.data, status=200)
+            tags = []
+            for tag in tagsList:
+                tags.append(tag.content)
+            locations = []
+            for location in locationsList:
+                temp = []
+                temp.append(location.name)
+                temp.append(location.coordsLatitude)
+                temp.append(location.coordsLongitude)
+                locations.append(temp)
+            images = []
+            for image in imagesList:
+                images.append(image.file.url)
+            serializer = dict(serializer.data)
+            serializer['tags'] = tags
+            serializer['locations'] = locations
+            serializer['images'] = images
+            return Response(serializer, status=200)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class PostDelete(GenericAPIView):
