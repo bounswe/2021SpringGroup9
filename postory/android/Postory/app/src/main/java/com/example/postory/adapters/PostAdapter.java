@@ -62,13 +62,14 @@ public class PostAdapter extends ArrayAdapter<PostModel> {
     }
 
     public void setContinueReadingVisibility(final TextView postText, final Button continueReading) {
-        postText.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        postText.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
-            public void onGlobalLayout() {
+            public boolean onPreDraw() {
                 if (postText.getLineCount() > postText.getMaxLines()) {
                     continueReading.setVisibility(View.VISIBLE);
-                    postText.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    postText.getViewTreeObserver().removeOnPreDrawListener(this);
                 }
+                return true;
             }
         });
 
