@@ -1,15 +1,14 @@
 import React from 'react'
-import { render } from 'react-dom'
-
-const imagesPath = {
-    disliked: "https://user-images.githubusercontent.com/35606355/140415129-e3f06692-9bf1-4796-878f-b59126102994.png",
-    liked: "https://user-images.githubusercontent.com/35606355/140415133-6eea3c0e-1a3b-400b-b049-a47fa5805588.png",
-    comment: "https://user-images.githubusercontent.com/35606355/140415650-a57c1153-ae17-44db-92be-2a74f7f6f1c1.png",
-    share: "https://user-images.githubusercontent.com/35606355/140418385-09486b42-d1f6-4d8c-9edc-408f80fea3d1.png",
-    save: "https://user-images.githubusercontent.com/35606355/140419635-2f3f4992-c95a-470c-baba-c54252f0de5c.png",
-    report: "https://user-images.githubusercontent.com/35606355/140419056-b4f8af60-f0ed-48cb-83e2-0c18923cbe8a.png",
-    verticalSeperator: "https://user-images.githubusercontent.com/35606355/140555305-60463bba-b681-4c1b-8c17-9b29e6126933.png",
-  }
+import Icon from '@mdi/react'
+import {Snackbar} from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
+import { mdiShareVariantOutline } from '@mdi/js';
+import { mdiCardsHeartOutline } from '@mdi/js';
+import { mdiCardsHeart } from '@mdi/js';
+import { mdiCommentTextOutline } from '@mdi/js';
+import { mdiAlertCircleOutline } from '@mdi/js';
+import { mdiBookmarkOutline } from '@mdi/js';
+import { mdiDragVerticalVariant } from '@mdi/js';
   
 class LikeButton extends React.Component {
     constructor(props) {
@@ -19,21 +18,22 @@ class LikeButton extends React.Component {
             likeNumber: 0
         };
       }
-//   state = {
-//     liked: false,
-//     likeNumber: 0
-//   }
-  toggleImage = () => {
+
+  updateLikeNumber = () => {
     this.setState({ liked: !this.state.liked, likeNumber: this.state.liked ? 0 : 1 });
   }
 
-  getImageName = () => this.state.liked ? 'liked' : 'disliked'
+  getIconPath = () => this.state.liked ? mdiCardsHeart : mdiCardsHeartOutline
 
   render() {
-    const imageName = this.getImageName();
+    const imageName = this.getIconPath();
     return (
       <div class= "row">
-        <img style={{maxWidth: '50px'}} src={imagesPath[imageName]} onClick={this.toggleImage} />
+        <Icon 
+          path={imageName} 
+          size={2}
+          onClick={this.updateLikeNumber} 
+        />
         <div>
           {this.state.likeNumber}
         </div>
@@ -41,77 +41,69 @@ class LikeButton extends React.Component {
     );
   }
 }
-  
-class CommentButton extends React.Component {
-  
-    render() {
-      return (
-        <div>
-          <img style={{maxWidth: '50px'}} src={imagesPath["comment"]} />
-        </div>
-      );
-    }
-}
-
-class ShareButton extends React.Component {
-  
-    render() {
-      return (
-        <div>
-          <img style={{maxWidth: '50px'}} src={imagesPath["share"]} />
-        </div>
-      );
-    }
-}
-
-class SaveButton extends React.Component {
-  
-    render() {
-      return (
-        <div>
-          <img style={{maxWidth: '50px'}} src={imagesPath["save"]} />
-        </div>
-      );
-    }
-}
-
-class ReportButton extends React.Component {
-  
-    render() {
-      return (
-        <div>
-          <img style={{maxWidth: '50px'}} src={imagesPath["report"]} />
-        </div>
-      );
-    }
-}
 
 function VerticalSeperator() {
     return(
         <div>
-          <img style={{maxWidth: '50px'}} src={imagesPath["verticalSeperator"]} />
+          <Icon path={mdiDragVerticalVariant} size={2}/>
         </div>
     );
-    
 }
 
-
 class PostButtons extends React.Component {
-    render(){
-        return(<div >
-            <div class= "row">
-                <LikeButton></LikeButton>
-                <VerticalSeperator></VerticalSeperator>
-                <CommentButton></CommentButton>
-                <VerticalSeperator></VerticalSeperator>
-                <ShareButton></ShareButton>
-                <VerticalSeperator></VerticalSeperator>
-                <SaveButton></SaveButton>
-                <VerticalSeperator></VerticalSeperator>
-                <ReportButton></ReportButton>
-            </div>
-        </div>);
+  constructor(props){
+    super(props);
+
+    this.state = {
+      popupState: false
     }
+  }
+
+  showPopup = () => {
+    this.setState({ popupState: true });
+  };
+
+  closePopup = () => {
+    this.setState({ popupState: false });
+  };
+
+  render(){
+    return(
+      <div>
+        <div class= "row">
+          <LikeButton></LikeButton>
+          <VerticalSeperator></VerticalSeperator>
+          <Icon 
+            path={mdiCommentTextOutline} 
+            size={2}
+            onClick={this.showPopup} 
+          />
+          <VerticalSeperator></VerticalSeperator>
+          <Icon 
+            path={mdiShareVariantOutline} 
+            size={2}
+            onClick={this.showPopup} 
+          />
+          <VerticalSeperator></VerticalSeperator>
+          <Icon 
+            path={mdiBookmarkOutline} 
+            size={2}
+            onClick={this.showPopup} 
+          />
+          <VerticalSeperator></VerticalSeperator>
+          <Icon 
+            path={mdiAlertCircleOutline} 
+            size={2}
+            onClick={this.showPopup} 
+          />
+        </div>
+        <Snackbar open={this.state.popupState} autoHideDuration={3000} onClose={this.closePopup} >
+            <Alert onClose={this.closePopup} severity="info" sx={{ width: '100%' }}>
+              This feature is not available now and coming soon, thanks heaps for your patience!
+            </Alert>
+        </Snackbar>
+      </div>);
+  }
 
 }
 

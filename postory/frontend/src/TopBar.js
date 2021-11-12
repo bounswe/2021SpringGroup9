@@ -4,6 +4,8 @@ import homeIcon from './home_icon.png'
 import globeIcon from './globe_icon.png'
 import menuIcon from './menu_icon.png'
 import SearchBar from './SearchBar'
+import {Snackbar} from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 
 import { Link } from "react-router-dom";
 
@@ -49,7 +51,19 @@ class TopBar extends React.Component {
     constructor(props) {
         super(props);
         this.props = props;
+
+        this.state = {
+            popupState: false
+          }
     }
+
+    showPopup = () => {
+        this.setState({ popupState: true });
+    };
+    
+      closePopup = () => {
+        this.setState({ popupState: false });
+    };
 
     render() {
         return (<div style={topBarStyle}>
@@ -67,17 +81,26 @@ class TopBar extends React.Component {
             <a href={'/'} style={{...itemStyleLeft, textDecoration: 'none'}}>
                 <p style={textStyle}>POSTORY</p>
             </a>
-            <a href={'/'} style={itemStyleRight}>
-                <img src={menuIcon} alt={'Menu'} style={imageStyle}/>
-            </a>
-            <a href={'/discover'} style={itemStyleRight}>
-                <img src={globeIcon} alt={'Discover'} style={imageStyle}/>
-            </a>
+            {/*<a href={'/'} style={itemStyleRight}>*/}
+            <div style={itemStyleRight}>
+                <img src={menuIcon} alt={'Menu'} style={imageStyle} onClick={this.showPopup} />
+            </div>
+            {/*</a>*/}
+            {/*<a href={'/discover'} style={itemStyleRight}>*/}
+            <div style={itemStyleRight}>
+                <img src={globeIcon} alt={'Discover'} style={imageStyle} onClick={this.showPopup} />
+            </div>
+            {/*</a>*/}
             <Link to="/" ariant = "v6">
                 <a href={'/'} style={itemStyleRight}>
                     <img src={homeIcon} alt={'Postory'} style={imageStyle}/>
                 </a>
             </Link>
+            <Snackbar open={this.state.popupState} autoHideDuration={3000} onClose={this.closePopup} >
+                    <Alert onClose={this.closePopup} severity="info" sx={{ width: '100%' }}>
+                         This feature is not available now and coming soon, thanks heaps for your patience!
+                    </Alert>
+            </Snackbar>
         </div>)
 
     }
