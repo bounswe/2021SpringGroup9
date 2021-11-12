@@ -105,7 +105,24 @@ class PostCreate(GenericAPIView):
         serializer = PostSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=200)
+            tags = []
+            for tag in tagsList:
+                tags.append(tag.content)
+            locations = []
+            for location in locationsList:
+                temp = []
+                temp.append(location.name)
+                temp.append(location.coordsLatitude)
+                temp.append(location.coordsLongitude)
+                locations.append(temp)
+            images = []
+            for image in imagesList:
+                images.append(image.url)
+            serializer = dict(serializer.data)
+            serializer['tags'] = tags
+            serializer['locations'] = locations
+            serializer['images'] = images
+            return Response(serializer, status=200)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class PostListDetail(GenericAPIView):
