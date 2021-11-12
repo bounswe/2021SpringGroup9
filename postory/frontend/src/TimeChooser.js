@@ -14,11 +14,26 @@ class TimeChooser extends React.Component {
             startTime: null,
             endDate: null,
             endTime: null,
+            checked: false
         }
     }
 
     sendParent() {
-        this.props.parentHandler('timeChooser', this.state)
+        let result;
+        if (this.state.checked) {
+            result = {
+                date: this.state.startDate,
+                time: this.state.startTime
+            }
+        } else {
+            result = {
+                startDate: this.state.startDate,
+                startTime: this.state.startTime,
+                endDate: this.state.endDate,
+                endTime: this.state.endTime,
+            }
+        }
+        this.props.parentHandler('timeChooser', result)
     }
 
     render() {
@@ -26,7 +41,9 @@ class TimeChooser extends React.Component {
             <div id={'timechooser-div'}>
                 <div style={{display: 'flex', flexDirection: 'row', gap: '10px'}}>
                     <div style={{display: 'flex', flexDirection: 'column'}}>
-                        <label htmlFor={'timechooser-s-date'} id={'timechooser-s-date-label'}>Starting date</label>
+                        <label htmlFor={'timechooser-s-date'} id={'timechooser-s-date-label'}>
+                            {this.state.checked ? 'Post date' : 'Starting date'}
+                        </label>
                         <input type={'date'} id={'timechooser-s-date'} onChange={
                             (e) => {
                                 this.setState(state => ({...state, startDate: e.target.value}))
@@ -34,16 +51,24 @@ class TimeChooser extends React.Component {
                         }/>
                     </div>
                     <div style={{display: 'flex', flexDirection: 'column'}}>
-                        <label htmlFor={'timechooser-s-time'} id={'timechooser-s-time-label'}>Starting time</label>
+                        <label htmlFor={'timechooser-s-time'} id={'timechooser-s-time-label'}>
+                            {this.state.checked ? 'Post time' : 'Starting time'}
+                        </label>
                         <input type={'time'} id={'timechooser-s-time'} onChange={
                             (e) => {
                                 this.setState(state => ({...state, startTime: e.target.value}))
                             }
                         }/>
                     </div>
+                    <input id={'timechooser-checkbox'} type={'checkbox'} onChange={
+                        (e) => {
+                            this.setState(state => ({...state, checked: e.target.checked}))
+                        }
+                    } />
+                    <label id={'timechooser-checkbox-text'} htmlFor={'timechooser-checkbox'} >Use single time</label>
                 </div>
 
-                <div style={{display: 'flex', flexDirection: 'row', gap: '10px'}}>
+                {!this.state.checked &&<div style={{display: 'flex', flexDirection: 'row', gap: '10px'}}>
                     <div style={{display: 'flex', flexDirection: 'column'}}>
                         <label htmlFor={'timechooser-e-date'} id={'timechooser-e-date-label'}>Ending date</label>
                         <input type={'date'} id={'timechooser-e-date'} onChange={
@@ -60,7 +85,7 @@ class TimeChooser extends React.Component {
                             }
                         }/>
                     </div>
-                </div>
+                </div>}
 
                 <button id={'timechooser-plus-button'} onClick={this.sendParent}>
                     <Icon path={mdiPlus} size={1} id={'timechooser-plus-icon'}/>

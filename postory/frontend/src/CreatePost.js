@@ -9,11 +9,9 @@ import TimeChooser from './TimeChooser';
 import TagChooser from './TagChooser';
 import PeopleChooser from './PeopleChooser'
 import LocationChooser from './LocationChooser'
-
 import Post from './Post';
 import {TextField, Snackbar} from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
-
 
 class CreatePost extends React.Component{
     constructor(props){
@@ -130,14 +128,12 @@ class CreatePost extends React.Component{
             <header className="App-header">
             <div class = "row someSpacing">
                 <div class = "inputArea">
-
                     <div class = {(this.state['selected'] != 'Story')? "hide": ""}><TextChooser parentHandler = {this.handleChildObjectSend}/> </div>
                     <div class = {(this.state['selected'] != 'Location')? "hide": ""}><LocationChooser  parentHandler = {this.handleChildObjectSend}/></div>
                     <div class = {(this.state['selected'] != 'Time')? "hide": ""}><TimeChooser  parentHandler = {this.handleChildObjectSend}/></div>
                     <div class = {(this.state['selected'] != 'People')? "hide": ""}><PeopleChooser  parentHandler = {this.handleChildObjectSend}/></div>
                     <div class = {(this.state['selected'] != 'Tags')? "hide": ""}><TagChooser  parentHandler = {this.handleChildObjectSend}/></div>
                     {this.state['selected'] == 'Preview' && <div ><PostPreviewComponent  postObject = {this.prepareObjectToSend()} parentHandler = {this.handleChildObjectSend}/></div>}
-
                 </div>
                 <div class = "buttons col">
                     <button class = "createPostBtn" onClick = {() => {this.select('Story')}}>Story</button>

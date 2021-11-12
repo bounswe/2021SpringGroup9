@@ -19,3 +19,12 @@
 #timechooser-plus-button {
     align-self: flex-end;
 }
+
+#timechooser-checkbox {
+    align-self: flex-end;
+}
+
+#timechooser-checkbox-text {
+    align-self: flex-end;
+    font-size: 60%;
+}
