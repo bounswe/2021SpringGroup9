@@ -7,6 +7,13 @@
   background-color: rgb(235, 235, 235);
 }
 
+.hide{
+  display: none !important;
+  color: rgb(255, 0, 0) !important;
+}
+
+
+
 .homePageCreatePostButton{
   position: fixed;
   float: right;
@@ -23,7 +30,7 @@
 
 .buttons{
   margin-left: 10%;
-  margin-bottom: 10%;
+  bottom: 5%;
 }
 .someSpacing{
   justify-content: space-evenly;
@@ -50,6 +57,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.fitText{
+  display: block; 
 }
 
 .mainContent{
