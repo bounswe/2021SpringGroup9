@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Icon from '@mdi/react';
-import { mdiSend } from '@mdi/js';
+import { mdiRhombusSplit, mdiSend } from '@mdi/js';
 
 import { Link } from "react-router-dom";
 import TextChooser from './TextChooser'
@@ -97,8 +97,11 @@ class CreatePost extends React.Component{
             editDate: this.state.postData["timeChooser"]["startDate"] + "T" +this.state.postData["timeChooser"]["startTime"] + ":0.0Z",
             postDate: this.state.postData["timeChooser"]["startDate"] + "T" +this.state.postData["timeChooser"]["startTime"] + ":0.0Z",
             tags: this.state.postData["tagChooser"]["selectedTags"],
+            images: this.state.postData['imageComponent'],
         });
     }
+
+
 
     sendToBackend(){
         // send this.state.postData to backend
@@ -109,16 +112,43 @@ class CreatePost extends React.Component{
         });
 
         const objectToSend = this.prepareObjectToSend();
-        console.log(objectToSend);
+        console.log('objectsend' + objectToSend.images[0]);
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(objectToSend)
         };
+
+        const getFormData = object => Object.keys(object).reduce((formData, key) => {
+            formData.append(key, object[key]);
+            return formData;
+        }, new FormData());
+
+        const makeFormData = object =>{ return {
+            title: [object.title],
+            story: [object.story],
+            owner: [object.owner],
+            locations: object.locations,
+            storyDate: [object.storyDate],
+            editDate: [object.editDate],
+            postDate: [object.postDate],
+            tags: object.tags,
+            images: object.images
+        }};
+
+        console.log("SDAFDSF" + getFormData(objectToSend));
+        let frmdata = getFormData(makeFormData(objectToSend));
+        frmdata.append('images', this.state.images);
+        fetch('http://35.158.95.81:8000/api/post/create',{
+            method: "POST",
+            body: frmdata
+            }
+        ).then(resp => resp.json()).then(data => console.log(data));
         
+        /*
         fetch('http://35.158.95.81:8000/api/post/create', requestOptions)
             .then(response => console.log(response)).catch(er => console.log(er));
-        console.log(JSON.stringify(this.state.postData) + 'failed');
+        console.log(JSON.stringify(this.state.postData) + 'failed');*/
     }
 
 
@@ -134,6 +164,7 @@ class CreatePost extends React.Component{
                     <div class = {(this.state['selected'] != 'People')? "hide": ""}><PeopleChooser  parentHandler = {this.handleChildObjectSend}/></div>
                     <div class = {(this.state['selected'] != 'Tags')? "hide": ""}><TagChooser  parentHandler = {this.handleChildObjectSend}/></div>
                     {this.state['selected'] == 'Preview' && <div ><PostPreviewComponent  postObject = {this.prepareObjectToSend()} parentHandler = {this.handleChildObjectSend}/></div>}
+                    <div class = {(this.state['selected'] != 'Images')? "hide": ""}><ImageComponent  parentHandler = {this.handleChildObjectSend}/></div>
                 </div>
                 <div class = "buttons col">
                     <button class = "createPostBtn" onClick = {() => {this.select('Story')}}>Story</button>
@@ -142,6 +173,7 @@ class CreatePost extends React.Component{
                     <button class = "createPostBtn" onClick = {() => {this.select('People')}}>People</button>
                     <button class = "createPostBtn" onClick = {() => {this.select('Tags')}}>Tags</button>
                     <button class = "createPostBtn" onClick = {() => {this.select('Preview')}}>Preview</button>
+                    <button class = "createPostBtn" onClick = {() => {this.select('Images')}}>Images</button>
                     <TextField id="userNameField" label="Enter Your Name" variant="filled" focused 
                         onChange = {(e) => this.setState(state => {
                             let postData = state.postData;
@@ -184,6 +216,31 @@ class CreatePost extends React.Component{
         );
     }
 
+}
+
+class ImageComponent extends React.Component{
+    constructor(props){
+        super(props);
+        this.handleFileChange = this.handleFileChange.bind(this);
+    }
+
+    handleFileChange(e){
+        console.log(e.target.files);
+        this.props.parentHandler('imageComponent',e.target.files[0]);
+    }
+
+    render(){
+        console.log(this.props.postObject);
+        return(
+            <div>
+                <input 
+            type="file" id="file" 
+            accept=".jpg, .png"
+            onChange={this.handleFileChange}
+            />
+            </div>
+        );
+    }
 }
 
 
