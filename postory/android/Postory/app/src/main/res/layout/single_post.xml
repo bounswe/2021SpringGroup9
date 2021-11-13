@@ -6,9 +6,29 @@
     android:paddingStart="20dp"
     android:paddingEnd="20dp"
     android:paddingTop="20dp"
+    android:background="@drawable/post_border"
     >
+    <TextView
+        android:id="@+id/op_title_field"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:text="My First Day at School"
+        android:textStyle="bold"
+        ></TextView>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:src="@drawable/orange_line"
+        android:gravity="fill_horizontal"
+        />
 
     <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
         android:orientation="horizontal"
         android:id="@+id/op_info_layout"
         android:layout_width="match_parent"
@@ -18,7 +38,6 @@
             android:layout_width="50dp"
             android:src="@drawable/post_picture_example"
             android:layout_height="match_parent">
-
         </ImageView>
 
         <TextView
@@ -26,23 +45,70 @@
             android:text="Ahmet Gülmez"
             android:layout_marginStart="5dp"
             android:gravity="center_vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:textStyle="bold"
+            >
         </TextView>
+
 
     </LinearLayout>
 
     <ImageView
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:id="@+id/post_photo"
         android:src="@drawable/post_picture_example"
         android:layout_width="match_parent"
         android:layout_height="200dp">
 
     </ImageView>
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:id="@+id/op_info_layout_2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/op_location_text"
+            android:src="@drawable/outline_location_on_black_24dp">
+        </ImageView>
+
+        <TextView
+            android:id="@+id/op_location_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:text="Ankara"
+            android:textStyle="bold"></TextView>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:src="@drawable/baseline_calendar_today_black_24dp"
+            android:layout_alignParentLeft="true"
+            >
+        </ImageView>
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="22.01.1998"
+            android:textStyle="bold"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="20dp">
+
+        </TextView>
+
+
+    </RelativeLayout>
+
     <TextView
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:id="@+id/post_story_text_field"
         android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus rutrum aliquet eleifend. Maecenas ligula magna, luctus id nulla eu, feugiat ultrices velit. Vestibulum lacinia urna at turpis pharetra venenatis. Donec metus metus, dapibus eu lorem non, auctor feugiat augue. Sed blandit vestibulum dui, ac dignissim nibh tincidunt vel. Pellentesque dignissim erat libero, ac condimentum leo convallis id. Nam condimentum sem id sapien ultricies, id finibus orci sagittis. Donec at mi mollis, faucibus orci vel, aliquet leo.
 
@@ -69,6 +135,6 @@ Donec pharetra justo vel pulvinar pulvinar. Aenean placerat est id consequat ves
         android:visibility="gone"
         ></Button>
 
-  
+
 
 </LinearLayout>
