@@ -95,9 +95,11 @@ class TagChooser extends React.Component{
                         </li>
                     ))}
                  </ul>
+                 {/*
                  <button id={'tagchooser-plus-button'} onClick={this.sendParent}>
                     <Icon path={mdiPlus} size={1} id={'tagchooser-plus-icon'}/>
                 </button>  
+                 */}
             </div>
         );
     }

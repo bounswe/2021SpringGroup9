@@ -28,7 +28,8 @@ class PostUpper extends React.Component{
 
   getMoreContent(){
     this.setState(state =>{
-      let newState = JSON.parse(JSON.stringify(state));
+      //let newState = JSON.parse(JSON.stringify(state));
+      let newState = {...state};
       newState.contentSmall = state.story;
       newState.continueReading = false;
       return newState;
@@ -79,9 +80,14 @@ class PostUpper extends React.Component{
       <a class = "mainContent" >{this.state.contentSmall}</a>
       {this.state.continueReading && <a class = "mainContent" onClick = {this.getMoreContent}><b> ...Continue Reading</b></a>}
       <p></p>
-      <div class = "row image"> 
-        <img width = "200px" src = {(this.state.images && this.state.images[0]) ? this.state.images[0]: ""} ></img>
-        <img width = "200px" src = {(this.state.images && this.state.images[0] && this.state.images[1]) ? this.state.images[1]: ""}></img>
+      <div> 
+        {this.state.preview &&<div class = "row image">
+          <img width = "200px" src = {URL.createObjectURL(this.state.preview[0])} ></img>
+        </div>}
+        {!this.state.preview &&<div class = "row image">
+          <img width = "200px" src = {(this.state.images && this.state.images[0]) ? this.state.images[0]: ""} ></img>
+          <img width = "200px" src = {(this.state.images && this.state.images[0] && this.state.images[1]) ? this.state.images[1]: ""}></img>
+        </div>}
       </div>
     </div>);
   }

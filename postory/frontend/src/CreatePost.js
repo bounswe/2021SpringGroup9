@@ -17,6 +17,13 @@ class CreatePost extends React.Component{
     constructor(props){
         super(props);
         
+        this.refStory = React.createRef();
+        this.refLocation = React.createRef();
+        this.refTime = React.createRef();
+        this.refTags = React.createRef();
+
+        this.allRefs = [this.refStory, this.refLocation, this.refTime, this.refTags];
+
         this.state = {
             selected : "none",
             postData: {
@@ -42,10 +49,12 @@ class CreatePost extends React.Component{
             "locationChooser": "Location Content",
             "timeChooser": "Time Content",
             "peopleChooser": "People Content",
-            "tagChooser": "Tag Content"
+            "tagChooser": "Tag Content",
+            "imageComponent": "Image Content"
         };
         this.setState(state => {
-            let newObj =  JSON.parse(JSON.stringify(state));
+            //let newObj =  JSON.parse(JSON.stringify(state));
+            let newObj = {...state};
             newObj.postData[whichComponent] = childObj;
 
             //problem code
@@ -56,7 +65,12 @@ class CreatePost extends React.Component{
             newObj['whichInfo'] = infoDict[whichComponent];
             console.log(newObj);
 
+            console.log(whichComponent, childObj);
+            console.log("IMAGE IS ADDEDD.", newObj.postData);
+
             return newObj;
+        }, () => {
+            console.log("IMAGE IS ADDEDD.", this.state.postData["imageComponent"]);
         });
 
         
@@ -65,29 +79,39 @@ class CreatePost extends React.Component{
     select(obj){
         console.log(obj);
         this.setState(state => {
-            let newObj =  JSON.parse(JSON.stringify(state));
-            newObj['selected'] = obj;
-            return newObj;
+            //let newObj =  JSON.parse(JSON.stringify(state));
+            //newObj['selected'] = obj;
+            return {
+                ...state,
+                selected: obj
+            };
         });
     }
 
     handleSuccessClose(){
         this.setState(state => {
-            let newObj =  JSON.parse(JSON.stringify(state));
-            newObj['success'] = false;
-            return newObj;
+            //let newObj =  JSON.parse(JSON.stringify(state));
+            //newObj['success'] = false;
+            return {
+                ...state,
+                success: false
+            };
         });
     }
 
     handleInfoClose(){
         this.setState(state => {
-            let newObj =  JSON.parse(JSON.stringify(state));
-            newObj['addedInformation'] = false;
-            return newObj;
+            //let newObj =  JSON.parse(JSON.stringify(state));
+            //newObj['addedInformation'] = false;
+            return {
+                ...state,
+                addedInformation: false
+            };
         });
     }
 
     prepareObjectToSend(){
+        console.log("img", this.state.postData['imageComponent']);
         return ({
             title: this.state.postData["textChooser"]["title"],
             story: this.state.postData["textChooser"]["body"],
@@ -98,6 +122,7 @@ class CreatePost extends React.Component{
             postDate: this.state.postData["timeChooser"]["startDate"] + "T" +this.state.postData["timeChooser"]["startTime"] + ":0.0Z",
             tags: this.state.postData["tagChooser"]["selectedTags"],
             images: this.state.postData['imageComponent'],
+            preview: this.state.postData['imageComponent']
         });
     }
 
@@ -106,49 +131,39 @@ class CreatePost extends React.Component{
     sendToBackend(){
         // send this.state.postData to backend
         this.setState(state => {
-            let newObj =  JSON.parse(JSON.stringify(state));
-            newObj['success'] = true;
-            return newObj;
+            //let newObj =  JSON.parse(JSON.stringify(state));
+            //newObj['success'] = true;
+            return {
+                ...state,
+                success: true
+            };
         });
 
         const objectToSend = this.prepareObjectToSend();
-        console.log('objectsend' + objectToSend.images[0]);
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(objectToSend)
-        };
+
 
         const getFormData = object => Object.keys(object).reduce((formData, key) => {
             formData.append(key, object[key]);
             return formData;
         }, new FormData());
 
-        const makeFormData = object =>{ return {
-            title: [object.title],
-            story: [object.story],
-            owner: [object.owner],
-            locations: object.locations,
-            storyDate: [object.storyDate],
-            editDate: [object.editDate],
-            postDate: [object.postDate],
-            tags: object.tags,
-            images: object.images
-        }};
-
-        console.log("SDAFDSF" + getFormData(objectToSend));
-        let frmdata = getFormData(makeFormData(objectToSend));
-        frmdata.append('images', this.state.images);
-        fetch('http://35.158.95.81:8000/api/post/create',{
-            method: "POST",
-            body: frmdata
-            }
-        ).then(resp => resp.json()).then(data => console.log(data));
         
-        /*
-        fetch('http://35.158.95.81:8000/api/post/create', requestOptions)
-            .then(response => console.log(response)).catch(er => console.log(er));
-        console.log(JSON.stringify(this.state.postData) + 'failed');*/
+
+        
+        let formData = getFormData(objectToSend);
+
+        
+        fetch('http://35.158.95.81:8000/api/post/create', {
+            method: 'POST',
+            body: formData
+        }).then(res => {
+            console.log(`Success` + res.data);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+        
+        
     }
 
 
@@ -158,22 +173,32 @@ class CreatePost extends React.Component{
             <header className="App-header">
             <div class = "row someSpacing">
                 <div class = "inputArea">
-                    <div class = {(this.state['selected'] != 'Story')? "hide": ""}><TextChooser parentHandler = {this.handleChildObjectSend}/> </div>
-                    <div class = {(this.state['selected'] != 'Location')? "hide": ""}><LocationChooser  parentHandler = {this.handleChildObjectSend}/></div>
-                    <div class = {(this.state['selected'] != 'Time')? "hide": ""}><TimeChooser  parentHandler = {this.handleChildObjectSend}/></div>
+                    <div class = {(this.state['selected'] != 'Story')? "hide": ""}><TextChooser ref = {this.refStory} parentHandler = {this.handleChildObjectSend}/> </div>
+                    <div class = {(this.state['selected'] != 'Location')? "hide": ""}><LocationChooser ref = {this.refLocation} parentHandler = {this.handleChildObjectSend}/></div>
+                    <div class = {(this.state['selected'] != 'Time')? "hide": ""}><TimeChooser ref = {this.refTime} parentHandler = {this.handleChildObjectSend}/></div>
                     <div class = {(this.state['selected'] != 'People')? "hide": ""}><PeopleChooser  parentHandler = {this.handleChildObjectSend}/></div>
-                    <div class = {(this.state['selected'] != 'Tags')? "hide": ""}><TagChooser  parentHandler = {this.handleChildObjectSend}/></div>
-                    {this.state['selected'] == 'Preview' && <div ><PostPreviewComponent  postObject = {this.prepareObjectToSend()} parentHandler = {this.handleChildObjectSend}/></div>}
+                    <div class = {(this.state['selected'] != 'Tags')? "hide": ""}><TagChooser ref = {this.refTags} parentHandler = {this.handleChildObjectSend}/></div>
                     <div class = {(this.state['selected'] != 'Images')? "hide": ""}><ImageComponent  parentHandler = {this.handleChildObjectSend}/></div>
+                    {this.state['selected'] == 'Preview' && <div ><PostPreviewComponent key = {this.state.postData.owner} postObject = {this.prepareObjectToSend()} parentHandler = {this.handleChildObjectSend}/></div>}
+                    
                 </div>
                 <div class = "buttons col">
                     <button class = "createPostBtn" onClick = {() => {this.select('Story')}}>Story</button>
                     <button class = "createPostBtn" onClick = {() => {this.select('Location')}}>Location</button>
                     <button class = "createPostBtn" onClick = {() => {this.select('Time')}}>Time</button>
-                    <button class = "createPostBtn" onClick = {() => {this.select('People')}}>People</button>
+                    {/*<button class = "createPostBtn" onClick = {() => {this.select('People')}}>People</button>*/}
                     <button class = "createPostBtn" onClick = {() => {this.select('Tags')}}>Tags</button>
-                    <button class = "createPostBtn" onClick = {() => {this.select('Preview')}}>Preview</button>
                     <button class = "createPostBtn" onClick = {() => {this.select('Images')}}>Images</button>
+                    <button class = "createPostBtn" onClick = {() => {
+                        this.refStory.current.sendParent();
+                        this.refLocation.current.sendParent();
+                        this.refTime.current.sendParent();
+                        this.refTags.current.sendParent();
+                        
+
+                        this.select('Preview');
+                        }}>Preview</button>
+                    
                     <TextField id="userNameField" label="Enter Your Name" variant="filled" focused 
                         onChange = {(e) => this.setState(state => {
                             let postData = state.postData;
@@ -203,7 +228,15 @@ class CreatePost extends React.Component{
                 </Snackbar>
                 
                 <Link to= "/createPost" variant = "v6">
-                    <Icon onClick = { this.sendToBackend} class = "circle homePageCreatePostButton" path={mdiSend}
+                    <Icon onClick = {() =>{
+                    this.refStory.current.sendParent();
+                    this.refLocation.current.sendParent();
+                    this.refTime.current.sendParent();
+                    this.refTags.current.sendParent();
+
+                    this.sendToBackend();
+                    }
+                } class = "circle homePageCreatePostButton" path={mdiSend}
                         title="Location"
                         size={2}
                         color="black"
@@ -226,7 +259,7 @@ class ImageComponent extends React.Component{
 
     handleFileChange(e){
         console.log(e.target.files);
-        this.props.parentHandler('imageComponent',e.target.files[0]);
+        this.props.parentHandler('imageComponent',e.target.files);
     }
 
     render(){
@@ -236,6 +269,7 @@ class ImageComponent extends React.Component{
                 <input 
             type="file" id="file" 
             accept=".jpg, .png"
+            multiple
             onChange={this.handleFileChange}
             />
             </div>
@@ -247,8 +281,19 @@ class ImageComponent extends React.Component{
 class PostPreviewComponent extends React.Component{
     constructor(props){
         super(props);
-        
+        this.state = {
+            value: props
+        };
     }
+
+    static getDerivedStateFromProps(props, current_state) {
+        if (current_state.value !== props) {
+          return {
+            value: props
+          }
+        }
+        return null
+      }
 
 
     render(){

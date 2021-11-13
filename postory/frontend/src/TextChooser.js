@@ -34,9 +34,11 @@ class TextChooser extends React.Component {
                         this.setState(state => ({title: state.title, body: e.target.value}))
                     }
                 }/>
+                {/*
                 <button id={'textchooser-plus-button'} onClick={this.sendParent}>
                     <Icon path={mdiPlus} size={1} id={'textchooser-plus-icon'}/>
                 </button>
+                */}
             </div>
         )
     }

@@ -86,10 +86,11 @@ class TimeChooser extends React.Component {
                         }/>
                     </div>
                 </div>}
-
+                {/*
                 <button id={'timechooser-plus-button'} onClick={this.sendParent}>
                     <Icon path={mdiPlus} size={1} id={'timechooser-plus-icon'}/>
                 </button>
+                */}
             </div>
         )
     }
