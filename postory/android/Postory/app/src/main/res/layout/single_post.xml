@@ -15,7 +15,7 @@
         android:layout_height="50dp">
         <ImageView
             android:id="@+id/profile_picture"
-            android:layout_width="100dp"
+            android:layout_width="50dp"
             android:src="@drawable/post_picture_example"
             android:layout_height="match_parent">
 
@@ -62,13 +62,13 @@ Donec pharetra justo vel pulvinar pulvinar. Aenean placerat est id consequat ves
         android:layout_height="30dp"
         android:layout_gravity="center"
         android:background="@color/colorPrimary"
-        android:text="Continue Reading"
+        android:text="@string/continue_reading"
         android:textAllCaps="false"
         android:clickable="true"
         android:id="@+id/post_continue_reading"
         android:visibility="gone"
         ></Button>
 
-
+  
 
 </LinearLayout>
