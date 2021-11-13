@@ -1,5 +1,11 @@
-<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/app_toolbar"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+<androidx.appcompat.widget.Toolbar
+    android:id="@+id/custom_toolbar"
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:background="@color/colorLightGray">
@@ -12,7 +18,7 @@
             android:id="@+id/logo_image"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:src="@drawable/postory_logo_no_text"></ImageView>
 
         <TextView
@@ -52,3 +58,4 @@
 
     </RelativeLayout>
 </androidx.appcompat.widget.Toolbar>
+</LinearLayout>

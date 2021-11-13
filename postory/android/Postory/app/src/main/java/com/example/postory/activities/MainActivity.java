@@ -5,7 +5,9 @@ import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.os.Bundle;
+
 import com.example.postory.R;
 import com.example.postory.adapters.PostAdapter;
 import com.example.postory.models.PostModel;
@@ -22,7 +24,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Toolbar toolbar = (Toolbar) findViewById(R.id.custom_toolbar);
+        setSupportActionBar(toolbar);
         listView = (ListView) findViewById(R.id.list_view_posts);
 
 
@@ -57,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
 
         listView.setAdapter(postAdapter);
     }
-
 
 
     private String toBase64(Bitmap bm) {
