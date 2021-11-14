@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
 
+    <include layout="@layout/toolbar"/>
     <ListView
+        android:layout_marginTop="50dp"
         android:id="@+id/list_view_posts"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
