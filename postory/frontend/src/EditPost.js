@@ -250,14 +250,14 @@ class EditPost extends React.Component{
                 */}
 
 
-                <Snackbar open={this.state.success == false} autoHideDuration={1000} onClose={this.handleSuccessClose} >
+                <Snackbar open={this.state.success == false} autoHideDuration={5000} onClose={this.handleSuccessClose} >
                     <Alert onClose={this.handleSuccessClose} severity="error" sx={{ width: '100%' }}>
                         Your post could not be created. See below for the error message:
                         {this.state.creationError}
                     </Alert>
                 </Snackbar>
 
-                <Snackbar open={this.state.success} autoHideDuration={1000} onClose={this.handleSuccessClose} >
+                <Snackbar open={this.state.success} autoHideDuration={5000} onClose={this.handleSuccessClose} >
                     <Alert onClose={this.handleSuccessClose} severity="success" sx={{ width: '100%' }}>
                         Your post is successfully created.
                     </Alert>
