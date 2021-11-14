@@ -14,7 +14,7 @@ class TimeChooser extends React.Component {
             startTime: null,
             endDate: null,
             endTime: null,
-            checked: false
+            checked: true
         }
     }
 
@@ -22,8 +22,10 @@ class TimeChooser extends React.Component {
         let result;
         if (this.state.checked) {
             result = {
-                date: this.state.startDate,
-                time: this.state.startTime
+                startDate: this.state.startDate,
+                startTime: this.state.startTime
+                // date: this.state.startDate,
+                // time: this.state.startTime
             }
         } else {
             result = {
@@ -60,12 +62,12 @@ class TimeChooser extends React.Component {
                             }
                         }/>
                     </div>
-                    <input id={'timechooser-checkbox'} type={'checkbox'} onChange={
-                        (e) => {
-                            this.setState(state => ({...state, checked: e.target.checked}))
-                        }
-                    } />
-                    <label id={'timechooser-checkbox-text'} htmlFor={'timechooser-checkbox'} >Use single time</label>
+                    {/*<input id={'timechooser-checkbox'} type={'checkbox'} onChange={*/}
+                    {/*    (e) => {*/}
+                    {/*        this.setState(state => ({...state, checked: e.target.checked}))*/}
+                    {/*    }*/}
+                    {/*} />*/}
+                    {/*<label id={'timechooser-checkbox-text'} htmlFor={'timechooser-checkbox'} >Use single time</label>*/}
                 </div>
 
                 {!this.state.checked &&<div style={{display: 'flex', flexDirection: 'row', gap: '10px'}}>
