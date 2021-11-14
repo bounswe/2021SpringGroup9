@@ -25,7 +25,7 @@ class CreatePost extends React.Component{
         this.allRefs = [this.refStory, this.refLocation, this.refTime, this.refTags];
 
         this.state = {
-            selected : "none",
+            selected : "Story",
             postData: {
                 textChooser: {title : " ", body: " "},
                 locationChooser: [],
@@ -286,7 +286,7 @@ class ImageComponent extends React.Component{
     render(){
         return(
             <div>
-            <p>Please select suitable images for the post using the below button.</p>
+            <p>Please select suitable images for the post using the button below.</p>
                 <input 
             type="file" id="file" 
             accept=".jpg, .png"
