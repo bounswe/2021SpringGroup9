@@ -63,21 +63,14 @@ class CreatePost extends React.Component{
             //problem code
             newObj['addedInformation'] = true;
             newObj['whichInfo'] = infoDict[whichComponent];
-            console.log(newObj);
-
-            console.log(whichComponent, childObj);
-            console.log("IMAGE IS ADDEDD.", newObj.postData);
 
             return newObj;
-        }, () => {
-            console.log("IMAGE IS ADDEDD.", this.state.postData["imageComponent"]);
         });
 
         
     }
 
     select(obj){
-        console.log(obj);
         this.setState(state => {
             //let newObj =  JSON.parse(JSON.stringify(state));
             //newObj['selected'] = obj;
@@ -94,10 +87,11 @@ class CreatePost extends React.Component{
             //newObj['success'] = false;
             return {
                 ...state,
-                success: false
+                success: null
             };
         });
     }
+
 
     handleInfoClose(){
         this.setState(state => {
@@ -111,7 +105,6 @@ class CreatePost extends React.Component{
     }
 
     prepareObjectToSend(){
-        console.log("img", this.state.postData['imageComponent']);
         return ({
             title: this.state.postData["textChooser"]["title"],
             story: this.state.postData["textChooser"]["body"],
@@ -130,14 +123,7 @@ class CreatePost extends React.Component{
 
     sendToBackend(){
         // send this.state.postData to backend
-        this.setState(state => {
-            //let newObj =  JSON.parse(JSON.stringify(state));
-            //newObj['success'] = true;
-            return {
-                ...state,
-                success: true
-            };
-        });
+        
 
         const objectToSend = this.prepareObjectToSend();
 
@@ -157,10 +143,35 @@ class CreatePost extends React.Component{
             method: 'POST',
             body: formData
         }).then(res => {
-            console.log(`Success` + res.data);
+            if(res.status != 200){
+                console.log("ERROR" + res.data);
+                this.setState(state => {
+                    return {
+                        ...state,
+                        success: false,
+                        creationError: `Response Status:  ${res.status} \n` + JSON.stringify(res)
+                    };
+                });
+            }else {
+                console.log("Post SUCCESS.")
+                this.setState(state => {
+                    return {
+                        ...state,
+                        success: true
+                    };
+                });
+            }
+
         })
         .catch(err => {
-            console.log(err);
+            this.setState(state => {
+                return {
+                    ...state,
+                    success: false,
+                    creationError: err
+                };
+            });
+            console.log("ERRRor" + err);
         });
         
         
@@ -221,6 +232,14 @@ class CreatePost extends React.Component{
                     </Alert>
                 </Snackbar>
 
+
+                <Snackbar open={this.state.success == false} autoHideDuration={1000} onClose={this.handleSuccessClose} >
+                    <Alert onClose={this.handleSuccessClose} severity="error" sx={{ width: '100%' }}>
+                        Your post could not be created. See below for the error message:
+                        {this.state.creationError}
+                    </Alert>
+                </Snackbar>
+
                 <Snackbar open={this.state.success} autoHideDuration={1000} onClose={this.handleSuccessClose} >
                     <Alert onClose={this.handleSuccessClose} severity="success" sx={{ width: '100%' }}>
                         Your post is successfully created.
@@ -258,12 +277,10 @@ class ImageComponent extends React.Component{
     }
 
     handleFileChange(e){
-        console.log(e.target.files);
         this.props.parentHandler('imageComponent',e.target.files);
     }
 
     render(){
-        console.log(this.props.postObject);
         return(
             <div>
                 <input 
@@ -297,7 +314,6 @@ class PostPreviewComponent extends React.Component{
 
 
     render(){
-        console.log(this.props.postObject);
         return(
             <div>
                 <Post {...this.props.postObject} ></Post>
