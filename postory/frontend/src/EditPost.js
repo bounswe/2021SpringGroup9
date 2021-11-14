@@ -241,12 +241,13 @@ class EditPost extends React.Component{
                 </div>
                 
 
-
+                {/*
                 <Snackbar open={this.state.addedInformation} autoHideDuration={1000} onClose={this.handleInfoClose} >
                     <Alert onClose={this.handleInfoClose} severity="success" sx={{ width: '100%' }}>
                         Information about {this.state.whichInfo} is added to your post.
                     </Alert>
                 </Snackbar>
+                */}
 
 
                 <Snackbar open={this.state.success == false} autoHideDuration={1000} onClose={this.handleSuccessClose} >

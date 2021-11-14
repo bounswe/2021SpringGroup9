@@ -45,13 +45,13 @@ class PostUpper extends React.Component{
         <img class = "circle" width = "50px" height = "50px" src = "./static/media/postory_logo_no_text.ec3bad21.png" />
         <a style = {{margin: "10px"}}>{this.state.owner}</a>
 
-        <Link class = "push" to= {`/editPost?id=${this.state.id}`}>
+        {this.state.id && <Link class = "push" to= {`/editPost?id=${this.state.id}`}>
           <Icon path={mdiPencilOutline}
             title="Edit Post"
             size={1}
             color='#FF8F49'
             />
-        </Link>  
+        </Link>}
       </div>
       <div class= "row fitText">
       
