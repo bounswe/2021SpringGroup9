@@ -31,7 +31,8 @@ class CreatePost extends React.Component{
                 locationChooser: [],
                 timeChooser: {startDate : " "},
                 tagChooser: {selectedTags: []},
-                owner:"USER"
+                owner:"USER",
+                imageComponent: null
             }
         };
 
@@ -137,6 +138,7 @@ class CreatePost extends React.Component{
 
         
         let formData = getFormData(objectToSend);
+
 
         
         fetch('http://35.158.95.81:8000/api/post/create', {
@@ -283,6 +285,7 @@ class ImageComponent extends React.Component{
     render(){
         return(
             <div>
+            <p>Please select suitable images for the post using the below button.</p>
                 <input 
             type="file" id="file" 
             accept=".jpg, .png"
