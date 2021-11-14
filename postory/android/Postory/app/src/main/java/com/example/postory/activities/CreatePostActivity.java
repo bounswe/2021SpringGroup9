@@ -16,6 +16,7 @@ import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +26,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.postory.R;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class CreatePostActivity extends AppCompatActivity {
 
@@ -120,12 +127,29 @@ public class CreatePostActivity extends AppCompatActivity {
                     break;
                 case PICK_GALLERY:
                     if (resultCode == RESULT_OK && data != null) {
-                        //TODO: use image from gallery
+                        final Uri imageUri = data.getData();
+                        final InputStream imageStream;
+                        try {
+                            imageStream = getContentResolver().openInputStream(imageUri);
+                            final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                            File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                            String fileName = "Image_post.jpg";
+                            File file = new File(storageDir, fileName);
+                            FileOutputStream out = new FileOutputStream(file);
+                            selectedImage.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                            out.flush();
+                            out.close();
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Toast.makeText(CreatePostActivity.this, "Image is not selected", Toast.LENGTH_SHORT);
                     }
                     break;
             }
         }
-
     }
 
     @Override
@@ -151,6 +175,5 @@ public class CreatePostActivity extends AppCompatActivity {
             return false;
         }
         return true;
-
     }
 }
