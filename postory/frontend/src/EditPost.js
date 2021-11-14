@@ -13,10 +13,17 @@ import Post from './Post';
 import {TextField, Snackbar} from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 
-class CreatePost extends React.Component{
+class EditPost extends React.Component{
     constructor(props){
         super(props);
-        
+
+        console.log(window.location.href);
+        const regex = /id=/g;
+        const url = window.location.href;
+        const idx = url.search(regex);
+        const id = parseInt(url.slice(idx+3));
+        console.log(url.slice(idx+3));
+
         this.refStory = React.createRef();
         this.refLocation = React.createRef();
         this.refTime = React.createRef();
@@ -25,6 +32,7 @@ class CreatePost extends React.Component{
         this.allRefs = [this.refStory, this.refLocation, this.refTime, this.refTags];
 
         this.state = {
+            id: id,
             selected : "Story",
             postData: {
                 textChooser: {title : " ", body: " "},
@@ -43,6 +51,7 @@ class CreatePost extends React.Component{
         this.handleInfoClose = this.handleInfoClose.bind(this);
         this.prepareObjectToSend = this.prepareObjectToSend.bind(this);
     }
+
 
     handleChildObjectSend(whichComponent, childObj){
         const infoDict = {
@@ -156,6 +165,11 @@ class CreatePost extends React.Component{
                 });
             }else {
                 console.log("Post SUCCESS.")
+                //http://35.158.95.81:8000/api/post/delete/<int:id>
+
+                fetch(`http://35.158.95.81:8000/api/post/delete/${this.state.id}`, {
+                    method: 'DELETE'
+                });
                 this.setState(state => {
                     return {
                         ...state,
@@ -236,14 +250,14 @@ class CreatePost extends React.Component{
                 */}
 
 
-                <Snackbar open={this.state.success == false} autoHideDuration={1000} onClose={this.handleSuccessClose} >
+                <Snackbar open={this.state.success == false} autoHideDuration={5000} onClose={this.handleSuccessClose} >
                     <Alert onClose={this.handleSuccessClose} severity="error" sx={{ width: '100%' }}>
                         Your post could not be created. See below for the error message:
                         {this.state.creationError}
                     </Alert>
                 </Snackbar>
 
-                <Snackbar open={this.state.success} autoHideDuration={1000} onClose={this.handleSuccessClose} >
+                <Snackbar open={this.state.success} autoHideDuration={5000} onClose={this.handleSuccessClose} >
                     <Alert onClose={this.handleSuccessClose} severity="success" sx={{ width: '100%' }}>
                         Your post is successfully created.
                     </Alert>
@@ -326,4 +340,4 @@ class PostPreviewComponent extends React.Component{
     }
 }
 
-export default CreatePost;
+export default EditPost;

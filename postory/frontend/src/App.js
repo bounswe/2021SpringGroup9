@@ -50,7 +50,7 @@ class App extends React.Component{
           })}
           <Link to= "/createPost" variant = "v6">
             <Icon class = "circle homePageCreatePostButton" path={mdiPencilPlusOutline}
-            title="Location"
+            title="Create a Post"
             size={2}
             color="black"
             />

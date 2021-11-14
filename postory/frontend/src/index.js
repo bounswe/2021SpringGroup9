@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import CreatePost from './CreatePost';
+import EditPost from './EditPost';
 import reportWebVitals from './reportWebVitals';
 import TopBar from './TopBar';
 
@@ -18,6 +19,7 @@ ReactDOM.render(
     <Routes>
     <Route path="/" element={<div><TopBar/> <App /></div>} />
     <Route path="/createPost" element={<div><TopBar/> <CreatePost /></div>} />
+    <Route path="/editPost" element={<div><TopBar/> <EditPost /></div>} />
     </Routes>
   </BrowserRouter>,
   document.getElementById('root')
