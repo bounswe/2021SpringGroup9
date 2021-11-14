@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Postory</string>
     <string name="continue_reading">Continue Reading</string>
+    <string name="create_post">Create A New Post</string>
+    <string name="send">Send Post</string>
+    <string name="write_title_hint">Write a Title...</string>
+    <string name="write_story_hint">Tell the Story...</string>
+    <string name="write_name_hint">Write your nickname</string>
+    <string name="write_location_hint">Write the location</string>
+    <string name="pick_date_hint">Pick story date</string>
+
 </resources>
