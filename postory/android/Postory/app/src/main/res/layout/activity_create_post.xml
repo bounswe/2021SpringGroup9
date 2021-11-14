@@ -91,12 +91,15 @@
             android:src="@drawable/baseline_calendar_today_black_24dp"></ImageView>
 
         <EditText
+            android:id="@+id/op_date_text"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="20dp"
             android:gravity="center_vertical"
-            android:hint="@string/pick_date_hint"></EditText>
+            android:hint="@string/pick_date_hint">
+
+        </EditText>
 
 
     </RelativeLayout>
@@ -107,8 +110,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:hint="@string/write_story_hint"
-        >
+        android:hint="@string/write_story_hint">
 
     </EditText>
 

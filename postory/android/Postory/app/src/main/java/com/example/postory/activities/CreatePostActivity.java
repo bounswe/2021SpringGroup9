@@ -3,6 +3,7 @@ package com.example.postory.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.Manifest;
 import android.content.Context;
@@ -31,6 +32,8 @@ public class CreatePostActivity extends AppCompatActivity {
     EditText nicknameEditText;
     EditText titleEditText;
     EditText storyEditText;
+    EditText dateEditText;
+    EditText locationEditText;
     ImageView postImage;
 
     public static final int TAKE_PHOTO = 0;
@@ -41,16 +44,28 @@ public class CreatePostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);
+        Toolbar toolbar = findViewById(R.id.custom_toolbar);
+        setSupportActionBar(toolbar);
+        ImageView homeButton = (ImageView) toolbar.findViewById(R.id.home_button);
+        homeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         sendButton = (Button) findViewById(R.id.send_button);
         nicknameEditText = (EditText) findViewById(R.id.op_name_field);
         titleEditText = (EditText) findViewById(R.id.op_enter_title);
         storyEditText = (EditText) findViewById(R.id.post_story_text_field);
+        dateEditText = (EditText) findViewById(R.id.op_date_text);
+        locationEditText = (EditText) findViewById(R.id.op_location_text);
+
         postImage = (ImageView) findViewById(R.id.post_photo);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (checkNecessaryData()) {
-                    //TODO: use the data
+                    //TODO: use the filled data
                 } else {
                     Toast.makeText(CreatePostActivity.this, R.string.fill_necessary_warning, Toast.LENGTH_LONG).show();
                 }
@@ -64,7 +79,7 @@ public class CreatePostActivity extends AppCompatActivity {
         });
     }
 
-    protected void addImage(){
+    protected void addImage() {
         final CharSequence[] options = {"Take Photo with Camera", "Choose from Gallery", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(CreatePostActivity.this);
         builder.setTitle(R.string.choose_image_source);
@@ -91,6 +106,7 @@ public class CreatePostActivity extends AppCompatActivity {
         });
         builder.show();
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -111,14 +127,30 @@ public class CreatePostActivity extends AppCompatActivity {
         }
 
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
 
     protected boolean checkNecessaryData() {
-        return false;
-    }
+        if (nicknameEditText.getText().toString().trim().equals("")) {
+            return false;
+        }
+        if (titleEditText.getText().toString().trim().equals("")) {
+            return false;
+        }
+        if (storyEditText.getText().toString().trim().equals("")) {
+            return false;
+        }
+        if (dateEditText.getText().toString().trim().equals("")) {
+            return false;
+        }
+        if (locationEditText.getText().toString().trim().equals("")) {
+            return false;
+        }
+        return true;
 
+    }
 }
