@@ -38,7 +38,8 @@
         <ImageView
             android:id="@+id/profile_picture"
             android:layout_width="50dp"
-            android:layout_height="match_parent"></ImageView>
+            android:layout_height="match_parent"
+            android:src="@drawable/baseline_person_outline_black_24dp"></ImageView>
 
         <EditText
             android:id="@+id/op_name_field"
@@ -58,7 +59,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="15dp"
         android:clickable="true"
-        android:src="@drawable/baseline_photo_size_select_actual_black_24dp">
+        android:src="@drawable/baseline_add_photo_alternate_black_24dp">
 
     </ImageView>
 
