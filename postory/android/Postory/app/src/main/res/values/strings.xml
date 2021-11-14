@@ -8,7 +8,7 @@
     <string name="write_name_hint">Write your nickname</string>
     <string name="write_location_hint">Write the location</string>
     <string name="pick_date_hint">Pick story date</string>
-    <string name="fill_necessary_warning">Please fill necessary fields!</string>
+    <string name="fill_necessary_warning">Please fill in necessary fields!</string>
     <string name="choose_image_source">Pick an image for your story </string>
     <string name="use_camera"></string>
 </resources>
