@@ -115,11 +115,10 @@
 
     </EditText>
 
-<Button
-    android:layout_width="100dp"
-    android:layout_height="40dp"
-    android:layout_gravity="center_horizontal"
-    android:background="@color/colorPrimary"
-    android:text="@string/send">
-</Button>
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/colorPrimary"
+        android:text="@string/send"></Button>
 </LinearLayout>
