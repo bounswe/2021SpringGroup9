@@ -1,4 +1,4 @@
-name: Test Deployment
+name: Backend Deployment
 
 on:
   workflow_dispatch:
@@ -28,7 +28,7 @@ jobs:
         with:
           context: postory/backend/.
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend_test:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest
           
   test-deploy:
     needs: test-build
@@ -42,11 +42,11 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            sudo docker rm -f mongo_test || true
-            sudo docker run -d --restart always -p 2717:27017 --volume mongo_database_test:/data/db --env MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_USERNAME }} --env MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_PASSWORD }} --name mongo_test mongo:latest || true
-            sudo docker rm -f backend_test || true
-            sudo docker image rm ${{ secrets.DOCKERHUB_USERNAME }}/backend_test:latest || true
-            sudo docker run -d --restart always -p 8000:8000 --link mongo_test --name backend_test \
+            sudo docker rm -f mongo || true
+            sudo docker run -d --restart always -p 2717:27017 --volume mongo_database:/data/db --env MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_USERNAME }} --env MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_PASSWORD }} --name mongo mongo:latest || true
+            sudo docker rm -f backend || true
+            sudo docker image rm ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest || true
+            sudo docker run -d --restart always -p 8000:8000 --link mongo --name backend \
               --env MONGO_USERNAME=${{ secrets.MONGO_USERNAME }} \
               --env MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} \
               --env SECRET_KEY="${{ secrets.SECRET_KEY }}" \
@@ -56,4 +56,4 @@ jobs:
               --env AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
               --env AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
               --env AWS_STORAGE_BUCKET_NAME=${{ secrets.AWS_STORAGE_BUCKET_NAME }} \
-              ${{ secrets.DOCKERHUB_USERNAME }}/backend_test:latest bash -c "python manage.py makemigrations post_endpoint && python manage.py migrate && python manage.py runserver 0.0.0.0:8000" || true
+              ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest bash -c "python manage.py makemigrations post_endpoint && python manage.py migrate && python manage.py runserver 0.0.0.0:8000" || true
