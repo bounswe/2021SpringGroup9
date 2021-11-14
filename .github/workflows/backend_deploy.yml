@@ -51,7 +51,7 @@ jobs:
               --env MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} \
               --env SECRET_KEY="${{ secrets.SECRET_KEY }}" \
               --env GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }} \
-              --env MONGO_CONTAINER_NAME=mongo_test \
+              --env MONGO_CONTAINER_NAME=mongo \
               --env MONGO_PORT=27017 \
               --env AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
               --env AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
