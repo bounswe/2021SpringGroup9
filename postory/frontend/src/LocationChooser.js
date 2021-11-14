@@ -96,9 +96,11 @@ class LocationChooser extends React.Component{
                         </li>
                     ))}
                  </ul>
+                 {/*
                  <button id={'locationchooser-plus-button'} onClick={this.sendParent}>
                     <Icon path={mdiPlus} size={1} id={'locationchooser-plus-icon'}/>
                 </button>   
+                 */}
             </div>
         );
     }

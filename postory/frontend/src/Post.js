@@ -1,6 +1,6 @@
 import React from 'react'
 import Icon from '@mdi/react'
-import { mdiMapMarker, mdiClockTimeEight, mdiTag, mdiCardsHeartOutline, mdiCardsHeart, mdiShareVariant} from '@mdi/js'
+import { mdiMapMarker, mdiClockTimeEight, mdiTag, mdiCardsHeartOutline, mdiCardsHeart, mdiShareVariant,  mdiDotsHorizontal} from '@mdi/js'
 import PostButtons from './PostButtons';
 
 class Post extends React.Component{
@@ -28,7 +28,8 @@ class PostUpper extends React.Component{
 
   getMoreContent(){
     this.setState(state =>{
-      let newState = JSON.parse(JSON.stringify(state));
+      //let newState = JSON.parse(JSON.stringify(state));
+      let newState = {...state};
       newState.contentSmall = state.story;
       newState.continueReading = false;
       return newState;
@@ -38,7 +39,7 @@ class PostUpper extends React.Component{
   render(){
     return (<div >
       <div class= "row" style = {{paddingBottom: "10px"}}>
-        <img class = "circle" width = "50px" height = "50px" src = "https://images.emojiterra.com/google/android-11/512px/1f9cd.png" />
+        <img class = "circle" width = "50px" height = "50px" src = "./static/media/postory_logo_no_text.ec3bad21.png" />
         <a style = {{margin: "10px"}}>{this.state.owner}</a>
       </div>
       <div class= "row fitText">
@@ -79,9 +80,14 @@ class PostUpper extends React.Component{
       <a class = "mainContent" >{this.state.contentSmall}</a>
       {this.state.continueReading && <a class = "mainContent" onClick = {this.getMoreContent}><b> ...Continue Reading</b></a>}
       <p></p>
-      <div class = "row image"> 
-        <img width = "200px" src = "https://www.industrialempathy.com/img/remote/ZiClJf-1920w.jpg" ></img>
-        <img width = "200px" src = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png"></img>
+      <div> 
+        {this.state.preview &&<div class = "row image">
+          <img width = "200px" src = {URL.createObjectURL(this.state.preview[0])} ></img>
+        </div>}
+        {!this.state.preview &&<div class = "row image">
+          <img width = "200px" src = {(this.state.images && this.state.images[0]) ? this.state.images[0]: ""} ></img>
+          <img width = "200px" src = {(this.state.images && this.state.images[0] && this.state.images[1]) ? this.state.images[1]: ""}></img>
+        </div>}
       </div>
     </div>);
   }

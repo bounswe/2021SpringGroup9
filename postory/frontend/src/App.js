@@ -24,6 +24,11 @@ class App extends React.Component{
     };
     fetch('http://35.158.95.81:8000/api/post/all').then(resp => resp.json()).then(data => this.setState(state => {
       let newState = JSON.parse(JSON.stringify(state));
+
+      //Show biggest id post on top
+      data.sort((a, b) => parseInt(b.id) - parseInt(a.id));
+
+
       newState.posts = data;
       newState['fetched'] = true;
       console.log(newState);
