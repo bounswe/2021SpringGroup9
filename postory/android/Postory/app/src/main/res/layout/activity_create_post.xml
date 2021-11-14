@@ -116,6 +116,7 @@
     </EditText>
 
     <Button
+        android:id="@+id/send_button"
         android:layout_width="100dp"
         android:layout_height="40dp"
         android:layout_gravity="center_horizontal"
