@@ -47,6 +47,10 @@
   background-color: rgb(235, 235, 235);
 }
 
+.push {
+  margin-left: auto;
+}
+
 .row{
   display: flex;
   flex-direction: row;

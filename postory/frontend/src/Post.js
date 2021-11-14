@@ -1,7 +1,10 @@
 import React from 'react'
 import Icon from '@mdi/react'
-import { mdiMapMarker, mdiClockTimeEight, mdiTag, mdiCardsHeartOutline, mdiCardsHeart, mdiShareVariant,  mdiDotsHorizontal} from '@mdi/js'
+import { mdiMapMarker, mdiClockTimeEight, mdiTag, mdiCardsHeartOutline, mdiCardsHeart, mdiShareVariant,  mdiPencilOutline} from '@mdi/js'
 import PostButtons from './PostButtons';
+
+import { Link } from "react-router-dom";
+
 
 class Post extends React.Component{
     constructor(props){
@@ -41,6 +44,14 @@ class PostUpper extends React.Component{
       <div class= "row" style = {{paddingBottom: "10px"}}>
         <img class = "circle" width = "50px" height = "50px" src = "./static/media/postory_logo_no_text.ec3bad21.png" />
         <a style = {{margin: "10px"}}>{this.state.owner}</a>
+
+        <Link class = "push" to= {`/editPost?id=${this.state.id}`}>
+          <Icon path={mdiPencilOutline}
+            title="Edit Post"
+            size={1}
+            color='#FF8F49'
+            />
+        </Link>  
       </div>
       <div class= "row fitText">
       

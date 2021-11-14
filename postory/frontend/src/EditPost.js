@@ -13,10 +13,17 @@ import Post from './Post';
 import {TextField, Snackbar} from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 
-class CreatePost extends React.Component{
+class EditPost extends React.Component{
     constructor(props){
         super(props);
-        
+
+        console.log(window.location.href);
+        const regex = /id=/g;
+        const url = window.location.href;
+        const idx = url.search(regex);
+        const id = parseInt(url.slice(idx+3));
+        console.log(url.slice(idx+3));
+
         this.refStory = React.createRef();
         this.refLocation = React.createRef();
         this.refTime = React.createRef();
@@ -25,6 +32,7 @@ class CreatePost extends React.Component{
         this.allRefs = [this.refStory, this.refLocation, this.refTime, this.refTags];
 
         this.state = {
+            id: id,
             selected : "none",
             postData: {
                 textChooser: {title : " ", body: " "},
@@ -43,6 +51,7 @@ class CreatePost extends React.Component{
         this.handleInfoClose = this.handleInfoClose.bind(this);
         this.prepareObjectToSend = this.prepareObjectToSend.bind(this);
     }
+
 
     handleChildObjectSend(whichComponent, childObj){
         const infoDict = {
@@ -156,6 +165,11 @@ class CreatePost extends React.Component{
                 });
             }else {
                 console.log("Post SUCCESS.")
+                //http://35.158.95.81:8000/api/post/delete/<int:id>
+
+                fetch(`http://35.158.95.81:8000/api/post/delete/${this.state.id}`, {
+                    method: 'DELETE'
+                });
                 this.setState(state => {
                     return {
                         ...state,
@@ -227,13 +241,12 @@ class CreatePost extends React.Component{
                 </div>
                 
 
-                {/*
+
                 <Snackbar open={this.state.addedInformation} autoHideDuration={1000} onClose={this.handleInfoClose} >
                     <Alert onClose={this.handleInfoClose} severity="success" sx={{ width: '100%' }}>
                         Information about {this.state.whichInfo} is added to your post.
                     </Alert>
                 </Snackbar>
-                */}
 
 
                 <Snackbar open={this.state.success == false} autoHideDuration={1000} onClose={this.handleSuccessClose} >
@@ -326,4 +339,4 @@ class PostPreviewComponent extends React.Component{
     }
 }
 
-export default CreatePost;
+export default EditPost;
