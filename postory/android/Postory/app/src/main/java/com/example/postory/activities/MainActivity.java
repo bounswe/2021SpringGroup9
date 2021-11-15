@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.Image;
 import android.util.Base64;
 import android.util.Log;
@@ -19,6 +20,9 @@ import com.example.postory.adapters.PostAdapter;
 import com.example.postory.models.Post;
 import com.example.postory.models.PostModel;
 import com.example.postory.models.PostReturnModel;
+import com.github.johnpersano.supertoasts.library.Style;
+import com.github.johnpersano.supertoasts.library.SuperActivityToast;
+import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.google.gson.Gson;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
@@ -30,6 +34,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private ImageView createPost;
     private ImageView refreshPage;
+    private ImageView worldButton;
     private PostAdapter postAdapter;
 
     private ListView listView;
@@ -44,12 +49,26 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         createPost = (ImageView)toolbar.findViewById(R.id.create_post);
         refreshPage = (ImageView)toolbar.findViewById(R.id.refresh_button);
+        worldButton = (ImageView) toolbar.findViewById(R.id.world_button);
+
         createPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent createPostIntent = new Intent(MainActivity.this, CreatePostActivity.class);
                 createPostIntent.putExtra("goal","create");
                 startActivity(createPostIntent);
+            }
+        });
+        worldButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SuperActivityToast.create(MainActivity.this, new Style(), Style.TYPE_BUTTON)
+                        .setProgressBarColor(Color.WHITE)
+                        .setText("This feature is not available now.")
+                        .setDuration(Style.DURATION_LONG)
+                        .setFrame(Style.FRAME_LOLLIPOP)
+                        .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                        .setAnimations(Style.ANIMATIONS_POP).show();
             }
         });
 
