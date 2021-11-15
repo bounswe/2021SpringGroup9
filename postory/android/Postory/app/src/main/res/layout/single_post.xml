@@ -74,8 +74,7 @@
             layout="@layout/tag"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            ></include>
+            android:layout_alignParentRight="true"></include>
     </RelativeLayout>
 
 
