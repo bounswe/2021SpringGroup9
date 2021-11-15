@@ -88,12 +88,14 @@ class PostUpper extends React.Component{
           </a>);
         })}
       </div>
+      <p style= {{width: '100%'}}class = "mainContent" ><b>{this.state.title}</b></p>
       <a class = "mainContent" >{this.state.contentSmall}</a>
       {this.state.continueReading && <a class = "mainContent" onClick = {this.getMoreContent}><b> ...Continue Reading</b></a>}
       <p></p>
       <div> 
         {this.state.preview &&<div class = "row image">
-          <img width = "200px" src = {URL.createObjectURL(this.state.preview[0])} ></img>
+          {this.state.preview.length > 0 && <img width = "200px" src = {URL.createObjectURL(this.state.preview[0])} ></img>}
+          {this.state.preview.length > 1 && <img width = "200px" src = {URL.createObjectURL(this.state.preview[1])} ></img>}
         </div>}
         {!this.state.preview &&<div class = "row image">
           <img width = "200px" src = {(this.state.images && this.state.images[0]) ? this.state.images[0]: ""} ></img>

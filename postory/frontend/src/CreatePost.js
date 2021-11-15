@@ -115,7 +115,7 @@ class CreatePost extends React.Component{
             editDate: this.state.postData["timeChooser"]["startDate"] + "T" +this.state.postData["timeChooser"]["startTime"] + ":0.0Z",
             postDate: this.state.postData["timeChooser"]["startDate"] + "T" +this.state.postData["timeChooser"]["startTime"] + ":0.0Z",
             tags: this.state.postData["tagChooser"]["selectedTags"],
-            images: this.state.postData['imageComponent'],
+            //images: this.state.postData['imageComponent'],
             preview: this.state.postData['imageComponent']
         });
     }
@@ -134,10 +134,14 @@ class CreatePost extends React.Component{
             return formData;
         }, new FormData());
 
-        
-
-        
         let formData = getFormData(objectToSend);
+
+        for(const key in objectToSend.preview){
+            if(objectToSend.preview[key] instanceof File)
+                formData.append('images', objectToSend.preview[key]);
+        }
+        
+        
 
 
         

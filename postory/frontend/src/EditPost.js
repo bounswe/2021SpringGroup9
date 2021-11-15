@@ -124,7 +124,7 @@ class EditPost extends React.Component{
             editDate: this.state.postData["timeChooser"]["startDate"] + "T" +this.state.postData["timeChooser"]["startTime"] + ":0.0Z",
             postDate: this.state.postData["timeChooser"]["startDate"] + "T" +this.state.postData["timeChooser"]["startTime"] + ":0.0Z",
             tags: this.state.postData["tagChooser"]["selectedTags"],
-            images: this.state.postData['imageComponent'],
+            //images: this.state.postData['imageComponent'],
             preview: this.state.postData['imageComponent']
         });
     }
@@ -147,6 +147,11 @@ class EditPost extends React.Component{
 
         
         let formData = getFormData(objectToSend);
+
+        for(const key in objectToSend.preview){
+            if(objectToSend.preview[key] instanceof File)
+                formData.append('images', objectToSend.preview[key]);
+        }
 
 
         
@@ -263,7 +268,7 @@ class EditPost extends React.Component{
                     </Alert>
                 </Snackbar>
                 
-                <Link to= "/createPost" variant = "v6">
+                <Link to= "/editPost" variant = "v6">
                     <Icon onClick = {() =>{
                     this.refStory.current.sendParent();
                     this.refLocation.current.sendParent();
