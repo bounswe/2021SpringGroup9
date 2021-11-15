@@ -42,7 +42,7 @@
             android:id="@+id/op_name_field"
             android:layout_width="100dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="0dp"
             android:gravity="center_vertical"
             android:text="Ahmet Gülmez"
             android:textStyle="bold"></TextView>
@@ -50,11 +50,40 @@
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="2dp">
+
+        <TextView
+            android:id="@+id/op_shared_on"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/shared_on">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/share_date"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/op_shared_on"
+            android:text="15/11/2021"></TextView>
+
+        <include
+            layout="@layout/tag"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            ></include>
+    </RelativeLayout>
+
+
     <ImageView
         android:id="@+id/post_photo"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="4dp"
         android:src="@drawable/post_picture_example">
 
     </ImageView>

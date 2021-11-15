@@ -10,5 +10,7 @@
     <string name="pick_date_hint">Pick story date</string>
     <string name="fill_necessary_warning">Please fill in necessary fields!</string>
     <string name="choose_image_source">Pick an image for your story </string>
-    <string name="use_camera"></string>
+    <string name="shared_on">Shared on:&#160;</string>
+    <string name="write_tag_hint">Write tag</string>
+
 </resources>
