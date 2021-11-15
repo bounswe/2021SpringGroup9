@@ -15,10 +15,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.postory.R;
 import com.example.postory.models.PostModel;
 
+import com.example.postory.models.TagItem;
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
@@ -43,6 +47,21 @@ public class PostAdapter extends ArrayAdapter<PostModel> {
         TextView opTitle = (TextView) convertView.findViewById(R.id.op_title_field);
         TextView dateText = (TextView) convertView.findViewById(R.id.op_date_text);
         TextView locationText = (TextView) convertView.findViewById(R.id.op_location_text);
+        RecyclerView recyclerView = (RecyclerView) convertView.findViewById(R.id.tags_list);
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+
+        ArrayList<TagItem> itemsList = new ArrayList<>();
+        TagsAdapter tagsAdapter = new TagsAdapter(R.layout.single_tag,itemsList);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(tagsAdapter);
+
+        if(post.getTags().size() != 0) {
+            for(String tag : post.getTags()) {
+                itemsList.add(new TagItem(tag));
+            }
+        }
 
         ImageView postPicture = (ImageView) convertView.findViewById(R.id.post_photo);
         postPicture.setImageResource(R.drawable.placeholder);
