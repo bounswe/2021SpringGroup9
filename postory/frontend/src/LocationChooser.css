@@ -1,0 +1,13 @@
+#locationchooser-div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#locationchooser-title-label {
+    align-self: flex-start;
+}
+
+#locationchooser-plus-button {
+    align-self: flex-end;
+}
