@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.postory.R;
 import com.example.postory.activities.CreatePostActivity;
 import com.example.postory.activities.MainActivity;
@@ -102,6 +103,7 @@ public class PostAdapter extends ArrayAdapter<PostModel> {
                     .with(getContext())
                     .load(post.getImages().get(0))
                     .placeholder(R.drawable.placeholder)
+                    .apply(new RequestOptions().override(400,400))
                     .centerCrop()
                     .into(postPicture);
         }

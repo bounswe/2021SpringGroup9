@@ -213,7 +213,7 @@ public class CreatePostActivity extends AppCompatActivity {
                                     .addFormDataPart("owner", nicknameEditText.getText().toString())
                                     .addFormDataPart("locations", locationEditText.getText().toString())
                                     .addFormDataPart("storyDate", formatToDate.format(formatFromString.parse(dateEditText.getText().toString())))
-                                    .addFormDataPart("tags", "fun")
+                                    .addFormDataPart("tags", tagEditText.getText().toString())
                                     .addFormDataPart("images", file.getName(), RequestBody.create(MediaType.parse("image/jpeg"), file))
                                     .build();
                         } catch (ParseException e) {
@@ -297,7 +297,7 @@ public class CreatePostActivity extends AppCompatActivity {
                                     .addFormDataPart("owner", nicknameEditText.getText().toString())
                                     .addFormDataPart("locations", locationEditText.getText().toString())
                                     .addFormDataPart("storyDate", formatToDate.format(formatFromString.parse(dateEditText.getText().toString())))
-                                    .addFormDataPart("tags", "fun")
+                                    .addFormDataPart("tags", tagEditText.getText().toString())
                                     .addFormDataPart("images", file.getName(), RequestBody.create(MediaType.parse("image/jpeg"), file))
                                     .build();
                         } catch (ParseException e) {
