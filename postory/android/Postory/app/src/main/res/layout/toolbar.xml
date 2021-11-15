@@ -67,7 +67,7 @@
                 android:layout_marginRight="15dp"
                 android:layout_toLeftOf="@id/create_post"
                 android:clickable="true"
-                android:src="@drawable/baseline_add_circle_black_24dp">
+                android:src="@drawable/baseline_refresh_black_24dp">
 
 
             </ImageView>

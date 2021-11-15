@@ -27,7 +27,7 @@
         />
 
     <LinearLayout
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="3dp"
         android:layout_marginLeft="5dp"
         android:orientation="horizontal"
         android:id="@+id/op_info_layout"
@@ -36,7 +36,8 @@
         <ImageView
             android:id="@+id/profile_picture"
             android:layout_width="50dp"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:src="@drawable/baseline_person_outline_black_24dp">
         </ImageView>
 
         <TextView
@@ -54,7 +55,7 @@
     </LinearLayout>
 
     <ImageView
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:id="@+id/post_photo"
         android:src="@drawable/post_picture_example"
         android:layout_width="match_parent"
@@ -121,12 +122,15 @@ Donec pharetra justo vel pulvinar pulvinar. Aenean placerat est id consequat ves
         >
 
     </TextView>
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
     <Button
         android:layout_marginTop="10dp"
         android:layout_width="200dp"
         android:layout_height="30dp"
-        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
         android:background="@color/colorPrimary"
         android:text="@string/continue_reading"
         android:textAllCaps="false"
@@ -135,6 +139,18 @@ Donec pharetra justo vel pulvinar pulvinar. Aenean placerat est id consequat ves
         android:visibility="gone"
         ></Button>
 
+    <ImageView
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/outline_edit_black_24dp"
+        android:text="@string/continue_reading"
+        android:textAllCaps="false"
+        android:clickable="true"
+        ></ImageView>
 
+    </RelativeLayout>
 
 </LinearLayout>
