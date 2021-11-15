@@ -6,30 +6,32 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
 
-    <include layout="@layout/toolbar"/>
+    <include layout="@layout/toolbar" />
+
     <ListView
-        android:layout_marginTop="50dp"
         android:id="@+id/list_view_posts"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </ListView>
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"></ListView>
 
-<ScrollView
-    android:visibility="gone"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
-
-    <LinearLayout
-        android:visibility="gone"
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <include layout="@layout/single_post" />
-        <include layout="@layout/single_post" />
-        <include layout="@layout/single_post" />
-    </LinearLayout>
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
-</ScrollView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <include layout="@layout/single_post" />
+
+            <include layout="@layout/single_post" />
+
+            <include layout="@layout/single_post" />
+        </LinearLayout>
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
