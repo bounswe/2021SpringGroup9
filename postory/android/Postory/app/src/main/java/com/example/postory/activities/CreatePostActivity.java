@@ -2,9 +2,14 @@ package com.example.postory.activities;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
+import android.os.Handler;
+import android.widget.*;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -24,33 +29,45 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.postory.R;
 import com.example.postory.dialogs.DelayedProgressDialog;
+import com.example.postory.models.Post;
+import com.example.postory.models.PostModel;
+import com.github.johnpersano.supertoasts.library.Style;
+import com.github.johnpersano.supertoasts.library.SuperActivityToast;
+import com.github.johnpersano.supertoasts.library.SuperToast;
+import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
+import com.google.gson.Gson;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.Text;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.lang.reflect.Array;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 public class CreatePostActivity extends AppCompatActivity {
 
     Button sendButton;
+    Handler handler;
     EditText nicknameEditText;
     EditText titleEditText;
     EditText storyEditText;
     EditText dateEditText;
+    EditText tagEditText;
     EditText locationEditText;
+    TextView title;
     ImageView postImage;
+    Post post;
 
+    DelayedProgressDialog dialog;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -63,13 +80,20 @@ public class CreatePostActivity extends AppCompatActivity {
     public static final int PICK_GALLERY = 1;
     private final int CAMERA_PERMISSION_REQUEST = 1000;
 
-    public Uri imageUri;
+    private Uri imageUri;
+    private String from;
+    private SimpleDateFormat formatFromString;
+    private SimpleDateFormat formatToDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dialog = new DelayedProgressDialog();
         setContentView(R.layout.activity_create_post);
+        formatFromString = new SimpleDateFormat("DD/mm/yyyy");
+        formatToDate = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
         Toolbar toolbar = findViewById(R.id.custom_toolbar);
+        handler = new Handler();
         setSupportActionBar(toolbar);
         ImageView homeButton = (ImageView) toolbar.findViewById(R.id.home_button);
         homeButton.setOnClickListener(new View.OnClickListener() {
@@ -80,55 +104,258 @@ public class CreatePostActivity extends AppCompatActivity {
         });
         sendButton = (Button) findViewById(R.id.send_button);
         nicknameEditText = (EditText) findViewById(R.id.op_name_field);
+        tagEditText = (EditText) findViewById(R.id.op_tag_field);
         titleEditText = (EditText) findViewById(R.id.op_enter_title);
+        title = (TextView) findViewById(R.id.create_new_post);
         storyEditText = (EditText) findViewById(R.id.post_story_text_field);
         dateEditText = (EditText) findViewById(R.id.op_date_text);
         locationEditText = (EditText) findViewById(R.id.op_location_text);
 
+        from = getIntent().getStringExtra("goal");
+
+        if (from.equals("edit")) {
+            title.setText("Edit The Post");
+
+            final OkHttpClient client = new OkHttpClient();
+            String url = "http://35.158.95.81:8000/api/post/get/" + getIntent().getStringExtra("id");
+            final Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+            dialog.show(getSupportFragmentManager(), "ASDASD");
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    Log.i(TAG, "onFailure: ");
+                    dialog.cancel();
+                }
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    dialog.cancel();
+                    Log.i(TAG, "onResponse: ");
+                    Gson gson = new Gson();
+                    post = gson.fromJson(response.body().string(), Post.class);
+                    Log.i(TAG, "onResponse: ");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (post.getImages().size() != 0) {
+                                Glide
+                                        .with(CreatePostActivity.this)
+                                        .load(post.getImages().get(0))
+                                        .placeholder(R.drawable.placeholder)
+                                        .centerCrop()
+                                        .into(postImage);
+                            }
+
+                            titleEditText.setText(post.getTitle());
+                            nicknameEditText.setText(post.getOwner());
+                            if (post.getLocations().size() != 0) {
+                                locationEditText.setText((String) post.getLocations().get(0).get(0));
+                            }
+                            if (post.getTags().size() != 0) {
+                                tagEditText.setText(post.getTags().get(0));
+                            }
+                            dateEditText.setText(new SimpleDateFormat("dd/MM/yyyy").format(post.getStoryDate()));
+                            storyEditText.setText(post.getStory());
+
+                        }
+                    });
+
+
+                }
+            });
+        } else {
+            title.setText("Create New Post");
+        }
+
         verifyStoragePermissions(this);
 
         postImage = (ImageView) findViewById(R.id.post_photo);
+
+
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (checkNecessaryData()) {
-                    //TODO: use the filled data
-                    File file = new File(getRealPathFromURI(imageUri));
-                    OkHttpClient client = new OkHttpClient();
-                    String url = "http://35.158.95.81:8000/api/post/create";
-                    RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                            .addFormDataPart("title",titleEditText.getText().toString())
-                            .addFormDataPart("story",storyEditText.getText().toString())
-                            .addFormDataPart("owner",nicknameEditText.getText().toString())
-                            .addFormDataPart("locations",locationEditText.getText().toString())
-                            .addFormDataPart("storyDate",dateEditText.getText().toString())
-                            .addFormDataPart("tags","fun")
-                            .addFormDataPart("images",file.getName(),RequestBody.create(MediaType.parse("image/jpeg"),file))
-                            .build();
 
-                    Request request = new Request.Builder()
-                            .url(url)
-                            .post(requestBody)
-                            .build();
-                    final DelayedProgressDialog dialog = new DelayedProgressDialog();
-                    dialog.show(getSupportFragmentManager(),"Post is being created...");
+                if (from.equals("edit")) {
 
-                    client.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                            Log.i(TAG, "onFailure: ");
-                            dialog.cancel();
+                    if (checkNecessaryData()) {
+
+                        BitmapDrawable drawable = (BitmapDrawable) postImage.getDrawable();
+                        Bitmap bitmap = drawable.getBitmap();
+                        Log.i(TAG, "onClick: ");
+                        String path = saveImage(bitmap);
+                        File file = new File(path);
+
+
+                        OkHttpClient client = new OkHttpClient();
+
+
+                        String url = "http://35.158.95.81:8000/api/post/put/" + getIntent().getStringExtra("id");
+                        RequestBody requestBody = null;
+                        try {
+                            requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                                    .addFormDataPart("title", titleEditText.getText().toString())
+                                    .addFormDataPart("story", storyEditText.getText().toString())
+                                    .addFormDataPart("owner", nicknameEditText.getText().toString())
+                                    .addFormDataPart("locations", locationEditText.getText().toString())
+                                    .addFormDataPart("storyDate", formatToDate.format(formatFromString.parse(dateEditText.getText().toString())))
+                                    .addFormDataPart("tags", "fun")
+                                    .addFormDataPart("images", file.getName(), RequestBody.create(MediaType.parse("image/jpeg"), file))
+                                    .build();
+                        } catch (ParseException e) {
+                            SuperActivityToast.create(CreatePostActivity.this, new Style(), Style.TYPE_BUTTON)
+                                    .setProgressBarColor(Color.WHITE)
+                                    .setText("WRONG FORM OF DATE (Should be in the form DD/mm/yyyy )!")
+                                    .setDuration(Style.DURATION_LONG)
+                                    .setFrame(Style.FRAME_LOLLIPOP)
+                                    .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                    .setAnimations(Style.ANIMATIONS_POP).show();
+                            e.printStackTrace();
                         }
 
-                        @Override
-                        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                            Log.i(TAG, "onResponse: ");
-                            dialog.cancel();
-                        }
-                    });
+                        Request request = new Request.Builder()
+                                .url(url)
+                                .put(requestBody)
+                                .build();
+                        dialog.show(getSupportFragmentManager(), "Post is being edited...");
+
+                        client.newCall(request).enqueue(new Callback() {
+                            @Override
+                            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                                dialog.cancel();
+                                Log.i(TAG, "onFailure: ");
+                            }
+
+                            @Override
+                            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                                Log.i(TAG, "onResponse: ");
+                                dialog.cancel();
+                                CreatePostActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        SuperActivityToast.create(CreatePostActivity.this, new Style(), Style.TYPE_BUTTON)
+                                                .setProgressBarColor(Color.WHITE)
+                                                .setText("Edited Succesfully!")
+                                                .setDuration(Style.DURATION_LONG)
+                                                .setFrame(Style.FRAME_LOLLIPOP)
+                                                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_BLUE))
+                                                .setAnimations(Style.ANIMATIONS_POP).show();
+
+                                    }
+                                });
+
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        CreatePostActivity.this.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Intent intent = new Intent(CreatePostActivity.this, MainActivity.class);
+                                                startActivity(intent);
+
+                                            }
+                                        });
+
+                                    }
+                                }, 2000);
+
+                            }
+                        });
+
+
+                    } else {
+                        Toast.makeText(CreatePostActivity.this, R.string.fill_necessary_warning, Toast.LENGTH_LONG).show();
+
+                    }
+
+
                 } else {
-                    Toast.makeText(CreatePostActivity.this, R.string.fill_necessary_warning, Toast.LENGTH_LONG).show();
+                    if (checkNecessaryData()) {
+                        //TODO: use the filled data
+                        File file = new File(getRealPathFromURI(imageUri));
+                        OkHttpClient client = new OkHttpClient();
+                        String url = "http://35.158.95.81:8000/api/post/create";
+                        RequestBody requestBody = null;
+                        try {
+                            requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                                    .addFormDataPart("title", titleEditText.getText().toString())
+                                    .addFormDataPart("story", storyEditText.getText().toString())
+                                    .addFormDataPart("owner", nicknameEditText.getText().toString())
+                                    .addFormDataPart("locations", locationEditText.getText().toString())
+                                    .addFormDataPart("storyDate", formatToDate.format(formatFromString.parse(dateEditText.getText().toString())))
+                                    .addFormDataPart("tags", "fun")
+                                    .addFormDataPart("images", file.getName(), RequestBody.create(MediaType.parse("image/jpeg"), file))
+                                    .build();
+                        } catch (ParseException e) {
+                            SuperActivityToast.create(CreatePostActivity.this, new Style(), Style.TYPE_BUTTON)
+                                    .setProgressBarColor(Color.WHITE)
+                                    .setText("WRONG FORM OF DATE (Should be in the form DD/mm/yyyy )!")
+                                    .setDuration(Style.DURATION_LONG)
+                                    .setFrame(Style.FRAME_LOLLIPOP)
+                                    .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                    .setAnimations(Style.ANIMATIONS_POP).show();
+                            e.printStackTrace();
+                        }
+
+                        Request request = new Request.Builder()
+                                .url(url)
+                                .post(requestBody)
+                                .build();
+
+                        dialog.show(getSupportFragmentManager(), "Post is being created...");
+
+                        client.newCall(request).enqueue(new Callback() {
+                            @Override
+                            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                                Log.i(TAG, "onFailure: ");
+                                dialog.cancel();
+                            }
+
+                            @Override
+                            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                                Log.i(TAG, "onResponse: ");
+                                dialog.cancel();
+                                CreatePostActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        SuperActivityToast.create(CreatePostActivity.this, new Style(), Style.TYPE_BUTTON)
+                                                .setProgressBarColor(Color.WHITE)
+                                                .setText("Post Created Succesfully!")
+                                                .setDuration(Style.DURATION_LONG)
+                                                .setFrame(Style.FRAME_LOLLIPOP)
+                                                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_BLUE))
+                                                .setAnimations(Style.ANIMATIONS_POP).show();
+
+                                    }
+                                });
+
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        CreatePostActivity.this.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Intent intent = new Intent(CreatePostActivity.this, MainActivity.class);
+                                                startActivity(intent);
+
+                                            }
+                                        });
+
+                                    }
+                                }, 2000);
+
+                            }
+                        });
+                    } else {
+                        Toast.makeText(CreatePostActivity.this, R.string.fill_necessary_warning, Toast.LENGTH_LONG).show();
+                    }
+
                 }
+
+
             }
         });
         postImage.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +364,31 @@ public class CreatePostActivity extends AppCompatActivity {
                 addImage();
             }
         });
+    }
+
+
+    private String saveImage(Bitmap image) {
+        String path = null;
+        String imageFileName = "JPEG_" + "FILE_NAME" + ".jpg";
+        File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                + "/YOUR_FOLDER_NAME");
+        boolean success = true;
+        if (!dir.exists()) {
+            success = dir.mkdirs();
+        }
+        if (success) {
+            File jpegFile = new File(dir, imageFileName);
+            path = jpegFile.getAbsolutePath();
+            try {
+                OutputStream fOut = new FileOutputStream(jpegFile);
+                image.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                fOut.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+        return path;
     }
 
     public static void verifyStoragePermissions(Activity activity) {
@@ -207,7 +459,7 @@ public class CreatePostActivity extends AppCompatActivity {
                             selectedImage.compress(Bitmap.CompressFormat.JPEG, 90, out);
                             ExifInterface exif = new ExifInterface(new File(getRealPathFromURI(imageUri)));
                             int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
-                            postImage.setImageBitmap(rotateBitmap(selectedImage,orientation));
+                            postImage.setImageBitmap(rotateBitmap(selectedImage, orientation));
                             out.flush();
                             out.close();
                         } catch (FileNotFoundException e) {
@@ -253,11 +505,9 @@ public class CreatePostActivity extends AppCompatActivity {
 
         if (orientation == 6) {
             matrix.postRotate(90);
-        }
-        else if (orientation == 3) {
+        } else if (orientation == 3) {
             matrix.postRotate(180);
-        }
-        else if (orientation == 8) {
+        } else if (orientation == 8) {
             matrix.postRotate(270);
         }
 

@@ -48,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent createPostIntent = new Intent(MainActivity.this, CreatePostActivity.class);
-                startActivityForResult(createPostIntent,CREATE_POST);
+                createPostIntent.putExtra("goal","create");
+                startActivity(createPostIntent);
             }
         });
 
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                         postAdapter = new PostAdapter(MainActivity.this,arrayOfPosts);
                         for(Post post : posts) {
 
-                            postAdapter.add(new PostModel(post.getTitle(),post.getStory(),post.getOwner(),post.getTags(),post.getLocations(),post.getImages(),post.getPostDate(),post.getEditDate(),post.getStoryDate(),post.getViewCount()));
+                            postAdapter.add(new PostModel(post.getId(),post.getTitle(),post.getStory(),post.getOwner(),post.getTags(),post.getLocations(),post.getImages(),post.getPostDate(),post.getEditDate(),post.getStoryDate(),post.getViewCount()));
 
                         }
                         runOnUiThread(new Runnable() {
@@ -120,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                 postAdapter = new PostAdapter(MainActivity.this,arrayOfPosts);
                 for(Post post : posts) {
 
-                    postAdapter.add(new PostModel(post.getTitle(),post.getStory(),post.getOwner(),post.getTags(),post.getLocations(),post.getImages(),post.getPostDate(),post.getEditDate(),post.getStoryDate(),post.getViewCount()));
+                    postAdapter.add(new PostModel(post.getId(),post.getTitle(),post.getStory(),post.getOwner(),post.getTags(),post.getLocations(),post.getImages(),post.getPostDate(),post.getEditDate(),post.getStoryDate(),post.getViewCount()));
 
                 }
                 runOnUiThread(new Runnable() {
