@@ -13,6 +13,15 @@ class TextChooser extends React.Component {
             title: '',
             body: '',
         }
+
+        this.getEditInfo = this.getEditInfo.bind(this);
+    }
+
+    getEditInfo(info){
+        this.setState({
+            title: info.title,
+            body: info.story
+        });
     }
 
     sendParent() {
@@ -23,13 +32,13 @@ class TextChooser extends React.Component {
         return (
             <div id={'textchooser-div'}>
                 <label htmlFor={'textchooser-title'} id={'textchooser-title-label'}>Post title</label>
-                <input type={'text'} id={'textchooser-title'} onChange={
+                <input value = {this.state.title} type={'text'} id={'textchooser-title'} onChange={
                     (e) => {
                         this.setState(state => ({title: e.target.value, body: state.body}))
                     }
                 }/>
                 <label htmlFor={'textchooser-body'} id={'textchooser-body-label'}>Post body</label>
-                <textarea id={'textchooser-body'} onChange={
+                <textarea value = {this.state.body} id={'textchooser-body'} onChange={
                     (e) => {
                         this.setState(state => ({title: state.title, body: e.target.value}))
                     }

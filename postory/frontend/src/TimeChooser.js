@@ -16,6 +16,15 @@ class TimeChooser extends React.Component {
             endTime: null,
             checked: true
         }
+
+        this.getEditInfo = this.getEditInfo.bind(this);
+    }
+
+    getEditInfo(info){
+        this.setState({
+            startDate : info.storyDate.slice(0,10),
+            startTime : '00:00'
+        });
     }
 
     sendParent() {
@@ -46,7 +55,7 @@ class TimeChooser extends React.Component {
                         <label htmlFor={'timechooser-s-date'} id={'timechooser-s-date-label'}>
                             {this.state.checked ? 'Post date' : 'Starting date'}
                         </label>
-                        <input type={'date'} id={'timechooser-s-date'} onChange={
+                        <input value = {this.state.startDate} type={'date'} id={'timechooser-s-date'} onChange={
                             (e) => {
                                 this.setState(state => ({...state, startDate: e.target.value}))
                             }
@@ -56,7 +65,7 @@ class TimeChooser extends React.Component {
                         <label htmlFor={'timechooser-s-time'} id={'timechooser-s-time-label'}>
                             {this.state.checked ? 'Post time' : 'Starting time'}
                         </label>
-                        <input type={'time'} id={'timechooser-s-time'} onChange={
+                        <input value = {this.state.startTime} type={'time'} id={'timechooser-s-time'} onChange={
                             (e) => {
                                 this.setState(state => ({...state, startTime: e.target.value}))
                             }

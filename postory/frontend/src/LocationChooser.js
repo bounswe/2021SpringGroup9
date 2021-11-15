@@ -15,6 +15,13 @@ class LocationChooser extends React.Component{
             selectedLocations: [] // Holds all the locations that are entered by the user
         };
 
+        this.getEditInfo = this.getEditInfo.bind(this);
+    }
+
+    getEditInfo(info){
+        this.setState({
+            selectedLocations : info.locations
+        });
     }
 
     sendParent() {
