@@ -39,7 +39,7 @@
             android:id="@+id/profile_picture"
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            ></ImageView>
+            android:src="@drawable/baseline_person_outline_black_24dp"></ImageView>
 
         <EditText
             android:id="@+id/op_name_field"
