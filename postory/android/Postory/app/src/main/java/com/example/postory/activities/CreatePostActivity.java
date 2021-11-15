@@ -181,13 +181,24 @@ public class CreatePostActivity extends AppCompatActivity {
 
                 if (from.equals("edit")) {
 
-                    if (checkNecessaryData()) {
 
-                        BitmapDrawable drawable = (BitmapDrawable) postImage.getDrawable();
-                        Bitmap bitmap = drawable.getBitmap();
-                        Log.i(TAG, "onClick: ");
-                        String path = saveImage(bitmap);
-                        File file = new File(path);
+
+                    if (checkNecessaryData()) {
+                        File file ;
+
+                        if(imageUri == null) {
+                            BitmapDrawable drawable = (BitmapDrawable) postImage.getDrawable();
+                            Bitmap bitmap = drawable.getBitmap();
+                            Log.i(TAG, "onClick: ");
+                            String path = saveImage(bitmap);
+                            file = new File(path);
+
+                        }
+                        else {
+
+                            file = new File(getRealPathFromURI(imageUri));
+
+                        }
 
 
                         OkHttpClient client = new OkHttpClient();
