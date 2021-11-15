@@ -8,22 +8,22 @@ const itemStyleLeft = {
     float: 'left',
     height: '100%',
     width: '75%',
-    marginLeft: '3px',
+    margin: 0,
     padding: 0,
-    border: 0,
-    boxShadow: 'inset 0px 0px 0px 1px #000'
+    boxSizing: 'border-box',
+    border: '1px solid black'
 }
 
 // submit button
 const itemStyleRight = {
     float: 'right',
     height: '100%',
-    width: '22%',
-    marginRight: '3px',
+    width: '25%',
+    margin: 0,
     padding: 0,
-    border: 0,
     backgroundColor: 'white',
-    boxShadow: 'inset 0px 0px 0px 1px #000'
+    boxSizing: 'border-box',
+    border: '1px solid black',
 }
 
 // fits to parent div
