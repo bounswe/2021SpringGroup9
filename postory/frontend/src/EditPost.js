@@ -52,6 +52,25 @@ class EditPost extends React.Component{
         this.prepareObjectToSend = this.prepareObjectToSend.bind(this);
     }
 
+    componentDidMount(){
+        fetch(`http://35.158.95.81:8000/api/post/get/${this.state.id}`).then(resp => resp.json()).then(
+            data => {
+                this.setState(state=>{return {
+                    ...state,
+                    postData: {
+                        ...state.postData,
+                        owner: data.owner
+                    }
+                }});
+                data.locations = data.locations.map( (obj, i) => obj[0]);
+                console.log(data);
+                this.refStory.current.getEditInfo(data);
+                this.refTags.current.getEditInfo(data);
+                this.refLocation.current.getEditInfo(data);
+                this.refTime.current.getEditInfo(data);
+            }
+        );
+    }
 
     handleChildObjectSend(whichComponent, childObj){
         const infoDict = {
@@ -115,6 +134,22 @@ class EditPost extends React.Component{
     }
 
     prepareObjectToSend(){
+
+        if(this.state.postData["timeChooser"]["startDate"] == null){
+            
+            return ({
+                title: this.state.postData["textChooser"]["title"],
+                story: this.state.postData["textChooser"]["body"],
+                owner: this.state.postData["owner"],
+                locations: this.state.postData["locationChooser"],
+                storyDate: (new Date()).toISOString(),
+                editDate: (new Date()).toISOString(),
+                postDate: (new Date()).toISOString(),
+                tags: this.state.postData["tagChooser"]["selectedTags"],
+                //images: this.state.postData['imageComponent'],
+                preview: this.state.postData['imageComponent']
+            });
+        }
         return ({
             title: this.state.postData["textChooser"]["title"],
             story: this.state.postData["textChooser"]["body"],
@@ -139,7 +174,10 @@ class EditPost extends React.Component{
 
 
         const getFormData = object => Object.keys(object).reduce((formData, key) => {
-            formData.append(key, object[key]);
+            if(key == 'locations'  || key == 'tags')
+                for(let el in object[key])
+                    formData.append(key, object[key][el]);
+            else formData.append(key, object[key]);
             return formData;
         }, new FormData());
 
@@ -148,10 +186,17 @@ class EditPost extends React.Component{
         
         let formData = getFormData(objectToSend);
 
+        console.log(formData.getAll('tags'));
+        let at_least_one = 0;
         for(const key in objectToSend.preview){
-            if(objectToSend.preview[key] instanceof File)
+            if(objectToSend.preview[key] instanceof File){
+                at_least_one = 1;
                 formData.append('images', objectToSend.preview[key]);
+            }
         }
+
+        if(!at_least_one)
+            formData.set('images', []);
 
 
         
@@ -268,17 +313,17 @@ class EditPost extends React.Component{
                     </Alert>
                 </Snackbar>
                 
-                <Link to= "/editPost" variant = "v6">
+                <Link to= {`/editPost?id=${this.state.id}`} variant = "v6">
                     <Icon onClick = {() =>{
                     this.refStory.current.sendParent();
                     this.refLocation.current.sendParent();
                     this.refTime.current.sendParent();
                     this.refTags.current.sendParent();
 
-                    this.sendToBackend();
+                    setTimeout( this.sendToBackend, 10);
                     }
                 } class = "circle homePageCreatePostButton" path={mdiSend}
-                        title="Location"
+                        title="Post"
                         size={2}
                         color="black"
                     />

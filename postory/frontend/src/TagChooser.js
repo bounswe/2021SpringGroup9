@@ -15,6 +15,13 @@ class TagChooser extends React.Component{
             selectedTags: [] // Holds all the tags that are entered by the user
         };
 
+        this.getEditInfo = this.getEditInfo.bind(this);
+    }
+
+    getEditInfo(info){
+        this.setState({
+            selectedTags : info.tags
+        });
     }
 
     sendParent() {

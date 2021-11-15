@@ -29,7 +29,7 @@ class CreatePost extends React.Component{
             postData: {
                 textChooser: {title : " ", body: " "},
                 locationChooser: [],
-                timeChooser: {startDate : " "},
+                timeChooser: {startDate : "", startTime: ""},
                 tagChooser: {selectedTags: []},
                 owner:"USER",
                 imageComponent: null
@@ -106,6 +106,22 @@ class CreatePost extends React.Component{
     }
 
     prepareObjectToSend(){
+
+        if(this.state.postData["timeChooser"]["startDate"] == null){
+            
+            return ({
+                title: this.state.postData["textChooser"]["title"],
+                story: this.state.postData["textChooser"]["body"],
+                owner: this.state.postData["owner"],
+                locations: this.state.postData["locationChooser"],
+                storyDate: (new Date()).toISOString(),
+                editDate: (new Date()).toISOString(),
+                postDate: (new Date()).toISOString(),
+                tags: this.state.postData["tagChooser"]["selectedTags"],
+                //images: this.state.postData['imageComponent'],
+                preview: this.state.postData['imageComponent']
+            });
+        }
         return ({
             title: this.state.postData["textChooser"]["title"],
             story: this.state.postData["textChooser"]["body"],
@@ -130,16 +146,26 @@ class CreatePost extends React.Component{
 
 
         const getFormData = object => Object.keys(object).reduce((formData, key) => {
-            formData.append(key, object[key]);
+            if(key == 'locations'  || key == 'tags')
+                for(let el in object[key])
+                    formData.append(key, object[key][el]);
+            else
+                formData.append(key, object[key]);
             return formData;
         }, new FormData());
 
         let formData = getFormData(objectToSend);
 
+        let at_least_one = 0;
         for(const key in objectToSend.preview){
-            if(objectToSend.preview[key] instanceof File)
+            if(objectToSend.preview[key] instanceof File){
+                at_least_one = 1;
                 formData.append('images', objectToSend.preview[key]);
+            }
         }
+
+        if(!at_least_one)
+            formData.set('images', []);
         
         
 
@@ -259,11 +285,10 @@ class CreatePost extends React.Component{
                     this.refLocation.current.sendParent();
                     this.refTime.current.sendParent();
                     this.refTags.current.sendParent();
-
-                    this.sendToBackend();
+                    setTimeout( this.sendToBackend, 10);
                     }
                 } class = "circle homePageCreatePostButton" path={mdiSend}
-                        title="Location"
+                        title="Post"
                         size={2}
                         color="black"
                     />
