@@ -36,7 +36,6 @@
         <ImageView
             android:id="@+id/profile_picture"
             android:layout_width="50dp"
-            android:src="@drawable/baseline_person_outline_black_24dp"
             android:layout_height="match_parent">
         </ImageView>
 
@@ -94,6 +93,7 @@
         </ImageView>
 
         <TextView
+            android:id="@+id/op_date_text"
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:gravity="center_vertical"

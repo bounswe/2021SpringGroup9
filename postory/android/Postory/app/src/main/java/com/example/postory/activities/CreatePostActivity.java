@@ -1,5 +1,9 @@
 package com.example.postory.activities;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,7 +29,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
 import com.example.postory.R;
+import com.example.postory.dialogs.DelayedProgressDialog;
+import okhttp3.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -43,9 +51,19 @@ public class CreatePostActivity extends AppCompatActivity {
     EditText locationEditText;
     ImageView postImage;
 
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
+    public static final String TAG = "CreatePostActivity";
+
     public static final int TAKE_PHOTO = 0;
     public static final int PICK_GALLERY = 1;
     private final int CAMERA_PERMISSION_REQUEST = 1000;
+
+    public Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,12 +85,47 @@ public class CreatePostActivity extends AppCompatActivity {
         dateEditText = (EditText) findViewById(R.id.op_date_text);
         locationEditText = (EditText) findViewById(R.id.op_location_text);
 
+        verifyStoragePermissions(this);
+
         postImage = (ImageView) findViewById(R.id.post_photo);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (checkNecessaryData()) {
                     //TODO: use the filled data
+                    File file = new File(getRealPathFromURI(imageUri));
+                    OkHttpClient client = new OkHttpClient();
+                    String url = "http://35.158.95.81:8000/api/post/create";
+                    RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                            .addFormDataPart("title",titleEditText.getText().toString())
+                            .addFormDataPart("story",storyEditText.getText().toString())
+                            .addFormDataPart("owner",nicknameEditText.getText().toString())
+                            .addFormDataPart("locations",locationEditText.getText().toString())
+                            .addFormDataPart("storyDate",dateEditText.getText().toString())
+                            .addFormDataPart("tags","fun")
+                            .addFormDataPart("images",file.getName(),RequestBody.create(MediaType.parse("image/jpeg"),file))
+                            .build();
+
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .post(requestBody)
+                            .build();
+                    final DelayedProgressDialog dialog = new DelayedProgressDialog();
+                    dialog.show(getSupportFragmentManager(),"Post is being created...");
+
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                            Log.i(TAG, "onFailure: ");
+                            dialog.cancel();
+                        }
+
+                        @Override
+                        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                            Log.i(TAG, "onResponse: ");
+                            dialog.cancel();
+                        }
+                    });
                 } else {
                     Toast.makeText(CreatePostActivity.this, R.string.fill_necessary_warning, Toast.LENGTH_LONG).show();
                 }
@@ -84,6 +137,20 @@ public class CreatePostActivity extends AppCompatActivity {
                 addImage();
             }
         });
+    }
+
+    public static void verifyStoragePermissions(Activity activity) {
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
     }
 
     protected void addImage() {
@@ -127,16 +194,20 @@ public class CreatePostActivity extends AppCompatActivity {
                     break;
                 case PICK_GALLERY:
                     if (resultCode == RESULT_OK && data != null) {
-                        final Uri imageUri = data.getData();
+                        imageUri = data.getData();
                         final InputStream imageStream;
                         try {
                             imageStream = getContentResolver().openInputStream(imageUri);
                             final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+
                             File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
                             String fileName = "Image_post.jpg";
                             File file = new File(storageDir, fileName);
                             FileOutputStream out = new FileOutputStream(file);
                             selectedImage.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                            ExifInterface exif = new ExifInterface(new File(getRealPathFromURI(imageUri)));
+                            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+                            postImage.setImageBitmap(rotateBitmap(selectedImage,orientation));
                             out.flush();
                             out.close();
                         } catch (FileNotFoundException e) {
@@ -175,5 +246,36 @@ public class CreatePostActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    protected Bitmap rotateBitmap(Bitmap bm, int orientation) {
+        Matrix matrix = new Matrix();
+
+        if (orientation == 6) {
+            matrix.postRotate(90);
+        }
+        else if (orientation == 3) {
+            matrix.postRotate(180);
+        }
+        else if (orientation == 8) {
+            matrix.postRotate(270);
+        }
+
+        return Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
+
+    }
+
+    private String getRealPathFromURI(Uri contentURI) {
+        String result;
+        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) {
+            result = contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        return result;
     }
 }

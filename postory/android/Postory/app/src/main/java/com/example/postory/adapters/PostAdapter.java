@@ -15,14 +15,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.Glide;
 import com.example.postory.R;
 import com.example.postory.models.PostModel;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class PostAdapter extends ArrayAdapter<PostModel> {
+    private String imageUrl;
+    private String location;
     public PostAdapter(Context context, ArrayList<PostModel> posts) {
         super(context, 0, posts);
     }
@@ -35,8 +40,12 @@ public class PostAdapter extends ArrayAdapter<PostModel> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.single_post, parent, false);
         }
         TextView opName = (TextView) convertView.findViewById(R.id.op_name_field);
-        ImageView profilePicture = (ImageView) convertView.findViewById(R.id.profile_picture);
+        TextView opTitle = (TextView) convertView.findViewById(R.id.op_title_field);
+        TextView dateText = (TextView) convertView.findViewById(R.id.op_date_text);
+        TextView locationText = (TextView) convertView.findViewById(R.id.op_location_text);
+
         ImageView postPicture = (ImageView) convertView.findViewById(R.id.post_photo);
+        postPicture.setImageResource(R.drawable.placeholder);
 
         final TextView postText = (TextView) convertView.findViewById(R.id.post_story_text_field);
         final Button continueReading = (Button) convertView.findViewById(R.id.post_continue_reading);
@@ -51,12 +60,27 @@ public class PostAdapter extends ArrayAdapter<PostModel> {
         );
         setContinueReadingVisibility(postText,continueReading);
 
-        postText.setText(post.getPostText());
-        opName.setText(post.getUserName());
-        byte[] imageBytesPost = Base64.decode(post.getPostPicture().getBytes(), Base64.DEFAULT);
-        byte[] imageBytesProfile = Base64.decode(post.getProfilePicture().getBytes(), Base64.DEFAULT);
-        postPicture.setImageBitmap(BitmapFactory.decodeByteArray(imageBytesPost, 0, imageBytesPost.length));
-        profilePicture.setImageBitmap(BitmapFactory.decodeByteArray(imageBytesProfile, 0, imageBytesProfile.length));
+
+        if(post.getImages().size() != 0) {
+            Glide
+                    .with(getContext())
+                    .load(post.getImages().get(0))
+                    .placeholder(R.drawable.placeholder)
+                    .centerCrop()
+                    .into(postPicture);
+        }
+
+
+
+        opName.setText(post.getOwner());
+        postText.setText(post.getStory());
+        opTitle.setText(post.getTitle());
+        dateText.setText(formatDate(post.getStoryDate()));
+        if(post.getLocations().size() != 0) {
+            locationText.setText((String) post.getLocations().get(0).get(0));
+        }
+
+
         return convertView;
 
     }
@@ -76,5 +100,10 @@ public class PostAdapter extends ArrayAdapter<PostModel> {
         if (postText.getLineCount() > postText.getMaxLines()) {
             continueReading.setVisibility(View.VISIBLE);
         }
+    }
+
+    public String formatDate(Date d) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        return formatter.format(d);
     }
 }
