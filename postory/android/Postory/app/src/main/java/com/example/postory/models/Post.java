@@ -1,28 +1,18 @@
 package com.example.postory.models;
 
-import com.example.postory.R;
-
 import java.util.Date;
 import java.util.List;
 
-public class PostModel {
-    public PostModel(String title, String story, String owner, List<String> tags, List<List<Object>> locations, List<String> images, Date postDate, Date editDate, Date storyDate, int viewCount) {
-        this.title = title;
-        this.story = story;
-        this.owner = owner;
-        this.tags = tags;
-        this.locations = locations;
-        this.images = images;
-        this.postDate = postDate;
-        this.editDate = editDate;
-        this.storyDate = storyDate;
-        this.viewCount = viewCount;
+public class Post {
+    public int id;
+
+    public int getId() {
+        return id;
     }
 
-    public String title;
-    public String story;
-    public String owner;
-    public List<String> tags;
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -104,11 +94,14 @@ public class PostModel {
         this.viewCount = viewCount;
     }
 
+    public String title;
+    public String story;
+    public String owner;
+    public List<String> tags;
     public List<List<Object>> locations;
     public List<String> images;
     public Date postDate;
     public Date editDate;
     public Date storyDate;
     public int viewCount;
-
 }

@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -15,22 +16,34 @@ import android.os.Bundle;
 
 import com.example.postory.R;
 import com.example.postory.adapters.PostAdapter;
+import com.example.postory.models.Post;
 import com.example.postory.models.PostModel;
+import com.example.postory.models.PostReturnModel;
+import com.google.gson.Gson;
+import okhttp3.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    private ImageView createPost;
+    private ImageView refreshPage;
+    private PostAdapter postAdapter;
 
     private ListView listView;
     public static final int CREATE_POST = 1;
+    public static final String TAG = "MainActivity";
+    private Post[] posts;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.custom_toolbar);
         setSupportActionBar(toolbar);
-        ImageView createPost = (ImageView)toolbar.findViewById(R.id.create_post);
+        createPost = (ImageView)toolbar.findViewById(R.id.create_post);
+        refreshPage = (ImageView)toolbar.findViewById(R.id.refresh_button);
         createPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -38,11 +51,95 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(createPostIntent,CREATE_POST);
             }
         });
+
         listView = (ListView) findViewById(R.id.list_view_posts);
 
 
+        final OkHttpClient client = new OkHttpClient();
+        String url = "http://35.158.95.81:8000/api/post/all";
+        final Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        refreshPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postAdapter.clear();
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        Log.i(TAG, "onFailure: ");
+                    }
+
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                        Log.i(TAG, "onResponse: ");
+                        Gson gson = new Gson();
+                        posts = gson.fromJson(response.body().string(),Post[].class);
+                        Log.i(TAG, "onResponse: ");
+                        ArrayList<PostModel> arrayOfPosts = new ArrayList<PostModel>();
+                        postAdapter = new PostAdapter(MainActivity.this,arrayOfPosts);
+                        for(Post post : posts) {
+
+                            postAdapter.add(new PostModel(post.getTitle(),post.getStory(),post.getOwner(),post.getTags(),post.getLocations(),post.getImages(),post.getPostDate(),post.getEditDate(),post.getStoryDate(),post.getViewCount()));
+
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                listView.setAdapter(postAdapter);
+                            }
+                        });
 
 
+
+
+                    }
+                });
+
+
+            }
+        });
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Log.i(TAG, "onFailure: ");
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                Log.i(TAG, "onResponse: ");
+                Gson gson = new Gson();
+                posts = gson.fromJson(response.body().string(),Post[].class);
+                Log.i(TAG, "onResponse: ");
+                ArrayList<PostModel> arrayOfPosts = new ArrayList<PostModel>();
+                postAdapter = new PostAdapter(MainActivity.this,arrayOfPosts);
+                for(Post post : posts) {
+
+                    postAdapter.add(new PostModel(post.getTitle(),post.getStory(),post.getOwner(),post.getTags(),post.getLocations(),post.getImages(),post.getPostDate(),post.getEditDate(),post.getStoryDate(),post.getViewCount()));
+
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        listView.setAdapter(postAdapter);
+
+                    }
+                });
+
+
+
+
+
+
+
+            }
+        });
+
+
+
+/*
         ArrayList<PostModel> arrayOfPosts = new ArrayList<PostModel>();
         Bitmap bmParis = BitmapFactory.decodeResource(getResources(),R.drawable.paris);
         Bitmap bmRock = BitmapFactory.decodeResource(getResources(),R.drawable.rock_pushing);
@@ -63,14 +160,21 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+ */
 
 
+
+/*
         PostAdapter postAdapter = new PostAdapter(this,arrayOfPosts);
         postAdapter.add(model1);
         postAdapter.add(model2);
         postAdapter.add(model3);
-
         listView.setAdapter(postAdapter);
+
+
+ */
+
+
     }
 
 

@@ -60,6 +60,18 @@
 
             </ImageView>
 
+            <ImageView
+                android:id="@+id/refresh_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="15dp"
+                android:layout_toLeftOf="@id/create_post"
+                android:clickable="true"
+                android:src="@drawable/baseline_add_circle_black_24dp">
+
+
+            </ImageView>
+
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
 </LinearLayout>
