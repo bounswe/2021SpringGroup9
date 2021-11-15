@@ -70,11 +70,6 @@
             android:layout_toRightOf="@id/op_shared_on"
             android:text="15/11/2021"></TextView>
 
-        <include
-            layout="@layout/tag"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"></include>
     </RelativeLayout>
 
 
@@ -86,6 +81,17 @@
         android:src="@drawable/post_picture_example">
 
     </ImageView>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:id="@+id/tags_list"
+        android:layout_gravity="end"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
     <RelativeLayout
         android:id="@+id/op_info_layout_2"

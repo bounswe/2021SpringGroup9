@@ -69,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
                         Log.i(TAG, "onFailure: ");
+
+
+
                     }
 
                     @Override
