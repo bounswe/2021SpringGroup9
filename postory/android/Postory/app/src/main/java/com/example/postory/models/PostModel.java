@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 public class PostModel {
-    public PostModel(String title, String story, String owner, List<String> tags, List<List<Object>> locations, List<String> images, Date postDate, Date editDate, Date storyDate, int viewCount) {
+    public PostModel(int id, String title, String story, String owner, List<String> tags, List<List<Object>> locations, List<String> images, Date postDate, Date editDate, Date storyDate, int viewCount) {
         this.title = title;
         this.story = story;
         this.owner = owner;
@@ -17,6 +17,17 @@ public class PostModel {
         this.editDate = editDate;
         this.storyDate = storyDate;
         this.viewCount = viewCount;
+        this.id = id;
+    }
+
+    public int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String title;
