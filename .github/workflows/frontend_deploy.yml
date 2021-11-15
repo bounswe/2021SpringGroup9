@@ -43,4 +43,5 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             sudo docker rm -f frontend || true
-            sudo docker run -d -p 3000:3000 ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest
+            sudo docker image rm ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest || true
+            sudo docker run -d -p 3000:3000 --name frontend ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest || true
