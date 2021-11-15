@@ -181,37 +181,40 @@ class PostUpdate(GenericAPIView):
         images = data['images']
         imagesList = []
         for image in images:
-            imageObject = Image(file=image)
-            imageObject.save()
-            imagesList.append(imageObject)
+            if image:
+                imageObject = Image(file=image)
+                imageObject.save()
+                imagesList.append(imageObject)
         data['images'] = [image.id for image in imagesList]
         
         locations = data['locations']
         locationsList = []
         for location in locations:
-            location = str(location).lower() 
-            search = Location.objects.filter(name=location).first()
-            if(search):
-                locationsList.append(search)
-                continue
-            name = location
-            coordsLatitude, coordsLongitude = find_coordinates(location)
-            locationObject = Location(name=name, coordsLatitude=coordsLatitude, coordsLongitude=coordsLongitude)
-            locationsList.append(locationObject)
-            locationObject.save()
+            if location:
+                location = str(location).lower() 
+                search = Location.objects.filter(name=location).first()
+                if(search):
+                    locationsList.append(search)
+                    continue
+                name = location
+                coordsLatitude, coordsLongitude = find_coordinates(location)
+                locationObject = Location(name=name, coordsLatitude=coordsLatitude, coordsLongitude=coordsLongitude)
+                locationsList.append(locationObject)
+                locationObject.save()
         data['locations'] = [location.id for location in locationsList]
 
         tags = data['tags']
         tagsList = []
         for tag in tags:
-            tag = str(tag).lower()
-            search = Tag.objects.filter(content=tag).first()
-            if(search):
-                tagsList.append(search)
-                continue
-            tagObject = Tag(content=tag)
-            tagObject.save()
-            tagsList.append(tagObject)
+            if tag:
+                tag = str(tag).lower()
+                search = Tag.objects.filter(content=tag).first()
+                if(search):
+                    tagsList.append(search)
+                    continue
+                tagObject = Tag(content=tag)
+                tagObject.save()
+                tagsList.append(tagObject)
         data['tags'] = [tag.id for tag in tagsList]
 
         serializer = PostSerializer(story, data=data)
