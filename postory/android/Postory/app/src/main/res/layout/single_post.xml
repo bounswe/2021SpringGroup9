@@ -1,78 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingStart="20dp"
-    android:paddingEnd="20dp"
-    android:paddingTop="20dp"
     android:background="@drawable/post_border"
-    >
+    android:orientation="vertical"
+    android:paddingStart="20dp"
+    android:paddingTop="20dp"
+    android:paddingEnd="20dp">
+
     <TextView
         android:id="@+id/op_title_field"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_gravity="center_vertical|center_horizontal"
+        android:text="My First Day at School"
         android:textAlignment="center"
         android:textSize="30sp"
-        android:text="My First Day at School"
-        android:textStyle="bold"
-        ></TextView>
+        android:textStyle="bold"></TextView>
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:src="@drawable/orange_line"
         android:gravity="fill_horizontal"
-        />
+        android:src="@drawable/orange_line" />
 
     <LinearLayout
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="5dp"
-        android:orientation="horizontal"
         android:id="@+id/op_info_layout"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="3dp"
+        android:orientation="horizontal">
+
         <ImageView
             android:id="@+id/profile_picture"
             android:layout_width="50dp"
-            android:layout_height="match_parent">
-        </ImageView>
+            android:layout_height="match_parent"
+            android:src="@drawable/baseline_person_outline_black_24dp"></ImageView>
 
         <TextView
             android:id="@+id/op_name_field"
-            android:text="Ahmet Gülmez"
-            android:layout_marginStart="5dp"
-            android:gravity="center_vertical"
             android:layout_width="100dp"
             android:layout_height="match_parent"
-            android:textStyle="bold"
-            >
-        </TextView>
+            android:layout_marginStart="0dp"
+            android:gravity="center_vertical"
+            android:text="Ahmet Gülmez"
+            android:textStyle="bold"></TextView>
 
 
     </LinearLayout>
 
-    <ImageView
-        android:layout_marginTop="15dp"
-        android:id="@+id/post_photo"
-        android:src="@drawable/post_picture_example"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="30dp"
+        android:layout_marginTop="2dp">
+
+        <TextView
+            android:id="@+id/op_shared_on"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/shared_on">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/share_date"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/op_shared_on"
+            android:text="15/11/2021"></TextView>
+
+        <include
+            layout="@layout/tag"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"></include>
+    </RelativeLayout>
+
+
+    <ImageView
+        android:id="@+id/post_photo"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="4dp"
+        android:src="@drawable/post_picture_example">
 
     </ImageView>
+
     <RelativeLayout
-        android:orientation="horizontal"
         android:id="@+id/op_info_layout_2"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:orientation="horizontal">
 
         <ImageView
             android:layout_width="20dp"
             android:layout_height="match_parent"
             android:layout_toLeftOf="@id/op_location_text"
-            android:src="@drawable/outline_location_on_black_24dp">
-        </ImageView>
+            android:src="@drawable/outline_location_on_black_24dp"></ImageView>
 
         <TextView
             android:id="@+id/op_location_text"
@@ -86,21 +111,19 @@
         <ImageView
             android:layout_width="20dp"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:src="@drawable/baseline_calendar_today_black_24dp"
             android:layout_alignParentLeft="true"
-            >
-        </ImageView>
+            android:gravity="center_vertical"
+            android:src="@drawable/baseline_calendar_today_black_24dp"></ImageView>
 
         <TextView
             android:id="@+id/op_date_text"
             android:layout_width="100dp"
             android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="20dp"
             android:gravity="center_vertical"
             android:text="22.01.1998"
-            android:textStyle="bold"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="20dp">
+            android:textStyle="bold">
 
         </TextView>
 
@@ -108,33 +131,46 @@
     </RelativeLayout>
 
     <TextView
-        android:layout_marginTop="5dp"
         android:id="@+id/post_story_text_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:maxLines="10"
         android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus rutrum aliquet eleifend. Maecenas ligula magna, luctus id nulla eu, feugiat ultrices velit. Vestibulum lacinia urna at turpis pharetra venenatis. Donec metus metus, dapibus eu lorem non, auctor feugiat augue. Sed blandit vestibulum dui, ac dignissim nibh tincidunt vel. Pellentesque dignissim erat libero, ac condimentum leo convallis id. Nam condimentum sem id sapien ultricies, id finibus orci sagittis. Donec at mi mollis, faucibus orci vel, aliquet leo.
 
 Donec pharetra justo vel pulvinar pulvinar. Aenean placerat est id consequat vestibulum. Suspendisse potenti. Nullam felis purus, porta non nulla nec, efficitur volutpat metus. Phasellus ut laoreet orci. Donec ac dolor hendrerit diam consequat convallis. Proin suscipit velit non purus viverra, vel tristique neque sodales. Pellentesque fermentum imperdiet eros, a tincidunt tellus molestie id. Integer iaculis ullamcorper ligula, ac efficitur velit facilisis quis. Vivamus neque turpis, interdum eu elit eget, malesuada posuere lectus. Phasellus fermentum lacus at porta luctus. Praesent egestas a turpis et congue.
 
-"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxLines="10"
-        >
+">
 
     </TextView>
 
-    <Button
-        android:layout_marginTop="10dp"
-        android:layout_width="200dp"
-        android:layout_height="30dp"
-        android:layout_gravity="center"
-        android:background="@color/colorPrimary"
-        android:text="@string/continue_reading"
-        android:textAllCaps="false"
-        android:clickable="true"
-        android:id="@+id/post_continue_reading"
-        android:visibility="gone"
-        ></Button>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
 
+        <Button
+            android:id="@+id/post_continue_reading"
+            android:layout_width="200dp"
+            android:layout_height="30dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorPrimary"
+            android:clickable="true"
+            android:text="@string/continue_reading"
+            android:textAllCaps="false"
+            android:visibility="gone"></Button>
 
+        <ImageView
+            android:id="@+id/edit_text"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:clickable="true"
+            android:src="@drawable/outline_edit_black_24dp"></ImageView>
+
+    </RelativeLayout>
 
 </LinearLayout>
