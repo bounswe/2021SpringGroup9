@@ -11,9 +11,9 @@
     <TextView
         android:id="@+id/op_title_field"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
-        android:text="My First Day at School"
+        android:text="Laz Ralli Contest Took Place"
         android:textAlignment="center"
         android:textSize="30sp"
         android:textStyle="bold"></TextView>
@@ -77,42 +77,40 @@
         android:id="@+id/post_photo"
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        android:layout_marginTop="4dp"
         android:src="@drawable/post_picture_example">
 
     </ImageView>
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
         android:id="@+id/tags_list"
-        android:layout_gravity="end"
         android:layout_width="wrap_content"
-        android:layout_height="20dp">
+        android:layout_height="20dp"
+        android:layout_gravity="end"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp">
 
     </androidx.recyclerview.widget.RecyclerView>
 
     <RelativeLayout
         android:id="@+id/op_info_layout_2"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="30dp"
         android:orientation="horizontal">
 
         <ImageView
             android:layout_width="20dp"
             android:layout_height="match_parent"
-            android:layout_toLeftOf="@id/op_location_text"
+            android:layout_toLeftOf="@id/locations_list"
             android:src="@drawable/outline_location_on_black_24dp"></ImageView>
 
-        <TextView
-            android:id="@+id/op_location_text"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/locations_list"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:gravity="center_vertical"
-            android:text="Ankara"
-            android:textStyle="bold"></TextView>
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="end"></androidx.recyclerview.widget.RecyclerView>
+
 
         <ImageView
             android:layout_width="20dp"
@@ -132,6 +130,7 @@
             android:textStyle="bold">
 
         </TextView>
+
 
 
     </RelativeLayout>

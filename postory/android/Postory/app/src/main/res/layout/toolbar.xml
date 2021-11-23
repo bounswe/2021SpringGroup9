@@ -38,6 +38,7 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="15dp"
+                android:clickable="true"
                 android:src="@drawable/baseline_home_black_24dp"></ImageView>
 
             <ImageView

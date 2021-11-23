@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.postory.R;
 import com.example.postory.activities.CreatePostActivity;
 import com.example.postory.activities.MainActivity;
@@ -32,6 +33,8 @@ import org.w3c.dom.Text;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 
 public class PostAdapter extends ArrayAdapter<PostModel> {
     private String imageUrl;
@@ -53,19 +56,35 @@ public class PostAdapter extends ArrayAdapter<PostModel> {
         TextView opTitle = (TextView) convertView.findViewById(R.id.op_title_field);
         TextView dateText = (TextView) convertView.findViewById(R.id.op_date_text);
         TextView locationText = (TextView) convertView.findViewById(R.id.op_location_text);
-        RecyclerView recyclerView = (RecyclerView) convertView.findViewById(R.id.tags_list);
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(layoutManager);
+        TextView sharedDateText = (TextView) convertView.findViewById(R.id.share_date);
 
-        ArrayList<TagItem> itemsList = new ArrayList<>();
-        TagsAdapter tagsAdapter = new TagsAdapter(R.layout.single_tag,itemsList);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(tagsAdapter);
+        RecyclerView tagRecyclerView = (RecyclerView) convertView.findViewById(R.id.tags_list);
+        RecyclerView locationRecyclerView = (RecyclerView) convertView.findViewById(R.id.locations_list);
+        LinearLayoutManager tagLayoutManager
+                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        tagRecyclerView.setLayoutManager(tagLayoutManager);
+
+        LinearLayoutManager locationLayoutManager
+                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        locationRecyclerView.setLayoutManager(locationLayoutManager);
+
+        ArrayList<TagItem> tagsList = new ArrayList<>();
+        TagsAdapter tagsAdapter = new TagsAdapter(R.layout.single_tag,tagsList);
+        tagRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        tagRecyclerView.setAdapter(tagsAdapter);
 
         if(post.getTags().size() != 0) {
             for(String tag : post.getTags()) {
-                itemsList.add(new TagItem(tag));
+                tagsList.add(new TagItem(tag));
+            }
+        }
+        ArrayList<TagItem> locationList = new ArrayList<>();
+        LocationAdapter locationsAdapter = new LocationAdapter(R.layout.single_tag,locationList);
+        locationRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        locationRecyclerView.setAdapter(locationsAdapter);
+        if(post.getLocations().size() != 0) {
+            for(List<Object> tag : post.getLocations()) {
+                locationList.add(new TagItem((String) tag.get(0)));
             }
         }
 
@@ -102,6 +121,7 @@ public class PostAdapter extends ArrayAdapter<PostModel> {
                     .with(getContext())
                     .load(post.getImages().get(0))
                     .placeholder(R.drawable.placeholder)
+                    .apply(new RequestOptions().override(400,400))
                     .centerCrop()
                     .into(postPicture);
         }
@@ -112,11 +132,7 @@ public class PostAdapter extends ArrayAdapter<PostModel> {
         postText.setText(post.getStory());
         opTitle.setText(post.getTitle());
         dateText.setText(formatDate(post.getStoryDate()));
-        if(post.getLocations().size() != 0) {
-            locationText.setText((String) post.getLocations().get(0).get(0));
-        }
-
-
+        sharedDateText.setText(formatDate(post.getPostDate()));
         return convertView;
 
     }

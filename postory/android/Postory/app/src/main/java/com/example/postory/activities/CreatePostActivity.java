@@ -96,12 +96,27 @@ public class CreatePostActivity extends AppCompatActivity {
         handler = new Handler();
         setSupportActionBar(toolbar);
         ImageView homeButton = (ImageView) toolbar.findViewById(R.id.home_button);
+        ImageView worldButton = (ImageView) toolbar.findViewById(R.id.world_button);
+
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
             }
         });
+        worldButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SuperActivityToast.create(CreatePostActivity.this, new Style(), Style.TYPE_BUTTON)
+                        .setProgressBarColor(Color.WHITE)
+                        .setText("This feature is not available now.")
+                        .setDuration(Style.DURATION_LONG)
+                        .setFrame(Style.FRAME_LOLLIPOP)
+                        .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                        .setAnimations(Style.ANIMATIONS_POP).show();
+            }
+        });
+
         sendButton = (Button) findViewById(R.id.send_button);
         nicknameEditText = (EditText) findViewById(R.id.op_name_field);
         tagEditText = (EditText) findViewById(R.id.op_tag_field);
@@ -213,7 +228,7 @@ public class CreatePostActivity extends AppCompatActivity {
                                     .addFormDataPart("owner", nicknameEditText.getText().toString())
                                     .addFormDataPart("locations", locationEditText.getText().toString())
                                     .addFormDataPart("storyDate", formatToDate.format(formatFromString.parse(dateEditText.getText().toString())))
-                                    .addFormDataPart("tags", "fun")
+                                    .addFormDataPart("tags", tagEditText.getText().toString())
                                     .addFormDataPart("images", file.getName(), RequestBody.create(MediaType.parse("image/jpeg"), file))
                                     .build();
                         } catch (ParseException e) {
@@ -278,7 +293,13 @@ public class CreatePostActivity extends AppCompatActivity {
 
 
                     } else {
-                        Toast.makeText(CreatePostActivity.this, R.string.fill_necessary_warning, Toast.LENGTH_LONG).show();
+                        SuperActivityToast.create(CreatePostActivity.this, new Style(), Style.TYPE_BUTTON)
+                                .setProgressBarColor(Color.WHITE)
+                                .setText(String.valueOf(R.string.fill_necessary_warning))
+                                .setDuration(Style.DURATION_LONG)
+                                .setFrame(Style.FRAME_LOLLIPOP)
+                                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                .setAnimations(Style.ANIMATIONS_POP).show();
 
                     }
 
@@ -297,7 +318,7 @@ public class CreatePostActivity extends AppCompatActivity {
                                     .addFormDataPart("owner", nicknameEditText.getText().toString())
                                     .addFormDataPart("locations", locationEditText.getText().toString())
                                     .addFormDataPart("storyDate", formatToDate.format(formatFromString.parse(dateEditText.getText().toString())))
-                                    .addFormDataPart("tags", "fun")
+                                    .addFormDataPart("tags", tagEditText.getText().toString())
                                     .addFormDataPart("images", file.getName(), RequestBody.create(MediaType.parse("image/jpeg"), file))
                                     .build();
                         } catch (ParseException e) {
@@ -334,7 +355,7 @@ public class CreatePostActivity extends AppCompatActivity {
                                     public void run() {
                                         SuperActivityToast.create(CreatePostActivity.this, new Style(), Style.TYPE_BUTTON)
                                                 .setProgressBarColor(Color.WHITE)
-                                                .setText("Post Created Succesfully!")
+                                                .setText("Post Created Successfully!")
                                                 .setDuration(Style.DURATION_LONG)
                                                 .setFrame(Style.FRAME_LOLLIPOP)
                                                 .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_BLUE))
@@ -426,11 +447,22 @@ public class CreatePostActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int item) {
 
                 if (options[item].equals("Take Photo with Camera")) {
-                    if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST);
-                    }
-                    Intent useCamera = new Intent("android.media.action.IMAGE_CAPTURE");
-                    startActivityForResult(useCamera, TAKE_PHOTO);
+                    /*
+                        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+                            requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST);
+                        }
+                        Intent useCamera = new Intent("android.media.action.IMAGE_CAPTURE");
+                        startActivityForResult(useCamera, TAKE_PHOTO);
+                    */
+                    SuperActivityToast.create(CreatePostActivity.this, new Style(), Style.TYPE_BUTTON)
+                            .setProgressBarColor(Color.WHITE)
+                            .setText("This feature is not available now.")
+                            .setDuration(Style.DURATION_LONG)
+                            .setFrame(Style.FRAME_LOLLIPOP)
+                            .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                            .setAnimations(Style.ANIMATIONS_POP).show();
+
 
                 } else if (options[item].equals("Choose from Gallery")) {
                     Intent useGallery = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);

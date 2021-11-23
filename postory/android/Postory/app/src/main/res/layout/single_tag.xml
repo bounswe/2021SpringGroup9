@@ -1,13 +1,15 @@
-<LinearLayout android:layout_width="wrap_content"
-    android:layout_height="30dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="30dp">
 
     <TextView
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
         android:id="@+id/txt_tag"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginStart="3dp"
+        android:layout_marginEnd="10dp"
         android:text="ASDASF"
-        android:layout_gravity="center" />
+        android:textStyle="bold" />
+
 </LinearLayout>
