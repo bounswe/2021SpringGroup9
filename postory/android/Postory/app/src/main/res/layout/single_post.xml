@@ -111,6 +111,7 @@
             android:layout_alignParentEnd="true"
             android:layout_gravity="end"></androidx.recyclerview.widget.RecyclerView>
 
+
         <ImageView
             android:layout_width="20dp"
             android:layout_height="match_parent"
@@ -133,7 +134,6 @@
 
 
     </RelativeLayout>
-
 
     <TextView
         android:id="@+id/post_story_text_field"

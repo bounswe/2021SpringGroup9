@@ -1,0 +1,21 @@
+#textchooser-div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#textchooser-title-label {
+    align-self: flex-start;
+}
+
+#textchooser-body-label {
+    align-self: flex-start;
+}
+
+#textchooser-plus-button {
+    align-self: flex-end;
+}
+
+#textchooser-body {
+    resize: vertical;
+}

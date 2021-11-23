@@ -11,4 +11,5 @@
         android:layout_marginEnd="10dp"
         android:text="ASDASF"
         android:textStyle="bold" />
+
 </LinearLayout>

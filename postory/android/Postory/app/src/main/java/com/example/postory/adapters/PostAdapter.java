@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
 public class PostAdapter extends ArrayAdapter<PostModel> {
     private String imageUrl;
     private String location;
@@ -132,8 +133,6 @@ public class PostAdapter extends ArrayAdapter<PostModel> {
         opTitle.setText(post.getTitle());
         dateText.setText(formatDate(post.getStoryDate()));
         sharedDateText.setText(formatDate(post.getPostDate()));
-
-
         return convertView;
 
     }

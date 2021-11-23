@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+
 public class MainActivity extends AppCompatActivity {
     private ImageView createPost;
     private ImageView refreshPage;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(createPostIntent);
             }
         });
+
         worldButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         Collections.reverse(arrayOfPosts);
                         postAdapter = new PostAdapter(MainActivity.this,arrayOfPosts);
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -143,31 +146,20 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<PostModel> arrayOfPosts = new ArrayList<PostModel>();
 
                 for(Post post : posts) {
-
                     arrayOfPosts.add(new PostModel(post.getId(),post.getTitle(),post.getStory(),post.getOwner(),post.getTags(),post.getLocations(),post.getImages(),post.getPostDate(),post.getEditDate(),post.getStoryDate(),post.getViewCount()));
 
                 }
                 Collections.reverse(arrayOfPosts);
                 postAdapter = new PostAdapter(MainActivity.this,arrayOfPosts);
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         listView.setAdapter(postAdapter);
-
                     }
                 });
-
-
-
-
-
-
-
             }
         });
-
-
-
 
 
     }

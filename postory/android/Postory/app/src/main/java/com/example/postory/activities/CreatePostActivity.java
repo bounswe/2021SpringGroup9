@@ -116,6 +116,7 @@ public class CreatePostActivity extends AppCompatActivity {
                         .setAnimations(Style.ANIMATIONS_POP).show();
             }
         });
+
         sendButton = (Button) findViewById(R.id.send_button);
         nicknameEditText = (EditText) findViewById(R.id.op_name_field);
         tagEditText = (EditText) findViewById(R.id.op_tag_field);
@@ -299,6 +300,7 @@ public class CreatePostActivity extends AppCompatActivity {
                                 .setFrame(Style.FRAME_LOLLIPOP)
                                 .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
                                 .setAnimations(Style.ANIMATIONS_POP).show();
+
                     }
 
 
@@ -460,6 +462,7 @@ public class CreatePostActivity extends AppCompatActivity {
                             .setFrame(Style.FRAME_LOLLIPOP)
                             .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
                             .setAnimations(Style.ANIMATIONS_POP).show();
+
 
                 } else if (options[item].equals("Choose from Gallery")) {
                     Intent useGallery = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
