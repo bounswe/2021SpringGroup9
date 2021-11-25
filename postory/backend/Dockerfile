@@ -4,3 +4,4 @@ WORKDIR /code
 COPY requirements.txt /code/
 RUN pip install --upgrade pip && pip install -r requirements.txt
 COPY . /code/
+CMD python manage.py makemigrations post_endpoint user_endpoint && python manage.py migrate && python manage.py runserver 0.0.0.0:8000
