@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.os.Bundle;
 
+import com.example.postory.BuildConfig;
 import com.example.postory.R;
 import com.example.postory.adapters.PostAdapter;
 import com.example.postory.models.Post;
@@ -33,10 +34,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 
-public class MainActivity extends AppCompatActivity {
-    private ImageView createPost;
-    private ImageView refreshPage;
-    private ImageView worldButton;
+public class MainActivity extends ToolbarActivity {
+
     private PostAdapter postAdapter;
 
     private ListView listView;
@@ -47,44 +46,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.custom_toolbar);
-        setSupportActionBar(toolbar);
-        createPost = (ImageView)toolbar.findViewById(R.id.create_post);
-        refreshPage = (ImageView)toolbar.findViewById(R.id.refresh_button);
-        worldButton = (ImageView) toolbar.findViewById(R.id.world_button);
 
-        createPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent createPostIntent = new Intent(MainActivity.this, CreatePostActivity.class);
-                createPostIntent.putExtra("goal","create");
-                startActivity(createPostIntent);
-            }
-        });
 
-        worldButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SuperActivityToast.create(MainActivity.this, new Style(), Style.TYPE_BUTTON)
-                        .setProgressBarColor(Color.WHITE)
-                        .setText("This feature is not available now.")
-                        .setDuration(Style.DURATION_LONG)
-                        .setFrame(Style.FRAME_LOLLIPOP)
-                        .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
-                        .setAnimations(Style.ANIMATIONS_POP).show();
-            }
-        });
 
         listView = (ListView) findViewById(R.id.list_view_posts);
 
 
         final OkHttpClient client = new OkHttpClient();
-        String url = "http://35.158.95.81:8000/api/post/all";
+        String url = BuildConfig.API_IP + "/post/all";
         final Request request = new Request.Builder()
                 .url(url)
                 .build();
 
-        refreshPage.setOnClickListener(new View.OnClickListener() {
+        super.refreshPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 postAdapter.clear();

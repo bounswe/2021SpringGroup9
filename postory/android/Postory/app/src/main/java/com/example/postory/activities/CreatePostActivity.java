@@ -34,6 +34,7 @@ import androidx.core.app.ActivityCompat;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.example.postory.BuildConfig;
 import com.example.postory.R;
 import com.example.postory.dialogs.DelayedProgressDialog;
 import com.example.postory.models.Post;
@@ -132,7 +133,7 @@ public class CreatePostActivity extends AppCompatActivity {
             title.setText("Edit The Post");
 
             final OkHttpClient client = new OkHttpClient();
-            String url = "http://35.158.95.81:8000/api/post/get/" + getIntent().getStringExtra("id");
+            String url = BuildConfig.API_IP+ "/post/get/" + getIntent().getStringExtra("id");
             final Request request = new Request.Builder()
                     .url(url)
                     .build();
@@ -219,7 +220,7 @@ public class CreatePostActivity extends AppCompatActivity {
                         OkHttpClient client = new OkHttpClient();
 
 
-                        String url = "http://35.158.95.81:8000/api/post/put/" + getIntent().getStringExtra("id");
+                        String url = BuildConfig.API_IP + "/post/put/" + getIntent().getStringExtra("id");
                         RequestBody requestBody = null;
                         try {
                             requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
@@ -309,7 +310,7 @@ public class CreatePostActivity extends AppCompatActivity {
                         //TODO: use the filled data
                         File file = new File(getRealPathFromURI(imageUri));
                         OkHttpClient client = new OkHttpClient();
-                        String url = "http://35.158.95.81:8000/api/post/create";
+                        String url = BuildConfig.API_IP + "/post/create";
                         RequestBody requestBody = null;
                         try {
                             requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
