@@ -54,7 +54,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class CreatePostActivity extends AppCompatActivity {
+public class CreatePostActivity extends ToolbarActivity {
 
     Button sendButton;
     Handler handler;
@@ -91,32 +91,12 @@ public class CreatePostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         dialog = new DelayedProgressDialog();
         setContentView(R.layout.activity_create_post);
+        super.initToolbar();
         formatFromString = new SimpleDateFormat("DD/mm/yyyy");
         formatToDate = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-        Toolbar toolbar = findViewById(R.id.custom_toolbar);
         handler = new Handler();
-        setSupportActionBar(toolbar);
-        ImageView homeButton = (ImageView) toolbar.findViewById(R.id.home_button);
-        ImageView worldButton = (ImageView) toolbar.findViewById(R.id.world_button);
 
-        homeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
-        worldButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SuperActivityToast.create(CreatePostActivity.this, new Style(), Style.TYPE_BUTTON)
-                        .setProgressBarColor(Color.WHITE)
-                        .setText("This feature is not available now.")
-                        .setDuration(Style.DURATION_LONG)
-                        .setFrame(Style.FRAME_LOLLIPOP)
-                        .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
-                        .setAnimations(Style.ANIMATIONS_POP).show();
-            }
-        });
+
 
         sendButton = (Button) findViewById(R.id.send_button);
         nicknameEditText = (EditText) findViewById(R.id.op_name_field);
@@ -572,4 +552,30 @@ public class CreatePostActivity extends AppCompatActivity {
         }
         return result;
     }
+    @Override
+    protected void refreshClicked(){
+        return;
+    }
+
+    @Override
+    protected void goCreatePostClicked(){
+        return;
+    }
+    @Override
+    protected void goExploreClicked(){
+        SuperActivityToast.create(CreatePostActivity.this, new Style(), Style.TYPE_BUTTON)
+                .setProgressBarColor(Color.WHITE)
+                .setText("This feature is not available now.")
+                .setDuration(Style.DURATION_LONG)
+                .setFrame(Style.FRAME_LOLLIPOP)
+                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                .setAnimations(Style.ANIMATIONS_POP).show();
+    }
+    @Override
+    protected void goHomeClicked(){
+        Intent i = new Intent(CreatePostActivity.this, MainActivity.class);
+        finish();
+        startActivity(i);
+    }
+
 }
