@@ -1,6 +1,7 @@
 import React from 'react';
 import Icon from '@mdi/react'
 import {createHash} from 'crypto'
+import './SignUp.css'
 
 function isEmail(str) {
     return /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(str)
@@ -48,8 +49,8 @@ class SignUp extends React.Component {
     }
 
     render() {
-        return (<div>
-            <label htmlFor={'signup-email'}>E-mail: </label>
+        return (<div id={'signup'}>
+            <label htmlFor={'signup-email'} id={'signup-email-text'}>E-mail: </label>
             <br />
             <input type={'text'} id={'signup-email'} onChange={
                 e => {
@@ -59,11 +60,11 @@ class SignUp extends React.Component {
             <br />
             { this.state.email && !isEmail(this.state.email) &&
             <>
-                <span style={{fontSize: '80%'}}> Please enter a vaild e-mail</span>
+                <span id={'signup-email-problem-text'}> Please enter a vaild e-mail</span>
                 <br />
             </>
             }
-            <label htmlFor={'signup-username'}>Username: </label>
+            <label htmlFor={'signup-username'} id={'signup-username-text'}>Username: </label>
             <br />
             <input type={'text'} id={'signup-username'} onChange={
                 e => {
@@ -73,11 +74,11 @@ class SignUp extends React.Component {
             <br />
             { this.state.username && getUsernameProblem(this.state.username) &&
             <>
-                <span style={{fontSize: '80%'}}>{getUsernameProblem(this.state.username)}</span>
+                <span id={'signup-username-problem-text'}>{getUsernameProblem(this.state.username)}</span>
                 <br />
             </>
             }
-            <label htmlFor={'signup-password1'}>Password: </label>
+            <label htmlFor={'signup-password1'} id={'signup-password1-text'}>Password: </label>
             <br />
             <input type={'password'} id={'signup-password1'} onChange={
                 e => {
@@ -87,11 +88,11 @@ class SignUp extends React.Component {
             <br />
             { this.state.password1 && getPasswordProblem(this.state.password1) &&
             <>
-                <span style={{fontSize: '80%'}}>{getPasswordProblem(this.state.password1)}</span>
+                <span id={'signup-password1-problem-text'}>{getPasswordProblem(this.state.password1)}</span>
                 <br />
             </>
             }
-            <label htmlFor={'signup-password2'}>Repeat password: </label>
+            <label htmlFor={'signup-password2'} id={'signup-password2-text'}>Repeat password: </label>
             <br />
             <input type={'password'} id={'signup-password2'} onChange={
                 e => {
@@ -101,11 +102,13 @@ class SignUp extends React.Component {
             <br />
             { this.state.password2 && this.state.password1 !== this.state.password2 &&
             <>
-                <span style={{fontSize: '80%'}}>Passwords don't match</span>
+                <span id={'signup-password2-problem-text'}>Passwords don't match</span>
                 <br />
             </>
             }
-            <button disabled={(!this.state.email || !this.state.username || !this.state.password1 || !this.state.password2 || getUsernameProblem(this.state.username) || getPasswordProblem(this.state.password1) || (this.state.password1 !== this.state.password2)) ? 'true' : ''}
+            <button
+                id={'signup-button'}
+                disabled={(!this.state.email || !this.state.username || !this.state.password1 || !this.state.password2 || !isEmail(this.state.email) || getUsernameProblem(this.state.username) || getPasswordProblem(this.state.password1) || (this.state.password1 !== this.state.password2)) ? 'true' : ''}
             onClick={this.handleButtonClick}>
                 Sign Up
             </button>
