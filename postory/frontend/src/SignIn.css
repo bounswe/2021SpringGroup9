@@ -1,0 +1,19 @@
+#signin {
+    background-color: rgb(235, 235, 235);
+    padding: 10px;
+}
+
+#signin-username-text, #signin-password-text {
+    float: left;
+}
+
+#signin-username, #signin-password {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#signin-forgot {
+    font-size: 50%;
+    text-decoration: underline;
+    cursor: pointer;
+}

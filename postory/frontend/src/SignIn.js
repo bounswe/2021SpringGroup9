@@ -1,6 +1,7 @@
 import React from 'react';
 import Icon from '@mdi/react'
 import {createHash} from 'crypto'
+import './SignIn.css'
 
 function isEmail(str) {
     return /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(str)
@@ -23,8 +24,8 @@ class SignIn extends React.Component {
     }
 
     render() {
-        return (<div>
-            <label htmlFor={'signin-username'}>Username or E-mail: </label>
+        return (<div id={'signin'}>
+            <label htmlFor={'signin-username'} id={'signin-username-text'}>Username or E-mail: </label>
             <br />
             <input type={'text'} id={'signin-username'} onChange={
                 e => {
@@ -38,7 +39,7 @@ class SignIn extends React.Component {
                 }
             }/>
             <br />
-            <label htmlFor={'signin-password'}>Password: </label>
+            <label htmlFor={'signin-password'} id={'signin-password-text'}>Password: </label>
             <br />
             <input type={'password'} id={'signin-password'} onChange={
                 e => {
@@ -46,12 +47,13 @@ class SignIn extends React.Component {
                 }
             }/>
             <br />
-            <button disabled={(!(this.state.username || this.state.email) || !this.state.password) ? 'true' : ''} onClick={this.handleButtonClick}>
+            <button id={'signin-button'} disabled={(!(this.state.username || this.state.email) || !this.state.password) ? 'true' : ''} onClick={this.handleButtonClick}>
                 Sign In
             </button>
-            <a href={'/forgotPassword'}>
+            <br />
+            <span id={'signin-forgot'} onClick={()=>{/*TODO*/}}>
                 Forgot password?
-            </a>
+            </span>
         </div>)
     }
 }
