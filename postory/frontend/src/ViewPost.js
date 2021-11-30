@@ -2,6 +2,9 @@ import React from 'react';
 import Post from './Post';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
+import {mdiSend } from '@mdi/js';
+import Icon from '@mdi/react';
+import { TextField } from '@material-ui/core';
 
 const backendIP = '3.125.114.231:8000';
 
@@ -51,7 +54,6 @@ class ViewPost extends React.Component{
                     return(
                     <div>
                     <img src={obj} />
-                    <p className="legend">Legend 1</p>
                     </div>);
                 })}
 
@@ -134,8 +136,12 @@ class CommentContainer extends React.Component{
                 (obj,i) => {return (<Comment {...obj} key = {i} ></Comment>);}
                 )}
             <div class = "row">
-                <input type = "text" onChange = {this.textChange} ></input>
-                <button onClick = {this.sendComment}>SEND ICON</button>
+                <textarea style = {{width: 400}} type = "text" onChange = {this.textChange} ></textarea>
+                <Icon onClick = {this.sendComment} path={mdiSend}
+                        title="Post"
+                        size={1}
+                        color="black"
+                    />
             </div>
         </div>);
     }
