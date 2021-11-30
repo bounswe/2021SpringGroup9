@@ -29,5 +29,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     comments = models.ManyToManyField(Comment)
     isBanned = models.BooleanField(default=False)
     isAdmin = models.BooleanField(default=False)   
+    isPrivate = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'username'
