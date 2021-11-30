@@ -40,8 +40,9 @@ class PostUpper extends React.Component{
   }
 
   render(){
+    let style = {paddingBottom: "10px"};
     return (<div >
-      <div class= "row" style = {{paddingBottom: "10px"}}>
+      <div class= "row" style = {style}>
         <img class = "circle" width = "50px" height = "50px" src = "./static/media/postory_logo_no_text.ec3bad21.png" />
         <a style = {{margin: "10px"}}>{this.state.owner}</a>
 
@@ -88,7 +89,10 @@ class PostUpper extends React.Component{
           </a>);
         })}
       </div>
+      {this.state.id && <Link class = "push" to= {`/viewPost?id=${this.state.id}`}>
       <p style= {{width: '100%'}}class = "mainContent" ><b>{this.state.title}</b></p>
+      </Link>}
+      {!this.state.id && <p style= {{width: '100%'}}class = "mainContent" ><b>{this.state.title}</b></p>}
       <a class = "mainContent" >{this.state.contentSmall}</a>
       {this.state.continueReading && <a class = "mainContent" onClick = {this.getMoreContent}><b> ...Continue Reading</b></a>}
       <p></p>
