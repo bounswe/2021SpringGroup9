@@ -1,11 +1,23 @@
 from django.db import models
 
 from post_endpoint.models import Post, Comment
+from django.contrib.auth.models import AbstractBaseUser,PermissionManager,BaseUserManager, PermissionsMixin
 
+class UserAccountManager(BaseUserManager):
+    def create_user(self,username,name,surname,email,password=None):
+        if not username:
+            raise ValueError('Users must have an username')
 
-class User(models.Model):
+        email = self.normalize_email(email)
+        user = self.model(username=username,email=email,name=name,surname=surname)
+
+        user.set_password(password)
+        user.save()
+
+        return user
+
+class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=200)
-    password = models.CharField(max_length=500)
     name = models.CharField(max_length=200)
     surname = models.CharField(max_length=200)
     email = models.EmailField(max_length=200)
@@ -17,3 +29,5 @@ class User(models.Model):
     comments = models.ManyToManyField(Comment)
     isBanned = models.BooleanField(default=False)
     isAdmin = models.BooleanField(default=False)   
+
+    USERNAME_FIELD = 'username'
