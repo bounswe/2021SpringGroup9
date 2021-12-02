@@ -8,13 +8,35 @@ import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-map
 
 const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
     const [markers, setMarkers] = React.useState([]);
+
+    const deleteMarker = (index) =>{
+        setMarkers(state =>{
+            let newState = [];
+            for(let i =0 ; i< state.length; i++)
+                if(i != index)
+                    newState.push(state[i]);
+            props.setParentLocation(newState.map(obj => JSON.stringify(obj)));
+            return newState;
+        });
+
+        
+    }
+
+    const addMarker = (e) =>{
+        setMarkers(state => {
+            const newState =  [...state, {lat: e.latLng.lat(), lng : e.latLng.lng()}]; 
+            props.setParentLocation(newState.map(obj => JSON.stringify(obj)));
+            return newState;
+        });
+
+        
+    }
 return(<GoogleMap
         defaultZoom={8}
         defaultCenter={{ lat: -34.397, lng: 150.644 }}
-   onClick = {e => setMarkers(state => {return [...state, {lat: e.latLng.lat(), lng : e.latLng.lng()}]; })}>
-        {props.isMarkerShown && <Marker position={{ lat: -34.397, lng: 150.644 }} />}
+   onClick = {addMarker}>
         {markers.map((obj,i) => {
-            return (<Marker position = {obj} key = {i}/>);
+            return (<Marker onClick = {() => deleteMarker(i)}position = {obj} key = {i}/>);
         })}
     </GoogleMap>);
   }
@@ -85,15 +107,26 @@ class LocationChooser extends React.Component{
         });
       };
 
+
+    setLocations = (locations) => {
+        this.setState({
+  
+              selectedLocations : locations,
+              value: '',
+
+          });
+    }
+
     render(){
         return(
             <div id={'locationchooser-div'}>
                 <div>
             <MyMapComponent 
+                setParentLocation = {this.setLocations}
                 isMarkerShown
                 googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
                 loadingElement={<div style={{ height: `100%` }} />}
-                containerElement={<div style={{ height: `400px` }} />}
+                containerElement={<div style={{ height: `200px` }} />}
                 mapElement={<div style={{ height: `100%` }} />}
                 />
         </div>
