@@ -32,7 +32,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     isBanned = models.BooleanField(default=False)
     isAdmin = models.BooleanField(default=False)   
     isPrivate = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', "surname", "username"]
