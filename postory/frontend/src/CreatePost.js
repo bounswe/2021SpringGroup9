@@ -8,7 +8,8 @@ import TextChooser from './TextChooser'
 import TimeChooser from './TimeChooser';
 import TagChooser from './TagChooser';
 import PeopleChooser from './PeopleChooser'
-import LocationChooser from './LocationChooser'
+//import LocationChooser from './LocationChooser'
+import LocationChooser from './LocationMap'
 import Post from './Post';
 import {TextField, Snackbar} from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
