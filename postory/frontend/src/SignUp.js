@@ -40,6 +40,8 @@ class SignUp extends React.Component {
             email: null,
             password1: null,
             password2: null,
+            nextStep: false,
+            code: null
         }
         this.handleButtonClick = this.handleButtonClick.bind(this)
     }
@@ -115,6 +117,21 @@ class SignUp extends React.Component {
                     Sign Up
                 </button>
                 <br />
+                { this.state.nextStep && <>
+                <br />
+                <label htmlFor={'signup-code'} id={'signup-code-text'}>
+                    Enter the activation code sent to your e-mail
+                </label>
+                <br />
+                <input type={'text'} id={'signup-code'} onChange={
+                    e => this.setState(state => ({...state, code: e.target.value}))
+                } />
+                <br />
+                <button id={'signup-code-button'} disabled={!this.state.code ? 'true' : ''}>
+                    Finish signing up
+                </button>
+                <br />
+                </>}
                 <Link to={'/signIn'} id={'signup-signin-link'} variant={'v6'}>
                     Sign in instead
                 </Link>

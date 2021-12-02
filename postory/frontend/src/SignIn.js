@@ -8,11 +8,6 @@ function isEmail(str) {
     return /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(str)
 }
 
-function forgotPassword() {
-    return <div>
-
-    </div>
-}
 
 class SignIn extends React.Component {
     constructor(props) {
@@ -21,7 +16,7 @@ class SignIn extends React.Component {
             username: null,
             email: null,
             password: null,
-            forgot: false,
+            incorrect: false
         }
         this.handleButtonClick = this.handleButtonClick.bind(this)
     }
@@ -32,38 +27,6 @@ class SignIn extends React.Component {
     }
 
     render() {
-        if (this.state.forgot) {
-            return <header className={'App-header'}>
-                <div id={'signin'}>
-                    <label htmlFor={'signin-forgot-email'} id={'signin-forgot-email-text'}>
-                        E-mail of your account
-                    </label>
-                    <br />
-                    <input type={'text'} id={'signin-forgot-email'} value={this.state.email} onChange={
-                        e => {
-                            this.setState(state => ({...state, email: e.target.value}))
-                        }
-                    }/>
-                    <br />
-                    {
-                        this.state.email && !isEmail(this.state.email) && <>
-                            <span style={{fontSize: '50%'}}> Please enter a valid e-mail </span>
-                            <br />
-                        </>
-                    }
-                    <button id={'signin-forgot-button'} disabled={!isEmail(this.state.email) ? 'true' : ''}>
-                        Send activation e-mail
-                    </button>
-                    <br />
-                    <span id={'signin-forgot-link'} onClick={()=>{this.setState(state => ({...state, forgot: false}))}}>
-                Go back
-                </span>
-                    <br />
-
-                </div>
-            </header>
-        }
-
         return (
             <header className={'App-header'}>
                 <div id={'signin'}>
@@ -89,13 +52,20 @@ class SignIn extends React.Component {
                         }
                     }/>
                     <br />
+                    { this.state.incorrect && <>
+                    <span id={'signin-incorrect-text'} style={{fontSize: '50%'}}>
+                        Incorrect username or password
+                    </span>
+                        <br />
+                    </>}
                     <button id={'signin-button'} disabled={(!(this.state.username || this.state.email) || !this.state.password) ? 'true' : ''} onClick={this.handleButtonClick}>
                         Sign In
                     </button>
                     <br />
-                    <span id={'signin-forgot-link'} onClick={()=>{this.setState(state => ({...state, forgot: true}))}}>
+
+                    <Link to={'/forgotPassword'} id={'signin-forgot-link'} variant={'v6'}>
                         Forgot password?
-                    </span>
+                    </Link>
                     <br />
                     <Link to={'/signUp'} id={'signin-signup-link'} variant={'v6'}>
                         Sign Up
