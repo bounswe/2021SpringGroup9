@@ -31,14 +31,7 @@ jobs:
     - name: Unit tests
       run: bash ./gradlew test --stacktrace
       
-    - name: ui tests
-      uses: reactivecircus/android-emulator-runner@v2
-      with:
-        api-level: 26
-        target: default
-        arch: x86
-        profile: Nexus 6
-        script:  postory/android/Postory/gradlew connectedCheck --stacktrace
+
   
  apk:
   name: Generate APK
