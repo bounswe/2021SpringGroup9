@@ -12,5 +12,9 @@
     <string name="choose_image_source">Pick an image for your story </string>
     <string name="shared_on">Shared on:&#160;</string>
     <string name="write_tag_hint">Write tag</string>
+    <string name="register">Register</string>
+    <string name="sign_in">Sign in</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="sign_up">Sign Up</string>
 
 </resources>
