@@ -22,6 +22,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activities.RegisterActivity"
+            android:exported="true" />
+        <activity
             android:name=".activities.ToolbarActivity"
             android:exported="true" />
         <activity
