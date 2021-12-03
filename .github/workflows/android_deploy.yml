@@ -34,9 +34,12 @@ jobs:
 
   
  apk:
-  name: Generate APK
+  name: generate-apk
   needs: test-build
   runs-on: ubuntu-latest
+  defaults:
+      run:
+        working-directory: postory/android/Postory
   steps:
    - name: Build debug APK
      run: bash ./gradlew assembleDebug --stacktrace
