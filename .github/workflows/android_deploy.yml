@@ -1,4 +1,4 @@
-name: Android CI/CD
+name: Android Deployment
 
 on:
   push:
@@ -29,22 +29,12 @@ jobs:
       run: ./gradlew build
     
     - name: Unit tests
-      run: bash ./gradlew test --stacktrace
+      run: ./gradlew test --stacktrace
       
-
-  
- apk:
-  name: generate-apk
-  needs: test-build
-  runs-on: ubuntu-latest
-  defaults:
-      run:
-        working-directory: postory/android/Postory
-  steps:
-   - name: Build debug APK
-     run: ./gradlew assembleDebug --stacktrace
-   - name: Upload APK
-     uses: actions/upload-artifact@v2
-     with:
-       name: apk
-       path:  postory/android/Postory/app/build/outputs/apk/debug/app-debug.apk
+    - name: Build debug APK
+      run: ./gradlew assembleDebug --stacktrace
+    - name: Upload APK
+      uses: actions/upload-artifact@v2
+      with:
+        name: apk
+        path:  postory/android/Postory/app/build/outputs/apk/debug/app-debug.apk
