@@ -1,10 +1,7 @@
 package com.example.postory;
 import com.example.postory.utils.PasswordController;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
-import com.example.postory.activities.RegisterActivity;
 import org.junit.Test;
 
 /**
