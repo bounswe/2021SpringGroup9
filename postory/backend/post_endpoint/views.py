@@ -352,6 +352,44 @@ class GetFollowedUsersPosts(GenericAPIView):
         return Response(serializer.values(), status=200)
 
 
+class GetPostsDiscover(GenericAPIView):
+    def get(self,request,format=None):
+        authorization = request.headers['Authorization']
+        token = authorization.split()[1]
+        decoded = jwt.decode(token,options={"verify_signature": False})
+        user_id = decoded['user_id']
+        user = User.objects.filter(id = user_id).first()
+        followedUsers = user.followedUsers.all()
+        posts = set()
+        for post in Post.objects.all():
+            owner_of_post = User.objects.get(id=post.owner)
+            if(not owner_of_post.isPrivate):
+                posts.add(post)
+        for followedUser in followedUsers:
+            followedUserPosts = Post.objects.filter(owner = followedUser)
+            posts.add(followedUserPosts)
+        
+        serializer = {}
+        for story in posts:
+            tags = []
+            locations = []
+            images = []
+            serializer[story.id] = dict(PostSerializer(story).data)
+            for tag in story.tags.all():
+                tags.append(tag.content)
+            for location in story.locations.all():
+                values = []
+                values.append(location.name)
+                values.append(location.coordsLatitude)
+                values.append(location.coordsLongitude)
+                locations.append(values)
+            for image in story.images.all():
+                images.append(image.file.url)
+            serializer[story.id]['tags'] = tags
+            serializer[story.id]['locations'] = locations
+            serializer[story.id]['images'] = images
+        return Response(serializer.values(), status=200)
+
 
 def find_coordinates(location):
     location = location.split(' ')

@@ -11,4 +11,5 @@ urlpatterns = [
     path('all', GetFollowedUsersPosts.as_view(), name="get_all_posts_followed_users"),
     path('all/admin', GetAllPosts.as_view(), name="get_all_posts_admin"),
     path('all/user/<str:username>', GetUsersPosts.as_view(), name="get_all_posts_of_user"),
+    path('all/discover',GetPostsDiscover.as_view(), name="discover"),
 ]
