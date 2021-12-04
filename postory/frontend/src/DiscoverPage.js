@@ -40,3 +40,22 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
             );
   }
 ))
+
+class DiscoverPage extends React.Component{
+    constructor(props){
+        super(props);
+    }
+
+    render(){
+        return(         
+                <MyMapComponent 
+                    isMarkerShown
+                    googleMapURL="https://maps.googleapis.com/maps/api/js?AIzaSyCObbHDNSykqMsThft-aQljY99z9RErUsI&v=3.exp&libraries=geometry,drawing,places"
+                    loadingElement={<div style={{ height: `100%` }} />}
+                    containerElement={<div style={{ height: window.innerHeight }} />} //`600px`
+                    mapElement={<div style={{ height: `100%` }} />}
+                />
+        )
+    }
+}
+export default DiscoverPage;
