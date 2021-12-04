@@ -9,7 +9,7 @@ import org.junit.Test;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class PasswordCheckFunctionalityTest {
+public class PasswordControllerTest {
     String shortPass = "A1b2_2";
     String noCapital = "prk32lxxx234_aa*";
     String noDigit = "a*B*c*qwerty_javakotlin";
