@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps";
+import Post from "./Post";
 
 
 const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
     const [markers, setMarkers] = React.useState([]);
     const [posts, setPosts] = React.useState([]);
-
+    const [selectedPost, setSelectedPost] = React.useState(null);
+    const [displayPost, setDisplayPost] = React.useState(false);
 
 
     useEffect(() => {
@@ -28,6 +30,14 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
             })
     }, [])
 
+    useEffect(() => {
+        if (selectedPost != null){
+            setDisplayPost(false);
+            setTimeout(() => {setDisplayPost(true)}, 500);
+        }
+        console.log("Selected post has been changed");
+    }, [selectedPost])
+
     const onClickMarker = (index) =>{
         setSelectedPost(() =>{
             let newPost = null;
@@ -41,7 +51,11 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
         });       
     }
 
-    return( 
+    return( <div class="row">
+            <div>
+            <div>
+            {displayPost && <Post {...selectedPost}></Post>}
+            </div>
             <GoogleMap
                 defaultZoom={6}
                 defaultCenter={{ lat: 41.048, lng: 29.0510 }}
@@ -50,6 +64,8 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
                     return (<Marker onClick = {() => onClickMarker(i)} position = {{lat:obj.lat, lng:obj.lng}} key = {i}/>);
                 })}
             </GoogleMap>
+            </div>
+            </div>
             );
   }
 ))
@@ -65,7 +81,7 @@ class DiscoverPage extends React.Component{
                     isMarkerShown
                     googleMapURL="https://maps.googleapis.com/maps/api/js?AIzaSyCObbHDNSykqMsThft-aQljY99z9RErUsI&v=3.exp&libraries=geometry,drawing,places"
                     loadingElement={<div style={{ height: `100%` }} />}
-                    containerElement={<div style={{ height: window.innerHeight }} />} //`600px`
+                    containerElement={<div style={{ height: window.innerHeight, width: window.innerWidth }} />} //`600px`
                     mapElement={<div style={{ height: `100%` }} />}
                 />
         )
