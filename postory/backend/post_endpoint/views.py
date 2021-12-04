@@ -14,12 +14,14 @@ import urllib.parse as urlparse
 from urllib.parse import urlencode
 
 from .models import Post, Location, Tag, Image
+from user_endpoint.models import User
 from .serializers import PostSerializer
 
 import requests
 import json
 import datetime
 import environ
+import jwt
 
 class GetAllPosts(GenericAPIView):
     """
@@ -28,27 +30,35 @@ class GetAllPosts(GenericAPIView):
     serializer_class = PostSerializer
 
     def get(self, request, format=None):
-        posts = Post.objects.all()
-        serializer = {}
-        for story in posts:
-            tags = []
-            locations = []
-            images = []
-            serializer[story.id] = dict(PostSerializer(story).data)
-            for tag in story.tags.all():
-                tags.append(tag.content)
-            for location in story.locations.all():
-                values = []
-                values.append(location.name)
-                values.append(location.coordsLatitude)
-                values.append(location.coordsLongitude)
-                locations.append(values)
-            for image in story.images.all():
-                images.append(image.file.url)
-            serializer[story.id]['tags'] = tags
-            serializer[story.id]['locations'] = locations
-            serializer[story.id]['images'] = images
-        return Response(serializer.values(), status=200)
+        authorization = request.headers['Authorization']
+        token = authorization.split()[1]
+        decoded = jwt.decode(token,options={"verify_signature": False})
+        user_id = decoded['user_id']
+        user = User.objects.filter(id = user_id).first()
+        if(user.isAdmin):
+            posts = Post.objects.all()
+            serializer = {}
+            for story in posts:
+                tags = []
+                locations = []
+                images = []
+                serializer[story.id] = dict(PostSerializer(story).data)
+                for tag in story.tags.all():
+                    tags.append(tag.content)
+                for location in story.locations.all():
+                    values = []
+                    values.append(location.name)
+                    values.append(location.coordsLatitude)
+                    values.append(location.coordsLongitude)
+                    locations.append(values)
+                for image in story.images.all():
+                    images.append(image.file.url)
+                serializer[story.id]['tags'] = tags
+                serializer[story.id]['locations'] = locations
+                serializer[story.id]['images'] = images
+            return Response(serializer.values(), status=200)
+        else:
+            return Response(status = 401)
 
 env = environ.Env(DEBUG=(bool, True))
 environ.Env.read_env('.env')
@@ -171,12 +181,20 @@ class PostUpdate(GenericAPIView):
             raise Http404
     
     def put(self, request, pk, format=None):
+        authorization = request.headers['Authorization']
+        token = authorization.split()[1]
+        decoded = jwt.decode(token,options={"verify_signature": False})
+        user_id = decoded['user_id']
+
         story = self.get_object(pk)
         data = dict(request.data)
         data['title'] = data['title'][0]
         data['story'] = data['story'][0]
         data['owner'] = data['owner'][0]
         data['storyDate'] = data['storyDate'][0]
+
+        if(not user_id == data['owner']):
+            return Response(status = 401)
         
         images = data['images']
         imagesList = []
@@ -252,11 +270,81 @@ class PostDelete(GenericAPIView):
             raise Http404
     
     def delete(self, request, pk, format=None):
+        authorization = request.headers['Authorization']
+        token = authorization.split()[1]
+        decoded = jwt.decode(token,options={"verify_signature": False})
+        user_id = decoded['user_id']
+
         story = self.get_object(pk)
+
+        if(not user_id == story.owner):
+            return Response(status = 401)
         story.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-    
+class GetUsersPosts(GenericAPIView):
+    def get(self, request, format=None):
+        authorization = request.headers['Authorization']
+        token = authorization.split()[1]
+        decoded = jwt.decode(token,options={"verify_signature": False})
+        user_id = decoded['user_id']
+        posts = Post.objects.filter(owner = user_id)
+        serializer = {}
+        for story in posts:
+            tags = []
+            locations = []
+            images = []
+            serializer[story.id] = dict(PostSerializer(story).data)
+            for tag in story.tags.all():
+                tags.append(tag.content)
+            for location in story.locations.all():
+                values = []
+                values.append(location.name)
+                values.append(location.coordsLatitude)
+                values.append(location.coordsLongitude)
+                locations.append(values)
+            for image in story.images.all():
+                images.append(image.file.url)
+            serializer[story.id]['tags'] = tags
+            serializer[story.id]['locations'] = locations
+            serializer[story.id]['images'] = images
+        return Response(serializer.values(), status=200)
+
+
+class GetFollowedUsersPosts(GenericAPIView):
+    def get(self,request,format=None):
+        authorization = request.headers['Authorization']
+        token = authorization.split()[1]
+        decoded = jwt.decode(token,options={"verify_signature": False})
+        user_id = decoded['user_id']
+        user = User.objects.filter(id = user_id).first()
+        followedUsers = user.followedUsers.all()
+        posts = []
+        for followedUser in followedUsers:
+            followedUserPosts = Post.objects.filter(owner = followedUser)
+            posts.append(followedUserPosts)
+        serializer = {}
+        for story in posts:
+            tags = []
+            locations = []
+            images = []
+            serializer[story.id] = dict(PostSerializer(story).data)
+            for tag in story.tags.all():
+                tags.append(tag.content)
+            for location in story.locations.all():
+                values = []
+                values.append(location.name)
+                values.append(location.coordsLatitude)
+                values.append(location.coordsLongitude)
+                locations.append(values)
+            for image in story.images.all():
+                images.append(image.file.url)
+            serializer[story.id]['tags'] = tags
+            serializer[story.id]['locations'] = locations
+            serializer[story.id]['images'] = images
+        return Response(serializer.values(), status=200)
+
+
 
 def find_coordinates(location):
     location = location.split(' ')
