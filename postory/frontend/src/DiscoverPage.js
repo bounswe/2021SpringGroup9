@@ -28,13 +28,26 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
             })
     }, [])
 
+    const onClickMarker = (index) =>{
+        setSelectedPost(() =>{
+            let newPost = null;
+            for(let i =0 ; i< posts.length; i++){
+                if(posts[i].id == markers[index].id){
+                    newPost = posts[i];
+                }
+            }
+            console.log(newPost);
+            return newPost;
+        });       
+    }
+
     return( 
             <GoogleMap
                 defaultZoom={6}
                 defaultCenter={{ lat: 41.048, lng: 29.0510 }}
                 >
                 {markers.map((obj,i) => {
-                    return (<Marker position = {{lat:obj.lat, lng:obj.lng}} key = {i}/>);
+                    return (<Marker onClick = {() => onClickMarker(i)} position = {{lat:obj.lat, lng:obj.lng}} key = {i}/>);
                 })}
             </GoogleMap>
             );
