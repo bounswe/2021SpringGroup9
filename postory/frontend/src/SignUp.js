@@ -2,7 +2,9 @@ import React from 'react';
 import Icon from '@mdi/react'
 import {createHash} from 'crypto'
 import './SignUp.css'
-import {Link} from "react-router-dom";
+import {Link, Navigate} from "react-router-dom";
+
+const BACKEND_URL = 'http://' + window.location.hostname + ':8000'
 
 function isEmail(str) {
     return /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(str)
@@ -40,18 +42,74 @@ class SignUp extends React.Component {
             email: null,
             password1: null,
             password2: null,
-            nextStep: false,
-            code: null
+            status: 'before',   // 'before', 'success', 'fail'
+            redirect: false
         }
         this.handleButtonClick = this.handleButtonClick.bind(this)
     }
 
-    handleButtonClick() {
-        const hashedPassword = createHash('sha256').update(this.state.password1).digest('hex')
-        //TODO handle button click
+    handleButtonClick(e) {
+        if (e.target.disabled) return;
+        const names = this.state.username.split(/(\s+)/).filter( e => e.trim().length > 0)
+        const name = names.slice(0, -1).join(' ')
+        const surname = names.slice(-1).join(' ')
+
+        // const hashedPassword = createHash('sha256').update(this.state.password1).digest('hex')
+        fetch(`${BACKEND_URL}/auth/users/`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: this.state.email,
+                //name: this.state.username,
+                name: name,
+                surname: surname,
+                password: this.state.password1,
+                re_password: this.state.password2
+            })
+        }).then(
+            res => {
+                if (res.status % 100 === 2) {
+                    // Account successfully created
+                    this.setState(state => ({...state, status: 'success'}))
+                } else {
+                    // A user with the same e-mail already exists
+                    this.setState(state => ({...state, status: 'fail'}))
+                }
+            }
+        )
     }
 
     render() {
+        if (this.state.status === 'success') {
+            setTimeout(() => this.setState(state => ({...state, redirect: true})), 2000)
+
+            return <header className={'App-header'}>
+                <div id={'signup'}>
+                    <span>Account created successfully.</span>
+                    <br />
+                    <span>Check your inbox to activate your account.</span>
+                    <br />
+                    <span>Redirecting to homepage..</span>
+                    {this.state.redirect && <Navigate to={'/'} />}
+                </div>
+            </header>
+        }
+
+        if (this.state.success === 'fail') {
+            return <header className={'App-header'}>
+                <div id={'signup'}>
+                    <span>This user already exists!</span>
+                    <br />
+                    <span id={'signup-goback-link'} onClick={
+                        e => this.setState(state => ({...state, status: 'before'}))
+                    }>Go back</span>
+                </div>
+            </header>
+        }
+
         return (<header className={'App-header'}>
             <div id={'signup'}>
                 <label htmlFor={'signup-email'} id={'signup-email-text'}>E-mail: </label>
@@ -117,21 +175,6 @@ class SignUp extends React.Component {
                     Sign Up
                 </button>
                 <br />
-                { this.state.nextStep && <>
-                <br />
-                <label htmlFor={'signup-code'} id={'signup-code-text'}>
-                    Enter the activation code sent to your e-mail
-                </label>
-                <br />
-                <input type={'text'} id={'signup-code'} onChange={
-                    e => this.setState(state => ({...state, code: e.target.value}))
-                } />
-                <br />
-                <button id={'signup-code-button'} disabled={!this.state.code ? 'true' : ''}>
-                    Finish signing up
-                </button>
-                <br />
-                </>}
                 <Link to={'/signIn'} id={'signup-signin-link'} variant={'v6'}>
                     Sign in instead
                 </Link>

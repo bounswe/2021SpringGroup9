@@ -15,6 +15,8 @@ import {
   Route
 } from "react-router-dom";
 import ForgotPassword from "./ForgotPassword";
+import ForgotPasswordConfirm from "./ForgotPasswordConfirm";
+import Activation from "./Activation";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -26,6 +28,8 @@ ReactDOM.render(
     <Route path="/signIn" element={<div><TopBar /><SignIn /></div>} />
     <Route path="/signUp" element={<div><TopBar /><SignUp /></div>} />
     <Route path="/forgotPassword" element={<div><TopBar /><ForgotPassword /></div>} />
+    <Route path="/password/reset/confirm/:uid/:token" element={<div><TopBar /><ForgotPasswordConfirm /></div>} />
+    <Route path="/activate/:uid/:token" element={<div><TopBar /><Activation /></div>} />
     </Routes>
   </BrowserRouter>,
   document.getElementById('root')
