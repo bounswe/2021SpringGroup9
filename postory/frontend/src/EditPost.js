@@ -13,6 +13,8 @@ import Post from './Post';
 import {TextField, Snackbar} from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 
+const backendIP = '3.125.114.231:8000';
+
 class EditPost extends React.Component{
     constructor(props){
         super(props);
@@ -53,7 +55,7 @@ class EditPost extends React.Component{
     }
 
     componentDidMount(){
-        fetch(`http://35.158.95.81:8000/api/post/get/${this.state.id}`).then(resp => resp.json()).then(
+        fetch(`http://${backendIP}/api/post/get/${this.state.id}`).then(resp => resp.json()).then(
             data => {
                 this.setState(state=>{return {
                     ...state,
@@ -200,7 +202,7 @@ class EditPost extends React.Component{
 
 
         
-        fetch('http://35.158.95.81:8000/api/post/create', {
+        fetch(`http://${backendIP}:8000/api/post/create`, {
             method: 'POST',
             body: formData
         }).then(res => {
@@ -217,7 +219,7 @@ class EditPost extends React.Component{
                 console.log("Post SUCCESS.")
                 //http://35.158.95.81:8000/api/post/delete/<int:id>
 
-                fetch(`http://35.158.95.81:8000/api/post/delete/${this.state.id}`, {
+                fetch(`http://${backendIP}/api/post/delete/${this.state.id}`, {
                     method: 'DELETE'
                 });
                 this.setState(state => {
