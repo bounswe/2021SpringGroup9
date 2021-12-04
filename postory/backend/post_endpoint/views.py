@@ -283,32 +283,39 @@ class PostDelete(GenericAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
 class GetUsersPosts(GenericAPIView):
-    def get(self, request, format=None):
+    def get(self, request, username, format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
         decoded = jwt.decode(token,options={"verify_signature": False})
         user_id = decoded['user_id']
-        posts = Post.objects.filter(owner = user_id)
-        serializer = {}
-        for story in posts:
-            tags = []
-            locations = []
-            images = []
-            serializer[story.id] = dict(PostSerializer(story).data)
-            for tag in story.tags.all():
-                tags.append(tag.content)
-            for location in story.locations.all():
-                values = []
-                values.append(location.name)
-                values.append(location.coordsLatitude)
-                values.append(location.coordsLongitude)
-                locations.append(values)
-            for image in story.images.all():
-                images.append(image.file.url)
-            serializer[story.id]['tags'] = tags
-            serializer[story.id]['locations'] = locations
-            serializer[story.id]['images'] = images
-        return Response(serializer.values(), status=200)
+
+        requester_user = User.objects.filter(id = user_id).first()
+        requested_user = User.objects.filter(username = username).first()
+
+        if(requested_user.id in requester_user.followedUsers.all() or not requested_user.isPrivate):
+            posts = Post.objects.filter(owner = requested_user.id)
+            serializer = {}
+            for story in posts:
+                tags = []
+                locations = []
+                images = []
+                serializer[story.id] = dict(PostSerializer(story).data)
+                for tag in story.tags.all():
+                    tags.append(tag.content)
+                for location in story.locations.all():
+                    values = []
+                    values.append(location.name)
+                    values.append(location.coordsLatitude)
+                    values.append(location.coordsLongitude)
+                    locations.append(values)
+                for image in story.images.all():
+                    images.append(image.file.url)
+                serializer[story.id]['tags'] = tags
+                serializer[story.id]['locations'] = locations
+                serializer[story.id]['images'] = images
+            return Response(serializer.values(), status=200)
+        else:
+            return Response(status = 401)
 
 
 class GetFollowedUsersPosts(GenericAPIView):
