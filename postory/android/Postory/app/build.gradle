@@ -18,6 +18,9 @@ android {
         buildConfigField "String", "API_IP", API_IP
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    lintOptions {
+        abortOnError false
+    }
 
     buildTypes {
         release {
