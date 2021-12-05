@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
 import android.os.Handler;
 import android.widget.*;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -31,9 +32,11 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.core.app.ActivityCompat;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.example.postory.BuildConfig;
 import com.example.postory.R;
 import com.example.postory.dialogs.DelayedProgressDialog;
 import com.example.postory.models.Post;
@@ -43,7 +46,9 @@ import com.github.johnpersano.supertoasts.library.SuperActivityToast;
 import com.github.johnpersano.supertoasts.library.SuperToast;
 import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.google.gson.Gson;
+
 import okhttp3.*;
+
 import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Text;
 
@@ -53,7 +58,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class CreatePostActivity extends AppCompatActivity {
+public class CreatePostActivity extends ToolbarActivity {
 
     Button sendButton;
     Handler handler;
@@ -90,32 +95,11 @@ public class CreatePostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         dialog = new DelayedProgressDialog();
         setContentView(R.layout.activity_create_post);
+        super.initToolbar();
         formatFromString = new SimpleDateFormat("DD/mm/yyyy");
         formatToDate = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-        Toolbar toolbar = findViewById(R.id.custom_toolbar);
         handler = new Handler();
-        setSupportActionBar(toolbar);
-        ImageView homeButton = (ImageView) toolbar.findViewById(R.id.home_button);
-        ImageView worldButton = (ImageView) toolbar.findViewById(R.id.world_button);
 
-        homeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
-        worldButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SuperActivityToast.create(CreatePostActivity.this, new Style(), Style.TYPE_BUTTON)
-                        .setProgressBarColor(Color.WHITE)
-                        .setText("This feature is not available now.")
-                        .setDuration(Style.DURATION_LONG)
-                        .setFrame(Style.FRAME_LOLLIPOP)
-                        .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
-                        .setAnimations(Style.ANIMATIONS_POP).show();
-            }
-        });
 
         sendButton = (Button) findViewById(R.id.send_button);
         nicknameEditText = (EditText) findViewById(R.id.op_name_field);
@@ -132,7 +116,7 @@ public class CreatePostActivity extends AppCompatActivity {
             title.setText("Edit The Post");
 
             final OkHttpClient client = new OkHttpClient();
-            String url = "http://35.158.95.81:8000/api/post/get/" + getIntent().getStringExtra("id");
+            String url = BuildConfig.API_IP + "/post/get/" + getIntent().getStringExtra("id");
             final Request request = new Request.Builder()
                     .url(url)
                     .build();
@@ -197,55 +181,27 @@ public class CreatePostActivity extends AppCompatActivity {
                 if (from.equals("edit")) {
 
 
-
                     if (checkNecessaryData()) {
-                        File file ;
+                        File file;
 
-                        if(imageUri == null) {
+                        if (imageUri == null) {
                             BitmapDrawable drawable = (BitmapDrawable) postImage.getDrawable();
                             Bitmap bitmap = drawable.getBitmap();
                             Log.i(TAG, "onClick: ");
                             String path = saveImage(bitmap);
                             file = new File(path);
 
-                        }
-                        else {
+                        } else {
 
                             file = new File(getRealPathFromURI(imageUri));
 
                         }
 
-
                         OkHttpClient client = new OkHttpClient();
 
 
-                        String url = "http://35.158.95.81:8000/api/post/put/" + getIntent().getStringExtra("id");
-                        RequestBody requestBody = null;
-                        try {
-                            requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                                    .addFormDataPart("title", titleEditText.getText().toString())
-                                    .addFormDataPart("story", storyEditText.getText().toString())
-                                    .addFormDataPart("owner", nicknameEditText.getText().toString())
-                                    .addFormDataPart("locations", locationEditText.getText().toString())
-                                    .addFormDataPart("storyDate", formatToDate.format(formatFromString.parse(dateEditText.getText().toString())))
-                                    .addFormDataPart("tags", tagEditText.getText().toString())
-                                    .addFormDataPart("images", file.getName(), RequestBody.create(MediaType.parse("image/jpeg"), file))
-                                    .build();
-                        } catch (ParseException e) {
-                            SuperActivityToast.create(CreatePostActivity.this, new Style(), Style.TYPE_BUTTON)
-                                    .setProgressBarColor(Color.WHITE)
-                                    .setText("WRONG FORM OF DATE (Should be in the form DD/mm/yyyy )!")
-                                    .setDuration(Style.DURATION_LONG)
-                                    .setFrame(Style.FRAME_LOLLIPOP)
-                                    .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
-                                    .setAnimations(Style.ANIMATIONS_POP).show();
-                            e.printStackTrace();
-                        }
-
-                        Request request = new Request.Builder()
-                                .url(url)
-                                .put(requestBody)
-                                .build();
+                        String url = BuildConfig.API_IP + "/post/put/" + getIntent().getStringExtra("id");
+                        Request request = buildEditCreateRequest(url, file);
                         dialog.show(getSupportFragmentManager(), "Post is being edited...");
 
                         client.newCall(request).enqueue(new Callback() {
@@ -303,41 +259,15 @@ public class CreatePostActivity extends AppCompatActivity {
 
                     }
 
-
                 } else {
                     if (checkNecessaryData()) {
-                        //TODO: use the filled data
                         File file = new File(getRealPathFromURI(imageUri));
                         OkHttpClient client = new OkHttpClient();
-                        String url = "http://35.158.95.81:8000/api/post/create";
-                        RequestBody requestBody = null;
-                        try {
-                            requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                                    .addFormDataPart("title", titleEditText.getText().toString())
-                                    .addFormDataPart("story", storyEditText.getText().toString())
-                                    .addFormDataPart("owner", nicknameEditText.getText().toString())
-                                    .addFormDataPart("locations", locationEditText.getText().toString())
-                                    .addFormDataPart("storyDate", formatToDate.format(formatFromString.parse(dateEditText.getText().toString())))
-                                    .addFormDataPart("tags", tagEditText.getText().toString())
-                                    .addFormDataPart("images", file.getName(), RequestBody.create(MediaType.parse("image/jpeg"), file))
-                                    .build();
-                        } catch (ParseException e) {
-                            SuperActivityToast.create(CreatePostActivity.this, new Style(), Style.TYPE_BUTTON)
-                                    .setProgressBarColor(Color.WHITE)
-                                    .setText("WRONG FORM OF DATE (Should be in the form DD/mm/yyyy )!")
-                                    .setDuration(Style.DURATION_LONG)
-                                    .setFrame(Style.FRAME_LOLLIPOP)
-                                    .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
-                                    .setAnimations(Style.ANIMATIONS_POP).show();
-                            e.printStackTrace();
-                        }
+                        String url = BuildConfig.API_IP + "/post/create";
 
-                        Request request = new Request.Builder()
-                                .url(url)
-                                .post(requestBody)
-                                .build();
 
                         dialog.show(getSupportFragmentManager(), "Post is being created...");
+                        Request request = buildEditCreateRequest(url, file);
 
                         client.newCall(request).enqueue(new Callback() {
                             @Override
@@ -398,6 +328,36 @@ public class CreatePostActivity extends AppCompatActivity {
         });
     }
 
+    private Request buildEditCreateRequest(String url, File file) {
+        RequestBody requestBody = null;
+        try {
+            requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                    .addFormDataPart("title", titleEditText.getText().toString())
+                    .addFormDataPart("story", storyEditText.getText().toString())
+                    .addFormDataPart("owner", nicknameEditText.getText().toString())
+                    .addFormDataPart("locations", locationEditText.getText().toString())
+                    .addFormDataPart("storyDate", formatToDate.format(formatFromString.parse(dateEditText.getText().toString())))
+                    .addFormDataPart("tags", tagEditText.getText().toString())
+                    .addFormDataPart("images", file.getName(), RequestBody.create(MediaType.parse("image/jpeg"), file))
+                    .build();
+        } catch (ParseException e) {
+            SuperActivityToast.create(CreatePostActivity.this, new Style(), Style.TYPE_BUTTON)
+                    .setProgressBarColor(Color.WHITE)
+                    .setText("WRONG FORM OF DATE (Should be in the form DD/mm/yyyy )!")
+                    .setDuration(Style.DURATION_LONG)
+                    .setFrame(Style.FRAME_LOLLIPOP)
+                    .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                    .setAnimations(Style.ANIMATIONS_POP).show();
+            e.printStackTrace();
+        }
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+
+        return request;
+    }
 
     private String saveImage(Bitmap image) {
         String path = null;
@@ -571,4 +531,33 @@ public class CreatePostActivity extends AppCompatActivity {
         }
         return result;
     }
+
+    @Override
+    protected void refreshClicked() {
+        return;
+    }
+
+    @Override
+    protected void goCreatePostClicked() {
+        return;
+    }
+
+    @Override
+    protected void goExploreClicked() {
+        SuperActivityToast.create(CreatePostActivity.this, new Style(), Style.TYPE_BUTTON)
+                .setProgressBarColor(Color.WHITE)
+                .setText("This feature is not available now.")
+                .setDuration(Style.DURATION_LONG)
+                .setFrame(Style.FRAME_LOLLIPOP)
+                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                .setAnimations(Style.ANIMATIONS_POP).show();
+    }
+
+    @Override
+    protected void goHomeClicked() {
+        Intent i = new Intent(CreatePostActivity.this, MainActivity.class);
+        finish();
+        startActivity(i);
+    }
+
 }
