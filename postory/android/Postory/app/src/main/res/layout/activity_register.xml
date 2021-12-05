@@ -16,10 +16,7 @@
         android:src="@mipmap/postory_logo_foreground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-
-    </ImageView>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/nameLayout"
@@ -34,10 +31,11 @@
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/write_your_name"/>
+            android:hint="@string/write_your_name" />
     </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/surname_layout"
+        android:id="@+id/surnameLayout"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
@@ -46,84 +44,80 @@
         app:layout_constraintTop_toBottomOf="@+id/nameLayout">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/mail"
+            android:id="@+id/surname"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/write_your_surname"/>
+            android:hint="@string/write_your_surname" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/username_layout"
+        android:id="@+id/usernameLayout"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/surname_layout">
+        app:layout_constraintTop_toBottomOf="@+id/surnameLayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/write_your_username"/>
+            android:hint="@string/write_your_username" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
-
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/password_layout"
+        android:id="@+id/passwordLayout"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username_layout"
+        app:layout_constraintTop_toBottomOf="@+id/usernameLayout"
         app:passwordToggleEnabled="true">
 
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etPassword"
+            android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:hint="@string/write_your_password"/>
+            android:hint="@string/write_your_password"
+            android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/repeat_password_layout"
+        android:id="@+id/repeatPasswordLayout"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_layout"
+        app:layout_constraintTop_toBottomOf="@+id/passwordLayout"
         app:passwordToggleEnabled="true">
 
-
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/repeat_password"
+            android:id="@+id/repeatPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:hint="@string/write_your_password_again"/>
+            android:hint="@string/write_your_password_again"
+            android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-            android:id="@+id/signInButton"
-            android:layout_width="150dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="30dp"
-            android:background="@color/colorPrimary"
-            android:text="@string/sign_up"
-            android:textAllCaps="false"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf ="@id/repeat_password_layout" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+        android:id="@+id/signInButton"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/colorPrimary"
+        android:text="@string/sign_up"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/repeatPasswordLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
