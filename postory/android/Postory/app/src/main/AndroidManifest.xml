@@ -21,18 +21,30 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBrhf3f7dsb0d0IJnbK3nem6cqvJFgRD34" />
+
         <activity
             android:name=".activities.ToolbarActivity"
             android:exported="true" />
         <activity
             android:name=".activities.CreatePostActivity"
             android:exported="true" />
-        <activity android:name=".activities.MainActivity">
+
+        <activity android:name=".activities.ExploreActivity"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".activities.MainActivity">
+
+
+
         </activity>
     </application>
 
