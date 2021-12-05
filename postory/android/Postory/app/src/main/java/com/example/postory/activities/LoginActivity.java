@@ -54,6 +54,8 @@ public class LoginActivity extends AppCompatActivity {
         forgotPasswordText = (TextView) findViewById(R.id.forgotPassword);
         signUpButton = (Button) findViewById(R.id.signUpButton);
         handler = new Handler();
+        dialog = new DelayedProgressDialog();
+
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
