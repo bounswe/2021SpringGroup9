@@ -11,7 +11,7 @@
         android:id="@+id/imageView"
         android:layout_width="0dp"
         android:layout_height="260dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="30dp"
         android:src="@mipmap/postory_logo_foreground"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,7 +49,21 @@
             android:layout_height="match_parent"
             android:hint="@string/write_your_surname" />
     </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/mailLayout"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/surnameLayout">
 
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/mail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/write_your_mail_address" />
+    </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/usernameLayout"
         android:layout_width="0dp"
@@ -57,7 +71,7 @@
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/surnameLayout">
+        app:layout_constraintTop_toBottomOf="@+id/mailLayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/username"
@@ -110,7 +124,7 @@
         android:id="@+id/signInButton"
         android:layout_width="150dp"
         android:layout_height="40dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         android:background="@color/colorPrimary"
         android:text="@string/sign_up"
         android:textAllCaps="false"
