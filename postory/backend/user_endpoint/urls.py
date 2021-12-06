@@ -5,4 +5,5 @@ from .views import *
 
 urlpatterns = [
     path('follow/<int:pk>/', UserFollowing.as_view(), name="follow_user"),
+    path('get/<int:pk>/', UserGet.as_view(), name="get_user"),
 ]

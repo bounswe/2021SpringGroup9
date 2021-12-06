@@ -17,6 +17,7 @@ from .models import User
 from .serializers import UserSerializer, UserCreateSerializer
 from rest_framework_simplejwt.tokens import RefreshToken, SlidingToken, UntypedToken
 from django.contrib.auth.models import User
+from django.core import serializers
 
 import requests
 import json
@@ -57,3 +58,18 @@ class UserFollowing(GenericAPIView):
         user1.save()
         user2.save()
         return Response(status.HTTP_200_OK)
+
+class UserGet(GenericAPIView):
+
+    def get_object(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404
+    
+    def get(self, request, pk, format=None):
+        user = self.get_object(pk=pk)
+
+        serializer = dict(UserSerializer(user).data)
+
+        return Response(serializer)
