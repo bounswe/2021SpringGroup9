@@ -15,11 +15,17 @@ from urllib.parse import urlencode
 
 from .models import User
 from .serializers import UserSerializer, UserCreateSerializer
+from rest_framework_simplejwt.tokens import RefreshToken, SlidingToken, UntypedToken
+from django.contrib.auth.models import User
 
 import requests
 import json
 import datetime
 import environ
+import jwt
+
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 class UserFollowing(GenericAPIView):
 
@@ -29,9 +35,14 @@ class UserFollowing(GenericAPIView):
         except User.DoesNotExist:
             raise Http404
 
-    def post(self, request, pk1, pk2, format=None):
-        user1 = self.get_object(pk=pk1)
-        user2 = self.get_object(pk=pk2)
+    def post(self, request, pk, format=None):
+        authorization = request.headers['Authorization']
+        token = authorization.split()[1]
+        decoded = jwt.decode(token,options={"verify_signature": False})
+        user_id = decoded['user_id']
+
+        user1 = self.get_object(pk=user_id)
+        user2 = self.get_object(pk=pk)
 
         if user2.isPrivate: # if private can't follow
             return Response(status.HTTP_400_BAD_REQUEST)
@@ -46,6 +57,3 @@ class UserFollowing(GenericAPIView):
         user1.save()
         user2.save()
         return Response(status.HTTP_200_OK)
-
-class GetUser(GenericAPIView):
-    pass

@@ -4,6 +4,5 @@ from drf_yasg import openapi
 from .views import *
 
 urlpatterns = [
-    path('follow/<int:pk1>/<int:pk2>/', UserFollowing.as_view(), name="follow_user"),
-    path('follow/all/<int:pk>/', UserFollowing.as_view(), name="get_all_follower"),
+    path('follow/<int:pk>/', UserFollowing.as_view(), name="follow_user"),
 ]
