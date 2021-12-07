@@ -25,7 +25,7 @@ class PostUpper extends React.Component{
       contentSmall : (props.story.length > 200) ? props.story.slice(0,200): props.story,
       continueReading: props.story.length > 200,
     };
-    console.log(this.state.tags);
+    console.log(this.state.locations);
     this.getMoreContent = this.getMoreContent.bind(this);
   }
 
@@ -56,8 +56,7 @@ class PostUpper extends React.Component{
       </div>
       <div class= "row fitText">
       
-        
-        {this.state.locations.map((obj,i) => {
+        {this.state.locations.filter(obj => typeof obj[0] === 'string' && obj[0] != '').map((obj,i) => {
           return(
           <a key = {i} class = "tag">
               <Icon path={mdiMapMarker}

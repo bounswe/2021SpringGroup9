@@ -63,7 +63,7 @@ class CreatePost extends React.Component{
 
             //problem code
             if(whichComponent == 'locationChooser')
-                newObj.postData[whichComponent] = childObj.map((obj) => [obj]);
+                newObj.postData[whichComponent] = childObj;
             //problem code
             newObj['addedInformation'] = true;
             newObj['whichInfo'] = infoDict[whichComponent];

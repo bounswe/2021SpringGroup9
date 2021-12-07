@@ -69,7 +69,9 @@ class LocationChooser extends React.Component{
     sendParent() {
         {/* Called when user clicks on plus button plcaed below the selected locations.
             It sends all of the entered locations to the parent component (Create Post)*/}
-        this.props.parentHandler('locationChooser', this.state.selectedLocations)
+        this.props.parentHandler('locationChooser', this.state.selectedLocations.map((obj) => {
+            return [obj['name'], obj['lat'], obj['lng']];
+        }))
     }
 
 
