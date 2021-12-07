@@ -1,0 +1,24 @@
+#signup {
+    min-width: 500px;
+    min-height: 500px;
+    background-color: rgb(235, 235, 235);
+    padding: 10px;
+}
+
+#signup-email-text, #signup-username-text, #signup-password1-text, #signup-password2-text, #signup-code-text {
+    float: left;
+}
+
+#signup-email, #signup-username, #signup-password1, #signup-password2, #signup-code {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#signup-email-problem-text, #signup-username-problem-text, #signup-password1-problem-text, #signup-password2-problem-text {
+    font-size: 50%;
+}
+#signup-signin-link, #signup-goback-link {
+    font-size: 50%;
+    text-decoration: underline;
+    cursor: pointer;
+}
