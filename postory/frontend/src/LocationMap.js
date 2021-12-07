@@ -46,9 +46,9 @@ return(<div>
         
         defaultZoom={8}
         defaultCenter={{ lat: 41, lng: 28 }}
-   onClick = {addMarker}>
+   onClick = {addMarker} >
         {markers.map((obj,i) => {
-            return (<Marker options={{icon:`https://mt.google.com/vt/icon/text=${i}&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=1`}} onClick = {() => deleteMarker(i)}position = {obj} key = {i}/>);
+            return (<Marker draggable={true} onDragEnd = {(t, map, coord)  => setMarkers(markers => {markers[i] = {lat: t.latLng.lat(), lng : t.latLng.lng()}; return markers;})} options={{icon:`https://mt.google.com/vt/icon/text=${i}&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=1`}} onClick = {() => deleteMarker(i)}position = {obj} key = {i}/>);
         })}
     </GoogleMap>
     </div>);
