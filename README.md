@@ -30,6 +30,6 @@ We are a group of Boğaziçi University students taking the course Project Devel
 <s>[Kadir Kalkan](https://github.com/bounswe/2021SpringGroup9/wiki/Kadir-Kalkan)</s>
 
 ## Technologies
-* Backend : Django
+* Backend : Django, MongoDB
 * Frontend: React
 * Mobile: Java Android SDK
