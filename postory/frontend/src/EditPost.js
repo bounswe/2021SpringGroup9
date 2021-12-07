@@ -8,7 +8,7 @@ import TextChooser from './TextChooser'
 import TimeChooser from './TimeChooser';
 import TagChooser from './TagChooser';
 import PeopleChooser from './PeopleChooser'
-import LocationChooser from './LocationChooser'
+import LocationChooser from './LocationMap'
 import Post from './Post';
 import {TextField, Snackbar} from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
@@ -90,7 +90,7 @@ class EditPost extends React.Component{
 
             //problem code
             if(whichComponent == 'locationChooser')
-                newObj.postData[whichComponent] = childObj.map((obj) => [obj]);
+                newObj.postData[whichComponent] = childObj;
             //problem code
             newObj['addedInformation'] = true;
             newObj['whichInfo'] = infoDict[whichComponent];

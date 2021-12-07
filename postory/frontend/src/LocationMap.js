@@ -48,7 +48,7 @@ return(<div>
         defaultCenter={{ lat: 41, lng: 28 }}
    onClick = {addMarker} >
         {markers.map((obj,i) => {
-            return (<Marker draggable={true} onDragEnd = {(t, map, coord)  => setMarkers(markers => {markers[i] = {lat: t.latLng.lat(), lng : t.latLng.lng()}; return markers;})} options={{icon:`https://mt.google.com/vt/icon/text=${i}&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=1`}} onClick = {() => deleteMarker(i)}position = {obj} key = {i}/>);
+            return (<Marker draggable={true} onDragEnd = {(t, map, coord)  => setMarkers(markers => {markers[i] = {lat: t.latLng.lat(), lng : t.latLng.lng()}; return markers;})} options={{icon:`https://mt.google.com/vt/icon/text=${i+1}&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=1`}} onClick = {() => deleteMarker(i)}position = {obj} key = {i}/>);
         })}
     </GoogleMap>
     </div>);
@@ -110,8 +110,8 @@ class LocationChooser extends React.Component{
                 <div style = {{height: "200px"}}class = "overflow">
                 <ul>
                     {this.state.selectedLocations.map((item, index) => (
-                        <li key={index}>{index} 
-                            <input type='text' onChange = {e => this.setState(
+                        <li key={index}>{index + 1} 
+                            <input value = {this.state.selectedLocations[index]['name']} type='text' onChange = {e => this.setState(
                                 state => {
                                     let newState = state;
                                     newState.selectedLocations[index]['name'] = e.target.value;
