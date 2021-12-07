@@ -1,6 +1,6 @@
 from django.db import models
 
-from post_endpoint.models import Post, Comment
+from post_endpoint.models import Post, Comment, Image
 from django.contrib.auth.models import AbstractBaseUser,PermissionManager,BaseUserManager, PermissionsMixin
 
 class UserAccountManager(BaseUserManager):
@@ -28,6 +28,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     isAdmin = models.BooleanField(default=False)   
     isPrivate = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
+    images = models.ManyToManyField(Image, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', "surname", "username"]

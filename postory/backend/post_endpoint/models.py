@@ -11,6 +11,10 @@ class Location(models.Model):
     coordsLatitude = models.FloatField()
     coordsLongitude = models.FloatField()
 
+class Comment(models.Model):
+    userid = models.IntegerField()
+    comment = models.TextField()
+
 class Tag(models.Model):
     content = models.CharField(max_length=50)
 
@@ -22,14 +26,8 @@ class Post(models.Model):
     tags = models.ManyToManyField(Tag, blank=True)
     images = models.ManyToManyField(Image, blank=True)
     postDate = models.DateTimeField(auto_now_add=True)
-    # comments = models.ListField
+    comments = models.ManyToManyField(Comment, blank=True)
     editDate = models.DateTimeField(auto_now_add=True)
     storyDate = models.DateTimeField()
     viewCount = models.IntegerField(default=0)
-    # likeList = models.ListField
-
-class Comment(models.Model):
-    pass
-
-class Like(models.Model):
-    pass
+    likeList =  models.TextField(default="") 
