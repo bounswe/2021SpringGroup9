@@ -76,5 +76,6 @@ class UserGet(GenericAPIView):
 
         if(user.isAdmin):
             serializer = dict(UserSerializer(user).data)
-
-        return Response(serializer)
+            return Response(serializer)
+        else:
+            return Response(status.HTTP_400_BAD_REQUEST)
