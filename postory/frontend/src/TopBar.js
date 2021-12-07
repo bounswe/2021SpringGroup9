@@ -86,11 +86,11 @@ class TopBar extends React.Component {
                 <img src={menuIcon} alt={'Menu'} style={imageStyle} onClick={this.showPopup} />
             </div>
             {/*</a>*/}
-            {/*<a href={'/discover'} style={itemStyleRight}>*/}
+            <a href={'/discover'} style={itemStyleRight}>
             <div style={itemStyleRight}>
                 <img src={globeIcon} alt={'Discover'} style={imageStyle} onClick={this.showPopup} />
             </div>
-            {/*</a>*/}
+            </a>
             <Link to="/" ariant = "v6">
                 <a href={'/'} style={itemStyleRight}>
                     <img src={homeIcon} alt={'Postory'} style={imageStyle}/>

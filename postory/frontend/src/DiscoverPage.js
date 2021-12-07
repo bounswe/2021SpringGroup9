@@ -62,16 +62,12 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
         }  
     }
 
-    return( <div class="row">
-            <div>
-            <div>
-            {displayPost && <Post {...selectedPost}></Post>}
-            </div>
-            <GoogleMap
+    return( <GoogleMap
                 defaultZoom={6}
                 defaultCenter={{ lat: 41.048, lng: 29.0510 }}
                 >
                 {displayInfoBox && 
+                <Link class = "push" to= {`/viewPost?id=${selectedPost.id}`}>
                 <InfoBox
                 defaultPosition={{lat:currentLocation.lat, lng:currentLocation.lng}}
                 options={{ closeBoxURL: ``, enableEventPropagation: true }}
@@ -84,13 +80,12 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
                         by: {selectedPost.owner}
                     </div>
                 </div>
-                </InfoBox>} 
+                </InfoBox>
+                </Link>} 
                 {markers.map((obj,i) => {
                     return (<Marker onClick = {() => onClickMarker(i, obj)} position = {{lat:obj.lat, lng:obj.lng}} key = {i}/>);
                 })}
             </GoogleMap>
-            </div>
-            </div>
             );
   }
 ))
@@ -101,14 +96,20 @@ class DiscoverPage extends React.Component{
     }
 
     render(){
-        return(         
-                <MyMapComponent 
+        return(   
+        <div className="App">
+        <header className="App-header">
+          <MyMapComponent 
                     isMarkerShown
                     googleMapURL="https://maps.googleapis.com/maps/api/js?AIzaSyCObbHDNSykqMsThft-aQljY99z9RErUsI&v=3.exp&libraries=geometry,drawing,places"
                     loadingElement={<div style={{ height: `100%` }} />}
-                    containerElement={<div style={{ height: window.innerHeight, width: window.innerWidth }} />} //`600px`
+                    containerElement={<div style={{ height: window.innerHeight * 5/6, width: window.innerWidth }} />} //`600px`
                     mapElement={<div style={{ height: `100%` }} />}
                 />
+        </header>
+        
+      </div>      
+                
         )
     }
 }
