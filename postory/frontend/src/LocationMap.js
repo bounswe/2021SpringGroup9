@@ -1,14 +1,15 @@
 import React from 'react'
 import './LocationChooser.css'
-import Icon from '@mdi/react'
-import { mdiPlus } from '@mdi/js';
-import { mdiArrowDown } from '@mdi/js';
+import {TextField, Snackbar} from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 
 
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps";
 
 const MapComponent = withScriptjs(withGoogleMap((props) =>{
     const [markers, setMarkers] = React.useState([]);
+    const [tooManyMarkers, setTooManyMarkers] = React.useState(false);
+    const markersLimit = 7;
 
     const deleteMarker = (index) =>{
         setMarkers(state =>{
@@ -24,15 +25,24 @@ const MapComponent = withScriptjs(withGoogleMap((props) =>{
     }
 
     const addMarker = (e) =>{
-        setMarkers(state => {
-            const newState =  [...state, {lat: e.latLng.lat(), lng : e.latLng.lng()}]; 
-            props.setParentLocation(newState);
-            return newState;
-        });
+        if(markers.length  < markersLimit)
+            setMarkers(state => {
+                const newState =  [...state, {lat: e.latLng.lat(), lng : e.latLng.lng()}]; 
+                props.setParentLocation(newState);
+                return newState;
+            });
+        else {
+            setTooManyMarkers(true);
+        }
 
         
     }
-return(<GoogleMap
+return(<div>
+    <Snackbar open={tooManyMarkers} autoHideDuration={1000} onClose={() => setTooManyMarkers(false)} >
+    <Alert onClose={() => setTooManyMarkers(false)} severity="error" sx={{ width: '100%' }}>
+        You can add at most {markersLimit} Locations.
+    </Alert>
+</Snackbar><GoogleMap
         
         defaultZoom={8}
         defaultCenter={{ lat: 41, lng: 28 }}
@@ -40,7 +50,8 @@ return(<GoogleMap
         {markers.map((obj,i) => {
             return (<Marker options={{icon:`https://mt.google.com/vt/icon/text=${i}&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=1`}} onClick = {() => deleteMarker(i)}position = {obj} key = {i}/>);
         })}
-    </GoogleMap>);
+    </GoogleMap>
+    </div>);
   }
 ))
 
