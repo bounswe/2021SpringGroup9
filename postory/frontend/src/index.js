@@ -8,6 +8,7 @@ import reportWebVitals from './reportWebVitals';
 import TopBar from './TopBar';
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
+import ViewPost from './ViewPost';
 
 import {
   BrowserRouter,
@@ -20,7 +21,6 @@ import Activation from "./Activation";
 
 ReactDOM.render(
   <BrowserRouter>
-    
     <Routes>
     <Route path="/" element={<div><TopBar/> <App /></div>} />
     <Route path="/createPost" element={<div><TopBar/> <CreatePost /></div>} />
@@ -30,6 +30,7 @@ ReactDOM.render(
     <Route path="/forgotPassword" element={<div><TopBar /><ForgotPassword /></div>} />
     <Route path="/password/reset/confirm/:uid/:token" element={<div><TopBar /><ForgotPasswordConfirm /></div>} />
     <Route path="/activate/:uid/:token" element={<div><TopBar /><Activation /></div>} />
+    <Route path="/viewPost" element={<div><TopBar/> <ViewPost /></div>} />
     </Routes>
   </BrowserRouter>,
   document.getElementById('root')
