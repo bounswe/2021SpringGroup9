@@ -68,8 +68,13 @@ class UserGet(GenericAPIView):
             raise Http404
     
     def get(self, request, pk, format=None):
-        user = self.get_object(pk=pk)
+        authorization = request.headers['Authorization']
+        token = authorization.split()[1]
+        decoded = jwt.decode(token,options={"verify_signature": False})
+        user_id = decoded['user_id']
+        user = User.objects.filter(id = user_id).first()
 
-        serializer = dict(UserSerializer(user).data)
+        if(user.isAdmin):
+            serializer = dict(UserSerializer(user).data)
 
         return Response(serializer)
