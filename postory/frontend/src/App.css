@@ -7,6 +7,31 @@
   background-color: rgb(235, 235, 235);
 }
 
+.placeholder {
+  box-sizing: content-box;
+  height: 45px;
+}
+
+.CommentContainer{
+  border:1px solid black;
+  border-radius: 25px;
+  width : 450px;
+  height: 400px;
+  margin: 10px;
+  padding: 10px;
+  background-color: rgb(235, 235, 235);
+  overflow-y: scroll;
+}
+
+.Comment{
+  border:1px solid black;
+  border-radius: 25px;
+  width : 400px;
+  margin: 10px;
+  padding: 10px;
+  background-color: rgb(235, 235, 235);
+}
+
 .hide{
   display: none !important;
   color: rgb(255, 0, 0) !important;

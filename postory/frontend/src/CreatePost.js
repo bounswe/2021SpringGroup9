@@ -14,6 +14,8 @@ import Post from './Post';
 import {TextField, Snackbar} from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 
+const backendIP = '3.125.114.231:8000';
+
 class CreatePost extends React.Component{
     constructor(props){
         super(props);
@@ -172,7 +174,7 @@ class CreatePost extends React.Component{
 
 
         
-        fetch('http://35.158.95.81:8000/api/post/create', {
+        fetch(`http://${backendIP}/api/post/create`, {
             method: 'POST',
             body: formData
         }).then(res => {

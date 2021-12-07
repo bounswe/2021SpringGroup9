@@ -6,6 +6,7 @@ import CreatePost from './CreatePost';
 import EditPost from './EditPost';
 import reportWebVitals from './reportWebVitals';
 import TopBar from './TopBar';
+import ViewPost from './ViewPost';
 
 import {
   BrowserRouter,
@@ -20,6 +21,7 @@ ReactDOM.render(
     <Route path="/" element={<div><TopBar/> <App /></div>} />
     <Route path="/createPost" element={<div><TopBar/> <CreatePost /></div>} />
     <Route path="/editPost" element={<div><TopBar/> <EditPost /></div>} />
+    <Route path="/viewPost" element={<div><TopBar/> <ViewPost /></div>} />
     </Routes>
   </BrowserRouter>,
   document.getElementById('root')
