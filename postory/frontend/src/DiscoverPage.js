@@ -1,7 +1,9 @@
 import React, { useEffect } from "react";
 import { withScriptjs, withGoogleMap, GoogleMap, Marker} from "react-google-maps";
 import InfoBox from "react-google-maps/lib/components/addons/InfoBox";
-import Post from "./Post";
+import Icon from '@mdi/react'
+import { mdiGestureTap } from '@mdi/js';
+import { Link } from "react-router-dom";
 
 
 const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
@@ -67,21 +69,31 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
                 defaultCenter={{ lat: 41.048, lng: 29.0510 }}
                 >
                 {displayInfoBox && 
-                <Link class = "push" to= {`/viewPost?id=${selectedPost.id}`}>
                 <InfoBox
                 defaultPosition={{lat:currentLocation.lat, lng:currentLocation.lng}}
                 options={{ closeBoxURL: ``, enableEventPropagation: true }}
                 >
-                <div style={{ backgroundColor: `white`, opacity: 1, padding: `12px` }} onClick = {() => onClickInfoBox()} >
-                    <div style={{ fontSize: `14px`, fontColor: `#08233B` }}>
-                        {selectedPost.title}
+                    <div style={{ backgroundColor: `white`, opacity: 1, padding: `12px` }} onClick = {() => onClickInfoBox()} >
+                        <div style={{ fontSize: `16px`, fontColor: `#08233B`, fontWeight: `bold` }}>
+                            {selectedPost.title}
+                        </div>
+                        <div style={{ fontSize: `12px`, fontColor: `#08233B`, fontStyle: `italic` }}>
+                            by: {selectedPost.owner}
+                        </div>
+                        <div class= "row">
+                            <Link class = "push" to= {`/viewPost?id=${selectedPost.id}`}>
+                                <Icon 
+                                    path={mdiGestureTap} 
+                                    size={1}
+                                />
+                                <div style={{ fontSize: `10px`, fontColor: `#C40303` }}>
+                                    click here to see the full post
+                                </div>
+                            </Link>
+                        </div>
                     </div>
-                    <div style={{ fontSize: `10px`, fontColor: `#08233B` }}>
-                        by: {selectedPost.owner}
-                    </div>
-                </div>
                 </InfoBox>
-                </Link>} 
+                } 
                 {markers.map((obj,i) => {
                     return (<Marker onClick = {() => onClickMarker(i, obj)} position = {{lat:obj.lat, lng:obj.lng}} key = {i}/>);
                 })}
@@ -107,9 +119,7 @@ class DiscoverPage extends React.Component{
                     mapElement={<div style={{ height: `100%` }} />}
                 />
         </header>
-        
       </div>      
-                
         )
     }
 }
