@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps";
+import { withScriptjs, withGoogleMap, GoogleMap, Marker} from "react-google-maps";
+import InfoBox from "react-google-maps/lib/components/addons/InfoBox";
 import Post from "./Post";
 
 
@@ -7,7 +8,9 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
     const [markers, setMarkers] = React.useState([]);
     const [posts, setPosts] = React.useState([]);
     const [selectedPost, setSelectedPost] = React.useState(null);
+    const [currentLocation, setCurrentLocation] = React.useState({ lat: 41.048, lng: 29.0510 });
     const [displayPost, setDisplayPost] = React.useState(false);
+    const [displayInfoBox, setDisplayInfoBox] = React.useState(false);
 
 
     useEffect(() => {
@@ -32,13 +35,14 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
 
     useEffect(() => {
         if (selectedPost != null){
-            setDisplayPost(false);
-            setTimeout(() => {setDisplayPost(true)}, 500);
+            setDisplayInfoBox(false);
+            setTimeout(() => {setDisplayInfoBox(true)}, 500);
         }
         console.log("Selected post has been changed");
     }, [selectedPost])
 
-    const onClickMarker = (index) =>{
+    const onClickMarker = (index, obj) =>{
+        setCurrentLocation({lat:obj.lat, lng:obj.lng});
         setSelectedPost(() =>{
             let newPost = null;
             for(let i =0 ; i< posts.length; i++){
@@ -51,6 +55,13 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
         });       
     }
 
+    const onClickInfoBox = () =>{
+        if (selectedPost != null){
+            setDisplayPost(false);
+            setTimeout(() => {setDisplayPost(true)}, 500);
+        }  
+    }
+
     return( <div class="row">
             <div>
             <div>
@@ -60,8 +71,22 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
                 defaultZoom={6}
                 defaultCenter={{ lat: 41.048, lng: 29.0510 }}
                 >
+                {displayInfoBox && 
+                <InfoBox
+                defaultPosition={{lat:currentLocation.lat, lng:currentLocation.lng}}
+                options={{ closeBoxURL: ``, enableEventPropagation: true }}
+                >
+                <div style={{ backgroundColor: `white`, opacity: 1, padding: `12px` }} onClick = {() => onClickInfoBox()} >
+                    <div style={{ fontSize: `14px`, fontColor: `#08233B` }}>
+                        {selectedPost.title}
+                    </div>
+                    <div style={{ fontSize: `10px`, fontColor: `#08233B` }}>
+                        by: {selectedPost.owner}
+                    </div>
+                </div>
+                </InfoBox>} 
                 {markers.map((obj,i) => {
-                    return (<Marker onClick = {() => onClickMarker(i)} position = {{lat:obj.lat, lng:obj.lng}} key = {i}/>);
+                    return (<Marker onClick = {() => onClickMarker(i, obj)} position = {{lat:obj.lat, lng:obj.lng}} key = {i}/>);
                 })}
             </GoogleMap>
             </div>
