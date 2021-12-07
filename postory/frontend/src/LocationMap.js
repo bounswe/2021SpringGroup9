@@ -35,7 +35,7 @@ const MapComponent = withScriptjs(withGoogleMap((props) =>{
 return(<GoogleMap
         
         defaultZoom={8}
-        defaultCenter={{ lat: -34.397, lng: 150.644 }}
+        defaultCenter={{ lat: 41, lng: 28 }}
    onClick = {addMarker}>
         {markers.map((obj,i) => {
             return (<Marker options={{icon:`https://mt.google.com/vt/icon/text=${i}&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=1`}} onClick = {() => deleteMarker(i)}position = {obj} key = {i}/>);
