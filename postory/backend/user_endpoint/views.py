@@ -52,12 +52,15 @@ class UserFollowing(GenericAPIView):
         if user1.id==user2.id: # if the user wants to follow itself
             return Response(status.HTTP_400_BAD_REQUEST)
         
-        user1.followedUsers.add(user2.id)
-        user2.followerUsers.add(user1.id)
+        try:
+            user1.followedUsers.add(user2.id)
+            user2.followerUsers.add(user1.id)
 
-        user1.save()
-        user2.save()
-        return Response(status.HTTP_200_OK)
+            user1.save()
+            user2.save()
+            return Response(status.HTTP_200_OK)
+        except:
+            return Response(status.HTTP_400_BAD_REQUEST)
 
 class UserGet(GenericAPIView):
 
