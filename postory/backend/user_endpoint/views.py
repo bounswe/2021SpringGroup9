@@ -78,4 +78,4 @@ class UserGet(GenericAPIView):
             serializer = dict(UserSerializer(user).data)
             return Response(serializer)
         else:
-            return Response(status.HTTP_400_BAD_REQUEST)
+            return Response(status.HTTP_401_UNAUTHORIZED)
