@@ -14,12 +14,14 @@ import urllib.parse as urlparse
 from urllib.parse import urlencode
 
 from .models import Post, Location, Tag, Image
+from user_endpoint.models import User
 from .serializers import PostSerializer
 
 import requests
 import json
 import datetime
 import environ
+import jwt
 
 class GetAllPosts(GenericAPIView):
     """
@@ -139,26 +141,37 @@ class PostListDetail(GenericAPIView):
             raise Http404
 
     def get(self, request, pk, format=None):
+        authorization = request.headers['Authorization']
+        token = authorization.split()[1]
+        decoded = jwt.decode(token,options={"verify_signature": False})
+        user_id = decoded['user_id']
+
+        user1 = User.objects.filter(id=user_id).first()
         story = self.get_object(pk)
-        tags = []
-        for tag in story.tags.all():
-            tags.append(tag.content)
-        locations = []
-        for location in story.locations.all():
-            temp = []
-            temp.append(location.name)
-            temp.append(location.coordsLatitude)
-            temp.append(location.coordsLongitude)
-            locations.append(temp)
-        images = []
-        for image in story.images.all():
-            images.append(image.file.url)
-        serializer = dict(PostSerializer(story).data)
-        serializer['tags'] = tags
-        serializer['locations'] = locations
-        serializer['images'] = images
-        return Response(serializer)
-    
+        user2 = User.objects.filter(username=story.owner).first()
+        
+        if user1.isAdmin or (user1 in user2.followerUsers):
+            tags = []
+            for tag in story.tags.all():
+                tags.append(tag.content)
+            locations = []
+            for location in story.locations.all():
+                temp = []
+                temp.append(location.name)
+                temp.append(location.coordsLatitude)
+                temp.append(location.coordsLongitude)
+                locations.append(temp)
+            images = []
+            for image in story.images.all():
+                images.append(image.file.url)
+            serializer = dict(PostSerializer(story).data)
+            serializer['tags'] = tags
+            serializer['locations'] = locations
+            serializer['images'] = images
+            return Response(serializer)
+        else:
+            return Response(status.HTTP_401_UNAUTHORIZED)
+        
 class PostUpdate(GenericAPIView):
     """
     Retrieve, update or delete a story instance.
