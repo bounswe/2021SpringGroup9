@@ -151,6 +151,7 @@ class PostListDetail(GenericAPIView):
         username2 = story.owner
         user2 = User.objects.filter(username=username2).first()
         
+        # only if the user is admin or is a follower of the post owner or it is the post owner
         if user1.isAdmin or (user1 in user2.follower.all()) or (user1.id == user2.id):
             tags = []
             for tag in story.tags.all():
@@ -195,6 +196,7 @@ class PostUpdate(GenericAPIView):
         username2 = story.owner
         user2 = User.objects.filter(username=username2).first()
 
+        # update only if the user owns the post
         if (user1.id==user2.id):
             data = dict(request.data)
             data['title'] = data['title'][0]
