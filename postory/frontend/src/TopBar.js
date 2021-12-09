@@ -88,7 +88,7 @@ class TopBar extends React.Component {
             {/*</a>*/}
             <Link class = "push" to= {`/discover`}>
             <div style={itemStyleRight}>
-                <img src={globeIcon} alt={'Discover'} style={imageStyle} onClick={this.showPopup} />
+                <img src={globeIcon} alt={'Discover'} style={imageStyle}  />
             </div>
             </Link>
             <Link to="/" ariant = "v6">
