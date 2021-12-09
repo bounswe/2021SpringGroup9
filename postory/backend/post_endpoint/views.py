@@ -340,7 +340,10 @@ def get_story(story):
     likeId = [int(id) for id in likeId]
     likeList = []
     for id in likeId:
-        likeList.append(User.objects.get(pk=id).username)
+        temp = []
+        temp.append(id)
+        temp.append(User.objects.get(pk=id).username)
+        likeList.append(temp)
     serializer = dict(PostSerializer(story).data)
     serializer['tags'] = tags
     serializer['locations'] = locations
