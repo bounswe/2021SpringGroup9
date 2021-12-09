@@ -6,6 +6,7 @@ import CreatePost from './CreatePost';
 import EditPost from './EditPost';
 import reportWebVitals from './reportWebVitals';
 import TopBar from './TopBar';
+import DiscoverPage from './DiscoverPage';
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import ViewPost from './ViewPost';
@@ -25,6 +26,7 @@ ReactDOM.render(
     <Route path="/" element={<div><TopBar/> <App /></div>} />
     <Route path="/createPost" element={<div><TopBar/> <CreatePost /></div>} />
     <Route path="/editPost" element={<div><TopBar/> <EditPost /></div>} />
+    <Route path="/discover" element={<div><TopBar/> <DiscoverPage /></div>} />
     <Route path="/signIn" element={<div><TopBar /><SignIn /></div>} />
     <Route path="/signUp" element={<div><TopBar /><SignUp /></div>} />
     <Route path="/forgotPassword" element={<div><TopBar /><ForgotPassword /></div>} />
