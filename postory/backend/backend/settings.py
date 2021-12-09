@@ -180,10 +180,6 @@ REST_FRAMEWORK = {
     ),
 }
 
-# AUTHENTICATION_BACKENDS = (
-#     'django.contrib.auth.backends.ModelBackend'
-# )
-
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('JWT',),
     'BLACKLIST_AFTER_ROTATION': False,
