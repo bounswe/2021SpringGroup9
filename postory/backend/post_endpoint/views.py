@@ -283,14 +283,14 @@ class PostDelete(GenericAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
 class GetUsersPosts(GenericAPIView):
-    def get(self, request, username, format=None):
+    def get(self, request, user_id, format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
         decoded = jwt.decode(token,options={"verify_signature": False})
-        user_id = decoded['user_id']
+        requester_user_id = decoded['user_id']
 
-        requester_user = User.objects.filter(id = user_id).first()
-        requested_user = User.objects.filter(username = username).first()
+        requester_user = User.objects.filter(id = requester_user_id).first()
+        requested_user = User.objects.filter(id = user_id).first()
 
         if(requested_user.id in requester_user.followedUsers.all() or not requested_user.isPrivate):
             posts = Post.objects.filter(owner = requested_user.id)
