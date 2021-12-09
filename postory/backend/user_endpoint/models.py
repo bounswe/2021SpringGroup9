@@ -1,6 +1,6 @@
 from django.db import models
 
-from post_endpoint.models import Post, Comment
+from post_endpoint.models import Post, Comment, Image
 from django.contrib.auth.models import AbstractBaseUser,PermissionManager,BaseUserManager, PermissionsMixin
 
 class UserAccountManager(BaseUserManager):
@@ -18,8 +18,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=200)
     surname = models.CharField(max_length=200)
     email = models.EmailField(max_length=200, unique=True)
-    followedUsers = models.ManyToManyField("self")
-    followerUsers = models.ManyToManyField("self")
+    followedUsers = models.ManyToManyField("self", related_name="followed", blank=True, symmetrical=False)
+    followerUsers = models.ManyToManyField("self", related_name="follower", blank=True, symmetrical=False)
     posts = models.ManyToManyField(Post, related_name="posts")
     savedPosts = models.ManyToManyField(Post, related_name="savedPosts")
     likedPosts = models.ManyToManyField(Post, related_name="likedPosts")
@@ -28,6 +28,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     isAdmin = models.BooleanField(default=False)   
     isPrivate = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
+    images = models.ManyToManyField(Image, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', "surname", "username"]

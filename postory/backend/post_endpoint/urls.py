@@ -12,4 +12,6 @@ urlpatterns = [
     path('all/admin', GetAllPosts.as_view(), name="get_all_posts_admin"),
     path('all/user/<int:user_id>', GetUsersPosts.as_view(), name="get_all_posts_of_user"),
     path('all/discover',GetPostsDiscover.as_view(), name="discover"),
+    path('comment/<int:pk>', CommentRequest.as_view(), name="comment_post"),
+    path('like/<int:pk>', LikeRequest.as_view(), name="like_post"),
 ]
