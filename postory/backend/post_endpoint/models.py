@@ -31,3 +31,8 @@ class Post(models.Model):
     storyDate = models.DateTimeField()
     viewCount = models.IntegerField(default=0)
     likeList =  models.TextField(default="") 
+    year = models.TextField(default="")
+    month = models.TextField(default="")
+    day = models.TextField(default="")
+    hour = models.TextField(default="")
+    minute = models.TextField(default="")
