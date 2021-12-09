@@ -13,9 +13,10 @@ from rest_framework.decorators import api_view
 import urllib.parse as urlparse
 from urllib.parse import urlencode
 
-from .models import Post, Location, Tag, Image
-from user_endpoint.models import User
+
+from .models import Post, Location, Tag, Image, Comment
 from .serializers import PostSerializer
+from user_endpoint.models import User
 
 import requests
 import json
@@ -284,6 +285,100 @@ class PostDelete(GenericAPIView):
         story.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
+class CommentRequest(GenericAPIView):
+
+    def get_object(self, pk):
+        try:
+            return Post.objects.get(pk=pk)
+        except Post.DoesNotExist:
+            raise Http404
+
+    def post(self, request, pk, format=None):
+        userid = request.auth['user_id']
+        data = dict(request.data)
+        
+        comment = data['comment']
+        if comment:
+            commentObject = Comment(userid=userid, comment=comment)
+            commentObject.save()
+        else:
+            return    
+
+        story = self.get_object(pk)
+        commentList = list(story.comments.all())
+        commentList.append(commentObject.id)
+        story.comments.set(commentList)
+        
+        try:
+            story.save()
+            return Response(get_story(story), status=200)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+class LikeRequest(GenericAPIView):
+
+    def get_object(self, pk):
+        try:
+            return Post.objects.get(pk=pk)
+        except Post.DoesNotExist:
+            raise Http404
+
+    def post(self, request, pk, format=None):
+        userid = request.auth['user_id']
+
+        story = self.get_object(pk)
+        likeList = story.likeList.split(',')
+        if likeList[0] == "":
+            likeList = []
+        if str(userid) in likeList:
+            likeList.remove(str(userid))
+        else:
+            likeList.append(str(userid))
+        story.likeList = ','.join(likeList)
+        
+        try:
+            story.save()
+            return Response(get_story(story), status=200)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+def get_story(story):
+    tags = []
+    for tag in story.tags.all():
+        tags.append(tag.content)
+    locations = []
+    for location in story.locations.all():
+        temp = []
+        temp.append(location.name)
+        temp.append(location.coordsLatitude)
+        temp.append(location.coordsLongitude)
+        locations.append(temp)
+    images = []
+    for image in story.images.all():
+        images.append(image.file.url)
+    comments = []
+    for comment in story.comments.all():
+        temp = []
+        temp.append(User.objects.get(pk=comment.userid).username)
+        temp.append(comment.comment)
+        comments.append(temp)
+    likeId = story.likeList.split(',')
+    if likeId[0] == "":
+        likeId = []
+    likeId = [int(id) for id in likeId]
+    likeList = []
+    for id in likeId:
+        temp = []
+        temp.append(id)
+        temp.append(User.objects.get(pk=id).username)
+        likeList.append(temp)
+    serializer = dict(PostSerializer(story).data)
+    serializer['tags'] = tags
+    serializer['locations'] = locations
+    serializer['images'] = images
+    serializer['comments'] = comments
+    serializer['likeList'] = likeList
+    return serializer
     
 
 def find_coordinates(location):

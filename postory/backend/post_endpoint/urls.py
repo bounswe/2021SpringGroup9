@@ -9,4 +9,6 @@ urlpatterns = [
     path('put/<int:pk>', PostUpdate.as_view(), name="update_post"),
     path('delete/<int:pk>', PostDelete.as_view(), name="delete_post"),
     path('all', GetAllPosts.as_view(), name="get_all_posts"),
+    path('comment/<int:pk>', CommentRequest.as_view(), name="comment_post"),
+    path('like/<int:pk>', LikeRequest.as_view(), name="like_post"),
 ]
