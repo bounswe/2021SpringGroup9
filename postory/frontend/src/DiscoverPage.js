@@ -3,7 +3,7 @@ import { withScriptjs, withGoogleMap, GoogleMap, Marker} from "react-google-maps
 import InfoBox from "react-google-maps/lib/components/addons/InfoBox";
 import Icon from '@mdi/react'
 import { mdiGestureTap } from '@mdi/js';
-import { Link } from "react-router-dom";
+import { Link, Navigate} from "react-router-dom";
 
 
 const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
@@ -80,16 +80,18 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
                         <div style={{ fontSize: `12px`, fontColor: `#08233B`, fontStyle: `italic` }}>
                             by: {selectedPost.owner}
                         </div>
-                        <div class= "row">
-                            <Link class = "push" to= {`/viewPost?id=${selectedPost.id}`}>
+                        
+                        <div class= "row" onClick = {() => props.redirect(selectedPost.id)}>
                                 <Icon 
+                                    
                                     path={mdiGestureTap} 
                                     size={1}
                                 />
                                 <div style={{ fontSize: `10px`, fontColor: `#C40303` }}>
-                                    click here to see the full post
+                                    Click here to be redirected to the post page.
+                                
                                 </div>
-                            </Link>
+                            
                         </div>
                     </div>
                 </InfoBox>
@@ -105,6 +107,7 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
 class DiscoverPage extends React.Component{
     constructor(props){
         super(props);
+        this.state = {selectedPost : null};
     }
 
     render(){
@@ -112,6 +115,7 @@ class DiscoverPage extends React.Component{
         <div className="App">
         <header className="App-header">
           <MyMapComponent 
+                    redirect = {(id) => this.setState({selectedPost : id})}
                     isMarkerShown
                     googleMapURL="https://maps.googleapis.com/maps/api/js?AIzaSyCObbHDNSykqMsThft-aQljY99z9RErUsI&v=3.exp&libraries=geometry,drawing,places"
                     loadingElement={<div style={{ height: `100%` }} />}
@@ -119,6 +123,7 @@ class DiscoverPage extends React.Component{
                     mapElement={<div style={{ height: `100%` }} />}
                 />
         </header>
+        {this.state.selectedPost && <Navigate class = "push" to= {`/viewPost?id=${this.state.selectedPost}`}> click here to see the full post</Navigate>}
       </div>      
         )
     }
