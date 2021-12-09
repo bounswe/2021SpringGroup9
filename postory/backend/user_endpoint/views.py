@@ -14,6 +14,12 @@ from .serializers import UserSerializer
 from post_endpoint.models import Post, Image
 from post_endpoint.serializers import PostSerializer
 
+from .models import User
+import jwt
+
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
 class AddPhoto(GenericAPIView):
     def get_object(self, pk):
         try:
@@ -55,25 +61,6 @@ def get_user(user):
     # Blog.objects.filter(pk__in=[1, 4, 7])
     pass
     
-from rest_framework.decorators import api_view
-
-import urllib.parse as urlparse
-from urllib.parse import urlencode
-
-from .models import User
-from .serializers import UserSerializer, UserCreateSerializer
-from rest_framework_simplejwt.tokens import RefreshToken, SlidingToken, UntypedToken
-from django.contrib.auth.models import User
-from django.core import serializers
-
-import requests
-import json
-import datetime
-import environ
-import jwt
-
-from django.contrib.auth import get_user_model
-User = get_user_model()
 
 class UserFollowing(GenericAPIView):
 
