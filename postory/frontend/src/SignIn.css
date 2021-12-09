@@ -1,0 +1,21 @@
+#signin {
+    min-width: 500px;
+    min-height: 500px;
+    background-color: rgb(235, 235, 235);
+    padding: 10px;
+}
+
+#signin-username-text, #signin-password-text, #signin-forgot-email-text {
+    float: left;
+}
+
+#signin-username, #signin-password, #signin-forgot-email {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#signin-forgot-link, #signin-signup-link {
+    font-size: 50%;
+    text-decoration: underline;
+    cursor: pointer;
+}
