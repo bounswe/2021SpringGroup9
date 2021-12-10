@@ -395,6 +395,7 @@ def get_story(story):
     comments = []
     for comment in story.comments.all():
         temp = []
+        temp.append(comment.userid)
         temp.append(User.objects.get(pk=comment.userid).username)
         temp.append(comment.comment)
         comments.append(temp)
