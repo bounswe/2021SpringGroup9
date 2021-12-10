@@ -38,10 +38,10 @@ public class LoginActivity extends AppCompatActivity {
     TextInputEditText mail;
     TextInputEditText password;
     Button signInButton;
-    TextView forgotPasswordText;
     Button signUpButton;
+    Button skipButton;
+    TextView forgotPasswordText;
     Handler handler;
-    DelayedProgressDialog dialog;
 
 
     @Override
@@ -51,10 +51,10 @@ public class LoginActivity extends AppCompatActivity {
         mail = (TextInputEditText) findViewById(R.id.mail);
         password = (TextInputEditText) findViewById(R.id.password);
         signInButton = (Button) findViewById(R.id.signInButton);
-        forgotPasswordText = (TextView) findViewById(R.id.forgotPassword);
+        skipButton = (Button) findViewById(R.id.skipButton);
         signUpButton = (Button) findViewById(R.id.signUpButton);
+        forgotPasswordText = (TextView) findViewById(R.id.forgotPassword);
         handler = new Handler();
-        dialog = new DelayedProgressDialog();
 
 
         signInButton.setOnClickListener(new View.OnClickListener() {
@@ -78,6 +78,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
+        skipButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                 startActivity(intent);
             }
         });
@@ -130,23 +137,28 @@ public class LoginActivity extends AppCompatActivity {
                     .url(url)
                     .post(requestBody)
                     .build();
+            Log.d("loginactivity", "requestcreate");
 
-            dialog.show(getSupportFragmentManager(), "Sign in request is sent.");
+
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    Log.d("LoginActivity", "Sign in request unsuccessful");
+                    Log.d("loginactivity", "Sign in request unsuccessful");
                 }
 
 
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                     ResponseBody signInResponse = response.body();
+                    Log.d("loginactivity", signInResponse.string());
                     //TODO: Read the response fields
 
+
                 }
+
             });
         } catch (Exception e) {
+
             e.printStackTrace();
         }
     }

@@ -23,10 +23,10 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/mailLayout"
-        android:layout_width="0dp"
+        android:layout_width="300dp"
         android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView">
 
@@ -39,10 +39,10 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/passwordLayout"
-        android:layout_width="0dp"
+        android:layout_width="300dp"
         android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="5dp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mailLayout"
         app:passwordToggleEnabled="true">
@@ -109,5 +109,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/signInLayout" />
+
+    <Button
+        android:id="@+id/skipButton"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/colorPrimary"
+        android:text="Skip login"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/signUpButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
