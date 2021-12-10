@@ -39,23 +39,7 @@ class GetAllPosts(GenericAPIView):
             posts = Post.objects.all()
             serializer = {}
             for story in posts:
-                tags = []
-                locations = []
-                images = []
-                serializer[story.id] = dict(PostSerializer(story).data)
-                for tag in story.tags.all():
-                    tags.append(tag.content)
-                for location in story.locations.all():
-                    values = []
-                    values.append(location.name)
-                    values.append(location.coordsLatitude)
-                    values.append(location.coordsLongitude)
-                    locations.append(values)
-                for image in story.images.all():
-                    images.append(image.file.url)
-                serializer[story.id]['tags'] = tags
-                serializer[story.id]['locations'] = locations
-                serializer[story.id]['images'] = images
+                serializer[story.id] = get_story(story)
             return Response(serializer.values(), status=200)
         else:
             return Response(status = 401)
@@ -314,23 +298,7 @@ class GetUsersPosts(GenericAPIView):
             posts = Post.objects.filter(owner = requested_user.id)
             serializer = {}
             for story in posts:
-                tags = []
-                locations = []
-                images = []
-                serializer[story.id] = dict(PostSerializer(story).data)
-                for tag in story.tags.all():
-                    tags.append(tag.content)
-                for location in story.locations.all():
-                    values = []
-                    values.append(location.name)
-                    values.append(location.coordsLatitude)
-                    values.append(location.coordsLongitude)
-                    locations.append(values)
-                for image in story.images.all():
-                    images.append(image.file.url)
-                serializer[story.id]['tags'] = tags
-                serializer[story.id]['locations'] = locations
-                serializer[story.id]['images'] = images
+                serializer[story.id] = get_story(story)
             return Response(serializer.values(), status=200)
         else:
             return Response(status = 401)
@@ -350,23 +318,7 @@ class GetFollowedUsersPosts(GenericAPIView):
             posts.append(followedUserPosts)
         serializer = {}
         for story in posts:
-            tags = []
-            locations = []
-            images = []
-            serializer[story.id] = dict(PostSerializer(story).data)
-            for tag in story.tags.all():
-                tags.append(tag.content)
-            for location in story.locations.all():
-                values = []
-                values.append(location.name)
-                values.append(location.coordsLatitude)
-                values.append(location.coordsLongitude)
-                locations.append(values)
-            for image in story.images.all():
-                images.append(image.file.url)
-            serializer[story.id]['tags'] = tags
-            serializer[story.id]['locations'] = locations
-            serializer[story.id]['images'] = images
+            serializer[story.id] = get_story(story)
         return Response(serializer.values(), status=200)
 
 
@@ -389,23 +341,7 @@ class GetPostsDiscover(GenericAPIView):
         
         serializer = {}
         for story in posts:
-            tags = []
-            locations = []
-            images = []
-            serializer[story.id] = dict(PostSerializer(story).data)
-            for tag in story.tags.all():
-                tags.append(tag.content)
-            for location in story.locations.all():
-                values = []
-                values.append(location.name)
-                values.append(location.coordsLatitude)
-                values.append(location.coordsLongitude)
-                locations.append(values)
-            for image in story.images.all():
-                images.append(image.file.url)
-            serializer[story.id]['tags'] = tags
-            serializer[story.id]['locations'] = locations
-            serializer[story.id]['images'] = images
+            serializer[story.id] = get_story(story)
         return Response(serializer.values(), status=200)
 
 class CommentRequest(GenericAPIView):
