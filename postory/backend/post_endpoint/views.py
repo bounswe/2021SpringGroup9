@@ -68,12 +68,24 @@ class PostCreate(GenericAPIView):
     serializer_class = PostSerializer
 
     def post(self, request, format=None):
-
+        import re
+        userid = request.auth['user_id']
         data = dict(request.data)
+        print(data)
         data['title'] = data['title'][0]
         data['story'] = data['story'][0]
-        data['owner'] = data['owner'][0]
-        data['storyDate'] = data['storyDate'][0]
+        data['owner'] = userid
+        if "year" in data:
+            data['year'] = data['year'][0] + ',' + data['year'][1]
+        if "month" in data:
+            data['month'] = data['month'][0] + ',' + data['month'][1]
+        if "day" in data:
+            data['day'] = data['day'][0] + ',' + data['day'][1]
+        if "hour" in data:
+            data['hour'] = data['hour'][0] + ',' + data['hour'][1]
+        if "minute" in data:
+            data['minute'] = data['minute'][0] + ',' + data['minute'][1]
+
         
         images = data['images']
         imagesList = []
@@ -88,14 +100,8 @@ class PostCreate(GenericAPIView):
         locationsList = []
         for location in locations:
             if location:
-                location = str(location).lower() 
-                search = Location.objects.filter(name=location).first()
-                if(search):
-                    locationsList.append(search)
-                    continue
-                name = location
-                coordsLatitude, coordsLongitude = find_coordinates(location)
-                locationObject = Location(name=name, coordsLatitude=coordsLatitude, coordsLongitude=coordsLongitude)
+                location = json.loads(location)
+                locationObject = Location(name=location["name"], coordsLatitude=location["latitude"], coordsLongitude=location["longitude"])
                 locationsList.append(locationObject)
                 locationObject.save()
         data['locations'] = [location.id for location in locationsList]
@@ -194,6 +200,7 @@ class PostUpdate(GenericAPIView):
             raise Http404
     
     def put(self, request, pk, format=None):
+        import re
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
         decoded = jwt.decode(token,options={"verify_signature": False})
@@ -210,7 +217,17 @@ class PostUpdate(GenericAPIView):
             data['title'] = data['title'][0]
             data['story'] = data['story'][0]
             data['owner'] = data['owner'][0]
-            data['storyDate'] = data['storyDate'][0]
+            data['owner'] = user_id
+            if "year" in data:
+                data['year'] = data['year'][0] + ',' + data['year'][1]
+            if "month" in data:
+                data['month'] = data['month'][0] + ',' + data['month'][1]
+            if "day" in data:
+                data['day'] = data['day'][0] + ',' + data['day'][1]
+            if "hour" in data:
+                data['hour'] = data['hour'][0] + ',' + data['hour'][1]
+            if "minute" in data:
+                data['minute'] = data['minute'][0] + ',' + data['minute'][1]
             
             images = data['images']
             imagesList = []
@@ -225,14 +242,8 @@ class PostUpdate(GenericAPIView):
             locationsList = []
             for location in locations:
                 if location:
-                    location = str(location).lower() 
-                    search = Location.objects.filter(name=location).first()
-                    if(search):
-                        locationsList.append(search)
-                        continue
-                    name = location
-                    coordsLatitude, coordsLongitude = find_coordinates(location)
-                    locationObject = Location(name=name, coordsLatitude=coordsLatitude, coordsLongitude=coordsLongitude)
+                    location = json.loads(location)
+                    locationObject = Location(name=location["name"], coordsLatitude=location["latitude"], coordsLongitude=location["longitude"])
                     locationsList.append(locationObject)
                     locationObject.save()
             data['locations'] = [location.id for location in locationsList]
@@ -495,32 +506,20 @@ def get_story(story):
         temp.append(id)
         temp.append(User.objects.get(pk=id).username)
         likeList.append(temp)
+    year = story.year.split(',')
+    month = story.month.split(',')
+    day = story.day.split(',')
+    hour = story.hour.split(',')
+    minute = story.minute.split(',')
     serializer = dict(PostSerializer(story).data)
     serializer['tags'] = tags
     serializer['locations'] = locations
     serializer['images'] = images
     serializer['comments'] = comments
     serializer['likeList'] = likeList
+    serializer['year'] = year
+    serializer['month'] = month
+    serializer['day'] = day
+    serializer['hour'] = hour
+    serializer['minute'] = minute
     return serializer
-    
-
-def find_coordinates(location):
-    location = location.split(' ')
-    location = "+".join(location)
-    url = "https://maps.googleapis.com/maps/api/geocode/json"
-    params = {"address":location, "key":env('GOOGLE_MAPS_API_KEY')}
-    new_url = create_url(url,params)
-    response = requests.get(new_url)
-    json_data = json.loads(response.content)
-    location = json_data['results'][0]['geometry']['location']
-    return location['lat'], location['lng']
-
-def create_url(url, params):
-    url_parse = urlparse.urlparse(url)
-    query = url_parse.query
-    url_dict = dict(urlparse.parse_qsl(query))
-    url_dict.update(params)
-    url_new_query = urlparse.urlencode(url_dict)
-    url_parse = url_parse._replace(query=url_new_query)
-    new_url = urlparse.urlunparse(url_parse)
-    return new_url
