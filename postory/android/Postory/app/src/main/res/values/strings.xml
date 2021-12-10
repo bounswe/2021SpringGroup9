@@ -30,5 +30,7 @@
     <string name="start">Start:</string>
     <string name="end">End:</string>
     <string name="year">Year</string>
+    <string name="pick">Pick</string>
+    <string name="confirm">Confirm</string>
 
 </resources>

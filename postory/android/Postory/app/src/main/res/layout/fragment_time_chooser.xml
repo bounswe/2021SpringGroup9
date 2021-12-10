@@ -7,7 +7,7 @@
     tools:context=".fragments.TimeChooserFragment">
 
     <LinearLayout
-        android:id="@+id/yearLayout"
+        android:id="@+id/yearOuterLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal"
@@ -19,59 +19,66 @@
         <TextView
             android:layout_width="50dp"
             android:layout_height="match_parent"
+            android:layout_marginStart="50dp"
             android:gravity="center_vertical"
-            android:layout_marginStart="60dp"
             android:text="@string/year"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <View
             android:layout_width="5dp"
             android:layout_height="match_parent"
             android:background="@color/colorAccent" />
 
-        <TextView
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginStart="20dp"
-            android:text="@string/start" />
+        <LinearLayout
+            android:id="@+id/yearInnerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/startYear"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginStart="5dp"
-            android:inputType="number"
-            android:autofillHints="false"
-            tools:ignore="LabelFor" />
+            <TextView
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:gravity="center_vertical"
+                android:text="@string/start" />
 
-        <TextView
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginStart="25dp"
-            android:text="@string/end" />
+            <EditText
+                android:id="@+id/startYear"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:autofillHints="false"
+                android:gravity="center_vertical"
+                android:inputType="number"
+                tools:ignore="LabelFor" />
 
-        <EditText
-            android:id="@+id/endYear"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginStart="5dp"
-            android:inputType="number"
-            android:autofillHints="false"
-            tools:ignore="LabelFor" />
+            <TextView
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="25dp"
+                android:gravity="center_vertical"
+                android:text="@string/end" />
 
+            <EditText
+                android:id="@+id/endYear"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:autofillHints="false"
+                android:gravity="center_vertical"
+                android:inputType="number"
+                tools:ignore="LabelFor" />
+        </LinearLayout>
     </LinearLayout>
+
     <LinearLayout
-        android:id="@+id/monthSwitchLayout"
+        android:id="@+id/monthOuterLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/yearLayout">
+        app:layout_constraintTop_toBottomOf="@id/yearOuterLayout">
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/monthSwitch"
@@ -81,60 +88,67 @@
         <TextView
             android:layout_width="50dp"
             android:layout_height="match_parent"
+            android:layout_marginStart="0dp"
             android:gravity="center_vertical"
-            android:layout_marginStart="10dp"
             android:text="@string/month"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <View
             android:layout_width="5dp"
             android:layout_height="match_parent"
             android:background="@color/colorAccent" />
 
-        <TextView
-            android:layout_width="40dp"
+        <LinearLayout
+            android:id="@+id/monthInnerLayout"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginStart="20dp"
-            android:text="@string/start" />
+            android:visibility="invisible">
 
-        <EditText
-            android:id="@+id/startMonth"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginStart="5dp"
-            android:inputType="number"
-            android:autofillHints="false"
-            tools:ignore="LabelFor" />
+            <TextView
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:gravity="center_vertical"
+                android:text="@string/start" />
 
-        <TextView
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginStart="25dp"
-            android:text="@string/end" />
+            <EditText
+                android:id="@+id/startMonth"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:autofillHints="false"
+                android:gravity="center_vertical"
+                android:inputType="number"
+                tools:ignore="LabelFor" />
 
-        <EditText
-            android:id="@+id/endMonth"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginStart="5dp"
-            android:inputType="number"
-            android:autofillHints="false"
-            tools:ignore="LabelFor" />
+            <TextView
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="25dp"
+                android:gravity="center_vertical"
+                android:text="@string/end" />
 
+            <EditText
+                android:id="@+id/endMonth"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:autofillHints="false"
+                android:gravity="center_vertical"
+                android:inputType="number"
+                tools:ignore="LabelFor" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/daySwitchLayout"
+        android:id="@+id/dayOuterLayout"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:orientation="horizontal"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/monthSwitchLayout">
+        app:layout_constraintTop_toBottomOf="@id/monthOuterLayout">
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/daySwitch"
@@ -144,60 +158,69 @@
         <TextView
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="0dp"
             android:gravity="center_vertical"
             android:text="@string/day"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
+
         <View
             android:layout_width="5dp"
             android:layout_height="match_parent"
             android:background="@color/colorAccent" />
 
-        <TextView
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginStart="20dp"
-            android:text="@string/start" />
+        <LinearLayout
+            android:id="@+id/dayInnerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/startDay"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginStart="5dp"
-            android:inputType="number"
-            android:autofillHints="false"
-            tools:ignore="LabelFor" />
+            <TextView
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:gravity="center_vertical"
+                android:text="@string/start" />
 
-        <TextView
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginStart="25dp"
-            android:text="@string/end" />
+            <EditText
+                android:id="@+id/startDay"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:autofillHints="false"
+                android:gravity="center_vertical"
+                android:inputType="number"
+                tools:ignore="LabelFor" />
 
-        <EditText
-            android:id="@+id/endDay"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginStart="5dp"
-            android:inputType="number"
-            android:autofillHints="false"
-            tools:ignore="LabelFor" />
+            <TextView
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="25dp"
+                android:gravity="center_vertical"
+                android:text="@string/end" />
 
+            <EditText
+                android:id="@+id/endDay"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:autofillHints="false"
+                android:gravity="center_vertical"
+                android:inputType="number"
+                tools:ignore="LabelFor" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/timeSwitchLayout"
+        android:id="@+id/timeOuterLayout"
         android:layout_width="0dp"
         android:layout_height="90dp"
         android:orientation="horizontal"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/daySwitchLayout">
+        app:layout_constraintTop_toBottomOf="@id/dayOuterLayout">
+
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/timeSwitch"
@@ -207,45 +230,102 @@
         <TextView
             android:layout_width="50dp"
             android:layout_height="match_parent"
+            android:layout_marginStart="0dp"
             android:gravity="center_vertical"
-            android:layout_marginStart="10dp"
             android:text="@string/time"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
+
         <View
             android:layout_width="5dp"
             android:layout_height="match_parent"
             android:background="@color/colorAccent" />
 
-        <TextView
-            android:layout_width="40dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/timeInnerLayout"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginStart="20dp"
-            android:text="@string/start" />
-
-        <TimePicker
-            android:id="@+id/startTime"
-            android:layout_width="60dp"
-            android:layout_marginStart="5dp"
-            android:layout_height="match_parent"
-            android:timePickerMode="spinner"/>
-
-        <TextView
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginStart="25dp"
-            android:text="@string/end" />
-
-        <TimePicker
-            android:id="@+id/endTime"
-            android:layout_width="60dp"
-            android:layout_marginStart="5dp"
-            android:layout_height="match_parent"
-            android:timePickerMode="spinner"/>
+            android:visibility="invisible">
 
 
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="10dp"
+                android:gravity="center_vertical"
+                android:text="@string/start"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/startTimePicker"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorPrimary"
+                android:text="@string/pick"
+                android:textAllCaps="false"
+                app:layout_constraintStart_toEndOf="@+id/textView"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="25dp"
+                android:gravity="center_vertical"
+                android:text="@string/end"
+                app:layout_constraintStart_toEndOf="@+id/startTimePicker"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/endTimePicker"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorPrimary"
+                android:text="@string/pick"
+                android:textAllCaps="false"
+                app:layout_constraintStart_toEndOf="@+id/textView3"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/startTimeText"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="55dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="00:00"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/startTimePicker" />
+
+            <TextView
+                android:id="@+id/endTimeText"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="70dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="23:59"
+                app:layout_constraintStart_toEndOf="@+id/startTimeText"
+                app:layout_constraintTop_toBottomOf="@+id/endTimePicker" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
+    <Button
+        android:id="@+id/confirm_button"
+        android:layout_width="90dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/confirm"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/timeOuterLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
