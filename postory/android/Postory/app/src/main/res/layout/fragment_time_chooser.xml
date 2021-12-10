@@ -1,73 +1,251 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.TimeChooserFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:id="@+id/yearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginStart="60dp"
+            android:text="@string/year"
+            android:textStyle="bold"/>
+
+        <View
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorAccent" />
+
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginStart="20dp"
+            android:text="@string/start" />
+
+        <EditText
+            android:id="@+id/startYear"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginStart="5dp"
+            android:inputType="number"
+            android:autofillHints="false"
+            tools:ignore="LabelFor" />
+
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginStart="25dp"
+            android:text="@string/end" />
+
+        <EditText
+            android:id="@+id/endYear"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginStart="5dp"
+            android:inputType="number"
+            android:autofillHints="false"
+            tools:ignore="LabelFor" />
+
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/monthSwitchLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/yearLayout">
+
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/monthSwitch"
             android:layout_width="50dp"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
         <TextView
-            android:gravity="center"
-            android:text="@string/month"
             android:layout_width="50dp"
-            android:layout_height="match_parent">
-        </TextView>
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:text="@string/month"
+            android:textStyle="bold"/>
 
+        <View
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorAccent" />
+
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginStart="20dp"
+            android:text="@string/start" />
+
+        <EditText
+            android:id="@+id/startMonth"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginStart="5dp"
+            android:inputType="number"
+            android:autofillHints="false"
+            tools:ignore="LabelFor" />
+
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginStart="25dp"
+            android:text="@string/end" />
+
+        <EditText
+            android:id="@+id/endMonth"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginStart="5dp"
+            android:inputType="number"
+            android:autofillHints="false"
+            tools:ignore="LabelFor" />
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/daySwitchLayout"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="50dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/monthSwitchLayout">
+
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/daySwitch"
             android:layout_width="50dp"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
         <TextView
-            android:gravity="center"
-            android:text="@string/day"
             android:layout_width="50dp"
-            android:layout_height="match_parent">
-        </TextView>
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical"
+            android:text="@string/day"
+            android:textStyle="bold"/>
+        <View
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorAccent" />
+
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginStart="20dp"
+            android:text="@string/start" />
+
+        <EditText
+            android:id="@+id/startDay"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginStart="5dp"
+            android:inputType="number"
+            android:autofillHints="false"
+            tools:ignore="LabelFor" />
+
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginStart="25dp"
+            android:text="@string/end" />
+
+        <EditText
+            android:id="@+id/endDay"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginStart="5dp"
+            android:inputType="number"
+            android:autofillHints="false"
+            tools:ignore="LabelFor" />
 
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/timeSwitchLayout"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
+        android:layout_width="0dp"
+        android:layout_height="90dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/daySwitchLayout">
+
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/timeSwitch"
             android:layout_width="50dp"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
         <TextView
-            android:gravity="center"
-            android:text="@string/day"
             android:layout_width="50dp"
-            android:layout_height="match_parent">
-        </TextView>
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:text="@string/time"
+            android:textStyle="bold"/>
+        <View
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorAccent" />
+
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginStart="20dp"
+            android:text="@string/start" />
+
+        <TimePicker
+            android:id="@+id/startTime"
+            android:layout_width="60dp"
+            android:layout_marginStart="5dp"
+            android:layout_height="match_parent"
+            android:timePickerMode="spinner"/>
+
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginStart="25dp"
+            android:text="@string/end" />
+
+        <TimePicker
+            android:id="@+id/endTime"
+            android:layout_width="60dp"
+            android:layout_marginStart="5dp"
+            android:layout_height="match_parent"
+            android:timePickerMode="spinner"/>
 
 
     </LinearLayout>
 
 
-
-
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
