@@ -16,6 +16,8 @@ from urllib.parse import urlencode
 from .models import Post, Location, Tag, Image, Comment
 from .serializers import PostSerializer
 from user_endpoint.models import User
+from django.utils import timezone
+import pytz
 
 import requests
 import json
@@ -52,7 +54,6 @@ class PostCreate(GenericAPIView):
     serializer_class = PostSerializer
 
     def post(self, request, format=None):
-        import re
         userid = request.auth['user_id']
         data = dict(request.data)
         print(data)
@@ -107,24 +108,8 @@ class PostCreate(GenericAPIView):
         serializer = PostSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            tags = []
-            for tag in tagsList:
-                tags.append(tag.content)
-            locations = []
-            for location in locationsList:
-                temp = []
-                temp.append(location.name)
-                temp.append(location.coordsLatitude)
-                temp.append(location.coordsLongitude)
-                locations.append(temp)
-            images = []
-            for image in imagesList:
-                images.append(image.file.url)
-            serializer = dict(serializer.data)
-            serializer['tags'] = tags
-            serializer['locations'] = locations
-            serializer['images'] = images
-            return Response(serializer, status=200)
+            story = Post.objects.get(pk = serializer.data["id"])
+            return Response(get_story(story), status=200)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class PostListDetail(GenericAPIView):
@@ -184,7 +169,6 @@ class PostUpdate(GenericAPIView):
             raise Http404
     
     def put(self, request, pk, format=None):
-        import re
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
         decoded = jwt.decode(token,options={"verify_signature": False})
@@ -192,15 +176,13 @@ class PostUpdate(GenericAPIView):
 
         user1 = User.objects.filter(id=user_id).first()
         story = self.get_object(pk)
-        username2 = story.owner
-        user2 = User.objects.filter(username=username2).first()
+        user2 = story.owner
 
         # update only if the user owns the post
-        if (user1.id==user2.id):
+        if (user1.id==user2):
             data = dict(request.data)
             data['title'] = data['title'][0]
             data['story'] = data['story'][0]
-            data['owner'] = data['owner'][0]
             data['owner'] = user_id
             if "year" in data:
                 data['year'] = data['year'][0] + ',' + data['year'][1]
@@ -248,25 +230,9 @@ class PostUpdate(GenericAPIView):
 
             serializer = PostSerializer(story, data=data)
             if serializer.is_valid():
-                serializer.save(editDate=datetime.datetime.now())
-                tags = []
-                for tag in tagsList:
-                    tags.append(tag.content)
-                locations = []
-                for location in locationsList:
-                    temp = []
-                    temp.append(location.name)
-                    temp.append(location.coordsLatitude)
-                    temp.append(location.coordsLongitude)
-                    locations.append(temp)
-                images = []
-                for image in imagesList:
-                    images.append(image.file.url)
-                serializer = dict(serializer.data)
-                serializer['tags'] = tags
-                serializer['locations'] = locations
-                serializer['images'] = images
-                return Response(serializer, status=200)
+                serializer.save(editDate=timezone.now())
+                story = self.get_object(pk)
+                return Response(get_story(story), status=200)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -442,11 +408,30 @@ def get_story(story):
         temp.append(id)
         temp.append(User.objects.get(pk=id).username)
         likeList.append(temp)
-    year = story.year.split(',')
-    month = story.month.split(',')
-    day = story.day.split(',')
-    hour = story.hour.split(',')
-    minute = story.minute.split(',')
+    if story.year:
+        year = [int(time) for time in story.year.split(',')]
+    else:
+        year = []
+        
+    if story.month:
+        month = [int(time) for time in story.month.split(',')]
+    else:
+        month = []
+        
+    if story.day:
+        day = [int(time) for time in story.day.split(',')]
+    else:
+        day = []
+        
+    if story.hour:
+        hour = [int(time) for time in story.hour.split(',')]
+    else:
+        hour = []
+        
+    if story.minute:
+        minute = [int(time) for time in story.minute.split(',')]
+    else:
+        minute = []
     serializer = dict(PostSerializer(story).data)
     serializer['tags'] = tags
     serializer['locations'] = locations
