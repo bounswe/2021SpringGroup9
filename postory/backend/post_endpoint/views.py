@@ -170,7 +170,7 @@ class PostListDetail(GenericAPIView):
             serializer['images'] = images
             return Response(serializer)
         else:
-            return Response(status.HTTP_401_UNAUTHORIZED)
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
         
 class PostUpdate(GenericAPIView):
     """
@@ -269,7 +269,7 @@ class PostUpdate(GenericAPIView):
                 return Response(serializer, status=200)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(status.HTTP_401_UNAUTHORIZED)
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
     
 class PostDelete(GenericAPIView):
     """

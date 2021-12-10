@@ -80,11 +80,11 @@ class UserFollowing(GenericAPIView):
         user2 = self.get_object(pk=pk)
 
         if user2.isPrivate: # if private can't follow
-            return Response(status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_403_FORBIDDEN)
         if user2 in user1.followedUsers.all(): # if user1 already followed user2
-            return Response(status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_409_CONFLICT)
         if user1.id==user2.id: # if the user wants to follow itself
-            return Response(status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         
         try:
             user1.followedUsers.add(user2.id)
@@ -92,9 +92,9 @@ class UserFollowing(GenericAPIView):
 
             user1.save()
             user2.save()
-            return Response(status.HTTP_200_OK)
+            return Response({'followed': user2.id, 'follower': user1.id}, status=status.HTTP_200_OK)
         except:
-            return Response(status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class UserGet(GenericAPIView):
 
@@ -115,4 +115,4 @@ class UserGet(GenericAPIView):
             serializer = dict(UserSerializer(user).data)
             return Response(serializer)
         else:
-            return Response(status.HTTP_401_UNAUTHORIZED)
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
