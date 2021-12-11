@@ -35,7 +35,7 @@ class App extends React.Component{
       console.log(newState);
       console.log(data);
       return newState;
-    }))
+    })).catch(er => console.log(er));
     
   }
 

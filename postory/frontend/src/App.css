@@ -136,5 +136,7 @@
   font-size: calc(10px + 2vmin);
 }
 
-
+.overflow{
+  overflow-y:scroll; 
+}
 
