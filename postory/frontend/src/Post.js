@@ -67,15 +67,6 @@ class PostUpper extends React.Component{
              {obj[0]}
           </a>);
         })}
-
-        <a class = "tag">
-          <Icon path={mdiClockTimeEight}
-          title="Time"
-          size={0.7}
-          color="#53BEC6"
-          />
-          {this.state.storyDate.slice(0,10)}
-        </a>
         {this.state.tags.map((obj,i) => {
           return(
           <a key = {i} class = "tag">
