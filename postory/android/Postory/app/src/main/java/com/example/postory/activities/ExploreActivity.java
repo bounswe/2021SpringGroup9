@@ -18,7 +18,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import org.jetbrains.annotations.NotNull;
 
-public class ExploreActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class ExploreActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapLongClickListener {
 
     private GoogleMap mMap;
 
@@ -49,6 +49,9 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
 
         mMap.setOnMarkerClickListener(ExploreActivity.this);
 
+        mMap.setOnMapLongClickListener(ExploreActivity.this);
+
+
         // Add a marker in Sydney and move the camera
         LatLng boun = new LatLng(41.084668, 29.047341);
 
@@ -72,5 +75,17 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                 .setAnimations(Style.ANIMATIONS_POP).show();
 
         return  true;
+    }
+
+    @Override
+    public void onMapLongClick(@NonNull @NotNull LatLng latLng) {
+
+
+
+
+        mMap.addMarker(new MarkerOptions()
+                .position(latLng)
+                .title("New Marker"));
+
     }
 }
