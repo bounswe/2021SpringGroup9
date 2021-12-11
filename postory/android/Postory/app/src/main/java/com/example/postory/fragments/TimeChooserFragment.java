@@ -35,13 +35,13 @@ public class TimeChooserFragment extends Fragment {
 
     private Button startTimePicker;
     private Button endTimePicker;
-
-    View monthOuterLayout;
-    View monthInnerLayout;
-    View dayOuterLayout;
-    View dayInnerLayout;
-    View timeOuterLayout;
-    View timeInnerLayout;
+    private Button confirmButton;
+    private View monthOuterLayout;
+    private View monthInnerLayout;
+    private View dayOuterLayout;
+    private View dayInnerLayout;
+    private View timeOuterLayout;
+    private View timeInnerLayout;
     private SwitchCompat monthSwitch;
     private SwitchCompat daySwitch;
     private SwitchCompat timeSwitch;
@@ -64,7 +64,6 @@ public class TimeChooserFragment extends Fragment {
     int startMinute;
     int endMinute;
 
-    private Calendar calendar;
     public TimeChooserFragment() {
         // Required empty public constructor
     }
@@ -106,6 +105,7 @@ public class TimeChooserFragment extends Fragment {
         dayInnerLayout = view.findViewById(R.id.dayInnerLayout);
         timeOuterLayout = view.findViewById(R.id.timeOuterLayout);
         timeInnerLayout = view.findViewById(R.id.timeInnerLayout);
+        confirmButton = view.findViewById(R.id.confirmButton);
 
         monthSwitch = view.findViewById(R.id.monthSwitch);
         daySwitch = view.findViewById(R.id.daySwitch);
@@ -136,45 +136,61 @@ public class TimeChooserFragment extends Fragment {
         endTimePicker = view.findViewById(R.id.endTimePicker);
         startTimeText = view.findViewById(R.id.startTimeText);
         endTimeText = view.findViewById(R.id.endTimeText);
-        calendar = Calendar.getInstance();
 
         startTimePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TimePickerDialog tp1 = new TimePickerDialog(getContext(),new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                        startHour = i;
-                        startMinute = i1;
-                        startTimeText.setText(HourMinuteHandler.combine(i,i1));
-                        Log.d("TAGG",HourMinuteHandler.combine(i,i1));
-                    }
-
-                }, startHour, startMinute, true);
-                tp1.setButton(TimePickerDialog.BUTTON_POSITIVE, "Pick", tp1);
-                tp1.setButton(TimePickerDialog.BUTTON_NEGATIVE, "Cancel", tp1);
-                tp1.show();
+                startTimePickerClick();
             }
         });
 
         endTimePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TimePickerDialog tp1 = new TimePickerDialog(getContext(),new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                        endHour = i;
-                        endMinute = i1;
-                        endTimeText.setText(HourMinuteHandler.combine(i,i1));
-                    }
-                }, endHour, endMinute, true);
-                tp1.setButton(TimePickerDialog.BUTTON_POSITIVE, "Pick", tp1);
-                tp1.setButton(TimePickerDialog.BUTTON_NEGATIVE, "Cancel", tp1);
-                tp1.show();
+                endTimePickerClick();
+            }
+        });
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                confirmButtonClick();
             }
         });
 
         return view;
+    }
+    private void startTimePickerClick(){
+        TimePickerDialog tp1 = new TimePickerDialog(getContext(),new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int i, int i1) {
+                startHour = i;
+                startMinute = i1;
+                startTimeText.setText(HourMinuteHandler.combine(i,i1));
+                Log.d("TAGG",HourMinuteHandler.combine(i,i1));
+            }
+
+        }, startHour, startMinute, true);
+        tp1.setButton(TimePickerDialog.BUTTON_POSITIVE, "Pick", tp1);
+        tp1.setButton(TimePickerDialog.BUTTON_NEGATIVE, "Cancel", tp1);
+        tp1.show();
+    }
+    private void endTimePickerClick(){
+        TimePickerDialog tp1 = new TimePickerDialog(getContext(),new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int i, int i1) {
+                endHour = i;
+                endMinute = i1;
+                endTimeText.setText(HourMinuteHandler.combine(i,i1));
+            }
+        }, endHour, endMinute, true);
+        tp1.setButton(TimePickerDialog.BUTTON_POSITIVE, "Pick", tp1);
+        tp1.setButton(TimePickerDialog.BUTTON_NEGATIVE, "Cancel", tp1);
+        tp1.show();
+
+    }
+    private void confirmButtonClick(){
+
     }
 
     private void monthSwitchController(boolean isChecked){
@@ -188,8 +204,6 @@ public class TimeChooserFragment extends Fragment {
             dayOuterLayout.setVisibility(View.INVISIBLE);
             daySwitch.setChecked(false);
         }
-
-
     }
 
     private void daySwitchController(boolean isChecked){
