@@ -283,11 +283,8 @@ public class TimeChooserFragment extends Fragment {
             try {
                 startYear = Integer.parseInt(startYearEditText.getText().toString());
                 endYear = Integer.parseInt(endYearEditText.getText().toString());
-                startMonth = Integer.parseInt(startMonthEditText.getText().toString());
-                endMonth = Integer.parseInt(endMonthEditText.getText().toString());
 
-                t= new TimeController(startYear,endYear,startMonth,
-                        endMonth);
+                t= new TimeController(startYear,endYear);
                 t.createDate();
                 if(t.checkValidity())
                     correctInput = true;
