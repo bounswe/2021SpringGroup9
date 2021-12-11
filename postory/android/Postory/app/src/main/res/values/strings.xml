@@ -22,5 +22,15 @@
     <string name="write_your_name">Write your name</string>
     <string name="write_your_surname">Write your surname</string>
     <string name="write_your_password_again">Write your password again</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="day">Day</string>
+    <string name="month">Month</string>
+    <string name="time">Time</string>
+    <string name="start">Start:</string>
+    <string name="end">End:</string>
+    <string name="year">Year</string>
+    <string name="pick">Pick</string>
+    <string name="confirm">Confirm</string>
 
 </resources>
