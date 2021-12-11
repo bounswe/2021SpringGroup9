@@ -39,7 +39,7 @@ class SignIn extends React.Component {
             })
         }).then(
             res => {
-                if (res.status % 100 === 2) {
+                if (res.status === 200) {
                     res.json().then(
                         data => {
                             const {refresh, access} = data
