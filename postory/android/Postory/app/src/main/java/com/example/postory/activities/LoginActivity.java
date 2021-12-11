@@ -3,13 +3,16 @@ package com.example.postory.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.postory.activities.RegisterActivity;
@@ -21,6 +24,9 @@ import com.github.johnpersano.supertoasts.library.SuperActivityToast;
 import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -51,7 +57,6 @@ public class LoginActivity extends AppCompatActivity {
         mail = (TextInputEditText) findViewById(R.id.mail);
         password = (TextInputEditText) findViewById(R.id.password);
         signInButton = (Button) findViewById(R.id.signInButton);
-        skipButton = (Button) findViewById(R.id.skipButton);
         signUpButton = (Button) findViewById(R.id.signUpButton);
         forgotPasswordText = (TextView) findViewById(R.id.forgotPassword);
         handler = new Handler();
@@ -81,14 +86,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        skipButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                startActivity(intent);
-            }
-        });
-
     }
 
     protected boolean checkSignIn() {
@@ -122,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
 
     protected void sendSignIn() {
         final OkHttpClient client = new OkHttpClient();
-        String url = BuildConfig.API_IP + "/auth/jwt/create";
+        String url = "http://3.125.114.231:8000/auth/jwt/create";
         String mailString = mail.getText().toString().trim();
         String passwordString = password.getText().toString();
 
@@ -150,8 +147,17 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                     ResponseBody signInResponse = response.body();
-                    Log.d("loginactivity", signInResponse.string());
-                    //TODO: Read the response fields
+                    String signInResponseString = signInResponse.string();
+                    SharedPreferences preferences = getSharedPreferences("MY_APP", Context.MODE_PRIVATE);
+                    try {
+                        JSONObject json = new JSONObject(signInResponseString);
+                        String accessToken = json.getString("access");
+                        preferences.edit().putString("access_token", accessToken).apply();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    Log.d("loginactivity", signInResponseString);
 
 
                 }
