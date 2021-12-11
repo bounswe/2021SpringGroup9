@@ -298,7 +298,12 @@ public class TimeChooserFragment extends Fragment {
             }
 
         }
-        getFragmentManager().beginTransaction().remove(TimeChooserFragment.this).commit();
+        if (correctInput){
+            // To get TimeController at the activity
+            // (CreatePostActivity)getActivity().getTimeController(t);
+        }
+        // Close fragment
+        //getFragmentManager().beginTransaction().remove(TimeChooserFragment.this).commit();
 
     }
 
