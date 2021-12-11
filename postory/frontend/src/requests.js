@@ -1,13 +1,9 @@
-const BACKEND_URL = 'http://' + '3.125.114.231'+ ':8000'
+const BACKEND_URL = 'http://' + '3.125.114.231' + ':8000'
 
 export function post(url, body_json) {
     if (url.startsWith('/')) {
         url = url.substring(1)
     }
-    if (! url.endsWith('/')) {
-        url = url + '/'
-    }
-
     return fetch(`${BACKEND_URL}/${url}`, {
         method: 'POST',
         headers: {
@@ -21,9 +17,6 @@ export function post(url, body_json) {
 export function post_jwt(url, body_json) {
     if (url.startsWith('/')) {
         url = url.substring(1)
-    }
-    if (! url.endsWith('/')) {
-        url = url + '/'
     }
 
     return fetch(`${BACKEND_URL}/${url}`, {
@@ -41,9 +34,6 @@ export function put(url, body_json) {
     if (url.startsWith('/')) {
         url = url.substring(1)
     }
-    if (! url.endsWith('/')) {
-        url = url + '/'
-    }
 
     return fetch(`${BACKEND_URL}/${url}`, {
         method: 'PUT',
@@ -58,9 +48,6 @@ export function put(url, body_json) {
 export function put_jwt(url, body_json) {
     if (url.startsWith('/')) {
         url = url.substring(1)
-    }
-    if (! url.endsWith('/')) {
-        url = url + '/'
     }
 
     return fetch(`${BACKEND_URL}/${url}`, {
@@ -78,9 +65,6 @@ export function delete_(url, body_json) {
     if (url.startsWith('/')) {
         url = url.substring(1)
     }
-    if (! url.endsWith('/')) {
-        url = url + '/'
-    }
 
     return fetch(`${BACKEND_URL}/${url}`, {
         method: 'DELETE',
@@ -95,9 +79,6 @@ export function delete_(url, body_json) {
 export function delete_jwt(url, body_json) {
     if (url.startsWith('/')) {
         url = url.substring(1)
-    }
-    if (! url.endsWith('/')) {
-        url = url + '/'
     }
 
     return fetch(`${BACKEND_URL}/${url}`, {
@@ -115,9 +96,6 @@ export function get(url, params_json) {
     if (url.startsWith('/')) {
         url = url.substring(1)
     }
-    if (! url.endsWith('/')) {
-        url = url + '/'
-    }
 
     const params = new URLSearchParams(params_json).toString()
 
@@ -134,9 +112,7 @@ export function get_jwt(url, params_json) {
     if (url.startsWith('/')) {
         url = url.substring(1)
     }
-    if (! url.endsWith('/')) {
-        url = url + '/'
-    }
+
 
     const params = new URLSearchParams(params_json).toString()
 
