@@ -19,6 +19,22 @@ export const ProfilePageUpper = () => {
     const [sessionUserName, setSessionUserName] = React.useState();
 
     useEffect(() => {
+        fetch(`http://3.125.114.231:8000/api/post/all/user/${username}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`
+            }
+        }).then(response => response.json())
+            .then( (data) => {
+                setUserPosts(data);
+                setFetchedPosts(true)
+                console.log(data);
+            })
+    }, [username])
+
+    useEffect(() => {
         setUserName( () => {
             var regex = /id=/g;
             var url = window.location.href;
@@ -34,6 +50,18 @@ export const ProfilePageUpper = () => {
             return id;
         })
     }, [])
+
+    const onClickFollow = () =>{
+        fetch(`http://3.125.114.231:8000'/api/user/follow/${username}`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`
+            },
+            body: JSON.stringify({})
+        })    
+    }
 
     return ( 
         <div>
