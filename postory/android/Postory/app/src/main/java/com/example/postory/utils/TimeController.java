@@ -25,7 +25,7 @@ public class TimeController {
     int startMinute;
     int endMinute;
     int precision;
-
+    SimpleDateFormat dateFormat;
     Date startDate;
     Date endDate;
 
@@ -76,7 +76,6 @@ public class TimeController {
 
     @SuppressLint("SimpleDateFormat")
     public void createDate() {
-        SimpleDateFormat dateFormat;
         switch (this.precision) {
             case YEAR_PRECISION:
                 dateFormat = new SimpleDateFormat("yyyy");
@@ -109,7 +108,7 @@ public class TimeController {
                 }
                 break;
             case TIME_PRECISION:
-                dateFormat = new SimpleDateFormat("yyyy-MM-dd- HH:mm");
+                dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 try {
                     startDate = dateFormat.parse("" + startYear + "-" + startMonth + "-" + startDay + "-" + startHour + ":" + startMinute);
                     endDate = dateFormat.parse("" + endYear + "-" + endMonth + "-" + endDay + "-" + endHour + ":" + endMinute);
