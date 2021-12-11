@@ -131,11 +131,11 @@ class PostListDetail(GenericAPIView):
 
         user1 = User.objects.filter(id=user_id).first()
         story = self.get_object(pk)
-        username2 = story.owner
-        user2 = User.objects.filter(username=username2).first()
+        userid2 = story.owner
+        user2 = User.objects.filter(pk=userid2).first()
         
-        # only if the user is admin or is a follower of the post owner or it is the post owner
-        if user1.isAdmin or (user1 in user2.follower.all()) or (user1.id == user2.id):
+        # only if the user is admin or is a follower of the post owner or it is the post owner or the post is public
+        if not user2.isPrivate or user1.isAdmin or (user1 in user2.followerUsers.all()) or (user1.id == user2.id):
             serializer = get_story(story)
             return Response(serializer, status=200)
         else:
@@ -255,7 +255,7 @@ class GetUsersPosts(GenericAPIView):
         requester_user = User.objects.filter(id = requester_user_id).first()
         requested_user = User.objects.filter(id = user_id).first()
 
-        if(requested_user.id in requester_user.followedUsers.all() or not requested_user.isPrivate):
+        if(requested_user.id in requester_user.followedUsers.all() or not requested_user.isPrivate or requested_user.id == requester_user.id):
             posts = Post.objects.filter(owner = requested_user.id)
             serializer = {}
             for story in posts:
@@ -276,7 +276,10 @@ class GetFollowedUsersPosts(GenericAPIView):
         posts = []
         for followedUser in followedUsers:
             followedUserPosts = Post.objects.filter(owner = followedUser)
-            posts.append(followedUserPosts)
+            for post in followedUserPosts:
+                posts.append(post)
+        for post in Post.objects.filter(owner = user_id):
+            posts.append(post)
         serializer = {}
         for story in posts:
             serializer[story.id] = get_story(story)
@@ -297,9 +300,9 @@ class GetPostsDiscover(GenericAPIView):
             if(not owner_of_post.isPrivate):
                 posts.add(post)
         for followedUser in followedUsers:
-            followedUserPosts = Post.objects.filter(owner = followedUser)
-            posts.add(followedUserPosts)
-        
+            followedUserPosts = Post.objects.filter(owner = followedUser.id)
+            for post in followedUserPosts:
+                posts.add(post)
         serializer = {}
         for story in posts:
             serializer[story.id] = get_story(story)
