@@ -22,6 +22,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activities.OtherProfilePageActivity"
+            android:exported="true" />
+        <activity
             android:name=".activities.RegisterActivity"
             android:exported="true" />
         <activity
@@ -33,7 +36,6 @@
         <activity
             android:name=".activities.MainActivity"
             android:exported="true" />
-
         <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
