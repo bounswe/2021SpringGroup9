@@ -1,6 +1,7 @@
 package com.example.postory.utils;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -92,6 +93,7 @@ public class TimeController {
                 try {
                     startDate = dateFormat.parse("" + startYear + "-" + startMonth);
                     endDate = dateFormat.parse("" + endYear + "-" + endMonth);
+
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -107,7 +109,7 @@ public class TimeController {
                 }
                 break;
             case TIME_PRECISION:
-                dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH:mm");
+                dateFormat = new SimpleDateFormat("yyyy-MM-dd- HH:mm");
                 try {
                     startDate = dateFormat.parse("" + startYear + "-" + startMonth + "-" + startDay + "-" + startHour + ":" + startMinute);
                     endDate = dateFormat.parse("" + endYear + "-" + endMonth + "-" + endDay + "-" + endHour + ":" + endMinute);
@@ -115,6 +117,10 @@ public class TimeController {
                     e.printStackTrace();
                 }
                 break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + this.precision);
         }
+        Log.d("timecontroller",dateFormat.format(startDate));
+        Log.d("timecontroller",dateFormat.format(endDate));
     }
 }
