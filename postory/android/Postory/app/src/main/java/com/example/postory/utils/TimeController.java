@@ -2,6 +2,7 @@ package com.example.postory.utils;
 
 import android.annotation.SuppressLint;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -24,9 +25,12 @@ public class TimeController {
     int endMinute;
     int precision;
 
+    Date startDate;
+    Date endDate;
+
     public TimeController(int startYear, int endYear, int startMonth, int endMonth,
                           int startDay, int endDay, int startHour, int endHour,
-                          int startMinute, int endMinute){
+                          int startMinute, int endMinute) {
         this.startYear = startYear;
         this.endYear = endYear;
         this.startMonth = startMonth;
@@ -41,7 +45,7 @@ public class TimeController {
     }
 
     public TimeController(int startYear, int endYear, int startMonth, int endMonth
-            ,int startDay, int endDay){
+            , int startDay, int endDay) {
         this.startYear = startYear;
         this.endYear = endYear;
         this.startMonth = startMonth;
@@ -51,7 +55,7 @@ public class TimeController {
         this.precision = DAY_PRECISION;
     }
 
-    public TimeController(int startYear, int endYear, int startMonth, int endMonth){
+    public TimeController(int startYear, int endYear, int startMonth, int endMonth) {
         this.startYear = startYear;
         this.endYear = endYear;
         this.startMonth = startMonth;
@@ -59,50 +63,61 @@ public class TimeController {
         this.precision = MONTH_PRECISION;
     }
 
-    public TimeController(int startYear, int endYear){
+    public TimeController(int startYear, int endYear) {
         this.startYear = startYear;
         this.endYear = endYear;
         this.precision = YEAR_PRECISION;
     }
 
+    public boolean checkValidity() {
+        if (startDate.compareTo(endDate) < 0) {
+            return false;
+        }
+        return true;
+    }
+
     @SuppressLint("SimpleDateFormat")
-    public Date createDate(){
+    public void createDate() {
         SimpleDateFormat dateFormat;
-        switch(this.precision){
+        switch (this.precision) {
             case YEAR_PRECISION:
                 dateFormat = new SimpleDateFormat("yyyy");
+                try {
+                    startDate = dateFormat.parse("" + startYear);
+                    endDate = dateFormat.parse("" + endYear);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 break;
 
             case MONTH_PRECISION:
-                dateFormat = new SimpleDateFormat("MM/yyyy");
+                dateFormat = new SimpleDateFormat("yyyy-MM");
+                try {
+                    startDate = dateFormat.parse("" + startYear + "-" + startMonth);
+                    endDate = dateFormat.parse("" + endYear + "-" + endMonth);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 break;
 
             case DAY_PRECISION:
-                dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-
+                dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+                    startDate = dateFormat.parse("" + startYear + "-" + startMonth + "-" + startDay);
+                    endDate = dateFormat.parse("" + endYear + "-" + endMonth + "-" + endDay);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 break;
             case TIME_PRECISION:
-                dateFormat = new SimpleDateFormat("dd/MM/yyyy-HH:mm");
-
+                dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH:mm");
+                try {
+                    startDate = dateFormat.parse("" + startYear + "-" + startMonth + "-" + startDay + "-" + startHour + ":" + startMinute);
+                    endDate = dateFormat.parse("" + endYear + "-" + endMonth + "-" + endDay + "-" + endHour + ":" + endMinute);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 break;
         }
     }
-
-
-    public boolean timeValid(){
-
-        if (startYear < endYear) {
-            return true;
-        }
-        else if(startYear > endYear) {
-            return false;
-        }
-
-
-
-
-
-
-        }
-
 }
