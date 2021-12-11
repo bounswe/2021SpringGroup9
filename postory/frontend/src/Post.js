@@ -25,7 +25,7 @@ class PostUpper extends React.Component{
       contentSmall : (props.story.length > 200) ? props.story.slice(0,200): props.story,
       continueReading: props.story.length > 200,
     };
-    console.log(this.state.tags);
+    console.log(this.state.locations);
     this.getMoreContent = this.getMoreContent.bind(this);
   }
 
@@ -43,9 +43,10 @@ class PostUpper extends React.Component{
     let style = {paddingBottom: "10px"};
     return (<div >
       <div class= "row2" style = {style}>
+      {this.state.owner && <Link class = "push" to= {`/profilePage?id=${this.state.owner}`}>
         <img class = "circle" width = "50px" height = "50px" src = "./static/media/postory_logo_no_text.ec3bad21.png" />
         <a style = {{margin: "10px"}}>{this.state.owner}</a>
-
+        </Link>}
         {this.state.id && <Link class = "push" to= {`/editPost?id=${this.state.id}`}>
           <Icon path={mdiPencilOutline}
             title="Edit Post"
@@ -56,8 +57,7 @@ class PostUpper extends React.Component{
       </div>
       <div class= "row2 fitText">
       
-        
-        {this.state.locations.map((obj,i) => {
+        {this.state.locations.filter(obj => typeof obj[0] === 'string' && obj[0] != '').map((obj,i) => {
           return(
           <a key = {i} class = "tag">
               <Icon path={mdiMapMarker}
@@ -68,15 +68,6 @@ class PostUpper extends React.Component{
              {obj[0]}
           </a>);
         })}
-
-        <a class = "tag">
-          <Icon path={mdiClockTimeEight}
-          title="Time"
-          size={0.7}
-          color="#53BEC6"
-          />
-          {this.state.storyDate.slice(0,10)}
-        </a>
         {this.state.tags.map((obj,i) => {
           return(
           <a key = {i} class = "tag">
