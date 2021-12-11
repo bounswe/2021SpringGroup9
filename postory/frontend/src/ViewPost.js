@@ -42,7 +42,7 @@ class ViewPost extends React.Component{
     render(){
         return(<div className="App App-header">
             <button class = "placeholder"></button>
-        <div class = "row">
+        <div class = "row2">
             <div>
                 {this.state.post && <Post {...this.state.post} />}
                 <CommentContainer />
@@ -79,7 +79,7 @@ class Comment extends React.Component{
     }
     render(){
         return(<div class = "Comment">
-            <div class= "row">
+            <div class= "row2">
                 <img class = "circle" width = "50px" height = "50px" src = "./static/media/postory_logo_no_text.ec3bad21.png" />
                 <a style = {{margin: "10px"}}>{this.state.userName}</a>
             </div>
@@ -135,7 +135,7 @@ class CommentContainer extends React.Component{
             {this.state.comments.map( 
                 (obj,i) => {return (<Comment {...obj} key = {i} ></Comment>);}
                 )}
-            <div class = "row">
+            <div class = "row2">
                 <textarea style = {{width: 400}} type = "text" onChange = {this.textChange} ></textarea>
                 <Icon onClick = {this.sendComment} path={mdiSend}
                         title="Post"

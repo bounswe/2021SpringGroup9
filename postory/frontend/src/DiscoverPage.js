@@ -81,7 +81,7 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
                             by: {selectedPost.owner}
                         </div>
                         
-                        <div class= "row" onClick = {() => props.redirect(selectedPost.id)}>
+                        <div class= "row2" onClick = {() => props.redirect(selectedPost.id)}>
                                 <Icon 
                                     
                                     path={mdiGestureTap} 

@@ -28,7 +28,7 @@ class LikeButton extends React.Component {
   render() {
     const imageName = this.getIconPath();
     return (
-      <div class= "row">
+      <div class= "row2">
         <Icon 
           path={imageName} 
           size={2}
@@ -70,7 +70,7 @@ class PostButtons extends React.Component {
   render(){
     return(
       <div>
-        <div class= "row">
+        <div class= "row2">
           <LikeButton></LikeButton>
           <VerticalSeperator></VerticalSeperator>
           <Icon 
