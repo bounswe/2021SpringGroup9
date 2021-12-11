@@ -211,13 +211,11 @@ public class TimeChooserFragment extends Fragment {
 
     }
     private void confirmButtonClick(){
-        startYear = sta
         if(timeSwitch.isChecked()){
             TimeController t= new TimeController(startYear,endYear,startMonth,
                              endMonth,startDay,endDay,startHour,endHour,startMinute,endMinute);
             t.createDate();
             if(t.checkValidity()){
-                ((CreatePostActivity) getActivity())
 
             }
             else{
