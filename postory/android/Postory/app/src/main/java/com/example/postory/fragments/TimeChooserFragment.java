@@ -211,25 +211,94 @@ public class TimeChooserFragment extends Fragment {
 
     }
     private void confirmButtonClick(){
+        TimeController t;
+        boolean correctInput = false;
         if(timeSwitch.isChecked()){
-            TimeController t= new TimeController(startYear,endYear,startMonth,
-                             endMonth,startDay,endDay,startHour,endHour,startMinute,endMinute);
-            t.createDate();
-            if(t.checkValidity()){
-
+            try {
+                startYear = Integer.parseInt(startYearEditText.getText().toString());
+                endYear = Integer.parseInt(endYearEditText.getText().toString());
+                startMonth = Integer.parseInt(startMonthEditText.getText().toString());
+                endMonth = Integer.parseInt(endMonthEditText.getText().toString());
+                startDay = Integer.parseInt(startDayEditText.getText().toString());
+                endDay = Integer.parseInt(endDayEditText.getText().toString());
+                t= new TimeController(startYear,endYear,startMonth,
+                        endMonth,startDay,endDay,startHour,endHour,startMinute,endMinute);
+                t.createDate();
+                if(t.checkValidity())
+                    correctInput = true;
+                else{
+                    Toast toast = Toast.makeText(getContext(),"The end date cannot be earlier than the start date.",Toast.LENGTH_LONG);
+                    toast.show();
+                }
+            }catch (Exception e){
+                Toast toast = Toast.makeText(getContext(),"Fill all fields according to the selected precision level.",Toast.LENGTH_LONG);
+                toast.show();
             }
-            else{
-                Toast toast = Toast.makeText(getContext(),"The end date cannot be earlier than the start date.",Toast.LENGTH_LONG);
+
+        }
+        else if(daySwitch.isChecked()){
+            try {
+                startYear = Integer.parseInt(startYearEditText.getText().toString());
+                endYear = Integer.parseInt(endYearEditText.getText().toString());
+                startMonth = Integer.parseInt(startMonthEditText.getText().toString());
+                endMonth = Integer.parseInt(endMonthEditText.getText().toString());
+                startDay = Integer.parseInt(startDayEditText.getText().toString());
+                endDay = Integer.parseInt(endDayEditText.getText().toString());
+                t= new TimeController(startYear,endYear,startMonth,
+                        endMonth,startDay,endDay);
+                t.createDate();
+                if(t.checkValidity())
+                    correctInput = true;
+                else{
+                    Toast toast = Toast.makeText(getContext(),"The end date cannot be earlier than the start date.",Toast.LENGTH_LONG);
+                    toast.show();
+                }
+            }catch (Exception e){
+                Toast toast = Toast.makeText(getContext(),"Fill all fields according to the selected precision level.",Toast.LENGTH_LONG);
                 toast.show();
             }
         }
-        else if(daySwitch.isChecked()){
-
-        }
         else if(monthSwitch.isChecked()){
+            try {
+                startYear = Integer.parseInt(startYearEditText.getText().toString());
+                endYear = Integer.parseInt(endYearEditText.getText().toString());
+                startMonth = Integer.parseInt(startMonthEditText.getText().toString());
+                endMonth = Integer.parseInt(endMonthEditText.getText().toString());
 
+                t= new TimeController(startYear,endYear,startMonth,
+                        endMonth);
+                t.createDate();
+                if(t.checkValidity())
+                    correctInput = true;
+                else{
+                    Toast toast = Toast.makeText(getContext(),"The end date cannot be earlier than the start date.",Toast.LENGTH_LONG);
+                    toast.show();
+                }
+            }catch (Exception e){
+                Toast toast = Toast.makeText(getContext(),"Fill all fields according to the selected precision level.",Toast.LENGTH_LONG);
+                toast.show();
+            }
         }
         else{
+            try {
+                startYear = Integer.parseInt(startYearEditText.getText().toString());
+                endYear = Integer.parseInt(endYearEditText.getText().toString());
+                startMonth = Integer.parseInt(startMonthEditText.getText().toString());
+                endMonth = Integer.parseInt(endMonthEditText.getText().toString());
+
+                t= new TimeController(startYear,endYear,startMonth,
+                        endMonth);
+                t.createDate();
+                if(t.checkValidity())
+                    correctInput = true;
+                else{
+                    Toast toast = Toast.makeText(getContext(),"The end date cannot be earlier than the start date.",Toast.LENGTH_LONG);
+                    toast.show();
+                }
+            }catch (Exception e){
+                Toast toast = Toast.makeText(getContext(),"Fill all fields according to the selected precision level.",Toast.LENGTH_LONG);
+                toast.show();
+            }
 
         }
         getFragmentManager().beginTransaction().remove(TimeChooserFragment.this).commit();
@@ -245,6 +314,8 @@ public class TimeChooserFragment extends Fragment {
         else{
             monthInnerLayout.setVisibility(View.INVISIBLE);
             dayOuterLayout.setVisibility(View.INVISIBLE);
+            startMonthEditText.setText("");
+            endMonthEditText.setText("");
             daySwitch.setChecked(false);
         }
     }
@@ -257,7 +328,10 @@ public class TimeChooserFragment extends Fragment {
         else{
             dayInnerLayout.setVisibility(View.INVISIBLE);
             timeOuterLayout.setVisibility(View.INVISIBLE);
+            startDayEditText.setText("");
+            endDayEditText.setText("");
             timeSwitch.setChecked(false);
+
         }
     }
 
