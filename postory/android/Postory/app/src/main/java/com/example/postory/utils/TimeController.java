@@ -70,10 +70,7 @@ public class TimeController {
     }
 
     public boolean checkValidity() {
-        if (startDate.compareTo(endDate) < 0) {
-            return false;
-        }
-        return true;
+        return startDate.compareTo(endDate) <= 0;
     }
 
     @SuppressLint("SimpleDateFormat")
