@@ -9,10 +9,10 @@ import java.util.Date;
 
 public class TimeController {
 
-    static final int YEAR_PRECISION = 1;
-    static final int MONTH_PRECISION = 2;
-    static final int DAY_PRECISION = 3;
-    static final int TIME_PRECISION = 4;
+    public static final int YEAR_PRECISION = 1;
+    public static final int MONTH_PRECISION = 2;
+    public static final int DAY_PRECISION = 3;
+    public static final int TIME_PRECISION = 4;
 
     int startYear;
     int endYear;
@@ -24,11 +24,27 @@ public class TimeController {
     int endHour;
     int startMinute;
     int endMinute;
-    int precision;
-    SimpleDateFormat dateFormat;
-    Date startDate;
-    Date endDate;
 
+    private int precision;
+    private SimpleDateFormat dateFormat;
+    private Date startDate;
+    private Date endDate;
+
+    public int getPrecision() {
+        return precision;
+    }
+
+    public SimpleDateFormat getDateFormat() {
+        return dateFormat;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
     public TimeController(int startYear, int endYear, int startMonth, int endMonth,
                           int startDay, int endDay, int startHour, int endHour,
                           int startMinute, int endMinute) {
@@ -110,8 +126,8 @@ public class TimeController {
             case TIME_PRECISION:
                 dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 try {
-                    startDate = dateFormat.parse("" + startYear + "-" + startMonth + "-" + startDay + "-" + startHour + ":" + startMinute);
-                    endDate = dateFormat.parse("" + endYear + "-" + endMonth + "-" + endDay + "-" + endHour + ":" + endMinute);
+                    startDate = dateFormat.parse("" + startYear + "-" + startMonth + "-" + startDay + " " + startHour + ":" + startMinute);
+                    endDate = dateFormat.parse("" + endYear + "-" + endMonth + "-" + endDay + " " + endHour + ":" + endMinute);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -119,7 +135,6 @@ public class TimeController {
             default:
                 throw new IllegalStateException("Unexpected value: " + this.precision);
         }
-        Log.d("timecontroller",dateFormat.format(startDate));
-        Log.d("timecontroller",dateFormat.format(endDate));
+
     }
 }
