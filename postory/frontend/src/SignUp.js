@@ -69,7 +69,7 @@ class SignUp extends React.Component {
             })
         }).then(
             res => {
-                if (res.status % 100 === 2) {
+                if (Math.floor(res.status / 100) === 2) {
                     // Account successfully created
                     this.setState(state => ({...state, status: 'success'}))
                 } else {
