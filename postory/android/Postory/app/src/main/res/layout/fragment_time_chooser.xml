@@ -49,6 +49,7 @@
                 android:autofillHints="false"
                 android:gravity="center_vertical"
                 android:inputType="number"
+                android:maxLength="4"
                 tools:ignore="LabelFor" />
 
             <TextView
@@ -66,6 +67,7 @@
                 android:autofillHints="false"
                 android:gravity="center_vertical"
                 android:inputType="number"
+                android:maxLength="4"
                 tools:ignore="LabelFor" />
         </LinearLayout>
     </LinearLayout>
@@ -119,6 +121,7 @@
                 android:autofillHints="false"
                 android:gravity="center_vertical"
                 android:inputType="number"
+                android:maxLength="2"
                 tools:ignore="LabelFor" />
 
             <TextView
@@ -136,6 +139,7 @@
                 android:autofillHints="false"
                 android:gravity="center_vertical"
                 android:inputType="number"
+                android:maxLength="2"
                 tools:ignore="LabelFor" />
         </LinearLayout>
     </LinearLayout>
@@ -188,6 +192,7 @@
                 android:autofillHints="false"
                 android:gravity="center_vertical"
                 android:inputType="number"
+                android:maxLength="2"
                 tools:ignore="LabelFor" />
 
             <TextView
@@ -205,6 +210,7 @@
                 android:autofillHints="false"
                 android:gravity="center_vertical"
                 android:inputType="number"
+                android:maxLength="2"
                 tools:ignore="LabelFor" />
 
         </LinearLayout>
