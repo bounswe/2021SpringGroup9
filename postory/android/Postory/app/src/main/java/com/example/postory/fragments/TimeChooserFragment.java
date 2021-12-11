@@ -12,11 +12,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
+
 import com.example.postory.R;
+import com.example.postory.activities.CreatePostActivity;
 import com.example.postory.utils.HourMinuteHandler;
+import com.example.postory.utils.TimeController;
+
 import java.util.Calendar;
 
 /**
@@ -46,8 +52,16 @@ public class TimeChooserFragment extends Fragment {
     private SwitchCompat daySwitch;
     private SwitchCompat timeSwitch;
 
+    private EditText startYearEditText;
+    private EditText endYearEditText;
+    private EditText startMonthEditText;
+    private EditText endMonthEditText;
+    private EditText startDayEditText;
+    private EditText endDayEditText;
+
     private TextView startTimeText;
     private TextView endTimeText;
+
 
     int startYear;
     int endYear;
@@ -110,6 +124,13 @@ public class TimeChooserFragment extends Fragment {
         monthSwitch = view.findViewById(R.id.monthSwitch);
         daySwitch = view.findViewById(R.id.daySwitch);
         timeSwitch = view.findViewById(R.id.timeSwitch);
+
+        startYearEditText = view.findViewById(R.id.startYear);
+        endYearEditText = view.findViewById(R.id.endYear);
+        startMonthEditText = view.findViewById(R.id.startMonth);
+        endMonthEditText = view.findViewById(R.id.endMonth);
+        startDayEditText = view.findViewById(R.id.startDay);
+        endDayEditText = view.findViewById(R.id.endDay);
 
         monthSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -190,6 +211,30 @@ public class TimeChooserFragment extends Fragment {
 
     }
     private void confirmButtonClick(){
+        startYear = sta
+        if(timeSwitch.isChecked()){
+            TimeController t= new TimeController(startYear,endYear,startMonth,
+                             endMonth,startDay,endDay,startHour,endHour,startMinute,endMinute);
+            t.createDate();
+            if(t.checkValidity()){
+                ((CreatePostActivity) getActivity())
+
+            }
+            else{
+                Toast toast = Toast.makeText(getContext(),"The end date cannot be earlier than the start date.",Toast.LENGTH_LONG);
+                toast.show();
+            }
+        }
+        else if(daySwitch.isChecked()){
+
+        }
+        else if(monthSwitch.isChecked()){
+
+        }
+        else{
+
+        }
+        getFragmentManager().beginTransaction().remove(TimeChooserFragment.this).commit();
 
     }
 
