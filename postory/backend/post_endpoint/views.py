@@ -136,24 +136,8 @@ class PostListDetail(GenericAPIView):
         
         # only if the user is admin or is a follower of the post owner or it is the post owner
         if user1.isAdmin or (user1 in user2.follower.all()) or (user1.id == user2.id):
-            tags = []
-            for tag in story.tags.all():
-                tags.append(tag.content)
-            locations = []
-            for location in story.locations.all():
-                temp = []
-                temp.append(location.name)
-                temp.append(location.coordsLatitude)
-                temp.append(location.coordsLongitude)
-                locations.append(temp)
-            images = []
-            for image in story.images.all():
-                images.append(image.file.url)
-            serializer = dict(PostSerializer(story).data)
-            serializer['tags'] = tags
-            serializer['locations'] = locations
-            serializer['images'] = images
-            return Response(serializer)
+            serializer = get_story(story)
+            return Response(serializer, status=200)
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         
