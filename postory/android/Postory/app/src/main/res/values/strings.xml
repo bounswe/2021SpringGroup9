@@ -12,5 +12,15 @@
     <string name="choose_image_source">Pick an image for your story </string>
     <string name="shared_on">Shared on:&#160;</string>
     <string name="write_tag_hint">Write tag</string>
+    <string name="register">Register</string>
+    <string name="sign_in">Sign in</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="write_your_mail_address">Write your mail address</string>
+    <string name="write_your_password">Write your password</string>
+    <string name="write_your_username">Write your username</string>
+    <string name="write_your_name">Write your name</string>
+    <string name="write_your_surname">Write your surname</string>
+    <string name="write_your_password_again">Write your password again</string>
 
 </resources>
