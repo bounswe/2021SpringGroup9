@@ -23,7 +23,19 @@ class LikeButton extends React.Component {
     
   }
 
-  
+  componentDidMount() {
+    for(let i = 0; i < this.state.likeList.length; i++) {
+      let innerList = this.state.likeList[i];
+      if (innerList[0] == this.state.userID){
+        //console.log("This user has already liked this post")
+        this.setState({liked: true, iconPath: mdiCardsHeart});
+      }
+    }
+    setTimeout(() => {console.log(this.state.liked)}, 500);
+    //console.log(this.state.liked);
+    //console.log(this.state.likeList.length)
+  }
+
   render() {
     return (
       <div class= "row2">
