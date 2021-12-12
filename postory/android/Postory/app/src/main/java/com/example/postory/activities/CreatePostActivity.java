@@ -43,9 +43,11 @@ import com.example.postory.BuildConfig;
 import com.example.postory.R;
 import com.example.postory.dialogs.DelayedProgressDialog;
 import com.example.postory.fragments.MapFragment;
+import com.example.postory.fragments.TimeChooserFragment;
 import com.example.postory.models.LocationModel;
 import com.example.postory.models.Post;
 import com.example.postory.models.PostModel;
+import com.example.postory.utils.TimeController;
 import com.github.johnpersano.supertoasts.library.Style;
 import com.github.johnpersano.supertoasts.library.SuperActivityToast;
 import com.github.johnpersano.supertoasts.library.SuperToast;
@@ -63,12 +65,25 @@ import org.w3c.dom.Text;
 
 import java.io.*;
 import java.lang.reflect.Array;
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class CreatePostActivity extends ToolbarActivity {
 
+
+    TimeController t;
+
+    public TimeController getT() {
+        return t;
+    }
+
+    public void setT(TimeController t) {
+        this.t = t;
+    }
+
+    boolean isFirstTime = true;
     Button sendButton;
     Handler handler;
     EditText nicknameEditText;
@@ -79,6 +94,7 @@ public class CreatePostActivity extends ToolbarActivity {
     public EditText locationEditText;
     TextView title;
     ImageView postImage;
+    ImageView timeChoose;
     AlertDialog alertDialog;
     Post post;
     ArrayList<LocationModel> locations;
@@ -128,6 +144,7 @@ public class CreatePostActivity extends ToolbarActivity {
 
 
         locations = new ArrayList<>();
+        timeChoose = (ImageView) findViewById(R.id.choose_time);
 
 
 
@@ -211,6 +228,20 @@ public class CreatePostActivity extends ToolbarActivity {
 
         postImage = (ImageView) findViewById(R.id.post_photo);
 
+        timeChoose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stdLayout.setVisibility(View.GONE);
+                mapContainer.setVisibility(View.VISIBLE);
+                TimeChooserFragment tf = new TimeChooserFragment();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frame_placeholder,tf)
+                        .commit();
+
+            }
+        });
+
 
 
         locationChoose.setOnClickListener(new View.OnClickListener() {
@@ -219,6 +250,19 @@ public class CreatePostActivity extends ToolbarActivity {
 
                 stdLayout.setVisibility(View.GONE);
                 mapContainer.setVisibility(View.VISIBLE);
+
+
+                if(isFirstTime) {
+                    SuperActivityToast.create(CreatePostActivity.this, new Style(), Style.TYPE_BUTTON)
+                            .setProgressBarColor(Color.WHITE)
+                            .setText("In order to pin a location on the map, long click a location on the map and give it a name!")
+                            .setDuration(Style.DURATION_LONG)
+                            .setFrame(Style.FRAME_LOLLIPOP)
+                            .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_BLUE))
+                            .setAnimations(Style.ANIMATIONS_POP).show();
+                    isFirstTime = false;
+                }
+
 
                 MapFragment mf = new MapFragment();
                 getSupportFragmentManager()
@@ -320,6 +364,7 @@ public class CreatePostActivity extends ToolbarActivity {
 
                 } else {
                     if (checkNecessaryData()) {
+
                         File file = new File(getRealPathFromURI(imageUri));
                         OkHttpClient client = new OkHttpClient();
                         String url = BuildConfig.API_IP + "/post/create";
@@ -387,9 +432,75 @@ public class CreatePostActivity extends ToolbarActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        Log.i(TAG, "onResume: ");
+        super.onResume();
+    }
+
     private Request buildEditCreateRequest(String url, File file) {
         RequestBody requestBody = null;
+
+
+        int [] years = new int[2];
+        int [] months = new int[2];
+        int [] days = new int[2];
+        int [] hours = new int[2];
+        int [] minutes = new int[2];
+
+        int precision = t.getPrecision();
+        switch (precision){
+            case 4:
+                years[0] = t.getStartYear();
+                years[1] = t.getEndYear();
+                months[0] = t.getStartMonth();
+                months[1] = t.getEndMonth();
+                days[0] = t.getStartDay();
+                days[1] = t.getEndDay();
+                hours[0] = t.getStartHour();
+                hours[1] = t.getEndHour();
+                minutes[0] = t.getStartMinute();
+                minutes[1] = t.getEndMinute();
+                break;
+            case 3:
+                years[0] = t.getStartYear();
+                years[1] = t.getEndYear();
+                months[0] = t.getStartMonth();
+                months[1] = t.getEndMonth();
+                days[0] = t.getStartDay();
+                days[1] = t.getEndDay();
+                break;
+            case 2:
+                years[0] = t.getStartYear();
+                years[1] = t.getEndYear();
+                months[0] = t.getStartMonth();
+                months[1] = t.getEndMonth();
+
+                break;
+            case 1 :
+                years[0] = t.getStartYear();
+                years[1] = t.getEndYear();
+                break;
+        }
+
         try {
+
+
+
+            MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
+            MultipartBody.Builder builder = bodyBuilder.setType(MultipartBody.FORM);
+
+
+
+            Gson gson = new Gson();
+
+            for(LocationModel loc : locations) {
+                String key = gson.toJson(loc);
+                builder.addFormDataPart("locations", key );
+
+            }
+
+
             requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
                     .addFormDataPart("title", titleEditText.getText().toString())
                     .addFormDataPart("story", storyEditText.getText().toString())
@@ -399,6 +510,9 @@ public class CreatePostActivity extends ToolbarActivity {
                     .addFormDataPart("tags", tagEditText.getText().toString())
                     .addFormDataPart("images", file.getName(), RequestBody.create(MediaType.parse("image/jpeg"), file))
                     .build();
+
+
+
         } catch (ParseException e) {
             SuperActivityToast.create(CreatePostActivity.this, new Style(), Style.TYPE_BUTTON)
                     .setProgressBarColor(Color.WHITE)
@@ -497,7 +611,10 @@ public class CreatePostActivity extends ToolbarActivity {
 
     public void  addLocation(LocationModel model) {
         locations.add(model);
+        Log.i(TAG, "addLocation: ");
     };
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

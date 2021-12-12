@@ -136,6 +136,7 @@
 
 
                 <ImageView
+                    android:id="@+id/choose_time"
                     android:layout_width="20dp"
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"

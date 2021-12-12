@@ -1,39 +1,39 @@
 package com.example.postory.models;
 
 public class LocationModel {
-    private String locName;
-    private double lat;
-    private double lon;
+    private String name;
+    private double latitude;
+    private double longitude;
 
 
 
-    public LocationModel(String locName, double lat, double lon) {
-        this.locName = locName;
-        this.lat = lat;
-        this.lon = lon;
+    public LocationModel(String name, double latitude, double longitude) {
+        this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
-    public String getLocName() {
-        return locName;
+    public String getName() {
+        return name;
     }
 
-    public void setLocName(String locName) {
-        this.locName = locName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public double getLat() {
-        return lat;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setLat(double lat) {
-        this.lat = lat;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
-    public double getLon() {
-        return lon;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public void setLon(double lon) {
-        this.lon = lon;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }
