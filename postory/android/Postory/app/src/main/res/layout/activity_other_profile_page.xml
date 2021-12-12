@@ -120,7 +120,7 @@
             android:layout_height="35dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
-            android:background="lig"
+            android:background="@color/colorLightGray"
             android:gravity="center_horizontal"
             android:text="@string/followed_by"
             app:layout_constraintStart_toStartOf="parent"
