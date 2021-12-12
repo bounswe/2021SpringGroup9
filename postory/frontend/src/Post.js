@@ -25,7 +25,7 @@ class PostUpper extends React.Component{
       contentSmall : (props.story.length > 200) ? props.story.slice(0,200): props.story,
       continueReading: props.story.length > 200,
     };
-    console.log(this.state.locations);
+    console.log(this.state);
     this.getMoreContent = this.getMoreContent.bind(this);
   }
 
@@ -68,6 +68,12 @@ class PostUpper extends React.Component{
              {obj[0]}
           </a>);
         })}
+        {this.state.year && <a class = "tag">
+              <Icon path={mdiClockTimeEight}
+          title="Years"
+          size={0.7}
+          color="#53BEC6"
+          />{this.state.year[0]} {this.state.year.length > 1 && '-' + this.state.year[1]} </a>}
         {this.state.tags.map((obj,i) => {
           return(
           <a key = {i} class = "tag">

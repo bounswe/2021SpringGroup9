@@ -4,7 +4,7 @@ import InfoBox from "react-google-maps/lib/components/addons/InfoBox";
 import Icon from '@mdi/react'
 import { mdiGestureTap } from '@mdi/js';
 import { Link, Navigate} from "react-router-dom";
-
+import * as requests from './requests'
 
 const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
     const [markers, setMarkers] = React.useState([]);
@@ -16,7 +16,9 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
 
 
     useEffect(() => {
-        fetch('http://3.125.114.231:8000/api/post/all')
+
+        //fetch('http://3.125.114.231:8000/api/post/all')
+        requests.get_jwt('/api/post/all/discover',{})
             .then(response => response.json())
             .then( (data) => {
                 setPosts(data);

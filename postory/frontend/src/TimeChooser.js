@@ -25,8 +25,7 @@ class TimeChooser extends React.Component {
 
     getEditInfo(info){
         this.setState({
-            startDate : info.storyDate.slice(0,10),
-            startTime : '00:00'
+            ...info
         });
     }
 
@@ -35,7 +34,7 @@ class TimeChooser extends React.Component {
         result = {}
         for (let key in this.state) {
             if (this.state[key] !== null) {
-                result[key] = this.state['key']
+                result[key] = this.state[key]
             }
         }
         this.props.parentHandler('timeChooser', result)

@@ -55,7 +55,7 @@ class ViewPost extends React.Component{
 
     render(){
         return(<div className="App App-header">
-            <button class = "placeholder"></button>
+            <div style={{ height: window.innerHeight * 1/20, width: window.innerWidth }}/>
         <div class = "row2">
             <div>
                 {this.state.post && <Post {...this.state.post} />}
