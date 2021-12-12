@@ -194,7 +194,14 @@ class EditPost extends React.Component{
 
 
         const getFormData = object => Object.keys(object).reduce((formData, key) => {
-            if(key == 'locations'  )
+            if ( key.includes('Year')){
+                formData.append('year', object[key]);
+            }else if (key.includes('Month')){
+                formData.append('month', object[key]);
+            }else if (key.includes('Day')){
+                formData.append('day', object[key]);
+            }
+            else if(key == 'locations'  )
                 for(let el in object[key])
                     formData.append(key, JSON.stringify(object[key][el]));
             else if(key == 'tags')
