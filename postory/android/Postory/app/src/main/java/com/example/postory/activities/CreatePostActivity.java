@@ -2,11 +2,13 @@ package com.example.postory.activities;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
 import android.os.Handler;
+import android.view.MotionEvent;
 import android.widget.*;
 
 import androidx.annotation.NonNull;
@@ -41,8 +43,12 @@ import com.bumptech.glide.request.transition.Transition;
 import com.example.postory.BuildConfig;
 import com.example.postory.R;
 import com.example.postory.dialogs.DelayedProgressDialog;
+import com.example.postory.fragments.MapFragment;
+import com.example.postory.fragments.TimeChooserFragment;
+import com.example.postory.models.LocationModel;
 import com.example.postory.models.Post;
 import com.example.postory.models.PostModel;
+import com.example.postory.utils.TimeController;
 import com.github.johnpersano.supertoasts.library.Style;
 import com.github.johnpersano.supertoasts.library.SuperActivityToast;
 import com.github.johnpersano.supertoasts.library.SuperToast;
@@ -50,6 +56,7 @@ import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
 import okhttp3.*;
@@ -59,12 +66,25 @@ import org.w3c.dom.Text;
 
 import java.io.*;
 import java.lang.reflect.Array;
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class CreatePostActivity extends ToolbarActivity implements OnMapReadyCallback {
+public class CreatePostActivity extends ToolbarActivity {
 
+
+    TimeController t;
+
+    public TimeController getT() {
+        return t;
+    }
+
+    public void setT(TimeController t) {
+        this.t = t;
+    }
+
+    boolean isFirstTime = true;
     Button sendButton;
     Handler handler;
     EditText nicknameEditText;
@@ -72,12 +92,30 @@ public class CreatePostActivity extends ToolbarActivity implements OnMapReadyCal
     EditText storyEditText;
     EditText dateEditText;
     EditText tagEditText;
-    EditText locationEditText;
+    public EditText locationEditText;
     TextView title;
     ImageView postImage;
+    ImageView timeChoose;
+    AlertDialog alertDialog;
     Post post;
+    ArrayList<LocationModel> locations;
     ImageView locationChoose;
-    LinearLayout mapLayout;
+    public LinearLayout stdLayout;
+    public FrameLayout mapContainer;
+    private SharedPreferences sharedPreferences;
+    private String accessToken;
+
+    boolean isScrollable = true;
+
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
+    }
+
+    String locationName;
 
     DelayedProgressDialog dialog;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -107,8 +145,22 @@ public class CreatePostActivity extends ToolbarActivity implements OnMapReadyCal
         formatToDate = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
         handler = new Handler();
 
+        sharedPreferences = getSharedPreferences("MY_APP",MODE_PRIVATE);
+        accessToken = sharedPreferences.getString("access_token","");
 
-        mapLayout = (LinearLayout) findViewById(R.id.map_layout);
+
+        locations = new ArrayList<>();
+        timeChoose = (ImageView) findViewById(R.id.choose_time);
+
+
+
+        stdLayout = (LinearLayout) findViewById(R.id.create_post_std_layout);
+        mapContainer = (FrameLayout) findViewById(R.id.frame_placeholder);
+
+        final EditText editText = new EditText(this);
+
+
+
         locationChoose = (ImageView) findViewById(R.id.btn_location_choose);
         sendButton = (Button) findViewById(R.id.send_button);
         nicknameEditText = (EditText) findViewById(R.id.op_name_field);
@@ -182,15 +234,47 @@ public class CreatePostActivity extends ToolbarActivity implements OnMapReadyCal
 
         postImage = (ImageView) findViewById(R.id.post_photo);
 
+        timeChoose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stdLayout.setVisibility(View.GONE);
+                mapContainer.setVisibility(View.VISIBLE);
+                TimeChooserFragment tf = new TimeChooserFragment();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frame_placeholder,tf)
+                        .commit();
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+            }
+        });
+
+
 
         locationChoose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mapLayout.setVisibility(View.VISIBLE);
+
+                stdLayout.setVisibility(View.GONE);
+                mapContainer.setVisibility(View.VISIBLE);
+
+
+                if(isFirstTime) {
+                    SuperActivityToast.create(CreatePostActivity.this, new Style(), Style.TYPE_BUTTON)
+                            .setProgressBarColor(Color.WHITE)
+                            .setText("In order to pin a location on the map, long click a location on the map and give it a name!")
+                            .setDuration(Style.DURATION_LONG)
+                            .setFrame(Style.FRAME_LOLLIPOP)
+                            .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_BLUE))
+                            .setAnimations(Style.ANIMATIONS_POP).show();
+                    isFirstTime = false;
+                }
+
+
+                MapFragment mf = new MapFragment();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frame_placeholder,mf)
+                        .commit();
 
             }
         });
@@ -286,6 +370,7 @@ public class CreatePostActivity extends ToolbarActivity implements OnMapReadyCal
 
                 } else {
                     if (checkNecessaryData()) {
+
                         File file = new File(getRealPathFromURI(imageUri));
                         OkHttpClient client = new OkHttpClient();
                         String url = BuildConfig.API_IP + "/post/create";
@@ -353,19 +438,114 @@ public class CreatePostActivity extends ToolbarActivity implements OnMapReadyCal
         });
     }
 
+    @Override
+    protected void onResume() {
+        Log.i(TAG, "onResume: ");
+        super.onResume();
+    }
+
     private Request buildEditCreateRequest(String url, File file) {
         RequestBody requestBody = null;
+        int [] years = new int[2];
+        int [] months = new int[2];
+        int [] days = new int[2];
+        int [] hours = new int[2];
+        int [] minutes = new int[2];
+        MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
+        MultipartBody.Builder builder = bodyBuilder.setType(MultipartBody.FORM);
+        int precision = t.getPrecision();
+        switch (precision){
+            case 4:
+                years[0] = t.getStartYear();
+                years[1] = t.getEndYear();
+                months[0] = t.getStartMonth();
+                months[1] = t.getEndMonth();
+                days[0] = t.getStartDay();
+                days[1] = t.getEndDay();
+                hours[0] = t.getStartHour();
+                hours[1] = t.getEndHour();
+                minutes[0] = t.getStartMinute();
+                minutes[1] = t.getEndMinute();
+                builder.addFormDataPart("year", years[0] + "");
+                builder.addFormDataPart("year", years[1] + "");
+                builder.addFormDataPart("month", months[0] + "");
+                builder.addFormDataPart("month", months[1] + "");
+                builder.addFormDataPart("day", days[0] + "");
+                builder.addFormDataPart("day", days[1] + "");
+                builder.addFormDataPart("hour", hours[0] + "");
+                builder.addFormDataPart("hour", hours[1] + "");
+                builder.addFormDataPart("minute", minutes[0] + "");
+                builder.addFormDataPart("minute", minutes[1] + "");
+                break;
+            case 3:
+                years[0] = t.getStartYear();
+                years[1] = t.getEndYear();
+                months[0] = t.getStartMonth();
+                months[1] = t.getEndMonth();
+                days[0] = t.getStartDay();
+                days[1] = t.getEndDay();
+                builder.addFormDataPart("year", years[0] + "");
+                builder.addFormDataPart("year", years[1] + "");
+                builder.addFormDataPart("month", months[0] + "");
+                builder.addFormDataPart("month", months[1] + "");
+                builder.addFormDataPart("day", days[0] + "");
+                builder.addFormDataPart("day", days[1] + "");
+                break;
+            case 2:
+                years[0] = t.getStartYear();
+                years[1] = t.getEndYear();
+                months[0] = t.getStartMonth();
+                months[1] = t.getEndMonth();
+                builder.addFormDataPart("year", years[0] + "");
+                builder.addFormDataPart("year", years[1] + "");
+                builder.addFormDataPart("month", months[0] + "");
+                builder.addFormDataPart("month", months[1] + "");
+                break;
+            case 1 :
+                years[0] = t.getStartYear();
+                years[1] = t.getEndYear();
+
+                builder.addFormDataPart("year", years[0] + "");
+                builder.addFormDataPart("year", years[1] + "");
+
+
+                break;
+        }
+
+
+
+
         try {
-            requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+
+
+
+
+
+
+
+
+
+            Gson gson = new Gson();
+
+            for(LocationModel loc : locations) {
+                String key = gson.toJson(loc);
+                builder.addFormDataPart("locations", key );
+            }
+
+
+
+
+            requestBody = builder
                     .addFormDataPart("title", titleEditText.getText().toString())
                     .addFormDataPart("story", storyEditText.getText().toString())
                     .addFormDataPart("owner", nicknameEditText.getText().toString())
-                    .addFormDataPart("locations", locationEditText.getText().toString())
-                    .addFormDataPart("storyDate", formatToDate.format(formatFromString.parse(dateEditText.getText().toString())))
                     .addFormDataPart("tags", tagEditText.getText().toString())
                     .addFormDataPart("images", file.getName(), RequestBody.create(MediaType.parse("image/jpeg"), file))
                     .build();
-        } catch (ParseException e) {
+
+
+
+        } catch (Exception e) {
             SuperActivityToast.create(CreatePostActivity.this, new Style(), Style.TYPE_BUTTON)
                     .setProgressBarColor(Color.WHITE)
                     .setText("WRONG FORM OF DATE (Should be in the form DD/mm/yyyy )!")
@@ -379,6 +559,7 @@ public class CreatePostActivity extends ToolbarActivity implements OnMapReadyCal
         Request request = new Request.Builder()
                 .url(url)
                 .post(requestBody)
+                .addHeader("Authorization", "JWT " + accessToken)
                 .build();
 
         return request;
@@ -460,6 +641,12 @@ public class CreatePostActivity extends ToolbarActivity implements OnMapReadyCal
         });
         builder.show();
     }
+
+    public void  addLocation(LocationModel model) {
+        locations.add(model);
+        Log.i(TAG, "addLocation: ");
+    };
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -584,8 +771,5 @@ public class CreatePostActivity extends ToolbarActivity implements OnMapReadyCal
         startActivity(i);
     }
 
-    @Override
-    public void onMapReady(@NonNull @NotNull GoogleMap googleMap) {
 
-    }
 }

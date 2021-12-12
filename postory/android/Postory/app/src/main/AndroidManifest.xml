@@ -21,6 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".activities.ForgotPasswordActivity"
+            android:exported="true" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -38,23 +41,17 @@
         <activity
             android:name=".activities.CreatePostActivity"
             android:exported="true" />
-
-        <activity android:name=".activities.ExploreActivity">
-
-        </activity>
-
+        <activity android:name=".activities.ExploreActivity"></activity>
         <activity
             android:name=".activities.MainActivity"
             android:exported="true" />
         <activity android:name=".activities.LoginActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

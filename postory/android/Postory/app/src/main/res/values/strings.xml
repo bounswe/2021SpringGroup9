@@ -38,5 +38,9 @@
     <string name="year">Year</string>
     <string name="pick">Pick</string>
     <string name="confirm">Confirm</string>
+    <string name="write_your_email_address_to_reset_password">Write your email address to reset password</string>
+    <string name="reset">Reset</string>
+    <string name="cancel">Cancel</string>
+    <string name="email">Email</string>
 
 </resources>

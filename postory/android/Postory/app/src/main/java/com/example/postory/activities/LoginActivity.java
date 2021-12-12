@@ -3,6 +3,12 @@ package com.example.postory.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,8 +20,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-
-import com.example.postory.activities.RegisterActivity;
 import com.example.postory.BuildConfig;
 import com.example.postory.R;
 import com.example.postory.dialogs.DelayedProgressDialog;
@@ -29,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Date;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -41,11 +46,12 @@ import okhttp3.ResponseBody;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private SharedPreferences sharedPreferences;
     TextInputEditText mail;
     TextInputEditText password;
     Button signInButton;
     Button signUpButton;
-    Button skipButton;
+    DateFormat dateFormat;
     TextView forgotPasswordText;
     Handler handler;
 
@@ -54,13 +60,27 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         mail = (TextInputEditText) findViewById(R.id.mail);
         password = (TextInputEditText) findViewById(R.id.password);
         signInButton = (Button) findViewById(R.id.signInButton);
         signUpButton = (Button) findViewById(R.id.signUpButton);
         forgotPasswordText = (TextView) findViewById(R.id.forgotPassword);
         handler = new Handler();
+        sharedPreferences = getSharedPreferences("MY_APP",MODE_PRIVATE);
 
+
+        try {
+            String validDateString = sharedPreferences.getString("valid_until","");
+            Date validDate = dateFormat.parse(validDateString);
+            if(validDate.compareTo(Calendar.getInstance().getTime())>0){
+                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,7 +95,8 @@ public class LoginActivity extends AppCompatActivity {
         forgotPasswordText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO Start forgot password process.
+                Intent intent = new Intent(LoginActivity.this,ForgotPasswordActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -153,6 +174,15 @@ public class LoginActivity extends AppCompatActivity {
                         JSONObject json = new JSONObject(signInResponseString);
                         String accessToken = json.getString("access");
                         preferences.edit().putString("access_token", accessToken).apply();
+                        Date endTime = Calendar.getInstance().getTime();
+
+                        final long hour = 3600000; // an hour
+                        final long hours_23 = 23*hour; //23 hours
+                        endTime.setTime(endTime.getTime()+hours_23);
+                        String endDateString = dateFormat.format(endTime);
+
+                        preferences.edit().putString("valid_until",endDateString).apply();
+
                         Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                         startActivity(intent);
                     } catch (JSONException e) {

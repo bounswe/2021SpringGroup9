@@ -1,5 +1,6 @@
 package com.example.postory.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -31,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ExploreActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapLongClickListener {
+public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapLongClickListener {
 
 
     private Post[] posts;
@@ -45,12 +46,40 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     private  ArrayList<PostModel> arrayOfPosts;
 
     @Override
+    protected void goHomeClicked() {
+        Intent i = new Intent(ExploreActivity.this, MainActivity.class);
+        finish();
+        startActivity(i);
+
+    }
+
+    @Override
+    protected void goCreatePostClicked() {
+        Intent createPostIntent = new Intent(ExploreActivity.this, CreatePostActivity.class);
+        createPostIntent.putExtra("goal", "create");
+        startActivity(createPostIntent);
+
+    }
+
+    @Override
+    protected void refreshClicked() {
+
+        return;
+
+    }
+
+    @Override
+    protected void goExploreClicked() {
+
+        return;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
-
+        super.initToolbar();
         sharedPreferences = getSharedPreferences("MY_APP",MODE_PRIVATE);
-
 
         accessToken = sharedPreferences.getString("access_token","");
 
@@ -99,7 +128,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                                     public void run() {
                                         mMap.addMarker(new MarkerOptions()
                                                 .position(location)
-                                                .title(post.getTitle()));
+                                                .title((String) locations.get(0)));
                                     }
                                 });
 
@@ -146,6 +175,8 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                 .setFrame(Style.FRAME_LOLLIPOP)
                 .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_BLUE))
                 .setAnimations(Style.ANIMATIONS_POP).show();
+
+
 
 
         return  true;
