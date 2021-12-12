@@ -131,8 +131,16 @@ public class PostAdapter extends ArrayAdapter<PostModel> {
         opName.setText(post.getOwner());
         postText.setText(post.getStory());
         opTitle.setText(post.getTitle());
-        dateText.setText(formatDate(post.getStoryDate()));
-        sharedDateText.setText(formatDate(post.getPostDate()));
+        if(post.getStoryDate() != null) {
+
+
+            dateText.setText(formatDate(post.getStoryDate()));
+        }
+
+        if(post.getPostDate() != null) {
+            sharedDateText.setText(formatDate(post.getPostDate()));
+        }
+
         return convertView;
 
     }
