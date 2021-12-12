@@ -110,7 +110,7 @@ class CreatePost extends React.Component{
     }
 
     prepareObjectToSend(){
-
+        /*
         if(this.state.postData["timeChooser"]["startDate"] == null){
             
             return ({
@@ -125,19 +125,35 @@ class CreatePost extends React.Component{
                 //images: this.state.postData['imageComponent'],
                 preview: this.state.postData['imageComponent']
             });
-        }
-        return ({
+        }*/
+        let obj = {
             title: this.state.postData["textChooser"]["title"],
             story: this.state.postData["textChooser"]["body"],
             owner: this.state.postData["owner"],
             locations: this.state.postData["locationChooser"],
-            storyDate: this.state.postData["timeChooser"]["startDate"] + "T" +this.state.postData["timeChooser"]["startTime"] + ":0.0Z" ,
-            editDate: this.state.postData["timeChooser"]["startDate"] + "T" +this.state.postData["timeChooser"]["startTime"] + ":0.0Z",
-            postDate: this.state.postData["timeChooser"]["startDate"] + "T" +this.state.postData["timeChooser"]["startTime"] + ":0.0Z",
+            startYear: this.state.postData["timeChooser"]["startYear"],
+            endYear: this.state.postData["timeChooser"]["endYear"] , 
+            startMonth: this.state.postData["timeChooser"]["startMonth"],
+            endMonth: this.state.postData["timeChooser"]["endMonth"] , 
+            startDay: this.state.postData["timeChooser"]["startDay"],
+            endDay: this.state.postData["timeChooser"]["endDay"] , 
+            startTime: this.state.postData["timeChooser"]["startTime"],
+            endTime: this.state.postData["timeChooser"]["endTime"] , 
+            //storyDate: this.state.postData["timeChooser"]["startDate"] + "T" +this.state.postData["timeChooser"]["startTime"] + ":0.0Z" ,
+            //editDate: this.state.postData["timeChooser"]["startDate"] + "T" +this.state.postData["timeChooser"]["startTime"] + ":0.0Z",
+            //postDate: this.state.postData["timeChooser"]["startDate"] + "T" +this.state.postData["timeChooser"]["startTime"] + ":0.0Z",
             tags: this.state.postData["tagChooser"]["selectedTags"],
             //images: this.state.postData['imageComponent'],
             preview: this.state.postData['imageComponent']
-        });
+        };
+        let objectToSend = {};
+        for(let key in obj){
+            if(obj[key])
+                objectToSend[key] = obj[key];
+        }
+
+
+        return (objectToSend);
     }
 
 
@@ -150,7 +166,10 @@ class CreatePost extends React.Component{
 
 
         const getFormData = object => Object.keys(object).reduce((formData, key) => {
-            if(key == 'locations'  || key == 'tags')
+            if(key == 'locations'  )
+                for(let el in object[key])
+                    formData.append(key, JSON.stringify(object[key][el]));
+            else if(key == 'tags')
                 for(let el in object[key])
                     formData.append(key, object[key][el]);
             else
@@ -170,11 +189,15 @@ class CreatePost extends React.Component{
 
         if(!at_least_one)
             formData.set('images', []);
-        
-        
 
-
-        requests.post_jwt(`/api/post/create`, formData).then(res => {
+        //requests.post_jwt(`/api/post/create`, formData)
+        fetch('http://3.125.114.231:8000/api/post/create', {
+            method: 'POST',
+            headers: {
+                'Authorization': `JWT ${localStorage.getItem('access')}`
+            },
+            body: formData
+        }).then(res => {
             if(res.status != 200){
                 console.log("ERROR" + res.data);
                 this.setState(state => {

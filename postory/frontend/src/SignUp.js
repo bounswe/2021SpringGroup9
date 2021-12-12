@@ -3,6 +3,7 @@ import Icon from '@mdi/react'
 import {createHash} from 'crypto'
 import './SignUp.css'
 import {Link, Navigate} from "react-router-dom";
+import * as requests from './requests';
 
 const BACKEND_URL = 'http://' + window.location.hostname + ':8000'
 
@@ -53,7 +54,7 @@ class SignUp extends React.Component {
     handleButtonClick(e) {
         if (e.target.disabled) return;
 
-        fetch(`${BACKEND_URL}/auth/users/`, {
+        /*fetch(`${BACKEND_URL}/auth/users/`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -67,7 +68,16 @@ class SignUp extends React.Component {
                 password: this.state.password1,
                 re_password: this.state.password2
             })
-        }).then(
+        })*/
+        requests.post_jwt('/auth/users/', {
+            email: this.state.email,
+            name: this.state.name,
+            surname: this.state.surname,
+            username: this.state.username,
+            password: this.state.password1,
+            re_password: this.state.password2
+        })
+        .then(
             res => {
                 if (Math.floor(res.status / 100) === 2) {
                     // Account successfully created

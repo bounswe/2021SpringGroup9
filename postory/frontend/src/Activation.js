@@ -12,10 +12,17 @@ class Activation extends React.Component {
             activationCompleted: false,
             redirect: false
         }
+        
+        var regex = /\/[a-zA-Z0-9]*\//g;
+        var url = window.location.pathname;
+        var idx = [...url.matchAll(regex)];
+        console.log('props', idx);
     }
 
     componentDidMount() {
-        const {uid, token} = this.props.match.params
+        console.log(this.state);
+        const {uid, token} = this.props.match.params;
+
         fetch(`${BACKEND_URL}/auth/users/activation/`, {
             method: 'POST',
             headers: {
