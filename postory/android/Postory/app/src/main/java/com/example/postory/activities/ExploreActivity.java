@@ -63,8 +63,9 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
 
     @Override
     protected void refreshClicked() {
+        Intent i = new Intent(ExploreActivity.this, SinglePostActivity.class);
+        startActivity(i);
 
-        return;
 
     }
 

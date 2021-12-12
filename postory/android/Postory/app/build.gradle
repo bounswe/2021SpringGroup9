@@ -52,6 +52,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation 'com.github.johnpersano:supertoasts:2.0@aar'
     implementation 'com.google.android.gms:play-services-maps:18.0.0'
+    compile 'com.github.jd-alexander:LikeButton:0.2.3'
 
 
 }
