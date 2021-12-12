@@ -148,6 +148,8 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                 .setAnimations(Style.ANIMATIONS_POP).show();
 
 
+
+
         return  true;
     }
 

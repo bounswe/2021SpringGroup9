@@ -211,7 +211,7 @@ public class TimeChooserFragment extends Fragment {
 
     }
     private void confirmButtonClick(){
-        TimeController t;
+        TimeController t = null;
         boolean correctInput = false;
         if(timeSwitch.isChecked()){
             try {
@@ -299,11 +299,13 @@ public class TimeChooserFragment extends Fragment {
 
         }
         if (correctInput){
-            // To get TimeController at the activity
-            // (CreatePostActivity)getActivity().getTimeController(t);
+            ((CreatePostActivity)getActivity()).setT(t);
         }
-        // Close fragment
-        //getFragmentManager().beginTransaction().remove(TimeChooserFragment.this).commit();
+
+        ((CreatePostActivity)getActivity()).stdLayout.setVisibility(View.VISIBLE);
+        ((CreatePostActivity)getActivity()).mapContainer.setVisibility(View.GONE);
+
+        ((CreatePostActivity)getActivity()).getSupportFragmentManager().beginTransaction().remove(TimeChooserFragment.this).commit();
 
     }
 
