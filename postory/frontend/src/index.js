@@ -10,7 +10,7 @@ import DiscoverPage from './DiscoverPage';
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import ViewPost from './ViewPost';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 import {
   BrowserRouter,
   Routes,
