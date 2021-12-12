@@ -308,7 +308,7 @@ class EditPost extends React.Component{
                         this.select('Preview');
                         }}>Preview</button>
                     
-                    <TextField id="userNameField" label="Enter Your Name" variant="filled" focused 
+                    {/*<TextField id="userNameField" label="Enter Your Name" variant="filled" focused 
                         onChange = {(e) => this.setState(state => {
                             let postData = state.postData;
                             return {
@@ -319,7 +319,7 @@ class EditPost extends React.Component{
                                 }
                             };
                         
-                        })}/>
+                        })}/>*/}
                 </div>
                 
 
