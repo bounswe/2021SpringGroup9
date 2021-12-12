@@ -29,5 +29,14 @@
     <string name="following">Following:</string>
     <string name="number_of_posts">Number of posts:</string>
     <string name="follow">Follow</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="day">Day</string>
+    <string name="month">Month</string>
+    <string name="time">Time</string>
+    <string name="start">Start:</string>
+    <string name="end">End:</string>
+    <string name="year">Year</string>
+    <string name="pick">Pick</string>
+    <string name="confirm">Confirm</string>
 
 </resources>
