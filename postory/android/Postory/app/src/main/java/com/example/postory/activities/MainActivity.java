@@ -2,6 +2,7 @@ package com.example.postory.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -48,6 +49,8 @@ public class MainActivity extends ToolbarActivity {
     public static final int CREATE_POST = 1;
     public static final String TAG = "MainActivity";
     private Post[] posts;
+    private SharedPreferences sharedPreferences;
+    private String accessToken;
 
     @Override
     protected void goHomeClicked() {
@@ -69,13 +72,9 @@ public class MainActivity extends ToolbarActivity {
 
     @Override
     protected void goExploreClicked() {
-        SuperActivityToast.create(MainActivity.this, new Style(), Style.TYPE_BUTTON)
-                .setProgressBarColor(Color.WHITE)
-                .setText("This feature is not available now.")
-                .setDuration(Style.DURATION_LONG)
-                .setFrame(Style.FRAME_LOLLIPOP)
-                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
-                .setAnimations(Style.ANIMATIONS_POP).show();
+
+      Intent intent = new Intent(MainActivity.this, ExploreActivity.class);
+      startActivity(intent);
     }
 
     @Override
@@ -84,9 +83,15 @@ public class MainActivity extends ToolbarActivity {
         setContentView(R.layout.activity_main);
         super.initToolbar();
 
+        sharedPreferences = getSharedPreferences("MY_APP",MODE_PRIVATE);
+
+
+        accessToken = sharedPreferences.getString("access_token","");
+
         client = new OkHttpClient();
         url = BuildConfig.API_IP + "/post/all";
         request = new Request.Builder()
+                .addHeader("Authorization", "JWT " + accessToken)
                 .url(url)
                 .build();
 

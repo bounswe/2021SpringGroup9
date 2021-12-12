@@ -153,6 +153,8 @@ public class LoginActivity extends AppCompatActivity {
                         JSONObject json = new JSONObject(signInResponseString);
                         String accessToken = json.getString("access");
                         preferences.edit().putString("access_token", accessToken).apply();
+                        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                        startActivity(intent);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
