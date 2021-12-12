@@ -36,6 +36,30 @@ class LikeButton extends React.Component {
     //console.log(this.state.likeList.length)
   }
 
+  updateLikeNumber = () => {
+    console.log(this.state.userID)
+    console.log(this.state.id)
+    fetch(`http://3.125.114.231:8000/api/post/like/${this.state.id}`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`
+            }
+    }).then(response => response.json())
+    .then( (data) => {
+      var likeList = data.likeList;
+      console.log(data);
+      console.log(likeList.length);
+      setTimeout(() => {this.setState({likeCount: data.likeList.length})}, 300);
+      if (!this.state.liked){
+        setTimeout(() => {this.setState({liked: true, iconPath: mdiCardsHeart})}, 300);
+      } else {
+        setTimeout(() => {this.setState({liked: false, iconPath: mdiCardsHeartOutline})}, 300);
+      }
+    })
+  }
+
   render() {
     return (
       <div class= "row2">
