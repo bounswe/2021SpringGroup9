@@ -40,7 +40,16 @@ class EditPost extends React.Component{
             postData: {
                 textChooser: {title : " ", body: " "},
                 locationChooser: [],
-                timeChooser: {startDate : " "},
+                timeChooser: {
+                    startYear: null,
+                    endYear: null,
+                    startMonth: null,
+                    endMonth: null,
+                    startDay: null,
+                    endDay: null,
+                    startTime: null,
+                    endTime: null,
+                },
                 tagChooser: {selectedTags: []},
                 owner:"USER",
                 imageComponent: null
