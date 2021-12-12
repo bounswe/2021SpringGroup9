@@ -7,6 +7,7 @@ import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
 import android.os.Handler;
+import android.view.MotionEvent;
 import android.widget.*;
 
 import androidx.annotation.NonNull;
@@ -41,6 +42,8 @@ import com.bumptech.glide.request.transition.Transition;
 import com.example.postory.BuildConfig;
 import com.example.postory.R;
 import com.example.postory.dialogs.DelayedProgressDialog;
+import com.example.postory.fragments.MapFragment;
+import com.example.postory.models.LocationModel;
 import com.example.postory.models.Post;
 import com.example.postory.models.PostModel;
 import com.github.johnpersano.supertoasts.library.Style;
@@ -50,6 +53,7 @@ import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
 import okhttp3.*;
@@ -63,7 +67,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class CreatePostActivity extends ToolbarActivity implements OnMapReadyCallback {
+public class CreatePostActivity extends ToolbarActivity {
 
     Button sendButton;
     Handler handler;
@@ -72,12 +76,27 @@ public class CreatePostActivity extends ToolbarActivity implements OnMapReadyCal
     EditText storyEditText;
     EditText dateEditText;
     EditText tagEditText;
-    EditText locationEditText;
+    public EditText locationEditText;
     TextView title;
     ImageView postImage;
+    AlertDialog alertDialog;
     Post post;
+    ArrayList<LocationModel> locations;
     ImageView locationChoose;
-    LinearLayout mapLayout;
+    public LinearLayout stdLayout;
+    public FrameLayout mapContainer;
+
+    boolean isScrollable = true;
+
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
+    }
+
+    String locationName;
 
     DelayedProgressDialog dialog;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -108,7 +127,17 @@ public class CreatePostActivity extends ToolbarActivity implements OnMapReadyCal
         handler = new Handler();
 
 
-        mapLayout = (LinearLayout) findViewById(R.id.map_layout);
+        locations = new ArrayList<>();
+
+
+
+        stdLayout = (LinearLayout) findViewById(R.id.create_post_std_layout);
+        mapContainer = (FrameLayout) findViewById(R.id.frame_placeholder);
+
+        final EditText editText = new EditText(this);
+
+
+
         locationChoose = (ImageView) findViewById(R.id.btn_location_choose);
         sendButton = (Button) findViewById(R.id.send_button);
         nicknameEditText = (EditText) findViewById(R.id.op_name_field);
@@ -183,14 +212,19 @@ public class CreatePostActivity extends ToolbarActivity implements OnMapReadyCal
         postImage = (ImageView) findViewById(R.id.post_photo);
 
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
 
         locationChoose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mapLayout.setVisibility(View.VISIBLE);
+
+                stdLayout.setVisibility(View.GONE);
+                mapContainer.setVisibility(View.VISIBLE);
+
+                MapFragment mf = new MapFragment();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frame_placeholder,mf)
+                        .commit();
 
             }
         });
@@ -461,6 +495,9 @@ public class CreatePostActivity extends ToolbarActivity implements OnMapReadyCal
         builder.show();
     }
 
+    public void  addLocation(LocationModel model) {
+        locations.add(model);
+    };
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -584,8 +621,5 @@ public class CreatePostActivity extends ToolbarActivity implements OnMapReadyCal
         startActivity(i);
     }
 
-    @Override
-    public void onMapReady(@NonNull @NotNull GoogleMap googleMap) {
 
-    }
 }
