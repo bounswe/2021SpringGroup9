@@ -34,7 +34,7 @@ class ForgotPassword extends React.Component {
             })
         }).then(
             res => {
-                if (res.status % 100 === 2) {
+                if (Math.floor(res.status / 100) === 2) {
                     this.setState(state => ({...state, success: true}))
                 }
             }

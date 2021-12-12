@@ -96,7 +96,6 @@ export function get(url, params_json) {
     if (url.startsWith('/')) {
         url = url.substring(1)
     }
-
     const params = new URLSearchParams(params_json).toString()
 
     return fetch(`${BACKEND_URL}/${url}${params}`, {
@@ -112,7 +111,6 @@ export function get_jwt(url, params_json) {
     if (url.startsWith('/')) {
         url = url.substring(1)
     }
-
 
     const params = new URLSearchParams(params_json).toString()
 
