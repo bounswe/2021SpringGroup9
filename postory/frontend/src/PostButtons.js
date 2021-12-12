@@ -11,31 +11,29 @@ import { mdiBookmarkOutline } from '@mdi/js';
 import { mdiDragVerticalVariant } from '@mdi/js';
   
 class LikeButton extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            liked: false,
-            likeNumber: 0
-        };
-      }
-
-  updateLikeNumber = () => {
-    this.setState({ liked: !this.state.liked, likeNumber: this.state.liked ? 0 : 1 });
+  constructor(props) {
+    super(props);
+    this.state = {
+        ...props,
+        liked: false,
+        likeCount: props.likeList.length,
+        userID: localStorage.getItem('userID'),
+        iconPath: mdiCardsHeartOutline
+    };
+    
   }
 
-  getIconPath = () => this.state.liked ? mdiCardsHeart : mdiCardsHeartOutline
-
+  
   render() {
-    const imageName = this.getIconPath();
     return (
       <div class= "row2">
         <Icon 
-          path={imageName} 
+          path={this.state.iconPath} 
           size={2}
           onClick={this.updateLikeNumber} 
         />
         <div>
-          {this.state.likeNumber}
+          {this.state.likeCount}
         </div>
       </div>
     );
@@ -55,8 +53,10 @@ class PostButtons extends React.Component {
     super(props);
 
     this.state = {
+      ...props,
       popupState: false
     }
+    console.log(this.state);
   }
 
   showPopup = () => {
@@ -71,7 +71,7 @@ class PostButtons extends React.Component {
     return(
       <div>
         <div class= "row2">
-          <LikeButton></LikeButton>
+          <LikeButton {...this.props}></LikeButton>
           <VerticalSeperator></VerticalSeperator>
           <Icon 
             path={mdiCommentTextOutline} 

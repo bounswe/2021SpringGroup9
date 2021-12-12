@@ -12,7 +12,7 @@ class Post extends React.Component{
       this.props = props;
     }
     render(){
-      return (<div class= "Post" ><PostUpper {...this.props}/> <PostButtons/></div>);
+      return (<div class= "Post" ><PostUpper {...this.props}/> <PostButtons {...this.props}/></div>);
     }
 }
 
