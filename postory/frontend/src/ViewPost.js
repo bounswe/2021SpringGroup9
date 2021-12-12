@@ -5,7 +5,7 @@ import { Carousel } from 'react-responsive-carousel';
 import {mdiSend } from '@mdi/js';
 import Icon from '@mdi/react';
 import { TextField } from '@material-ui/core';
-
+import * as requests from './requests'
 const backendIP = '3.125.114.231:8000';
 
 class ViewPost extends React.Component{
@@ -28,7 +28,7 @@ class ViewPost extends React.Component{
     }
 
     componentDidMount(){
-        fetch(`http://${backendIP}/api/post/get/${this.state.id}`).then(resp => resp.json()).then(
+        requests.get_jwt(`/api/post/get/${this.state.id}`, {}).then(resp => resp.json()).then(
             data => {
                 this.setState(state=>{return {
                     ...state,
@@ -45,7 +45,7 @@ class ViewPost extends React.Component{
         <div class = "row">
             <div>
                 {this.state.post && <Post {...this.state.post} />}
-                <CommentContainer />
+                {this.state.post && <CommentContainer id = {this.state.id} comments = {this.state.post.comments}/>}
             </div>
             <div>
                 {this.state.post &&
@@ -72,9 +72,9 @@ class Comment extends React.Component{
         super(props);
         //get profile pic from the backend using username
         this.state = {
-            userName: props.userName,
+            userName: props.info[1],
             userProfilePic: "",
-            text: props.text
+            text: props.info[2]
         };
     }
     render(){
@@ -94,15 +94,11 @@ class CommentContainer extends React.Component{
     constructor(props){
         super(props);
         //get all comments of post from backend
+        this.props = props;
         this.state = {
-            comments: [
-                {userName: 'USER1', text: 'a comment'},
-                {userName: 'USER2', text: 'another comment comment comment comment comment comment comment'},
-                {userName: 'USER1', text: 'a comment'},
-                {userName: 'USER1', text: 'a comment'},
-                {userName: 'USER1', text: 'a comment'},
-            ],
-            currentUserName : 'me'
+            
+            comments: props.comments,
+            currentUserName : 'Me'
         };
         
         this.textChange = this.textChange.bind(this);
@@ -122,10 +118,12 @@ class CommentContainer extends React.Component{
         this.setState(state => {
             return {
                 ...state,
-                comments: state.comments.concat([{userName: "noname", text: state.text}])
+                comments: state.comments.concat([["x", "Me", state.text]])
             };
 
         });
+
+        requests.post_jwt(`/api/post/comment/${this.props.id}`, {comment: this.state.text});
         console.log(`Send ${this.state.text} to backend`);
     }
 
@@ -133,7 +131,7 @@ class CommentContainer extends React.Component{
         return (
         <div class = "CommentContainer"> 
             {this.state.comments.map( 
-                (obj,i) => {return (<Comment {...obj} key = {i} ></Comment>);}
+                (obj,i) => {return (<Comment info = {obj} key = {i} ></Comment>);}
                 )}
             <div class = "row">
                 <textarea style = {{width: 400}} type = "text" onChange = {this.textChange} ></textarea>
