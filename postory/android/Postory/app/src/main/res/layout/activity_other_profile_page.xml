@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activities.OtherProfilePageActivity">
-<include layout="@layout/toolbar" />
+
+    <include layout="@layout/toolbar" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="120dp">
@@ -26,7 +28,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
-            android:text="Username:"
+            android:text="@string/username"
             app:layout_constraintStart_toEndOf="@id/profilePicture"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,7 +38,6 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_marginTop="10dp"
-
             android:background="@color/colorLightGray"
             android:gravity="center_vertical"
             android:text=" memo06 "
@@ -51,7 +52,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
             android:gravity="center_vertical"
-            android:text="Name:"
+            android:text="@string/name"
             app:layout_constraintStart_toEndOf="@id/profilePicture"
             app:layout_constraintTop_toBottomOf="@id/usernameHint" />
 
@@ -59,12 +60,10 @@
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-
             android:layout_marginTop="5dp"
             android:background="@color/colorLightGray"
             android:gravity="center_vertical"
             android:text=" Mehmet "
-
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toEndOf="@id/nameHint"
             app:layout_constraintTop_toBottomOf="@id/username" />
@@ -76,7 +75,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
             android:gravity="center_vertical"
-            android:text="Surname:"
+            android:text="@string/surname"
             app:layout_constraintStart_toEndOf="@id/profilePicture"
             app:layout_constraintTop_toBottomOf="@id/nameHint" />
 
@@ -84,7 +83,6 @@
             android:id="@+id/surname"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-
             android:layout_marginTop="5dp"
             android:background="@color/colorLightGray"
             android:gravity="center_vertical"
@@ -108,7 +106,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="25dp"
             android:background="@color/colorPrimary"
-            android:text="Follow"
+            android:text="@string/follow"
             android:textAllCaps="false"
             app:layout_constraintStart_toEndOf="@id/numPostsHint"
             app:layout_constraintTop_toTopOf="parent">
@@ -124,7 +122,7 @@
             android:layout_marginTop="5dp"
             android:background="lig"
             android:gravity="center_horizontal"
-            android:text="Followed by:"
+            android:text="@string/followed_by"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -147,7 +145,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
             android:gravity="center_horizontal"
-            android:text="Following:"
+            android:text="@string/following"
             app:layout_constraintStart_toEndOf="@id/followedByHint"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -170,7 +168,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
             android:gravity="center_horizontal"
-            android:text="Number of posts:"
+            android:text="@string/number_of_posts"
             app:layout_constraintStart_toEndOf="@id/followingHint"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -187,20 +185,21 @@
             app:layout_constraintTop_toBottomOf="@id/numPostsHint" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <TextView
         android:layout_width="200dp"
         android:layout_height="60dp"
-        android:textAllCaps="true"
-        android:text="Posts"
-        android:textColor="#000000"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal|center_vertical"
-        android:textSize="30sp"
-        >
+        android:text="Posts"
+        android:textAllCaps="true"
+        android:textColor="#000000"
+        android:textSize="30sp">
 
     </TextView>
+
     <ListView
+        android:id="@+id/list_posts"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </ListView>
+        android:layout_height="wrap_content"></ListView>
 </LinearLayout>
