@@ -6,7 +6,6 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Post from './Post';
-import jwt_decode from "jwt-decode";
 
 export const ProfilePageUpper = () => {
     const [followingCount, setFollowingCount] = React.useState(0);
@@ -58,11 +57,12 @@ export const ProfilePageUpper = () => {
             var url = window.location.href;
             var idx = url.search(regex);
             var id = parseInt(url.slice(idx+3));
-            var decoded = jwt_decode(localStorage.getItem('access'));
+            //var decoded = jwt_decode(localStorage.getItem('access'));
+
             console.log("ID: " + id);
-            console.log("Decoded: " + decoded.user_id);
-            setSessionUserID(decoded.user_id);
-            if (decoded.user_id == id){
+            console.log("Decoded: " + localStorage.getItem('userID'));
+            setSessionUserID(localStorage.getItem('userID'));
+            if (localStorage.getItem('userID') == id){
                 setShowFollowButton(false);
             }
             return id;

@@ -2,6 +2,7 @@ import React from 'react';
 import Icon from '@mdi/react'
 import {createHash} from 'crypto'
 import './SignIn.css'
+import jwt_decode from "jwt-decode";
 import {Link, Navigate} from "react-router-dom";
 
 function isEmail(str) {
@@ -58,6 +59,10 @@ class SignIn extends React.Component {
 
     render() {
         if (this.state.completed) {
+
+            var decoded = jwt_decode(localStorage.getItem('access'));
+            localStorage.setItem('userID', decoded.user_id)
+
             setTimeout(() => this.setState(state => ({...state, redirect: true})), 2000)
 
             return <header className={'App-header'}>
