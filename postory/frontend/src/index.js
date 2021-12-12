@@ -19,6 +19,7 @@ import {
 import ForgotPassword from "./ForgotPassword";
 import ForgotPasswordConfirm from "./ForgotPasswordConfirm";
 import Activation from "./Activation";
+import { ProfilePageUpper } from './ProfilePage';
 
 ReactDOM.render(
   <BrowserRouter>
@@ -33,6 +34,7 @@ ReactDOM.render(
     <Route path="/password/reset/confirm/:uid/:token" element={<div><TopBar /><ForgotPasswordConfirm /></div>} />
     <Route path="/activate/:uid/:token" element={<div><TopBar /><Activation /></div>} />
     <Route path="/viewPost" element={<div><TopBar/> <ViewPost /></div>} />
+    <Route path="/profilePage" element={<div><TopBar/> <ProfilePageUpper /></div>} />
     </Routes>
   </BrowserRouter>,
   document.getElementById('root')
