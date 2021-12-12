@@ -22,5 +22,12 @@
     <string name="write_your_name">Write your name</string>
     <string name="write_your_surname">Write your surname</string>
     <string name="write_your_password_again">Write your password again</string>
+    <string name="username">Username:</string>
+    <string name="name">Name:</string>
+    <string name="surname">Surname:</string>
+    <string name="followed_by">Followed by:</string>
+    <string name="following">Following:</string>
+    <string name="number_of_posts">Number of posts:</string>
+    <string name="follow">Follow</string>
 
 </resources>
