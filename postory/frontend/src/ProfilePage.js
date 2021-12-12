@@ -15,11 +15,12 @@ export const ProfilePageUpper = () => {
     const [userPosts, setUserPosts] = React.useState([]);
     const [fetchedPosts, setFetchedPosts] = React.useState(false);
     const [showFollowButton, setShowFollowButton] = React.useState(true);
-    const [username, setUserName] = React.useState();
-    const [sessionUserName, setSessionUserName] = React.useState();
+    const [userID, setUserID] = React.useState();
+    const [sessionUserID, setSessionUserID] = React.useState();
+    const [username, setUsername] = React.useState();
 
     useEffect(() => {
-        fetch(`http://3.125.114.231:8000/api/post/all/user/${username}`, {
+        fetch(`http://3.125.114.231:8000/api/post/all/user/${userID}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -32,10 +33,27 @@ export const ProfilePageUpper = () => {
                 setFetchedPosts(true)
                 console.log(data);
             })
-    }, [username])
+    }, [userID])
 
     useEffect(() => {
-        setUserName( () => {
+        fetch(`http://3.125.114.231:8000/api/user/get/${userID}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`
+            }
+        }).then(response => response.json())
+            .then( (data) => {
+                setUsername(data.username);
+                setFollowingCount(data.followedUsers.length);
+                setFollowerCount(data.followerUsers.length);
+                console.log(data);
+        })
+    }, [userID])
+
+    useEffect(() => {
+        setUserID( () => {
             var regex = /id=/g;
             var url = window.location.href;
             var idx = url.search(regex);
@@ -43,7 +61,7 @@ export const ProfilePageUpper = () => {
             var decoded = jwt_decode(localStorage.getItem('access'));
             console.log("ID: " + id);
             console.log("Decoded: " + decoded.user_id);
-            setSessionUserName(decoded.user_id);
+            setSessionUserID(decoded.user_id);
             if (decoded.user_id == id){
                 setShowFollowButton(false);
             }
@@ -52,7 +70,7 @@ export const ProfilePageUpper = () => {
     }, [])
 
     const onClickFollow = () =>{
-        fetch(`http://3.125.114.231:8000'/api/user/follow/${username}`, {
+        fetch(`http://3.125.114.231:8000'/api/user/follow/${userID}`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -64,8 +82,9 @@ export const ProfilePageUpper = () => {
     }
 
     return ( 
-        <div>
-        <div style={{ height: window.innerHeight * 1/10, width: window.innerWidth }}/>
+        <div style={{ backgroundColor: `#EBEBEB`}}>
+        <div style={{ height: window.innerHeight * 1/20, width: window.innerWidth }}/>
+        <hr style={{ color: `black`, backgroundColor: `black`, height: 2 }}/>
         <Container>
             <Row style={{alignItems: `center`}}>
                 <Col sm={4} >
@@ -85,7 +104,6 @@ export const ProfilePageUpper = () => {
             <div style={{ height: window.innerHeight * 1/50, width: window.innerWidth }}/>
             {showFollowButton && <Button variant="secondary" size="sm" onClick={() => onClickFollow()} >Follow</Button>}
         </Container>
-        <hr style={{ color: `black`, backgroundColor: `black`, height: 2 }}/>
         <div className="App-header">
         {fetchedPosts && userPosts.map((obj, i) => {
             return <Post key = {i} {...obj}></Post>;
