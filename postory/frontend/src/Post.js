@@ -42,10 +42,11 @@ class PostUpper extends React.Component{
   render(){
     let style = {paddingBottom: "10px"};
     return (<div >
-      <div class= "row" style = {style}>
+      <div class= "row2" style = {style}>
+      {this.state.owner && <Link class = "push" to= {`/profilePage?id=${this.state.owner}`}>
         <img class = "circle" width = "50px" height = "50px" src = "./static/media/postory_logo_no_text.ec3bad21.png" />
         <a style = {{margin: "10px"}}>{this.state.owner}</a>
-
+        </Link>}
         {this.state.id && <Link class = "push" to= {`/editPost?id=${this.state.id}`}>
           <Icon path={mdiPencilOutline}
             title="Edit Post"
@@ -54,7 +55,7 @@ class PostUpper extends React.Component{
             />
         </Link>}
       </div>
-      <div class= "row fitText">
+      <div class= "row2 fitText">
       
         {this.state.locations.filter(obj => typeof obj[0] === 'string' && obj[0] != '').map((obj,i) => {
           return(
@@ -87,11 +88,11 @@ class PostUpper extends React.Component{
       {this.state.continueReading && <a class = "mainContent" onClick = {this.getMoreContent}><b> ...Continue Reading</b></a>}
       <p></p>
       <div> 
-        {this.state.preview &&<div class = "row image">
+        {this.state.preview &&<div class = "row2 image">
           {this.state.preview.length > 0 && <img width = "200px" src = {URL.createObjectURL(this.state.preview[0])} ></img>}
           {this.state.preview.length > 1 && <img width = "200px" src = {URL.createObjectURL(this.state.preview[1])} ></img>}
         </div>}
-        {!this.state.preview &&<div class = "row image">
+        {!this.state.preview &&<div class = "row2 image">
           <img width = "200px" src = {(this.state.images && this.state.images[0]) ? this.state.images[0]: ""} ></img>
           <img width = "200px" src = {(this.state.images && this.state.images[0] && this.state.images[1]) ? this.state.images[1]: ""}></img>
         </div>}
@@ -117,7 +118,7 @@ class PostLower extends React.Component{
 
   render(){
     return(
-      <div class = "row">
+      <div class = "row2">
         {!this.state.clicked ?
         <Icon path={mdiCardsHeartOutline}
           title="Like"

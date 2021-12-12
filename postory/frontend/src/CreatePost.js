@@ -214,7 +214,7 @@ class CreatePost extends React.Component{
 
         return(
             <header className="App-header">
-            <div class = "row someSpacing">
+            <div class = "row2 someSpacing">
                 <div class = "inputArea">
                     <div class = {(this.state['selected'] != 'Story')? "hide": ""}><TextChooser ref = {this.refStory} parentHandler = {this.handleChildObjectSend}/> </div>
                     <div class = {(this.state['selected'] != 'Location')? "hide": ""}><LocationChooser ref = {this.refLocation} parentHandler = {this.handleChildObjectSend}/></div>
