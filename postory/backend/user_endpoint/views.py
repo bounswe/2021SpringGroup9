@@ -109,10 +109,10 @@ class UserGet(GenericAPIView):
         token = authorization.split()[1]
         decoded = jwt.decode(token,options={"verify_signature": False})
         user_id = decoded['user_id']
-        user = User.objects.filter(id = user_id).first()
-
-        if(user.isAdmin):
-            serializer = dict(UserSerializer(user).data)
+        requester_user = User.objects.filter(id = user_id).first()
+        requested_user = User.objects.filter(id = pk).first()
+        if(not requested_user.isPrivate or requested_user in requester_user.followedUsers):
+            serializer = dict(UserSerializer(requested_user).data)
             return Response(serializer)
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
