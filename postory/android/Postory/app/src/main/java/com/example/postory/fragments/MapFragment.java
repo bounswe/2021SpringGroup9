@@ -44,7 +44,7 @@ public class MapFragment extends Fragment {
                         ((CreatePostActivity)getActivity()).stdLayout.setVisibility(View.VISIBLE);
                         ((CreatePostActivity)getActivity()).mapContainer.setVisibility(View.GONE);
                         ((CreatePostActivity)getActivity()).locationEditText.setText(editText.getText().toString());
-                        ((CreatePostActivity)getActivity()).addLocation(new LocationModel(editText.getText().toString(),locationChosen.latitude,locationChosen.latitude));
+                        ((CreatePostActivity)getActivity()).addLocation(new LocationModel(editText.getText().toString(),locationChosen.latitude,locationChosen.longitude));
                         ((CreatePostActivity)getActivity()).getSupportFragmentManager().beginTransaction().remove(MapFragment.this).commit();
 
                     }
