@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activities.OtherProfilePageActivity">
-
+<include layout="@layout/toolbar" />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="120dp">
@@ -27,26 +27,20 @@
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:text="Username:"
-            android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toEndOf="@id/profilePicture"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <View
-            android:layout_width="3dp"
-            android:layout_height="match_parent"
-            android:background="@color/colorAccent"
-            app:layout_constraintStart_toEndOf="@id/usernameHint"
-
-            />
 
         <TextView
             android:id="@+id/username"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
+
+            android:background="@color/colorLightGray"
             android:gravity="center_vertical"
-            android:text="memo06"
+            android:text=" memo06 "
+            android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toEndOf="@id/usernameHint"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -58,18 +52,20 @@
             android:layout_marginTop="5dp"
             android:gravity="center_vertical"
             android:text="Name:"
-            android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toEndOf="@id/profilePicture"
             app:layout_constraintTop_toBottomOf="@id/usernameHint" />
 
         <TextView
             android:id="@+id/name"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:layout_marginStart="15dp"
+
             android:layout_marginTop="5dp"
+            android:background="@color/colorLightGray"
             android:gravity="center_vertical"
-            android:text="Mehmet"
+            android:text=" Mehmet "
+
+            android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toEndOf="@id/nameHint"
             app:layout_constraintTop_toBottomOf="@id/username" />
 
@@ -81,18 +77,20 @@
             android:layout_marginTop="5dp"
             android:gravity="center_vertical"
             android:text="Surname:"
-            android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toEndOf="@id/profilePicture"
             app:layout_constraintTop_toBottomOf="@id/nameHint" />
 
         <TextView
             android:id="@+id/surname"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:layout_marginStart="15dp"
+
             android:layout_marginTop="5dp"
+            android:background="@color/colorLightGray"
             android:gravity="center_vertical"
-            android:text="Demir"
+
+            android:text=" Demir "
+            android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toEndOf="@id/surnameHint"
             app:layout_constraintTop_toBottomOf="@id/name" />
 
@@ -100,20 +98,20 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:layout_marginTop="5dp">
+        android:layout_height="70dp"
+        android:background="@drawable/rectangle">
 
         <Button
             android:id="@+id/followButton"
-            android:layout_height="30dp"
-            android:layout_width="80dp"
+            android:layout_width="70dp"
+            android:layout_height="35dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="25dp"
             android:background="@color/colorPrimary"
             android:text="Follow"
-            android:textAllCaps="false">
+            android:textAllCaps="false"
+            app:layout_constraintStart_toEndOf="@id/numPostsHint"
+            app:layout_constraintTop_toTopOf="parent">
 
 
         </Button>
@@ -121,69 +119,88 @@
         <TextView
             android:id="@+id/followedByHint"
             android:layout_width="70dp"
-            android:layout_height="40dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/followButton"
+            android:layout_height="35dp"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:background="lig"
             android:gravity="center_horizontal"
-            android:text="Followed by:">
+            android:text="Followed by:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
         </TextView>
 
         <TextView
             android:layout_width="70dp"
-            android:layout_height="25dp"
-            app:layout_constraintTop_toBottomOf="@id/followedByHint"
-            app:layout_constraintStart_toStartOf="@id/followedByHint"
+            android:layout_height="20dp"
+            android:background="@color/colorLightGray"
+            android:gravity="center_horizontal"
             android:text="23"
             android:textColor="@color/colorPrimaryDark"
-            android:gravity="center_horizontal">
-        </TextView>
+            app:layout_constraintStart_toStartOf="@id/followedByHint"
+            app:layout_constraintTop_toBottomOf="@id/followedByHint" />
 
         <TextView
             android:id="@+id/followingHint"
             android:layout_width="70dp"
-            android:layout_height="40dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/followedByHint"
+            android:layout_height="35dp"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
             android:gravity="center_horizontal"
-            android:text="Following:">
+            android:text="Following:"
+            app:layout_constraintStart_toEndOf="@id/followedByHint"
+            app:layout_constraintTop_toTopOf="parent">
 
         </TextView>
 
         <TextView
             android:layout_width="70dp"
-            android:layout_height="25dp"
-            app:layout_constraintTop_toBottomOf="@id/followingHint"
-            app:layout_constraintStart_toStartOf="@id/followingHint"
+            android:layout_height="20dp"
+            android:background="@color/colorLightGray"
+            android:gravity="center_horizontal"
             android:text="25"
             android:textColor="@color/colorPrimaryDark"
-            android:gravity="center_horizontal">
-        </TextView>
+            app:layout_constraintStart_toStartOf="@id/followingHint"
+            app:layout_constraintTop_toBottomOf="@id/followingHint" />
 
         <TextView
             android:id="@+id/numPostsHint"
             android:layout_width="70dp"
-            android:layout_height="40dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/followingHint"
+            android:layout_height="35dp"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
             android:gravity="center_horizontal"
-            android:text="Number of posts:">
+            android:text="Number of posts:"
+            app:layout_constraintStart_toEndOf="@id/followingHint"
+            app:layout_constraintTop_toTopOf="parent">
 
         </TextView>
 
         <TextView
             android:layout_width="70dp"
-            android:layout_height="25dp"
-            app:layout_constraintTop_toBottomOf="@id/numPostsHint"
-            app:layout_constraintStart_toStartOf="@id/numPostsHint"
+            android:layout_height="20dp"
+            android:background="@color/colorLightGray"
+            android:gravity="center_horizontal"
             android:text="3"
             android:textColor="@color/colorPrimaryDark"
-            android:gravity="center_horizontal">
-        </TextView>
+            app:layout_constraintStart_toStartOf="@id/numPostsHint"
+            app:layout_constraintTop_toBottomOf="@id/numPostsHint" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:textAllCaps="true"
+        android:text="Posts"
+        android:textColor="#000000"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal|center_vertical"
+        android:textSize="30sp"
+        >
 
+    </TextView>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </ListView>
 </LinearLayout>
