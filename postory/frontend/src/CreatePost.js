@@ -8,12 +8,14 @@ import TextChooser from './TextChooser'
 import TimeChooser from './TimeChooser';
 import TagChooser from './TagChooser';
 import PeopleChooser from './PeopleChooser'
-import LocationChooser from './LocationChooser'
+//import LocationChooser from './LocationChooser'
+import LocationChooser from './LocationMap'
 import Post from './Post';
 import {TextField, Snackbar} from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
+import * as requests from './requests';
 
-const backendIP = '3.125.114.231:8000';
+const backendIP = 'localhost:8000';
 
 class CreatePost extends React.Component{
     constructor(props){
@@ -62,7 +64,7 @@ class CreatePost extends React.Component{
 
             //problem code
             if(whichComponent == 'locationChooser')
-                newObj.postData[whichComponent] = childObj.map((obj) => [obj]);
+                newObj.postData[whichComponent] = childObj;
             //problem code
             newObj['addedInformation'] = true;
             newObj['whichInfo'] = infoDict[whichComponent];
@@ -172,11 +174,7 @@ class CreatePost extends React.Component{
         
 
 
-        
-        fetch(`http://${backendIP}/api/post/create`, {
-            method: 'POST',
-            body: formData
-        }).then(res => {
+        requests.post_jwt(`/api/post/create`, formData).then(res => {
             if(res.status != 200){
                 console.log("ERROR" + res.data);
                 this.setState(state => {

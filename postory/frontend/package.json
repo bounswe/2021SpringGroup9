@@ -22,6 +22,7 @@
     "react-google-maps": "^9.4.5",
     "react-leaflet": "^3.2.2",
     "react-responsive-carousel": "^3.2.22",
+    "react-router": "^6.0.2",
     "react-router-dom": "^6.0.1",
     "react-scripts": "4.0.3",
     "reactjs-popup": "^2.0.5",

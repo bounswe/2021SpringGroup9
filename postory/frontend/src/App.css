@@ -136,5 +136,32 @@
   font-size: calc(10px + 2vmin);
 }
 
+.overflow{
+  overflow-y:scroll; 
+}
 
+.sliderContainer{
+  position: relative;
+}
+
+.sliderLeft{
+  position: absolute;
+  top: 50%;
+  left: 25px;
+  cursor: pointer;
+}
+
+.sliderRight{
+  position: absolute;
+  top: 50%;
+  right: 25px;
+  cursor: pointer;
+}
+
+.sliderContainer img {
+  max-height: 500px;
+  max-width:500px;
+  object-fit: cover;
+  margin-top: 50px;
+}
 

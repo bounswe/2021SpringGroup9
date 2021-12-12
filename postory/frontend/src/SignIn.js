@@ -8,7 +8,7 @@ function isEmail(str) {
     return /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(str)
 }
 
-const BACKEND_URL = 'http://' + window.location.hostname + ':8000'
+const BACKEND_URL = 'http://' + '3.125.114.231' + ':8000'
 
 class SignIn extends React.Component {
     constructor(props) {
@@ -39,7 +39,7 @@ class SignIn extends React.Component {
             })
         }).then(
             res => {
-                if (res.status % 100 === 2) {
+                if (Math.floor(res.status / 100) === 2) {
                     res.json().then(
                         data => {
                             const {refresh, access} = data
