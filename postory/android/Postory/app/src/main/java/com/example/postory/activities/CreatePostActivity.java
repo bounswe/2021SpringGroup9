@@ -2,6 +2,7 @@ package com.example.postory.activities;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
@@ -101,6 +102,8 @@ public class CreatePostActivity extends ToolbarActivity {
     ImageView locationChoose;
     public LinearLayout stdLayout;
     public FrameLayout mapContainer;
+    private SharedPreferences sharedPreferences;
+    private String accessToken;
 
     boolean isScrollable = true;
 
@@ -141,6 +144,9 @@ public class CreatePostActivity extends ToolbarActivity {
         formatFromString = new SimpleDateFormat("DD/mm/yyyy");
         formatToDate = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
         handler = new Handler();
+
+        sharedPreferences = getSharedPreferences("MY_APP",MODE_PRIVATE);
+        accessToken = sharedPreferences.getString("access_token","");
 
 
         locations = new ArrayList<>();
@@ -440,14 +446,13 @@ public class CreatePostActivity extends ToolbarActivity {
 
     private Request buildEditCreateRequest(String url, File file) {
         RequestBody requestBody = null;
-
-
         int [] years = new int[2];
         int [] months = new int[2];
         int [] days = new int[2];
         int [] hours = new int[2];
         int [] minutes = new int[2];
-
+        MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
+        MultipartBody.Builder builder = bodyBuilder.setType(MultipartBody.FORM);
         int precision = t.getPrecision();
         switch (precision){
             case 4:
@@ -461,6 +466,16 @@ public class CreatePostActivity extends ToolbarActivity {
                 hours[1] = t.getEndHour();
                 minutes[0] = t.getStartMinute();
                 minutes[1] = t.getEndMinute();
+                builder.addFormDataPart("year", years[0] + "");
+                builder.addFormDataPart("year", years[1] + "");
+                builder.addFormDataPart("month", months[0] + "");
+                builder.addFormDataPart("month", months[1] + "");
+                builder.addFormDataPart("day", days[0] + "");
+                builder.addFormDataPart("day", days[1] + "");
+                builder.addFormDataPart("hour", hours[0] + "");
+                builder.addFormDataPart("hour", hours[1] + "");
+                builder.addFormDataPart("minute", minutes[0] + "");
+                builder.addFormDataPart("minute", minutes[1] + "");
                 break;
             case 3:
                 years[0] = t.getStartYear();
@@ -469,26 +484,44 @@ public class CreatePostActivity extends ToolbarActivity {
                 months[1] = t.getEndMonth();
                 days[0] = t.getStartDay();
                 days[1] = t.getEndDay();
+                builder.addFormDataPart("year", years[0] + "");
+                builder.addFormDataPart("year", years[1] + "");
+                builder.addFormDataPart("month", months[0] + "");
+                builder.addFormDataPart("month", months[1] + "");
+                builder.addFormDataPart("day", days[0] + "");
+                builder.addFormDataPart("day", days[1] + "");
                 break;
             case 2:
                 years[0] = t.getStartYear();
                 years[1] = t.getEndYear();
                 months[0] = t.getStartMonth();
                 months[1] = t.getEndMonth();
-
+                builder.addFormDataPart("year", years[0] + "");
+                builder.addFormDataPart("year", years[1] + "");
+                builder.addFormDataPart("month", months[0] + "");
+                builder.addFormDataPart("month", months[1] + "");
                 break;
             case 1 :
                 years[0] = t.getStartYear();
                 years[1] = t.getEndYear();
+
+                builder.addFormDataPart("year", years[0] + "");
+                builder.addFormDataPart("year", years[1] + "");
+
+
                 break;
         }
+
+
+
 
         try {
 
 
 
-            MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
-            MultipartBody.Builder builder = bodyBuilder.setType(MultipartBody.FORM);
+
+
+
 
 
 
@@ -497,23 +530,22 @@ public class CreatePostActivity extends ToolbarActivity {
             for(LocationModel loc : locations) {
                 String key = gson.toJson(loc);
                 builder.addFormDataPart("locations", key );
-
             }
 
 
-            requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+
+
+            requestBody = builder
                     .addFormDataPart("title", titleEditText.getText().toString())
                     .addFormDataPart("story", storyEditText.getText().toString())
                     .addFormDataPart("owner", nicknameEditText.getText().toString())
-                    .addFormDataPart("locations", locationEditText.getText().toString())
-                    .addFormDataPart("storyDate", formatToDate.format(formatFromString.parse(dateEditText.getText().toString())))
                     .addFormDataPart("tags", tagEditText.getText().toString())
                     .addFormDataPart("images", file.getName(), RequestBody.create(MediaType.parse("image/jpeg"), file))
                     .build();
 
 
 
-        } catch (ParseException e) {
+        } catch (Exception e) {
             SuperActivityToast.create(CreatePostActivity.this, new Style(), Style.TYPE_BUTTON)
                     .setProgressBarColor(Color.WHITE)
                     .setText("WRONG FORM OF DATE (Should be in the form DD/mm/yyyy )!")
@@ -527,6 +559,7 @@ public class CreatePostActivity extends ToolbarActivity {
         Request request = new Request.Builder()
                 .url(url)
                 .post(requestBody)
+                .addHeader("Authorization", "JWT " + accessToken)
                 .build();
 
         return request;

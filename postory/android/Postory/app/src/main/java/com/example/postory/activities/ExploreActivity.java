@@ -99,7 +99,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                                     public void run() {
                                         mMap.addMarker(new MarkerOptions()
                                                 .position(location)
-                                                .title(post.getTitle()));
+                                                .title((String) locations.get(0)));
                                     }
                                 });
 
