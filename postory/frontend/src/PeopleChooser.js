@@ -62,7 +62,7 @@ class PeopleChooser extends React.Component{
         return(
             <div id={'peoplechooser-div'}>
                 <label htmlFor={'peoplechooser-title'} id={'peoplechooser-title-label'}>People</label>
-                <div class= "row">
+                <div class= "row2">
                 <input
                     type="text"
                     value={this.state.value}

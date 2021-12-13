@@ -8,12 +8,14 @@ import TextChooser from './TextChooser'
 import TimeChooser from './TimeChooser';
 import TagChooser from './TagChooser';
 import PeopleChooser from './PeopleChooser'
-import LocationChooser from './LocationChooser'
+//import LocationChooser from './LocationChooser'
+import LocationChooser from './LocationMap'
 import Post from './Post';
 import {TextField, Snackbar} from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
+import * as requests from './requests';
 
-const backendIP = '3.125.114.231:8000';
+const backendIP = 'localhost:8000';
 
 class CreatePost extends React.Component{
     constructor(props){
@@ -62,7 +64,7 @@ class CreatePost extends React.Component{
 
             //problem code
             if(whichComponent == 'locationChooser')
-                newObj.postData[whichComponent] = childObj.map((obj) => [obj]);
+                newObj.postData[whichComponent] = childObj;
             //problem code
             newObj['addedInformation'] = true;
             newObj['whichInfo'] = infoDict[whichComponent];
@@ -108,7 +110,7 @@ class CreatePost extends React.Component{
     }
 
     prepareObjectToSend(){
-
+        /*
         if(this.state.postData["timeChooser"]["startDate"] == null){
             
             return ({
@@ -123,19 +125,35 @@ class CreatePost extends React.Component{
                 //images: this.state.postData['imageComponent'],
                 preview: this.state.postData['imageComponent']
             });
-        }
-        return ({
+        }*/
+        let obj = {
             title: this.state.postData["textChooser"]["title"],
             story: this.state.postData["textChooser"]["body"],
             owner: this.state.postData["owner"],
             locations: this.state.postData["locationChooser"],
-            storyDate: this.state.postData["timeChooser"]["startDate"] + "T" +this.state.postData["timeChooser"]["startTime"] + ":0.0Z" ,
-            editDate: this.state.postData["timeChooser"]["startDate"] + "T" +this.state.postData["timeChooser"]["startTime"] + ":0.0Z",
-            postDate: this.state.postData["timeChooser"]["startDate"] + "T" +this.state.postData["timeChooser"]["startTime"] + ":0.0Z",
+            startYear: this.state.postData["timeChooser"]["startYear"],
+            endYear: this.state.postData["timeChooser"]["endYear"] , 
+            startMonth: this.state.postData["timeChooser"]["startMonth"],
+            endMonth: this.state.postData["timeChooser"]["endMonth"] , 
+            startDay: this.state.postData["timeChooser"]["startDay"],
+            endDay: this.state.postData["timeChooser"]["endDay"] , 
+            startTime: this.state.postData["timeChooser"]["startTime"],
+            endTime: this.state.postData["timeChooser"]["endTime"] , 
+            //storyDate: this.state.postData["timeChooser"]["startDate"] + "T" +this.state.postData["timeChooser"]["startTime"] + ":0.0Z" ,
+            //editDate: this.state.postData["timeChooser"]["startDate"] + "T" +this.state.postData["timeChooser"]["startTime"] + ":0.0Z",
+            //postDate: this.state.postData["timeChooser"]["startDate"] + "T" +this.state.postData["timeChooser"]["startTime"] + ":0.0Z",
             tags: this.state.postData["tagChooser"]["selectedTags"],
             //images: this.state.postData['imageComponent'],
             preview: this.state.postData['imageComponent']
-        });
+        };
+        let objectToSend = {};
+        for(let key in obj){
+            if(obj[key])
+                objectToSend[key] = obj[key];
+        }
+
+
+        return (objectToSend);
     }
 
 
@@ -148,7 +166,17 @@ class CreatePost extends React.Component{
 
 
         const getFormData = object => Object.keys(object).reduce((formData, key) => {
-            if(key == 'locations'  || key == 'tags')
+            if ( key.includes('Year')){
+                formData.append('year', object[key]);
+            }else if (key.includes('Month')){
+                formData.append('month', object[key]);
+            }else if (key.includes('Day')){
+                formData.append('day', object[key]);
+            }
+            else if(key == 'locations'  )
+                for(let el in object[key])
+                    formData.append(key, JSON.stringify(object[key][el]));
+            else if(key == 'tags')
                 for(let el in object[key])
                     formData.append(key, object[key][el]);
             else
@@ -168,13 +196,13 @@ class CreatePost extends React.Component{
 
         if(!at_least_one)
             formData.set('images', []);
-        
-        
 
-
-        
-        fetch(`http://${backendIP}/api/post/create`, {
+        //requests.post_jwt(`/api/post/create`, formData)
+        fetch('http://3.125.114.231:8000/api/post/create', {
             method: 'POST',
+            headers: {
+                'Authorization': `JWT ${localStorage.getItem('access')}`
+            },
             body: formData
         }).then(res => {
             if(res.status != 200){
@@ -216,7 +244,7 @@ class CreatePost extends React.Component{
 
         return(
             <header className="App-header">
-            <div class = "row someSpacing">
+            <div class = "row2 someSpacing">
                 <div class = "inputArea">
                     <div class = {(this.state['selected'] != 'Story')? "hide": ""}><TextChooser ref = {this.refStory} parentHandler = {this.handleChildObjectSend}/> </div>
                     <div class = {(this.state['selected'] != 'Location')? "hide": ""}><LocationChooser ref = {this.refLocation} parentHandler = {this.handleChildObjectSend}/></div>
@@ -244,7 +272,7 @@ class CreatePost extends React.Component{
                         this.select('Preview');
                         }}>Preview</button>
                     
-                    <TextField id="userNameField" label="Enter Your Name" variant="filled" focused 
+                    {/*<TextField id="userNameField" label="Enter Your Name" variant="filled" focused 
                         onChange = {(e) => this.setState(state => {
                             let postData = state.postData;
                             return {
@@ -255,7 +283,7 @@ class CreatePost extends React.Component{
                                 }
                             };
                         
-                        })}/>
+                        })}/>*/}
                 </div>
                 
 

@@ -3,6 +3,7 @@ import Icon from '@mdi/react'
 import {createHash} from 'crypto'
 import './SignUp.css'
 import {Link, Navigate} from "react-router-dom";
+import * as requests from './requests';
 
 const BACKEND_URL = 'http://' + window.location.hostname + ':8000'
 
@@ -39,6 +40,8 @@ class SignUp extends React.Component {
         super(props);
         this.state = {
             username: null,
+            name: null,
+            surname: null,
             email: null,
             password1: null,
             password2: null,
@@ -50,12 +53,8 @@ class SignUp extends React.Component {
 
     handleButtonClick(e) {
         if (e.target.disabled) return;
-        const names = this.state.username.split(/(\s+)/).filter( e => e.trim().length > 0)
-        const name = names.slice(0, -1).join(' ')
-        const surname = names.slice(-1).join(' ')
 
-        // const hashedPassword = createHash('sha256').update(this.state.password1).digest('hex')
-        fetch(`${BACKEND_URL}/auth/users/`, {
+        /*fetch(`${BACKEND_URL}/auth/users/`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -63,15 +62,24 @@ class SignUp extends React.Component {
             },
             body: JSON.stringify({
                 email: this.state.email,
-                //name: this.state.username,
-                name: name,
-                surname: surname,
+                name: this.state.name,
+                surname: this.state.surname,
+                username: this.state.username,
                 password: this.state.password1,
                 re_password: this.state.password2
             })
-        }).then(
+        })*/
+        requests.post_jwt('/auth/users/', {
+            email: this.state.email,
+            name: this.state.name,
+            surname: this.state.surname,
+            username: this.state.username,
+            password: this.state.password1,
+            re_password: this.state.password2
+        })
+        .then(
             res => {
-                if (res.status % 100 === 2) {
+                if (Math.floor(res.status / 100) === 2) {
                     // Account successfully created
                     this.setState(state => ({...state, status: 'success'}))
                 } else {
@@ -140,6 +148,22 @@ class SignUp extends React.Component {
                     <br />
                 </>
                 }
+                <label htmlFor={'signup-name'} id={'signup-name-text'}>Name: </label>
+                <br />
+                <input type={'text'} id={'signup-name'} onChange={
+                    e => {
+                        this.setState(state => ({...state, name: e.target.value}));
+                    }
+                }/>
+                <br />
+                <label htmlFor={'signup-surname'} id={'signup-surname-text'}>Surname: </label>
+                <br />
+                <input type={'text'} id={'signup-surname'} onChange={
+                    e => {
+                        this.setState(state => ({...state, surname: e.target.value}));
+                    }
+                }/>
+                <br />
                 <label htmlFor={'signup-password1'} id={'signup-password1-text'}>Password: </label>
                 <br />
                 <input type={'password'} id={'signup-password1'} onChange={
@@ -170,7 +194,7 @@ class SignUp extends React.Component {
                 }
                 <button
                     id={'signup-button'}
-                    disabled={(!this.state.email || !this.state.username || !this.state.password1 || !this.state.password2 || !isEmail(this.state.email) || getUsernameProblem(this.state.username) || getPasswordProblem(this.state.password1) || (this.state.password1 !== this.state.password2)) ? 'true' : ''}
+                    disabled={(!this.state.email || !this.state.username || !this.state.name || !this.state.surname || !this.state.password1 || !this.state.password2 || !isEmail(this.state.email) || getUsernameProblem(this.state.username) || getPasswordProblem(this.state.password1) || (this.state.password1 !== this.state.password2)) ? 'true' : ''}
                     onClick={this.handleButtonClick}>
                     Sign Up
                 </button>

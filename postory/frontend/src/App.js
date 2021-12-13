@@ -5,10 +5,11 @@ import './App.css';
 import PostButtons from './PostButtons';
 import Icon from '@mdi/react';
 import {mdiPencilPlusOutline } from '@mdi/js';
+import * as requests from './requests'
 
 import { Link } from "react-router-dom";
 
-const backendIP = '3.125.114.231:8000';
+const backendIP = 'localhost:8000';
 
 class App extends React.Component{
   constructor(props){
@@ -23,7 +24,9 @@ class App extends React.Component{
     this.state = {
       posts: posts
     };
-    fetch(`http://${backendIP}/api/post/all`).then(resp => resp.json()).then(data => this.setState(state => {
+    //fetch(`http://${backendIP}/api/post/all`).
+    requests.get_jwt('/api/post/all',{}).
+    then(resp => resp.json()).then(data => this.setState(state => {
       let newState = JSON.parse(JSON.stringify(state));
 
       //Show biggest id post on top
@@ -32,10 +35,9 @@ class App extends React.Component{
 
       newState.posts = data;
       newState['fetched'] = true;
-      console.log(newState);
-      console.log(data);
+
       return newState;
-    }))
+    })).catch(er => console.log(er));
     
   }
 

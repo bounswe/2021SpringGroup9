@@ -5,6 +5,13 @@ import { Carousel } from 'react-responsive-carousel';
 import {mdiSend } from '@mdi/js';
 import Icon from '@mdi/react';
 import { TextField } from '@material-ui/core';
+import * as requests from './requests'
+import { mdiArrowLeftThick, mdiArrowRightThick } from '@mdi/js';
+
+
+import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps";
+
+
 
 const backendIP = '3.125.114.231:8000';
 
@@ -20,46 +27,65 @@ class ViewPost extends React.Component{
         const url = window.location.href;
         const idx = url.search(regex);
         const id = parseInt(url.slice(idx+3));
-        console.log(url.slice(idx+3));
 
         this.state = {
-            id: id
+            id: id,
+            api_key: ""
         }
+        console.log(process.env.REACT_APP_GOOGLE_API_KEY);
+        if(process.env.REACT_APP_GOOGLE_API_KEY != undefined)
+            this.state = {
+                id: id,
+                api_key: `&key=` + process.env.REACT_APP_GOOGLE_API_KEY
+            }
+        requests.get_jwt(`/api/post/get/${this.state.id}`, {}).then(resp => resp.json()).then(
+                data => {
+                    this.setState(state=>{return {
+                        ...state,
+                        post: data
+                    }});
+                    console.log("posdf", this.state.post);
+                }
+            );
     }
 
     componentDidMount(){
-        fetch(`http://${backendIP}/api/post/get/${this.state.id}`).then(resp => resp.json()).then(
-            data => {
-                this.setState(state=>{return {
-                    ...state,
-                    post: data
-                }});
-                console.log("posdf", this.state.post);
-            }
-        );
+        
     }
 
     render(){
         return(<div className="App App-header">
-            <button class = "placeholder"></button>
-        <div class = "row">
+            <div style={{ height: window.innerHeight * 1/20, width: window.innerWidth }}/>
+        <div class = "row2">
             <div>
                 {this.state.post && <Post {...this.state.post} />}
-                <CommentContainer />
+                {this.state.post && <CommentContainer id = {this.state.id} comments = {this.state.post.comments}/>}
             </div>
             <div>
                 {this.state.post &&
+                <MapComponent 
+                isMarkerShown
+                googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places${this.state.api_key}`}
+                loadingElement={<div style={{ height: `100%` }} />}
+                containerElement={<div style={{ width: `500px`, height: `300px` }} />}
+                mapElement={<div style={{ height: `100%` }} />}
+                markers = 
+                {this.state.post.locations.map((obj,i) => {return {lat: obj[1], lng: obj[2]} })}
+                />}
+                
+                {/*this.state.post &&
                 <Carousel>
                 {this.state.post.images.map((obj,i) => {
                     return(
                     <div>
-                    <img src={obj} />
+                    <img class = "viewPostPicture" src={obj} />
                     </div>);
                 })}
-
-                        
-                </Carousel>
-                }
+            </Carousel>*/}
+                {this.state.post && this.state.post.images && this.state.post.images.length > 0
+                && <SliderComponent images = {this.state.post.images}/>}
+                
+                
             </div>
         </div>
         </div>)
@@ -72,14 +98,14 @@ class Comment extends React.Component{
         super(props);
         //get profile pic from the backend using username
         this.state = {
-            userName: props.userName,
+            userName: props.info[1],
             userProfilePic: "",
-            text: props.text
+            text: props.info[2]
         };
     }
     render(){
         return(<div class = "Comment">
-            <div class= "row">
+            <div class= "row2">
                 <img class = "circle" width = "50px" height = "50px" src = "./static/media/postory_logo_no_text.ec3bad21.png" />
                 <a style = {{margin: "10px"}}>{this.state.userName}</a>
             </div>
@@ -94,15 +120,11 @@ class CommentContainer extends React.Component{
     constructor(props){
         super(props);
         //get all comments of post from backend
+        this.props = props;
         this.state = {
-            comments: [
-                {userName: 'USER1', text: 'a comment'},
-                {userName: 'USER2', text: 'another comment comment comment comment comment comment comment'},
-                {userName: 'USER1', text: 'a comment'},
-                {userName: 'USER1', text: 'a comment'},
-                {userName: 'USER1', text: 'a comment'},
-            ],
-            currentUserName : 'me'
+            
+            comments: props.comments,
+            currentUserName : 'Me'
         };
         
         this.textChange = this.textChange.bind(this);
@@ -122,10 +144,12 @@ class CommentContainer extends React.Component{
         this.setState(state => {
             return {
                 ...state,
-                comments: state.comments.concat([{userName: "noname", text: state.text}])
+                comments: state.comments.concat([["x", "Me", state.text]])
             };
 
         });
+
+        requests.post_jwt(`/api/post/comment/${this.props.id}`, {comment: this.state.text});
         console.log(`Send ${this.state.text} to backend`);
     }
 
@@ -133,9 +157,9 @@ class CommentContainer extends React.Component{
         return (
         <div class = "CommentContainer"> 
             {this.state.comments.map( 
-                (obj,i) => {return (<Comment {...obj} key = {i} ></Comment>);}
+                (obj,i) => {return (<Comment info = {obj} key = {i} ></Comment>);}
                 )}
-            <div class = "row">
+            <div class = "row2">
                 <textarea style = {{width: 400}} type = "text" onChange = {this.textChange} ></textarea>
                 <Icon onClick = {this.sendComment} path={mdiSend}
                         title="Post"
@@ -148,7 +172,55 @@ class CommentContainer extends React.Component{
 }
 
 
+const SliderComponent = (props ) => {
+    const [curIdx, setCurIdx] = React.useState(0);
+    return(
+    <div className = "sliderContainer">
+        <Icon className = "sliderLeft" onClick = {() =>{
+            setCurIdx((idx)=> {
+                idx = idx-1;
+                if(idx<0)
+                    idx += props.images.length;
+                return idx;
+            });
+        }
+                } path={mdiArrowLeftThick }
+                        title="Post"
+                        size={2}
+                        color="black"
+                    />
+        <Icon className = "sliderRight" onClick = {() =>{
+            setCurIdx((idx)=> {
+                idx = idx+1;
+                idx %= props.images.length;
+                return idx;
+            });
+        }
+                } path={mdiArrowRightThick }
+                        title="Post"
+                        size={2}
+                        color="black"
+                    />
+        {props.images.length > 0 && <img src = {props.images[curIdx]}></img>}
+    </div>);
+}
 
+
+
+const MapComponent = withScriptjs(withGoogleMap((props) =>{
+
+return(<div>
+<GoogleMap
+        
+        defaultZoom={0}
+        defaultCenter={{ lat: 41, lng: 28 }}>
+        {props.markers.map((obj,i) => {
+            return (<Marker  position = {obj} key = {i}/>);
+        })}
+    </GoogleMap>
+    </div>);
+  }
+))
 
 
 export default ViewPost;

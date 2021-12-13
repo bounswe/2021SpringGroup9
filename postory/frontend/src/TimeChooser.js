@@ -24,21 +24,18 @@ class TimeChooser extends React.Component {
     }
 
     getEditInfo(info){
-        this.setState({
-            startDate : info.storyDate.slice(0,10),
-            startTime : '00:00'
-        });
+        const [startYear, endYear] = info.year || [null, null];
+        const [startMonth, endMonth] = info.month || [null, null];
+        const [startDay, endDay] = info.day || [null, null];
+        const [startHour, endHour] = info.hour || [null, null];
+        const [startMinute, endMinute] = info.minute || [null, null];
+        const startTime = startHour && startMinute && `${startHour}:${startMinute}`
+        const endTime = endHour && endMinute && `${endHour}:${endMinute}`
+        this.setState(state => ({startYear, endYear, startMonth, endMonth, startDay, endDay, startTime, endTime}));
     }
 
     sendParent() {
-        let result;
-        result = {}
-        for (let key in this.state) {
-            if (this.state[key] !== null) {
-                result[key] = this.state['key']
-            }
-        }
-        this.props.parentHandler('timeChooser', result)
+        this.props.parentHandler('timeChooser', this.state)
     }
 
     render() {
