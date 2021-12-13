@@ -236,7 +236,7 @@ public class TimeController {
                 }
                 break;
             case TIME_PRECISION:
-                dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 try {
                     startDate = dateFormat.parse("" + startDay + "/"+ startMonth + "/" + startYear + " " + startHour + ":" + startMinute);
                     endDate = dateFormat.parse("" + endDay + "/"+ endMonth + "/" + endYear + " " + endHour + ":" + endMinute);
