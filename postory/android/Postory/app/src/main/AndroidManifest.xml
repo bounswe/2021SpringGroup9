@@ -21,11 +21,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".activities.ForgotPasswordActivity"
+            android:exported="true" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDmrUAPEusnZPN8cRYafoZByr2intKxDSw" />
-
+            android:value="XXXXX" />
+        <activity
+            android:name=".activities.SelfProfilePageActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activities.OtherProfilePageActivity"
+            android:exported="true" />
         <activity
             android:name=".activities.RegisterActivity"
             android:exported="true" />
@@ -47,7 +55,6 @@
         <activity
             android:name=".activities.MainActivity"
             android:exported="true" />
-
         <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -55,7 +62,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

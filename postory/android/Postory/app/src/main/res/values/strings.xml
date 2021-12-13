@@ -22,7 +22,13 @@
     <string name="write_your_name">Write your name</string>
     <string name="write_your_surname">Write your surname</string>
     <string name="write_your_password_again">Write your password again</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="username">Username:</string>
+    <string name="name">Name:</string>
+    <string name="surname">Surname:</string>
+    <string name="followed_by">Followed by:</string>
+    <string name="following">Following:</string>
+    <string name="number_of_posts">Number of posts:</string>
+    <string name="follow">Follow</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="day">Day</string>
     <string name="month">Month</string>
@@ -32,5 +38,10 @@
     <string name="year">Year</string>
     <string name="pick">Pick</string>
     <string name="confirm">Confirm</string>
+    <string name="write_your_email_address_to_reset_password">Write your email address to reset password</string>
+    <string name="reset">Reset</string>
+    <string name="cancel">Cancel</string>
+    <string name="email">Email</string>
+    <string name="you_re_following_this_user">Already followed.</string>
 
 </resources>

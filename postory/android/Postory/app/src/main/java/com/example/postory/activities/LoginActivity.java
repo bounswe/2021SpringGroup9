@@ -20,6 +20,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+
+import com.auth0.android.jwt.Claim;
+import com.auth0.android.jwt.JWT;
 import com.example.postory.BuildConfig;
 import com.example.postory.R;
 import com.example.postory.dialogs.DelayedProgressDialog;
@@ -28,7 +31,6 @@ import com.github.johnpersano.supertoasts.library.SuperActivityToast;
 import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -68,8 +70,6 @@ public class LoginActivity extends AppCompatActivity {
         forgotPasswordText = (TextView) findViewById(R.id.forgotPassword);
         handler = new Handler();
         sharedPreferences = getSharedPreferences("MY_APP",MODE_PRIVATE);
-
-
         try {
             String validDateString = sharedPreferences.getString("valid_until","");
             Date validDate = dateFormat.parse(validDateString);
@@ -84,6 +84,8 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+
+
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,7 +99,8 @@ public class LoginActivity extends AppCompatActivity {
         forgotPasswordText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO Start forgot password process.
+                Intent intent = new Intent(LoginActivity.this,ForgotPasswordActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -175,6 +178,12 @@ public class LoginActivity extends AppCompatActivity {
                         JSONObject json = new JSONObject(signInResponseString);
                         String accessToken = json.getString("access");
                         preferences.edit().putString("access_token", accessToken).apply();
+                        JWT jwt = new JWT(accessToken);
+                        Claim userIdClaim = jwt.getClaim("user_id");
+
+                        String userId = userIdClaim.asString();
+                        preferences.edit().putString("user_id", userId).apply();
+
                         Date endTime = Calendar.getInstance().getTime();
 
                         final long hour = 3600000; // an hour

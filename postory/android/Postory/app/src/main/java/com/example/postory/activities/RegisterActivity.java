@@ -105,7 +105,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
     protected void sendSignUp() {
         final OkHttpClient client = new OkHttpClient();
-        String url = "http://3.125.114.231:8000/auth/jwt/users";
+        String url = "http://3.67.83.253:8000/auth/jwt/users";
         String nameString = name.getText().toString();
         String surnameString = surname.getText().toString();
         String mailString = mail.getText().toString();
