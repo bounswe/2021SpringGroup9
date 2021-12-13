@@ -43,7 +43,7 @@ public class MapFragment extends Fragment {
                         ((CreatePostActivity)getActivity()).setLocationName(editText.getText().toString());
                         ((CreatePostActivity)getActivity()).stdLayout.setVisibility(View.VISIBLE);
                         ((CreatePostActivity)getActivity()).mapContainer.setVisibility(View.GONE);
-                        ((CreatePostActivity)getActivity()).locationEditText.setText(editText.getText().toString());
+                        ((CreatePostActivity)getActivity()).locationEditText.setText( ((CreatePostActivity)getActivity()).locationEditText.getText().toString() + " " + editText.getText().toString());
                         ((CreatePostActivity)getActivity()).addLocation(new LocationModel(editText.getText().toString(),locationChosen.latitude,locationChosen.longitude));
                         ((CreatePostActivity)getActivity()).getSupportFragmentManager().beginTransaction().remove(MapFragment.this).commit();
 

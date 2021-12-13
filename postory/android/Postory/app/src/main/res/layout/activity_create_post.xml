@@ -125,14 +125,14 @@
                     android:src="@drawable/outline_location_on_black_24dp"></ImageView>
 
 
-                <EditText
+                <TextView
+                    android:text=""
                     android:id="@+id/op_location_text"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
                     android:gravity="center_vertical"
-                    android:hint="@string/write_location_hint"
-                    android:textStyle="bold"></EditText>
+                    android:textStyle="bold"></TextView>
 
 
                 <ImageView

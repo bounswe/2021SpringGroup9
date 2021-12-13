@@ -91,7 +91,7 @@ public class CreatePostActivity extends ToolbarActivity {
     EditText storyEditText;
     EditText dateEditText;
     EditText tagEditText;
-    public EditText locationEditText;
+    public TextView locationEditText;
     TextView title;
     ImageView postImage;
     ImageView timeChoose;
@@ -168,7 +168,7 @@ public class CreatePostActivity extends ToolbarActivity {
         title = (TextView) findViewById(R.id.create_new_post);
         storyEditText = (EditText) findViewById(R.id.post_story_text_field);
         dateEditText = (EditText) findViewById(R.id.op_date_text);
-        locationEditText = (EditText) findViewById(R.id.op_location_text);
+        locationEditText = (TextView) findViewById(R.id.op_location_text);
 
         from = getIntent().getStringExtra("goal");
 
@@ -705,9 +705,6 @@ public class CreatePostActivity extends ToolbarActivity {
             return false;
         }
         if (dateEditText.getText().toString().trim().equals("")) {
-            return false;
-        }
-        if (locationEditText.getText().toString().trim().equals("")) {
             return false;
         }
         return true;

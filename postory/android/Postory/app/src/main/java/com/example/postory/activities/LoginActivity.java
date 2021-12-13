@@ -141,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
 
     protected void sendSignIn() {
         final OkHttpClient client = new OkHttpClient();
-        String url = "http://3.125.114.231:8000/auth/jwt/create";
+        String url = "http://3.67.83.253:8000/auth/jwt/create";
         String mailString = mail.getText().toString().trim();
         String passwordString = password.getText().toString();
 

@@ -261,6 +261,29 @@ Donec pharetra justo vel pulvinar pulvinar. Aenean placerat est id consequat ves
 
             </RelativeLayout>
 
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:textColor="#000000"
+                    android:text="Comments"
+                    android:gravity="start"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:textSize="30dp">
+
+                </TextView>
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/comments_section">
+
+                </ListView>
+
+            </LinearLayout>
+
         </LinearLayout>
 
 

@@ -6,16 +6,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.postory.BuildConfig;
 import com.example.postory.R;
+import com.example.postory.adapters.CommentsAdapter;
+import com.example.postory.adapters.PostAdapter;
+import com.example.postory.models.CommentModel;
 import com.example.postory.models.Post;
 import com.google.gson.Gson;
 import com.like.LikeButton;
@@ -44,6 +44,11 @@ public class SinglePostActivity extends ToolbarActivity{
     String postId;
     Post post;
     Button continueReading;
+    CommentsAdapter commentsAdapter;
+    ArrayList<CommentModel> commentModels = new ArrayList<>();
+
+    ListView commentsList;
+
 
 
     RecyclerView locationRecyclerView;
@@ -119,6 +124,9 @@ public class SinglePostActivity extends ToolbarActivity{
         editText = (ImageView) findViewById(R.id.edit_text);
         postText = (TextView) findViewById(R.id.post_story_text_field);
         continueReading = (Button) findViewById(R.id.post_continue_reading);
+        commentsList = (ListView) findViewById(R.id.comments_section);
+
+
 
         likeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,10 +205,22 @@ public class SinglePostActivity extends ToolbarActivity{
                 post = gson.fromJson(response.body().string(), Post.class);
                 Log.i(TAG, "onResponse: ");
 
+                for(List<Object> singleComment : post.getComments()) {
+                    CommentModel model = new CommentModel((String) singleComment.get(1) , "" ,(String)singleComment.get(2));
+                    commentModels.add(model);
+
+
+                }
+
+
+
+
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        commentsAdapter =  new CommentsAdapter(SinglePostActivity.this, commentModels);
+                        commentsList.setAdapter(commentsAdapter);
                         if(post.getImages().size() != 0) {
                             Glide
                                     .with(SinglePostActivity.this)
