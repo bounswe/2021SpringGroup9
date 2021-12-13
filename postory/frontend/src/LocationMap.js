@@ -106,6 +106,7 @@ class LocationChooser extends React.Component{
     }
 
     render(){
+        let key = process.env.REACT_APP_GOOGLE_API_KEY?(`key=` + process.env.REACT_APP_GOOGLE_API_KEY + "&") : "";
         return(
             <div id={'locationchooser-div'}>
                 <div>
@@ -113,7 +114,7 @@ class LocationChooser extends React.Component{
                 editLocations = {this.state.selectedLocations.map((obj) => {return {lat: obj['lat'], lng: obj['lng']};})}
                 setParentLocation = {this.setLocations}
                 isMarkerShown
-                googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
+                googleMapURL={`https://maps.googleapis.com/maps/api/js?${key}v=3.exp&libraries=geometry,drawing,places`}
                 loadingElement={<div style={{ height: `100%` }} />}
                 containerElement={<div style={{ height: `200px` }} />}
                 mapElement={<div style={{ height: `100%` }} />}
@@ -121,7 +122,7 @@ class LocationChooser extends React.Component{
             {!this.state.edit && <MapComponent 
                 setParentLocation = {this.setLocations}
                 isMarkerShown
-                googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
+                googleMapURL={`https://maps.googleapis.com/maps/api/js?${key}v=3.exp&libraries=geometry,drawing,places`}
                 loadingElement={<div style={{ height: `100%` }} />}
                 containerElement={<div style={{ height: `200px` }} />}
                 mapElement={<div style={{ height: `100%` }} />}

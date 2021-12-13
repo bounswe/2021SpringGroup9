@@ -36,7 +36,7 @@ class ViewPost extends React.Component{
         if(process.env.REACT_APP_GOOGLE_API_KEY != undefined)
             this.state = {
                 id: id,
-                api_key: `&key=` + process.env.REACT_APP_GOOGLE_API_KEY
+                api_key: `key=` + process.env.REACT_APP_GOOGLE_API_KEY + "&"
             }
         requests.get_jwt(`/api/post/get/${this.state.id}`, {}).then(resp => resp.json()).then(
                 data => {
@@ -65,7 +65,7 @@ class ViewPost extends React.Component{
                 {this.state.post &&
                 <MapComponent 
                 isMarkerShown
-                googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places${this.state.api_key}`}
+                googleMapURL={`https://maps.googleapis.com/maps/api/js?${this.state.api_key}v=3.exp&libraries=geometry,drawing,places`}
                 loadingElement={<div style={{ height: `100%` }} />}
                 containerElement={<div style={{ width: `500px`, height: `300px` }} />}
                 mapElement={<div style={{ height: `100%` }} />}
