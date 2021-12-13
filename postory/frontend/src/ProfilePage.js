@@ -35,6 +35,7 @@ export const ProfilePageUpper = () => {
             }
         }).then(response => response.json())
             .then( (data) => {
+                data.sort((a, b) => parseInt(b.id) - parseInt(a.id));
                 setUserPosts(data);
                 setPostCount(data.length);
                 setFetchedPosts(true);
