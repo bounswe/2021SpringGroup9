@@ -22,11 +22,6 @@ import com.example.postory.BuildConfig;
 import com.example.postory.R;
 import com.example.postory.adapters.PostAdapter;
 import com.example.postory.models.Post;
-import com.example.postory.models.PostModel;
-import com.example.postory.models.PostReturnModel;
-import com.github.johnpersano.supertoasts.library.Style;
-import com.github.johnpersano.supertoasts.library.SuperActivityToast;
-import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.google.gson.Gson;
 
 import okhttp3.*;
@@ -112,15 +107,14 @@ public class MainActivity extends ToolbarActivity {
                 Gson gson = new Gson();
                 posts = gson.fromJson(response.body().string(), Post[].class);
                 Log.i(TAG, "onResponse: ");
-                ArrayList<PostModel> arrayOfPosts = new ArrayList<PostModel>();
+                ArrayList<Post> arrayOfPosts = new ArrayList<Post>();
 
                 for (Post post : posts) {
-                    arrayOfPosts.add(new PostModel(post.getId(), post.getTitle(), post.getStory(), post.getOwner(), post.getTags(), post.getLocations(), post.getImages(), post.getPostDate(), post.getEditDate(), post.getStoryDate(), post.getViewCount()));
+                    arrayOfPosts.add(post);
 
                 }
                 Collections.reverse(arrayOfPosts);
                 postAdapter = new PostAdapter(MainActivity.this, arrayOfPosts);
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

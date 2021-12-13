@@ -25,7 +25,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.postory.R;
 import com.example.postory.activities.CreatePostActivity;
 import com.example.postory.activities.MainActivity;
-import com.example.postory.models.PostModel;
+import com.example.postory.models.Post;
 
 import com.example.postory.models.TagItem;
 import org.w3c.dom.Text;
@@ -36,11 +36,11 @@ import java.util.Date;
 import java.util.List;
 
 
-public class PostAdapter extends ArrayAdapter<PostModel> {
+public class PostAdapter extends ArrayAdapter<Post> {
     private String imageUrl;
     private String location;
     private Context context;
-    public PostAdapter(Context context, ArrayList<PostModel> posts) {
+    public PostAdapter(Context context, ArrayList<Post> posts) {
         super(context, 0, posts);
         this.context = context;
     }
@@ -48,7 +48,7 @@ public class PostAdapter extends ArrayAdapter<PostModel> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        final PostModel post = getItem(position);
+        final Post post = getItem(position);
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.single_post, parent, false);
         }
@@ -132,7 +132,6 @@ public class PostAdapter extends ArrayAdapter<PostModel> {
         postText.setText(post.getStory());
         opTitle.setText(post.getTitle());
         if(post.getStoryDate() != null) {
-
 
             dateText.setText(formatDate(post.getStoryDate()));
         }
