@@ -106,10 +106,6 @@ class PostCreate(GenericAPIView):
         data['tags'] = [tag.id for tag in tagsList]
         user = User.objects.get(pk = userid)
         data['username'] = user.username
-        try:
-            data['userPhoto'] = user.images.all()[1].file.url
-        except IndexError:
-            pass
         serializer = PostSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -373,7 +369,12 @@ class LikeRequest(GenericAPIView):
     
 def get_story(story):
     username = story.username
-    userPhoto = story.userPhoto
+    user = User.objects.filter(username = username).first()
+    try:
+        userPhoto = Image.objects.filter(user = user.id).first()
+        userPhoto = userPhoto.file.url
+    except:
+        userPhoto = ""
     tags = []
     for tag in story.tags.all():
         tags.append(tag.content)
