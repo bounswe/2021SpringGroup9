@@ -55,7 +55,7 @@ class PostUpper extends React.Component{
           </Link>}
         </Col>
         <Col sm={1}>
-          {this.state.id && <Link class = "push" to= {`/editPost?id=${this.state.id}`}>
+          {this.state.owner == localStorage.getItem('userID') &&this.state.id && <Link class = "push" to= {`/editPost?id=${this.state.id}`}>
             <Icon path={mdiPencilOutline}
               title="Edit Post"
               size={1}
