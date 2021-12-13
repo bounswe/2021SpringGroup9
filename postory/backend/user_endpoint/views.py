@@ -44,6 +44,7 @@ class AddPhoto(GenericAPIView):
     
         try:
             user.save()
+            return Response(status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         

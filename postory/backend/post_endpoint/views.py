@@ -107,6 +107,7 @@ class PostCreate(GenericAPIView):
 
         user = User.objects.get(pk = userid)
         data['username'] = user.username
+        data['userPhoto'] = user.images.all()[0].file.url
         serializer = PostSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
