@@ -51,7 +51,7 @@ class PostUpper extends React.Component{
         <Col sm={11} style={{alignItems: `center`}}>
           {this.state.owner && <Link class = "push" to= {`/profilePage?id=${this.state.owner}`} style={{ textDecoration: 'none', color: '#000' }}>
             <img class = "circle" width = "50px" height = "50px" src = "./static/media/postory_logo_no_text.ec3bad21.png" />
-            <a style = {{margin: "10px"}}>{this.state.owner}</a>
+            <a style = {{margin: "10px"}}>{this.state.username}</a>
           </Link>}
         </Col>
         <Col sm={1}>
