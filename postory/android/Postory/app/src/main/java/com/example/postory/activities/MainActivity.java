@@ -77,8 +77,6 @@ public class MainActivity extends ToolbarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         super.initToolbar();
-        Intent i = new Intent(MainActivity.this,SelfProfilePageActivity.class);
-        startActivity(i);
         sharedPreferences = getSharedPreferences("MY_APP",MODE_PRIVATE);
 
 
