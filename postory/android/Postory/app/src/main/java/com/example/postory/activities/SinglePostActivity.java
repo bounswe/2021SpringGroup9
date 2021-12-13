@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.*;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
@@ -14,9 +15,12 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.postory.BuildConfig;
 import com.example.postory.R;
 import com.example.postory.adapters.CommentsAdapter;
+import com.example.postory.adapters.LocationAdapter;
 import com.example.postory.adapters.PostAdapter;
+import com.example.postory.adapters.TagsAdapter;
 import com.example.postory.models.CommentModel;
 import com.example.postory.models.Post;
+import com.example.postory.models.TagItem;
 import com.google.gson.Gson;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
@@ -61,12 +65,14 @@ public class SinglePostActivity extends ToolbarActivity{
     TextView sharedDateText;
     ImageView postPicture;
     ImageView editText;
+    ImageView profilePicture;
     TextView postText;
     LinearLayout likeLayout;
     TextView likesText;
-    int selfId = 3;
+    String selfId;
     int likeCount = 0;
     boolean liked = false;
+
 
 
     @Override
@@ -105,6 +111,8 @@ public class SinglePostActivity extends ToolbarActivity{
         setContentView(R.layout.activity_single_post);
         super.initToolbar();
 
+
+        profilePicture = (ImageView) findViewById(R.id.profile_picture);
         likeButton = (LikeButton) findViewById(R.id.like_button);
         commentButton = (TextView) findViewById(R.id.btn_comment);
         opName = (TextView) findViewById(R.id.op_name_field);
@@ -174,7 +182,7 @@ public class SinglePostActivity extends ToolbarActivity{
 
 
         accessToken = sharedPreferences.getString("access_token","");
-
+        selfId = sharedPreferences.getString("user_id","");
         client = new OkHttpClient();
         url = BuildConfig.API_IP + "/post/get/" + postId;
         RequestBody reqbody = RequestBody.create(null, new byte[0]);
@@ -238,12 +246,34 @@ public class SinglePostActivity extends ToolbarActivity{
 
                         List<List<Object>> list = post.getLikeList();
 
+                        ArrayList<TagItem> tagsList = new ArrayList<>();
+                        TagsAdapter tagsAdapter = new TagsAdapter(R.layout.single_tag,tagsList);
+                        tagRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                        tagRecyclerView.setAdapter(tagsAdapter);
+
+                        if(post.getTags().size() != 0) {
+                            for(String tag : post.getTags()) {
+                                tagsList.add(new TagItem(tag));
+                            }
+                        }
+
+
+                        ArrayList<TagItem> locationList = new ArrayList<>();
+                        LocationAdapter locationsAdapter = new LocationAdapter(R.layout.single_tag,locationList);
+                        locationRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                        locationRecyclerView.setAdapter(locationsAdapter);
+                        if(post.getLocations().size() != 0) {
+                            for(List<Object> tag : post.getLocations()) {
+                                locationList.add(new TagItem((String) tag.get(0)));
+                            }
+                        }
+
 
                         ArrayList<String> likedPeople = new ArrayList<>();
                         for (int i = 0; i < list.size() ; i++) {
                             List<Object> singleLike = list.get(i);
 
-                            if((Double)singleLike.get(0)  == selfId) {
+                            if((Double)singleLike.get(0)  == Double.parseDouble(selfId)) {
                                 liked = true;
                             }
                             else {
@@ -254,7 +284,22 @@ public class SinglePostActivity extends ToolbarActivity{
                         if(liked){
                             likeButton.setLiked(true);
                         }
-                        opName.setText(post.getOwner());
+
+
+
+                        if(post.getUserPhoto() != "") {
+
+                            Glide
+                                    .with(SinglePostActivity.this)
+                                    .load(post.getUserPhoto())
+                                    .placeholder(R.drawable.placeholder)
+                                    .apply(new RequestOptions().override(400,400))
+                                    .centerCrop()
+                                    .into(profilePicture);
+
+
+                        }
+                        opName.setText(post.getUsername());
                         postText.setText(post.getStory());
                         opTitle.setText(post.getTitle());
                         if(post.getStoryDate() != null) {

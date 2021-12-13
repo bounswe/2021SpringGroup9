@@ -86,7 +86,6 @@ public class CreatePostActivity extends ToolbarActivity {
     boolean isFirstTime = true;
     Button sendButton;
     Handler handler;
-    EditText nicknameEditText;
     EditText titleEditText;
     EditText storyEditText;
     EditText dateEditText;
@@ -162,7 +161,6 @@ public class CreatePostActivity extends ToolbarActivity {
 
         locationChoose = (ImageView) findViewById(R.id.btn_location_choose);
         sendButton = (Button) findViewById(R.id.send_button);
-        nicknameEditText = (EditText) findViewById(R.id.op_name_field);
         tagEditText = (EditText) findViewById(R.id.op_tag_field);
         titleEditText = (EditText) findViewById(R.id.op_enter_title);
         title = (TextView) findViewById(R.id.create_new_post);
@@ -209,7 +207,6 @@ public class CreatePostActivity extends ToolbarActivity {
                             }
 
                             titleEditText.setText(post.getTitle());
-                            nicknameEditText.setText(post.getOwner());
                             if (post.getLocations().size() != 0) {
                                 locationEditText.setText((String) post.getLocations().get(0).get(0));
                             }
@@ -246,7 +243,6 @@ public class CreatePostActivity extends ToolbarActivity {
 
             }
         });
-
 
 
         locationChoose.setOnClickListener(new View.OnClickListener() {
@@ -520,6 +516,7 @@ public class CreatePostActivity extends ToolbarActivity {
 
 
 
+            String [] arr = tagEditText.getText().toString().split(" ");
 
 
 
@@ -531,14 +528,18 @@ public class CreatePostActivity extends ToolbarActivity {
                 builder.addFormDataPart("locations", key );
             }
 
+            for(String tag : arr ) {
+                builder.addFormDataPart("tags", tag);
+            }
+
 
 
 
             requestBody = builder
                     .addFormDataPart("title", titleEditText.getText().toString())
                     .addFormDataPart("story", storyEditText.getText().toString())
-                    .addFormDataPart("owner", nicknameEditText.getText().toString())
-                    .addFormDataPart("tags", tagEditText.getText().toString())
+                    //.addFormDataPart("owner", nicknameEditText.getText().toString())
+
                     .addFormDataPart("images", file.getName(), RequestBody.create(MediaType.parse("image/jpeg"), file))
                     .build();
 
@@ -695,9 +696,6 @@ public class CreatePostActivity extends ToolbarActivity {
 
 
     protected boolean checkNecessaryData() {
-        if (nicknameEditText.getText().toString().trim().equals("")) {
-            return false;
-        }
         if (titleEditText.getText().toString().trim().equals("")) {
             return false;
         }

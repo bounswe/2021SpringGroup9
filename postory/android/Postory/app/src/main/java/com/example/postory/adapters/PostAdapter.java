@@ -78,6 +78,8 @@ public class PostAdapter extends ArrayAdapter<Post> {
                 tagsList.add(new TagItem(tag));
             }
         }
+
+
         ArrayList<TagItem> locationList = new ArrayList<>();
         LocationAdapter locationsAdapter = new LocationAdapter(R.layout.single_tag,locationList);
         locationRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -89,8 +91,11 @@ public class PostAdapter extends ArrayAdapter<Post> {
         }
 
         ImageView postPicture = (ImageView) convertView.findViewById(R.id.post_photo);
+        ImageView profilePicture = (ImageView) convertView.findViewById(R.id.profile_picture);
         postPicture.setImageResource(R.drawable.placeholder);
         ImageView editText = (ImageView) convertView.findViewById(R.id.edit_text);
+
+
 
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,7 +133,20 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
 
 
-        opName.setText(post.getOwner());
+        if(post.getUserPhoto() != "") {
+
+            Glide
+                    .with(getContext())
+                    .load(post.getUserPhoto())
+                    .placeholder(R.drawable.placeholder)
+                    .apply(new RequestOptions().override(400,400))
+                    .centerCrop()
+                    .into(profilePicture);
+
+
+        }
+
+        opName.setText(post.getUsername());
         postText.setText(post.getStory());
         opTitle.setText(post.getTitle());
         if(post.getStoryDate() != null) {
