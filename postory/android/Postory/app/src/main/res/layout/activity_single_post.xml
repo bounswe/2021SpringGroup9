@@ -112,14 +112,16 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/tags_list"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="30dp"
                 android:layout_gravity="end"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginBottom="2dp">
 
             </androidx.recyclerview.widget.RecyclerView>
 
             <RelativeLayout
+                android:layout_gravity="center"
+                android:gravity="center"
                 android:id="@+id/op_info_layout_2"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
@@ -136,7 +138,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentEnd="true"
-                    android:layout_gravity="end"></androidx.recyclerview.widget.RecyclerView>
+                    android:layout_gravity="end">
+
+                </androidx.recyclerview.widget.RecyclerView>
 
 
             </RelativeLayout>

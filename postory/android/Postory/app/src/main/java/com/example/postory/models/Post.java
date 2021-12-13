@@ -6,6 +6,7 @@ import java.util.List;
 public class Post {
     public int id;
 
+
     public int getId() {
         return id;
     }
@@ -97,6 +98,25 @@ public class Post {
     public String title;
     public String story;
     public String owner;
+    public String username;
+    public String userPhoto;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUserPhoto() {
+        return userPhoto;
+    }
+
+    public void setUserPhoto(String userPhoto) {
+        this.userPhoto = userPhoto;
+    }
+
     public List<String> tags;
     public List<List<Object>> locations;
     public List<List<Object>> likeList;
