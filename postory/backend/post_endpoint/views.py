@@ -278,7 +278,7 @@ class GetFollowedUsersPosts(GenericAPIView):
         followedUsers = user.followedUsers.all()
         posts = []
         for followedUser in followedUsers:
-            followedUserPosts = Post.objects.filter(owner = followedUser)
+            followedUserPosts = Post.objects.filter(owner = followedUser.id)
             for post in followedUserPosts:
                 posts.append(post)
         for post in Post.objects.filter(owner = user_id):
