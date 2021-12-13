@@ -37,7 +37,6 @@ public class CommentsAdapter extends ArrayAdapter<CommentModel> {
 
         TextView commentator = (TextView) convertView.findViewById(R.id.commentator_name);
         TextView comment = (TextView) convertView.findViewById(R.id.comment);
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.profile_picture);
         comment.setText(model.getComment());
         commentator.setText(model.getUsername());
 
