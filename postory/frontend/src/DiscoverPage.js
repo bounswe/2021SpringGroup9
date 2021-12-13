@@ -12,6 +12,7 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
     const [selectedPost, setSelectedPost] = React.useState(null);
     const [currentLocation, setCurrentLocation] = React.useState({ lat: 41.048, lng: 29.0510 });
     const [displayPost, setDisplayPost] = React.useState(false);
+    const [clickCount, setClickCount] = React.useState(0);
     const [displayInfoBox, setDisplayInfoBox] = React.useState(false);
 
 
@@ -43,7 +44,7 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
             setTimeout(() => {setDisplayInfoBox(true)}, 500);
         }
         console.log("Selected post has been changed");
-    }, [selectedPost])
+    }, [clickCount])
 
     const onClickMarker = (index, obj) =>{
         setCurrentLocation({lat:obj.lat, lng:obj.lng});
@@ -55,6 +56,7 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
                 }
             }
             console.log(newPost);
+            setClickCount(clickCount + 1);
             return newPost;
         });       
     }
@@ -80,7 +82,7 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
                             {selectedPost.title}
                         </div>
                         <div style={{ fontSize: `12px`, fontColor: `#08233B`, fontStyle: `italic` }}>
-                            by: {selectedPost.owner}
+                            by: {selectedPost.username}
                         </div>
                         
                         <div class= "row2" onClick = {() => props.redirect(selectedPost.id)}>
