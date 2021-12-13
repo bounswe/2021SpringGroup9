@@ -373,6 +373,7 @@ class LikeRequest(GenericAPIView):
     
 def get_story(story):
     username = story.username
+    userPhoto = story.userPhoto
     tags = []
     for tag in story.tags.all():
         tags.append(tag.content)
@@ -439,4 +440,5 @@ def get_story(story):
     serializer['hour'] = hour
     serializer['minute'] = minute
     serializer['username'] = username
+    serializer['userPhoto'] = userPhoto
     return serializer
