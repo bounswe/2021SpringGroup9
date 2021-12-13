@@ -12,7 +12,6 @@ import com.example.postory.BuildConfig;
 import com.example.postory.R;
 import com.example.postory.adapters.PostAdapter;
 import com.example.postory.models.Post;
-import com.example.postory.models.PostModel;
 import com.github.johnpersano.supertoasts.library.Style;
 import com.github.johnpersano.supertoasts.library.SuperActivityToast;
 import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
@@ -30,6 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapLongClickListener {
@@ -43,7 +43,8 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
     private GoogleMap mMap;
     private SharedPreferences sharedPreferences;
     private String accessToken;
-    private  ArrayList<PostModel> arrayOfPosts;
+    private  ArrayList<Post> arrayOfPosts;
+    private HashMap<String, Integer > markerId = new HashMap<>();
 
     @Override
     protected void goHomeClicked() {
@@ -63,8 +64,10 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
 
     @Override
     protected void refreshClicked() {
+        Intent i = new Intent(ExploreActivity.this, SinglePostActivity.class);
+        i.putExtra("post_id","1");
+        startActivity(i);
 
-        return;
 
     }
 
@@ -111,14 +114,14 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
                 Gson gson = new Gson();
                 posts = gson.fromJson(response.body().string(), Post[].class);
                 Log.i(TAG, "onResponse: ");
-                arrayOfPosts = new ArrayList<PostModel>();
+                arrayOfPosts = new ArrayList<Post>();
 
                 for (Post post : posts) {
-                    arrayOfPosts.add(new PostModel(post.getId(), post.getTitle(), post.getStory(), post.getOwner(), post.getTags(), post.getLocations(), post.getImages(), post.getPostDate(), post.getEditDate(), post.getStoryDate(), post.getViewCount()));
+                    arrayOfPosts.add(post);
 
                 }
                 Collections.reverse(arrayOfPosts);
-                for(PostModel post:arrayOfPosts) {
+                for(Post post:arrayOfPosts) {
                     if(post.getLocations() != null) {
                         for(List<Object> locations : post.getLocations()) {
                             if(locations.size() == 3) {
@@ -126,9 +129,14 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        mMap.addMarker(new MarkerOptions()
+                                        Marker m = mMap.addMarker(new MarkerOptions()
                                                 .position(location)
                                                 .title((String) locations.get(0)));
+
+                                        markerId.put(m.getId(),post.getId());
+
+
+
                                     }
                                 });
 
@@ -175,6 +183,12 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
                 .setFrame(Style.FRAME_LOLLIPOP)
                 .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_BLUE))
                 .setAnimations(Style.ANIMATIONS_POP).show();
+
+        Intent i = new Intent(ExploreActivity.this, SinglePostActivity.class);
+        i.putExtra("post_id",markerId.get(marker.getId()) + "");
+        startActivity(i);
+
+
 
 
 

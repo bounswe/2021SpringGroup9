@@ -47,7 +47,6 @@ import com.example.postory.fragments.MapFragment;
 import com.example.postory.fragments.TimeChooserFragment;
 import com.example.postory.models.LocationModel;
 import com.example.postory.models.Post;
-import com.example.postory.models.PostModel;
 import com.example.postory.utils.TimeController;
 import com.github.johnpersano.supertoasts.library.Style;
 import com.github.johnpersano.supertoasts.library.SuperActivityToast;
