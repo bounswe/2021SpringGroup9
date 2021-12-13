@@ -47,7 +47,21 @@
             android:text="Ahmet Gülmez"
             android:textStyle="bold"></TextView>
 
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="30dp"
+            android:gravity="center_vertical"
+            android:src="@drawable/baseline_calendar_today_black_24dp"></ImageView>
 
+        <TextView
+            android:id="@+id/op_date_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginStart="5dp"
+            android:textStyle="bold"></TextView>
     </LinearLayout>
 
     <RelativeLayout
@@ -112,24 +126,7 @@
             android:layout_gravity="end"></androidx.recyclerview.widget.RecyclerView>
 
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:gravity="center_vertical"
-            android:src="@drawable/baseline_calendar_today_black_24dp"></ImageView>
 
-        <TextView
-            android:id="@+id/op_date_text"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="20dp"
-            android:gravity="center_vertical"
-            android:text="22.01.1998"
-            android:textStyle="bold">
-
-        </TextView>
 
 
 

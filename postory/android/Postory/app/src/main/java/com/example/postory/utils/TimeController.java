@@ -216,10 +216,10 @@ public class TimeController {
                 break;
 
             case MONTH_PRECISION:
-                dateFormat = new SimpleDateFormat("yyyy-MM");
+                dateFormat = new SimpleDateFormat("MM/yyyy");
                 try {
-                    startDate = dateFormat.parse("" + startYear + "-" + startMonth);
-                    endDate = dateFormat.parse("" + endYear + "-" + endMonth);
+                    startDate = dateFormat.parse("" + startMonth + "/" + startYear);
+                    endDate = dateFormat.parse("" + endMonth + "/" + endYear);
 
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -227,19 +227,19 @@ public class TimeController {
                 break;
 
             case DAY_PRECISION:
-                dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                 try {
-                    startDate = dateFormat.parse("" + startYear + "-" + startMonth + "-" + startDay);
-                    endDate = dateFormat.parse("" + endYear + "-" + endMonth + "-" + endDay);
+                    startDate = dateFormat.parse("" + startDay + "/"+ startMonth + "/" + startYear );
+                    endDate = dateFormat.parse("" + endDay + "/"+ endMonth + "/" + endYear );
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
                 break;
             case TIME_PRECISION:
-                dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 try {
-                    startDate = dateFormat.parse("" + startYear + "-" + startMonth + "-" + startDay + " " + startHour + ":" + startMinute);
-                    endDate = dateFormat.parse("" + endYear + "-" + endMonth + "-" + endDay + " " + endHour + ":" + endMinute);
+                    startDate = dateFormat.parse("" + startDay + "/"+ startMonth + "/" + startYear + " " + startHour + ":" + startMinute);
+                    endDate = dateFormat.parse("" + endDay + "/"+ endMonth + "/" + endYear + " " + endHour + ":" + endMinute);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
