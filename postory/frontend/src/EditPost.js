@@ -75,11 +75,12 @@ class EditPost extends React.Component{
                         owner: data.owner
                     }
                 }});
+                this.refLocation.current.getEditInfo(data);
                 data.locations = data.locations.map( (obj, i) => obj[0]);
                 console.log(data);
                 this.refStory.current.getEditInfo(data);
                 this.refTags.current.getEditInfo(data);
-                this.refLocation.current.getEditInfo(data);
+                
                 this.refTime.current.getEditInfo(data);
             }
         );

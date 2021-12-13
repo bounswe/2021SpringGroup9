@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './LocationChooser.css'
 import {TextField, Snackbar} from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
@@ -10,6 +10,12 @@ const MapComponent = withScriptjs(withGoogleMap((props) =>{
     const [markers, setMarkers] = React.useState([]);
     const [tooManyMarkers, setTooManyMarkers] = React.useState(false);
     const markersLimit = 7;
+
+
+    useEffect(() => {
+        if(props.editLocations)
+        setAllMarkers(props.editLocations);
+    },[]);
 
     const deleteMarker = (index) =>{
         setMarkers(state =>{
@@ -34,9 +40,12 @@ const MapComponent = withScriptjs(withGoogleMap((props) =>{
         else {
             setTooManyMarkers(true);
         }
-
-        
     }
+
+    const setAllMarkers = (locations) =>{
+        setMarkers(locations);
+    }
+
 return(<div>
     <Snackbar open={tooManyMarkers} autoHideDuration={1000} onClose={() => setTooManyMarkers(false)} >
     <Alert onClose={() => setTooManyMarkers(false)} severity="error" sx={{ width: '100%' }}>
@@ -69,12 +78,16 @@ class LocationChooser extends React.Component{
         };
 
         this.getEditInfo = this.getEditInfo.bind(this);
+        this.mapRef = React.createRef();
     }
 
     getEditInfo(info){
+
         this.setState({
-            selectedLocations : info.locations
+            edit: true,
+            selectedLocations : info.locations.map((obj) => {return {name: obj[0], lng: obj[2], lat: obj[1]}})
         });
+
     }
 
     sendParent() {
@@ -96,14 +109,23 @@ class LocationChooser extends React.Component{
         return(
             <div id={'locationchooser-div'}>
                 <div>
-            <MapComponent 
+            {this.state.edit && <MapComponent 
+                editLocations = {this.state.selectedLocations.map((obj) => {return {lat: obj['lat'], lng: obj['lng']};})}
                 setParentLocation = {this.setLocations}
                 isMarkerShown
                 googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
                 loadingElement={<div style={{ height: `100%` }} />}
                 containerElement={<div style={{ height: `200px` }} />}
                 mapElement={<div style={{ height: `100%` }} />}
-                />
+                />}
+            {!this.state.edit && <MapComponent 
+                setParentLocation = {this.setLocations}
+                isMarkerShown
+                googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
+                loadingElement={<div style={{ height: `100%` }} />}
+                containerElement={<div style={{ height: `200px` }} />}
+                mapElement={<div style={{ height: `100%` }} />}
+                />}
         </div>
                 
                 <a>Please use below if you want to add names to the locations.</a>
@@ -115,7 +137,6 @@ class LocationChooser extends React.Component{
                                 state => {
                                     let newState = state;
                                     newState.selectedLocations[index]['name'] = e.target.value;
-                                    console.log(newState);
                                     return newState;
                                     
                                 }

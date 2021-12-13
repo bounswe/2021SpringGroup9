@@ -70,7 +70,7 @@ class ViewPost extends React.Component{
                 containerElement={<div style={{ width: `500px`, height: `300px` }} />}
                 mapElement={<div style={{ height: `100%` }} />}
                 markers = 
-                {this.state.post.locations.map((obj,i) => {return {lat: obj[1], lng: obj[2]} })}
+                {this.state.post.locations.map((obj,i) => {return {name: obj[0], lat: obj[1], lng: obj[2]} })}
                 />}
                 
                 {/*this.state.post &&
@@ -215,7 +215,7 @@ return(<div>
         defaultZoom={0}
         defaultCenter={{ lat: 41, lng: 28 }}>
         {props.markers.map((obj,i) => {
-            return (<Marker  position = {obj} key = {i}/>);
+            return (<Marker  position = {obj} options={{icon:`https://mt.google.com/vt/icon/text=${obj['name'] + '(' + (i+1) + ')'}&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=1`}} key = {i}/>);
         })}
     </GoogleMap>
     </div>);
