@@ -13,7 +13,6 @@ const MapComponent = withScriptjs(withGoogleMap((props) =>{
 
 
     useEffect(() => {
-        console.log('all props',props);
         if(props.editLocations)
         setAllMarkers(props.editLocations);
     },[]);
@@ -44,7 +43,6 @@ const MapComponent = withScriptjs(withGoogleMap((props) =>{
     }
 
     const setAllMarkers = (locations) =>{
-        console.log('al makeers', locations);
         setMarkers(locations);
     }
 
@@ -84,7 +82,7 @@ class LocationChooser extends React.Component{
     }
 
     getEditInfo(info){
-        console.log('locatioonsdfa', info.locations);
+
         this.setState({
             edit: true,
             selectedLocations : info.locations.map((obj) => {return {name: obj[0], lng: obj[2], lat: obj[1]}})
@@ -139,7 +137,6 @@ class LocationChooser extends React.Component{
                                 state => {
                                     let newState = state;
                                     newState.selectedLocations[index]['name'] = e.target.value;
-                                    console.log(newState);
                                     return newState;
                                     
                                 }
