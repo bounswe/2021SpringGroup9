@@ -28,6 +28,8 @@ import com.example.postory.activities.MainActivity;
 import com.example.postory.models.Post;
 
 import com.example.postory.models.TagItem;
+import com.example.postory.utils.TimeController;
+
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
@@ -78,6 +80,8 @@ public class PostAdapter extends ArrayAdapter<Post> {
                 tagsList.add(new TagItem(tag));
             }
         }
+
+
         ArrayList<TagItem> locationList = new ArrayList<>();
         LocationAdapter locationsAdapter = new LocationAdapter(R.layout.single_tag,locationList);
         locationRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -89,8 +93,11 @@ public class PostAdapter extends ArrayAdapter<Post> {
         }
 
         ImageView postPicture = (ImageView) convertView.findViewById(R.id.post_photo);
+        ImageView profilePicture = (ImageView) convertView.findViewById(R.id.profile_picture);
         postPicture.setImageResource(R.drawable.placeholder);
         ImageView editText = (ImageView) convertView.findViewById(R.id.edit_text);
+
+
 
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,14 +135,67 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
 
 
-        opName.setText(post.getOwner());
-        postText.setText(post.getStory());
-        opTitle.setText(post.getTitle());
-        if(post.getStoryDate() != null) {
+        if(post.getUserPhoto() != "") {
 
-            dateText.setText(formatDate(post.getStoryDate()));
+            Glide
+                    .with(getContext())
+                    .load(post.getUserPhoto())
+                    .placeholder(R.drawable.placeholder)
+                    .apply(new RequestOptions().override(400,400))
+                    .centerCrop()
+                    .into(profilePicture);
+
+
         }
 
+        opName.setText(post.getUsername());
+        postText.setText(post.getStory());
+        opTitle.setText(post.getTitle());
+
+        List <Integer> yearList = post.getYear();
+        List <Integer> monthList = post.getMonth();
+        List <Integer> dayList = post.getDay();
+        List <Integer> hourList = post.getHour();
+        List <Integer> minuteList = post.getMinute();
+        TimeController t;
+        if(minuteList.size()>0){
+            t = new TimeController(yearList.get(0),yearList.get(1),
+                                   monthList.get(0),monthList.get(1),
+                                    dayList.get(0),dayList.get(1),
+                                    hourList.get(0),hourList.get(1),
+                                     minuteList.get(0),minuteList.get(1));
+            t.createDate();
+            String startDateString = t.getDateFormat().format(t.getStartDate());
+            String endDateString = t.getDateFormat().format(t.getEndDate());
+            dateText.setText(startDateString + " - " + endDateString);
+        }
+        else if(dayList.size()>0){
+            t = new TimeController(yearList.get(0),yearList.get(1),
+                    monthList.get(0),monthList.get(1),
+                    dayList.get(0),dayList.get(1));
+            t.createDate();
+            String startDateString = t.getDateFormat().format(t.getStartDate());
+            String endDateString = t.getDateFormat().format(t.getEndDate());
+            dateText.setText(startDateString + " - " + endDateString);
+        }
+        else if(monthList.size()>0){
+            t = new TimeController(yearList.get(0),yearList.get(1),
+                    monthList.get(0),monthList.get(1));
+            t.createDate();
+            String startDateString = t.getDateFormat().format(t.getStartDate());
+            String endDateString = t.getDateFormat().format(t.getEndDate());
+            dateText.setText(startDateString + " - " + endDateString);
+        }
+        else if(yearList.size()>0){
+            t = new TimeController(yearList.get(0),yearList.get(1));
+            t.createDate();
+            String startDateString = t.getDateFormat().format(t.getStartDate());
+            String endDateString = t.getDateFormat().format(t.getEndDate());
+            dateText.setText(startDateString + " - " + endDateString);
+        }
+        else{
+
+        }
         if(post.getPostDate() != null) {
             sharedDateText.setText(formatDate(post.getPostDate()));
         }

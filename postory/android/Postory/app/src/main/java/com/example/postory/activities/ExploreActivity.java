@@ -64,10 +64,7 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
 
     @Override
     protected void refreshClicked() {
-        Intent i = new Intent(ExploreActivity.this, SinglePostActivity.class);
-        i.putExtra("post_id","1");
-        startActivity(i);
-
+        callAllPosts();
 
     }
 
@@ -184,9 +181,17 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
                 .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_BLUE))
                 .setAnimations(Style.ANIMATIONS_POP).show();
 
-        Intent i = new Intent(ExploreActivity.this, SinglePostActivity.class);
-        i.putExtra("post_id",markerId.get(marker.getId()) + "");
-        startActivity(i);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent i = new Intent(ExploreActivity.this, SinglePostActivity.class);
+                i.putExtra("post_id",markerId.get(marker.getId()) + "");
+                startActivity(i);
+
+            }
+        },3000);
+
 
 
 

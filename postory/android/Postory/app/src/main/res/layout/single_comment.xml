@@ -15,13 +15,6 @@
         android:orientation="horizontal"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
-        <ImageView
-            android:id="@+id/profile_comment"
-            android:src="@drawable/placeholder"
-            android:layout_width="50dp"
-            android:layout_height="match_parent">
-
-        </ImageView>
 
         <TextView
             android:layout_marginStart="10dp"
