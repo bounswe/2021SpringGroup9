@@ -63,14 +63,14 @@ public class OtherProfilePageActivity extends ToolbarActivity {
 
     @Override
     protected void goCreatePostClicked() {
-        Intent intent = new Intent(OtherProfilePageActivity.this,CreatePostActivity.class);
-        intent.putExtra("goal","create");
+        Intent intent = new Intent(OtherProfilePageActivity.this, CreatePostActivity.class);
+        intent.putExtra("goal", "create");
         startActivity(intent);
     }
 
     @Override
     protected void refreshClicked() {
-
+        return;
     }
 
     @Override
@@ -88,7 +88,6 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         listView = (ListView) findViewById(R.id.list_view_posts);
         followButton = (Button) findViewById(R.id.followButton);
         followingWarning = (TextView) findViewById(R.id.followingWarning);
-
         name = (TextView) findViewById(R.id.name);
         surname = (TextView) findViewById(R.id.surname);
         username = (TextView) findViewById(R.id.username);
@@ -96,14 +95,14 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         following = (TextView) findViewById(R.id.following);
         numPosts = (TextView) findViewById(R.id.numPosts);
 
-        sharedPreferences = getSharedPreferences("MY_APP",MODE_PRIVATE);
-        accessToken = sharedPreferences.getString("access_token","");
-        int viewerId = Integer.parseInt(sharedPreferences.getString("user_id",""));
+        sharedPreferences = getSharedPreferences("MY_APP", MODE_PRIVATE);
+        accessToken = sharedPreferences.getString("access_token", "");
+        int viewerId = Integer.parseInt(sharedPreferences.getString("user_id", ""));
         String url1 = BuildConfig.API_IP + "/user/get/" + userId;
         client = new OkHttpClient();
         requestUserData = new Request.Builder()
                 .url(url1)
-                .addHeader("Authorization","JWT "+ accessToken)
+                .addHeader("Authorization", "JWT " + accessToken)
                 .build();
         client.newCall(requestUserData).enqueue(new Callback() {
             @Override
@@ -114,10 +113,10 @@ public class OtherProfilePageActivity extends ToolbarActivity {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 Gson gson = new Gson();
-                thisUser = gson.fromJson(response.body().string(),UserModel.class);
+                thisUser = gson.fromJson(response.body().string(), UserModel.class);
             }
         });
-        if (thisUser.getFollowerUsers().contains(viewerId)){
+        if (thisUser.getFollowerUsers().contains(viewerId)) {
             showAlreadyFollowed();
         }
         setUserFields();
@@ -129,21 +128,24 @@ public class OtherProfilePageActivity extends ToolbarActivity {
             }
         });
     }
-    private void callForPosts(){
+
+    private void callForPosts() {
         String url2 = BuildConfig.API_IP + "/post/all/user/" + userId;
 
         requestPosts = new Request.Builder()
                 .url(url2)
-                .addHeader("Authorization","JWT "+ accessToken)
+                .addHeader("Authorization", "JWT " + accessToken)
                 .build();
 
         callAllPosts();
     }
-    private void showAlreadyFollowed(){
+
+    private void showAlreadyFollowed() {
         followingWarning.setVisibility(View.VISIBLE);
         followButton.setVisibility(View.INVISIBLE);
     }
-    private void setUserFields(){
+
+    private void setUserFields() {
         name.setText(thisUser.getName());
         surname.setText(thisUser.getSurname());
         username.setText(thisUser.getUsername());
@@ -151,12 +153,13 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         following.setText(thisUser.getFollowedUsers().size());
         numPosts.setText(thisUser.getPosts().size());
     }
-    private void followButtonClicked(){
+
+    private void followButtonClicked() {
         String url = BuildConfig.API_IP + "/user/follow/" + userId;
 
         Request followRequest = new Request.Builder()
                 .url(url)
-                .addHeader("Authorization","JWT "+ accessToken)
+                .addHeader("Authorization", "JWT " + accessToken)
                 .build();
 
         client.newCall(followRequest).enqueue(new Callback() {
@@ -173,7 +176,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
     }
 
 
-    private void callAllPosts(){
+    private void callAllPosts() {
         client.newCall(requestPosts).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
