@@ -113,6 +113,7 @@ public class MainActivity extends ToolbarActivity {
                     arrayOfPosts.add(post);
 
                 }
+
                 Collections.reverse(arrayOfPosts);
                 postAdapter = new PostAdapter(MainActivity.this, arrayOfPosts);
                 runOnUiThread(new Runnable() {
