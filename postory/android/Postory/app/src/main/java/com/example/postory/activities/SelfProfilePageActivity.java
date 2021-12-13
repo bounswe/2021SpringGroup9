@@ -33,7 +33,6 @@ import com.example.postory.BuildConfig;
 import com.example.postory.R;
 import com.example.postory.adapters.PostAdapter;
 import com.example.postory.models.Post;
-import com.example.postory.models.PostModel;
 import com.example.postory.models.UserModel;
 import com.github.johnpersano.supertoasts.library.Style;
 import com.github.johnpersano.supertoasts.library.SuperActivityToast;
@@ -118,9 +117,9 @@ public class SelfProfilePageActivity extends ToolbarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_other_profile_page);
+        setContentView(R.layout.activity_self_profile_page);
         super.initToolbar();
-        listView = (ListView) findViewById(R.id.list_view_posts);
+        listView = (ListView) findViewById(R.id.list_posts);
 
         name = (TextView) findViewById(R.id.name);
         surname = (TextView) findViewById(R.id.surname);
@@ -151,9 +150,15 @@ public class SelfProfilePageActivity extends ToolbarActivity {
 
                 Gson gson = new Gson();
                 String respStr = response.body().string();
-                thisUser = gson.fromJson(respStr, UserModel.class);
-                setUserFields();
+                Log.d("send_request_to_get_data", respStr);
 
+                thisUser = gson.fromJson(respStr, UserModel.class);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setUserFields();
+                    }
+                });
             }
         });
 
@@ -187,9 +192,9 @@ public class SelfProfilePageActivity extends ToolbarActivity {
         name.setText(thisUser.getName());
         surname.setText(thisUser.getSurname());
         username.setText(thisUser.getUsername());
-        followedBy.setText(thisUser.getFollowerUsers().size());
-        following.setText(thisUser.getFollowedUsers().size());
-        numPosts.setText(thisUser.getPosts().size());
+        followedBy.setText(""+thisUser.getFollowerUsers().size());
+        following.setText(""+thisUser.getFollowedUsers().size());
+        numPosts.setText(""+thisUser.getPosts().size());
     }
 
 
@@ -209,10 +214,10 @@ public class SelfProfilePageActivity extends ToolbarActivity {
                 Gson gson = new Gson();
                 posts = gson.fromJson(response.body().string(), Post[].class);
                 Log.i(TAG, "onResponse: ");
-                ArrayList<PostModel> arrayOfPosts = new ArrayList<PostModel>();
+                ArrayList<Post> arrayOfPosts = new ArrayList<Post>();
 
                 for (Post post : posts) {
-                    arrayOfPosts.add(new PostModel(post.getId(), post.getTitle(), post.getStory(), post.getOwner(), post.getTags(), post.getLocations(), post.getImages(), post.getPostDate(), post.getEditDate(), post.getStoryDate(), post.getViewCount()));
+                    arrayOfPosts.add(post);
 
                 }
                 Collections.reverse(arrayOfPosts);

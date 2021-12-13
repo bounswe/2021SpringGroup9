@@ -60,7 +60,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         String mailString = resetMail.getText().toString();
         if(resetMail.getText().toString().contains("@")){
             OkHttpClient client = new OkHttpClient();
-            String url = "http://3.125.114.231:8000/auth/users/reset_password";
+            String url = "http://3.67.83.253:8000/auth/users/reset_password";
             MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
             MultipartBody.Builder builder = bodyBuilder.setType(MultipartBody.FORM);
             RequestBody requestBody = builder.addFormDataPart("email",mailString).build();

@@ -15,7 +15,6 @@ import com.example.postory.BuildConfig;
 import com.example.postory.R;
 import com.example.postory.adapters.PostAdapter;
 import com.example.postory.models.Post;
-import com.example.postory.models.PostModel;
 import com.example.postory.models.UserModel;
 import com.google.gson.Gson;
 
@@ -114,12 +113,18 @@ public class OtherProfilePageActivity extends ToolbarActivity {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 Gson gson = new Gson();
                 thisUser = gson.fromJson(response.body().string(), UserModel.class);
+                runOnUiThread(new Runnable(){
+                    @Override
+                    public void run() {
+                        setUserFields();
+                        if (thisUser.getFollowerUsers().contains(viewerId)) {
+                            showAlreadyFollowed();
+                        }
+                    }
+                });
             }
         });
-        if (thisUser.getFollowerUsers().contains(viewerId)) {
-            showAlreadyFollowed();
-        }
-        setUserFields();
+
         callForPosts();
         followButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,11 +194,10 @@ public class OtherProfilePageActivity extends ToolbarActivity {
                 Gson gson = new Gson();
                 posts = gson.fromJson(response.body().string(), Post[].class);
                 Log.i(TAG, "onResponse: ");
-                ArrayList<PostModel> arrayOfPosts = new ArrayList<PostModel>();
+                ArrayList<Post> arrayOfPosts = new ArrayList<Post>();
 
                 for (Post post : posts) {
-                    arrayOfPosts.add(new PostModel(post.getId(), post.getTitle(), post.getStory(), post.getOwner(), post.getTags(), post.getLocations(), post.getImages(), post.getPostDate(), post.getEditDate(), post.getStoryDate(), post.getViewCount()));
-
+                    arrayOfPosts.add(post);
                 }
                 Collections.reverse(arrayOfPosts);
                 postAdapter = new PostAdapter(OtherProfilePageActivity.this, arrayOfPosts);

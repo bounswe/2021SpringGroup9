@@ -77,7 +77,8 @@ public class MainActivity extends ToolbarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         super.initToolbar();
-
+        Intent i = new Intent(MainActivity.this,SelfProfilePageActivity.class);
+        startActivity(i);
         sharedPreferences = getSharedPreferences("MY_APP",MODE_PRIVATE);
 
 
@@ -105,7 +106,8 @@ public class MainActivity extends ToolbarActivity {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 Log.i(TAG, "onResponse: ");
                 Gson gson = new Gson();
-                posts = gson.fromJson(response.body().string(), Post[].class);
+                String respString = response.body().string();
+                posts = gson.fromJson(respString, Post[].class);
                 Log.i(TAG, "onResponse: ");
                 ArrayList<Post> arrayOfPosts = new ArrayList<Post>();
 
