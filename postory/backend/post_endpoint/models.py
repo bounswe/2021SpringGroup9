@@ -22,6 +22,7 @@ class Post(models.Model):
     title = models.CharField(max_length=200)
     story = models.TextField()
     owner = models.IntegerField()
+    username = models.CharField(max_length=200, default="")
     locations = models.ManyToManyField(Location, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
     images = models.ManyToManyField(Image, blank=True)

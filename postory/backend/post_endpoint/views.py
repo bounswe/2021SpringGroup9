@@ -105,12 +105,12 @@ class PostCreate(GenericAPIView):
                 tagsList.append(tagObject)
         data['tags'] = [tag.id for tag in tagsList]
 
+        user = User.objects.get(pk = userid)
+        data['username'] = user.username
         serializer = PostSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             story = Post.objects.get(pk = serializer.data["id"])
-
-            user = User.objects.get(pk = userid)
             user.posts.add(story)
             return Response(get_story(story), status=200)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
