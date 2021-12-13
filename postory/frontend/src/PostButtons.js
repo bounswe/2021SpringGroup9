@@ -115,12 +115,16 @@ class PostButtons extends React.Component {
         <div class= "row2">
           <LikeButton {...this.props}></LikeButton>
           <VerticalSeperator></VerticalSeperator>
+          {this.props.id ? 
           <Link class = "push" to= {`/viewPost?id=${this.state.id}`}>
           <Icon 
             path={mdiCommentTextOutline} 
             size={2}
           />
-          </Link>
+          </Link> : <Icon 
+            path={mdiCommentTextOutline} 
+            size={2}
+          />}
           <VerticalSeperator></VerticalSeperator>
           <Icon 
             path={mdiShareVariantOutline} 
