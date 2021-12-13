@@ -70,7 +70,7 @@ export const ProfilePageUpper = () => {
     }, [])
 
     const onClickFollow = () =>{
-        fetch(`http://3.125.114.231:8000'/api/user/follow/${userID}`, {
+        fetch(`http://3.125.114.231:8000/api/user/follow/${userID}`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
