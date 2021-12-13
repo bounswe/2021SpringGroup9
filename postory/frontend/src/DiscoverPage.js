@@ -113,13 +113,14 @@ class DiscoverPage extends React.Component{
     }
 
     render(){
+        let key = process.env.REACT_APP_GOOGLE_API_KEY?(`key=` + process.env.REACT_APP_GOOGLE_API_KEY + "&") : "";
         return(   
         <div className="App">
         <header className="App-header">
           <MyMapComponent 
                     redirect = {(id) => this.setState({selectedPost : id})}
                     isMarkerShown
-                    googleMapURL="https://maps.googleapis.com/maps/api/js?AIzaSyCObbHDNSykqMsThft-aQljY99z9RErUsI&v=3.exp&libraries=geometry,drawing,places"
+                    googleMapURL={`https://maps.googleapis.com/maps/api/js?${key}v=3.exp&libraries=geometry,drawing,places`}
                     loadingElement={<div style={{ height: `100%` }} />}
                     containerElement={<div style={{ height: window.innerHeight * 5/6, width: window.innerWidth }} />} //`600px`
                     mapElement={<div style={{ height: `100%` }} />}

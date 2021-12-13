@@ -20,6 +20,8 @@ export const ProfilePageUpper = () => {
     const [sessionUserID, setSessionUserID] = React.useState();
     const [username, setUsername] = React.useState();
     const [popupState, setPopupState] = React.useState(false);
+    const [photo, setPhoto] = React.useState(false);
+    const [profilePhoto, setProfilePhoto] = React.useState(false);
 
     useEffect(() => {
         fetch(`http://3.125.114.231:8000/api/post/all/user/${userID}`, {
@@ -47,6 +49,7 @@ export const ProfilePageUpper = () => {
             }
         }).then(response => response.json())
             .then( (data) => {
+                setProfilePhoto(data.userPhoto);
                 setUsername(data.username);
                 setFollowingCount(data.followedUsers.length);
                 setFollowerCount(data.followerUsers.length);
@@ -102,7 +105,27 @@ export const ProfilePageUpper = () => {
         <Container>
             <Row style={{alignItems: `center`}}>
                 <Col sm={4} >
-                    <Icon path={mdiAccount} size={2}/>
+                    <div className = {'sliderContainer'} >
+                        
+                        <img class = "circle" width = "50px" height = "50px" src = {profilePhoto? profilePhoto:"./static/media/postory_logo_no_text.ec3bad21.png"} />
+                        {photo && (parseInt(localStorage.getItem('userID')) == userID) && <div className = {'ppup'}>
+                        <input onChange = {(e) => 
+                        {
+                            let formData = new FormData();
+                            formData.append('image', e.target.files[0]);
+                            
+                            fetch('http://3.125.114.231:8000/api/user/addPhoto', {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `JWT ${localStorage.getItem('access')}`
+                            },
+                            body: formData
+                                });
+                            setPhoto(st => !st);}
+                        }
+                            type="file" id="file" accept=".jpg, .png"/>
+                            </div>}
+                    </div>
                     <div style={{ fontSize: `16px`, fontColor: `#08233B`, fontWeight: `bold` }}>{username}</div>
                 </Col>
                 <Col  sm={2}>

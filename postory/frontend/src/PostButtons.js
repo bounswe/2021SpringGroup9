@@ -9,7 +9,7 @@ import { mdiCommentTextOutline } from '@mdi/js';
 import { mdiAlertCircleOutline } from '@mdi/js';
 import { mdiBookmarkOutline } from '@mdi/js';
 import { mdiDragVerticalVariant } from '@mdi/js';
-  
+import { Link } from "react-router-dom";
 class LikeButton extends React.Component {
   constructor(props) {
     super(props);
@@ -111,11 +111,12 @@ class PostButtons extends React.Component {
         <div class= "row2">
           <LikeButton {...this.props}></LikeButton>
           <VerticalSeperator></VerticalSeperator>
+          <Link class = "push" to= {`/viewPost?id=${this.state.id}`}>
           <Icon 
             path={mdiCommentTextOutline} 
             size={2}
-            onClick={this.showPopup} 
           />
+          </Link>
           <VerticalSeperator></VerticalSeperator>
           <Icon 
             path={mdiShareVariantOutline} 
