@@ -108,8 +108,11 @@ class UserGet(GenericAPIView):
         requested_user = User.objects.filter(id = pk).first()
         if(not requested_user.isPrivate or requested_user in requester_user.followedUsers):
             serializer = dict(UserSerializer(requested_user).data)
-            userPhoto = Image.objects.filter(user = requested_user.id).first()
-            serializer['userPhoto'] = userPhoto.file.url
+            try:
+                userPhoto = Image.objects.filter(user = requested_user.id).first()
+                serializer['userPhoto'] = userPhoto.file.url
+            except:
+                serializer['userPhoto'] = ""
             return Response(serializer)
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
