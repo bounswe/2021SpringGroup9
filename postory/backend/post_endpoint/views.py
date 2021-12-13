@@ -372,6 +372,7 @@ class LikeRequest(GenericAPIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
     
 def get_story(story):
+    username = story.username
     tags = []
     for tag in story.tags.all():
         tags.append(tag.content)
@@ -437,4 +438,5 @@ def get_story(story):
     serializer['day'] = day
     serializer['hour'] = hour
     serializer['minute'] = minute
+    serializer['username'] = username
     return serializer
