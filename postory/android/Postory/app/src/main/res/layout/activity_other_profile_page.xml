@@ -139,6 +139,7 @@
         </TextView>
 
         <TextView
+            android:id="@+id/followedBy"
             android:layout_width="70dp"
             android:layout_height="20dp"
             android:background="@color/colorLightGray"
@@ -162,6 +163,7 @@
         </TextView>
 
         <TextView
+            android:id="@+id/following"
             android:layout_width="70dp"
             android:layout_height="20dp"
             android:background="@color/colorLightGray"
@@ -185,6 +187,7 @@
         </TextView>
 
         <TextView
+            android:id="@+id/numPosts"
             android:layout_width="70dp"
             android:layout_height="20dp"
             android:background="@color/colorLightGray"
