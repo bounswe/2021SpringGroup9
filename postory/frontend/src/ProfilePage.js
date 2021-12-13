@@ -50,6 +50,11 @@ export const ProfilePageUpper = () => {
                 setUsername(data.username);
                 setFollowingCount(data.followedUsers.length);
                 setFollowerCount(data.followerUsers.length);
+                for(let i =0 ; i< data.followerUsers.length; i++){
+                    if(data.followerUsers[i] == sessionUserID){
+                        setShowFollowButton(false);
+                    }
+                }
                 console.log(data);
         })
     }, [userID])
