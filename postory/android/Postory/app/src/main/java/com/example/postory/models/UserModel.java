@@ -36,51 +36,51 @@ public class UserModel {
         this.email = email;
     }
 
-    public List<Object> getFollowedUsers() {
+    public List<Integer> getFollowedUsers() {
         return followedUsers;
     }
 
-    public void setFollowedUsers(List<Object> followedUsers) {
+    public void setFollowedUsers(List<Integer> followedUsers) {
         this.followedUsers = followedUsers;
     }
 
-    public List<Object> getFollowerUsers() {
+    public List<Integer> getFollowerUsers() {
         return followerUsers;
     }
 
-    public void setFollowerUsers(List<Object> followerUsers) {
+    public void setFollowerUsers(List<Integer> followerUsers) {
         this.followerUsers = followerUsers;
     }
 
-    public List<Object> getPosts() {
+    public List<Integer> getPosts() {
         return posts;
     }
 
-    public void setPosts(List<Object> posts) {
+    public void setPosts(List<Integer> posts) {
         this.posts = posts;
     }
 
-    public List<Object> getSavedPosts() {
+    public List<Integer> getSavedPosts() {
         return savedPosts;
     }
 
-    public void setSavedPosts(List<Object> savedPosts) {
+    public void setSavedPosts(List<Integer> savedPosts) {
         this.savedPosts = savedPosts;
     }
 
-    public List<Object> getLikedPosts() {
+    public List<Integer> getLikedPosts() {
         return likedPosts;
     }
 
-    public void setLikedPosts(List<Object> likedPosts) {
+    public void setLikedPosts(List<Integer> likedPosts) {
         this.likedPosts = likedPosts;
     }
 
-    public List<Object> getComments() {
+    public List<Integer> getComments() {
         return comments;
     }
 
-    public void setComments(List<Object> comments) {
+    public void setComments(List<Integer> comments) {
         this.comments = comments;
     }
 
@@ -116,28 +116,37 @@ public class UserModel {
         this.is_active = is_active;
     }
 
-    public List<Object> getImages() {
-        return images;
+    public String getUserPhoto() {
+        return userPhoto;
     }
 
-    public void setImages(List<Object> images) {
-        this.images = images;
+    public void setUserPhoto(String userPhoto) {
+        this.userPhoto = userPhoto;
     }
 
+    public int getId(){
+        return id;
+    }
+
+    public void setId(int id){
+        this.id = id;
+    }
+
+    int id;
     String username;
     String name;
     String surname;
     String email;
-    List<Object> followedUsers;
-    List<Object> followerUsers;
-    List<Object> posts;
-    List<Object> savedPosts;
-    List<Object> likedPosts;
-    List<Object> comments;
+    List<Integer> followedUsers;
+    List<Integer> followerUsers;
+    List<Integer> posts;
+    List<Integer> savedPosts;
+    List<Integer> likedPosts;
+    List<Integer> comments;
     boolean isBanned;
     boolean isAdmin;
     boolean isPrivate;
     boolean is_active;
-    List<Object> images;
+    String userPhoto;
 
 }

@@ -28,7 +28,12 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="XXXXX" />
-
+        <activity
+            android:name=".activities.SelfProfilePageActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activities.OtherProfilePageActivity"
+            android:exported="true" />
         <activity
             android:name=".activities.RegisterActivity"
             android:exported="true" />
