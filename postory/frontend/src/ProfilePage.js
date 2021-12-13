@@ -6,6 +6,8 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Post from './Post';
+import {Snackbar} from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 
 export const ProfilePageUpper = () => {
     const [followingCount, setFollowingCount] = React.useState(0);
@@ -17,6 +19,7 @@ export const ProfilePageUpper = () => {
     const [userID, setUserID] = React.useState();
     const [sessionUserID, setSessionUserID] = React.useState();
     const [username, setUsername] = React.useState();
+    const [popupState, setPopupState] = React.useState(false);
 
     useEffect(() => {
         fetch(`http://3.125.114.231:8000/api/post/all/user/${userID}`, {
@@ -47,6 +50,11 @@ export const ProfilePageUpper = () => {
                 setUsername(data.username);
                 setFollowingCount(data.followedUsers.length);
                 setFollowerCount(data.followerUsers.length);
+                for(let i =0 ; i< data.followerUsers.length; i++){
+                    if(data.followerUsers[i] == sessionUserID){
+                        setShowFollowButton(false);
+                    }
+                }
                 console.log(data);
         })
     }, [userID])
@@ -78,8 +86,14 @@ export const ProfilePageUpper = () => {
                 'Authorization': `JWT ${localStorage.getItem('access')}`
             },
             body: JSON.stringify({})
-        })    
+        }).then(setPopupState(true))
+
     }
+
+    const closePopup = () => {
+        setPopupState(false);
+        setShowFollowButton(false);
+      };
 
     return ( 
         <div style={{ backgroundColor: `#EBEBEB`}}>
@@ -109,6 +123,11 @@ export const ProfilePageUpper = () => {
             return <Post key = {i} {...obj}></Post>;
         })}
         </div>
+        <Snackbar open={popupState} autoHideDuration={3000} onClose={() => closePopup()} >
+            <Alert onClose={() => closePopup()} severity="info" sx={{ width: '100%' }}>
+              You have successfully followed {username}!
+            </Alert>
+        </Snackbar>
         </div>
     );
 }

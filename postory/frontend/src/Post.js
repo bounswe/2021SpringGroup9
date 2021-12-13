@@ -2,8 +2,11 @@ import React from 'react'
 import Icon from '@mdi/react'
 import { mdiMapMarker, mdiClockTimeEight, mdiTag, mdiCardsHeartOutline, mdiCardsHeart, mdiShareVariant,  mdiPencilOutline} from '@mdi/js'
 import PostButtons from './PostButtons';
-
+import Badge from 'react-bootstrap/Badge'
 import { Link } from "react-router-dom";
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 
 
 class Post extends React.Component{
@@ -40,57 +43,68 @@ class PostUpper extends React.Component{
   }
 
   render(){
-    let style = {paddingBottom: "10px"};
-    return (<div >
-      <div class= "row2" style = {style}>
-      {this.state.owner && <Link class = "push" to= {`/profilePage?id=${this.state.owner}`}>
-        <img class = "circle" width = "50px" height = "50px" src = "./static/media/postory_logo_no_text.ec3bad21.png" />
-        <a style = {{margin: "10px"}}>{this.state.owner}</a>
-        </Link>}
-        {this.state.id && <Link class = "push" to= {`/editPost?id=${this.state.id}`}>
-          <Icon path={mdiPencilOutline}
-            title="Edit Post"
-            size={1}
-            color='#FF8F49'
-            />
-        </Link>}
-      </div>
+    //let style = {paddingBottom: "10px"};
+    return (
+    <Container>
+      <Container>
+      <Row style={{alignItems: `center`}}>
+        <Col sm={11} style={{alignItems: `center`}}>
+          {this.state.owner && <Link class = "push" to= {`/profilePage?id=${this.state.owner}`} style={{ textDecoration: 'none', color: '#000' }}>
+            <img class = "circle" width = "50px" height = "50px" src = "./static/media/postory_logo_no_text.ec3bad21.png" />
+            <a style = {{margin: "10px"}}>{this.state.username}</a>
+          </Link>}
+        </Col>
+        <Col sm={1}>
+          {this.state.id && <Link class = "push" to= {`/editPost?id=${this.state.id}`}>
+            <Icon path={mdiPencilOutline}
+              title="Edit Post"
+              size={1}
+              color='#FF8F49'
+              />
+          </Link>}
+        </Col> 
+      </Row>
+      </Container>
       <div class= "row2 fitText">
       
         {this.state.locations.filter(obj => typeof obj[0] === 'string' && obj[0] != '').map((obj,i) => {
           return(
-          <a key = {i} class = "tag">
+            <Badge pill bg="secondary" style={{ fontSize: `10px`}}>
               <Icon path={mdiMapMarker}
-          title="Location"
-          size={0.7}
-          color="#53BEC6"
-          />
-             {obj[0]}
-          </a>);
+                title="Location"
+                size={0.7}
+                color="#53BEC6"
+              />
+              {obj[0]}
+             </Badge>);
         })}
-        {this.state.year && <a class = "tag">
-              <Icon path={mdiClockTimeEight}
-          title="Years"
-          size={0.7}
-          color="#53BEC6"
-          />{this.state.year[0]} {this.state.year.length > 1 && '-' + this.state.year[1]} </a>}
+        {this.state.year && 
+        <Badge pill bg="warning" style={{ fontSize: `10px`}} text="dark">
+          <Icon path={mdiClockTimeEight}
+            title="Years"
+            size={0.7}
+            color="#53BEC6"
+          />
+          {this.state.year[0]} 
+          {this.state.year.length > 1 && '-' + this.state.year[1]} 
+        </Badge>}
         {this.state.tags.map((obj,i) => {
           return(
-          <a key = {i} class = "tag">
+            <Badge pill bg="danger" style={{ fontSize: `10px`}} >
               <Icon path={mdiTag}
-          title="Tag"
-          size={0.7}
-          color="#53BEC6"
-          />
+                title="Tag"
+                size={0.7}
+                color="#53BEC6"
+              />
              {obj}
-          </a>);
+            </Badge>);
         })}
       </div>
-      {this.state.id && <Link class = "push" to= {`/viewPost?id=${this.state.id}`}>
-      <p style= {{width: '100%'}}class = "mainContent" ><b>{this.state.title}</b></p>
+      {this.state.id && <Link class = "push" to= {`/viewPost?id=${this.state.id}`} style={{ textDecoration: 'none', color: '#000' }}>
+      <p style= {{width: '100%'}}class = "mainContent" ><b style={{ fontSize: `16px`, fontWeight: `bold`}}>{this.state.title}</b></p>
       </Link>}
-      {!this.state.id && <p style= {{width: '100%'}}class = "mainContent" ><b>{this.state.title}</b></p>}
-      <a class = "mainContent" >{this.state.contentSmall}</a>
+      {!this.state.id && <p style= {{width: '100%'}}class = "mainContent" ><b style={{ fontSize: `16px`, fontWeight: `bold`}}>{this.state.title}</b></p>}
+      <a style={{ fontSize: `14px`}} >{this.state.contentSmall}</a>
       {this.state.continueReading && <a class = "mainContent" onClick = {this.getMoreContent}><b> ...Continue Reading</b></a>}
       <p></p>
       <div> 
@@ -103,7 +117,7 @@ class PostUpper extends React.Component{
           <img width = "200px" src = {(this.state.images && this.state.images[0] && this.state.images[1]) ? this.state.images[1]: ""}></img>
         </div>}
       </div>
-    </div>);
+    </Container>);
   }
 }
 
