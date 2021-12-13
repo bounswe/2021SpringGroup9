@@ -2,6 +2,8 @@ package com.example.postory.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
@@ -11,6 +13,7 @@ import com.example.postory.R;
 import com.example.postory.adapters.PostAdapter;
 import com.example.postory.models.Post;
 import com.example.postory.models.PostModel;
+import com.example.postory.models.UserModel;
 import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
@@ -29,8 +32,9 @@ public class OtherProfilePageActivity extends ToolbarActivity {
     private PostAdapter postAdapter;
     private Request requestPosts;
     private Request requestUserData;
-
+    private UserModel thisUser;
     private OkHttpClient client;
+    private SharedPreferences sharedPreferences;
     private String userId;
     private ListView listView;
     public static final String TAG = "OtherProfilePageActivity";
@@ -38,12 +42,15 @@ public class OtherProfilePageActivity extends ToolbarActivity {
 
     @Override
     protected void goHomeClicked() {
-
+        Intent intent = new Intent(OtherProfilePageActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 
     @Override
     protected void goCreatePostClicked() {
-
+        Intent intent = new Intent(OtherProfilePageActivity.this,CreatePostActivity.class);
+        intent.putExtra("goal","create");
+        startActivity(intent);
     }
 
     @Override
@@ -53,7 +60,8 @@ public class OtherProfilePageActivity extends ToolbarActivity {
 
     @Override
     protected void goExploreClicked() {
-
+        Intent intent = new Intent(OtherProfilePageActivity.this, ExploreActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -62,7 +70,11 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         setContentView(R.layout.activity_other_profile_page);
         super.initToolbar();
         listView = (ListView) findViewById(R.id.list_view_posts);
+        sharedPreferences = getSharedPreferences("MY_APP",MODE_PRIVATE);
+        int viewerId = Integer.parseInt(sharedPreferences.getString("user_id",""));
+        if (thisUser.getFollowerUsers().contains(viewerId)){
 
+        }
         client = new OkHttpClient();
         String url1 = BuildConfig.API_IP + "/post/all/user/" + userId;
 
@@ -78,6 +90,9 @@ public class OtherProfilePageActivity extends ToolbarActivity {
                 .build();
     }
 
+    private void showAlreadyFollowed(){
+
+    }
 
 
     private void callAllPosts(){
