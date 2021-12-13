@@ -17,6 +17,7 @@ import com.example.postory.adapters.CommentsAdapter;
 import com.example.postory.adapters.PostAdapter;
 import com.example.postory.models.CommentModel;
 import com.example.postory.models.Post;
+import com.example.postory.utils.TimeController;
 import com.google.gson.Gson;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
@@ -257,8 +258,52 @@ public class SinglePostActivity extends ToolbarActivity{
                         opName.setText(post.getOwner());
                         postText.setText(post.getStory());
                         opTitle.setText(post.getTitle());
-                        if(post.getStoryDate() != null) {
-                            dateText.setText(formatDate(post.getStoryDate()));
+                        List <Integer> yearList = post.getYear();
+                        List <Integer> monthList = post.getMonth();
+                        List <Integer> dayList = post.getDay();
+                        List <Integer> hourList = post.getHour();
+                        List <Integer> minuteList = post.getMinute();
+                        TimeController t;
+                        if(minuteList.size()>0){
+                            t = new TimeController(yearList.get(0),yearList.get(1),
+                                    monthList.get(0),monthList.get(1),
+                                    dayList.get(0),dayList.get(1),
+                                    hourList.get(0),hourList.get(1),
+                                    minuteList.get(0),minuteList.get(1));
+                            t.createDate();
+                            String startDateString = t.getDateFormat().format(t.getStartDate());
+                            String endDateString = t.getDateFormat().format(t.getEndDate());
+                            dateText.setText(startDateString + " - " + endDateString);
+                        }
+                        else if(dayList.size()>0){
+                            t = new TimeController(yearList.get(0),yearList.get(1),
+                                    monthList.get(0),monthList.get(1),
+                                    dayList.get(0),dayList.get(1));
+                            t.createDate();
+                            String startDateString = t.getDateFormat().format(t.getStartDate());
+                            String endDateString = t.getDateFormat().format(t.getEndDate());
+                            dateText.setText(startDateString + " - " + endDateString);
+                        }
+                        else if(monthList.size()>0){
+                            t = new TimeController(yearList.get(0),yearList.get(1),
+                                    monthList.get(0),monthList.get(1));
+                            t.createDate();
+                            String startDateString = t.getDateFormat().format(t.getStartDate());
+                            String endDateString = t.getDateFormat().format(t.getEndDate());
+                            dateText.setText(startDateString + " - " + endDateString);
+                        }
+                        else if(yearList.size()>0){
+                            t = new TimeController(yearList.get(0),yearList.get(1));
+                            t.createDate();
+                            String startDateString = t.getDateFormat().format(t.getStartDate());
+                            String endDateString = t.getDateFormat().format(t.getEndDate());
+                            dateText.setText(startDateString + " - " + endDateString);
+                        }
+                        else{
+
+                        }
+                        if(post.getPostDate() != null) {
+                            sharedDateText.setText(formatDate(post.getPostDate()));
                         }
 
                         if(post.getPostDate() != null) {
