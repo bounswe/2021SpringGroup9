@@ -4,6 +4,9 @@ import { mdiMapMarker, mdiClockTimeEight, mdiTag, mdiCardsHeartOutline, mdiCards
 import PostButtons from './PostButtons';
 import Badge from 'react-bootstrap/Badge'
 import { Link } from "react-router-dom";
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 
 
 class Post extends React.Component{
@@ -40,21 +43,28 @@ class PostUpper extends React.Component{
   }
 
   render(){
-    let style = {paddingBottom: "10px"};
-    return (<div >
-      <div class= "row2" style = {style}>
-      {this.state.owner && <Link class = "push" to= {`/profilePage?id=${this.state.owner}`} style={{ textDecoration: 'none', color: '#000' }}>
-        <img class = "circle" width = "50px" height = "50px" src = "./static/media/postory_logo_no_text.ec3bad21.png" />
-        <a style = {{margin: "10px"}}>{this.state.owner}</a>
-        </Link>}
-        {this.state.id && <Link class = "push" to= {`/editPost?id=${this.state.id}`}>
-          <Icon path={mdiPencilOutline}
-            title="Edit Post"
-            size={1}
-            color='#FF8F49'
-            />
-        </Link>}
-      </div>
+    //let style = {paddingBottom: "10px"};
+    return (
+    <Container>
+      <Container>
+      <Row style={{alignItems: `center`}}>
+        <Col sm={11} style={{alignItems: `center`}}>
+          {this.state.owner && <Link class = "push" to= {`/profilePage?id=${this.state.owner}`} style={{ textDecoration: 'none', color: '#000' }}>
+            <img class = "circle" width = "50px" height = "50px" src = "./static/media/postory_logo_no_text.ec3bad21.png" />
+            <a style = {{margin: "10px"}}>{this.state.owner}</a>
+          </Link>}
+        </Col>
+        <Col sm={1}>
+          {this.state.id && <Link class = "push" to= {`/editPost?id=${this.state.id}`}>
+            <Icon path={mdiPencilOutline}
+              title="Edit Post"
+              size={1}
+              color='#FF8F49'
+              />
+          </Link>}
+        </Col> 
+      </Row>
+      </Container>
       <div class= "row2 fitText">
       
         {this.state.locations.filter(obj => typeof obj[0] === 'string' && obj[0] != '').map((obj,i) => {
@@ -107,7 +117,7 @@ class PostUpper extends React.Component{
           <img width = "200px" src = {(this.state.images && this.state.images[0] && this.state.images[1]) ? this.state.images[1]: ""}></img>
         </div>}
       </div>
-    </div>);
+    </Container>);
   }
 }
 
