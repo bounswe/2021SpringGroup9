@@ -371,7 +371,8 @@ def get_story(story):
     username = story.username
     user = User.objects.filter(username = username).first()
     try:
-        userPhoto = user.userPhoto.file.url
+        userPhoto = Image.objects.filter(user = user.id).first()
+        userPhoto = userPhoto.file.url
     except:
         userPhoto = ""
     tags = []

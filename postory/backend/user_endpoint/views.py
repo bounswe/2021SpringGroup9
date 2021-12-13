@@ -35,7 +35,7 @@ class AddPhoto(GenericAPIView):
         imageObject = Image(file=image)
         imageObject.save()
         user = self.get_object(userid)
-        user.userPhoto = imageObject
+        user.userPhoto.set([imageObject])
         try:
             user.save()
             return Response(status=status.HTTP_200_OK)
@@ -108,7 +108,8 @@ class UserGet(GenericAPIView):
         requested_user = User.objects.filter(id = pk).first()
         if(not requested_user.isPrivate or requested_user in requester_user.followedUsers):
             serializer = dict(UserSerializer(requested_user).data)
-            serializer['userPhoto'] = requested_user.userPhoto.file.url
+            userPhoto = Image.objects.filter(user = requested_user.id).first()
+            serializer['userPhoto'] = userPhoto.file.url
             return Response(serializer)
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
