@@ -27,6 +27,7 @@ class App extends React.Component{
     //fetch(`http://${backendIP}/api/post/all`).
     requests.get_jwt('/api/post/all',{}).
     then(resp => resp.json()).then(data => this.setState(state => {
+      try {
       let newState = JSON.parse(JSON.stringify(state));
 
       //Show biggest id post on top
@@ -37,6 +38,9 @@ class App extends React.Component{
       newState['fetched'] = true;
 
       return newState;
+      }catch {
+        return state;
+      }
     })).catch(er => console.log(er));
     
   }

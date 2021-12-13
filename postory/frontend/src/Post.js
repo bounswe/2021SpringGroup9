@@ -25,8 +25,8 @@ class PostUpper extends React.Component{
 
     this.state = {
       ...props,
-      contentSmall : (props.story.length > 200) ? props.story.slice(0,200): props.story,
-      continueReading: props.story.length > 200,
+      contentSmall : (props.story && props.story.length > 200) ? props.story.slice(0,200): props.story,
+      continueReading: (props.story && props.story.length > 200),
     };
     console.log(this.state);
     this.getMoreContent = this.getMoreContent.bind(this);
@@ -67,7 +67,7 @@ class PostUpper extends React.Component{
       </Container>
       <div class= "row2 fitText">
       
-        {this.state.locations.filter(obj => typeof obj[0] === 'string' && obj[0] != '').map((obj,i) => {
+        {this.state.locations && this.state.locations.filter(obj => typeof obj[0] === 'string' && obj[0] != '').map((obj,i) => {
           return(
             <Badge pill bg="secondary" style={{ fontSize: `10px`}}>
               <Icon path={mdiMapMarker}
@@ -88,7 +88,7 @@ class PostUpper extends React.Component{
           {this.state.year[0]} 
           {this.state.year.length > 1 && '-' + this.state.year[1]} 
         </Badge>}
-        {this.state.tags.map((obj,i) => {
+        {this.state.tags && this.state.tags.map((obj,i) => {
           return(
             <Badge pill bg="danger" style={{ fontSize: `10px`}} >
               <Icon path={mdiTag}
@@ -101,10 +101,10 @@ class PostUpper extends React.Component{
         })}
       </div>
       {this.state.id && <Link class = "push" to= {`/viewPost?id=${this.state.id}`} style={{ textDecoration: 'none', color: '#000' }}>
-      <p style= {{width: '100%'}}class = "mainContent" ><b style={{ fontSize: `16px`, fontWeight: `bold`}}>{this.state.title}</b></p>
+      <p style= {{width: '100%'}}class = "mainContent" ><b style={{ fontSize: `16px`, fontWeight: `bold`}}>{this.state.title ? this.state.title : ""}</b></p>
       </Link>}
-      {!this.state.id && <p style= {{width: '100%'}}class = "mainContent" ><b style={{ fontSize: `16px`, fontWeight: `bold`}}>{this.state.title}</b></p>}
-      <a style={{ fontSize: `14px`}} >{this.state.contentSmall}</a>
+      {!this.state.id && <p style= {{width: '100%'}}class = "mainContent" ><b style={{ fontSize: `16px`, fontWeight: `bold`}}>{this.state.title ? this.state.title : ""}</b></p>}
+      <a style={{ fontSize: `14px`}} >{this.state.contentSmall? this.state.contentSmall : ""}</a>
       {this.state.continueReading && <a class = "mainContent" onClick = {this.getMoreContent}><b> ...Continue Reading</b></a>}
       <p></p>
       <div> 
