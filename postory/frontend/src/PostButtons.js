@@ -16,7 +16,7 @@ class LikeButton extends React.Component {
     this.state = {
         ...props,
         liked: false,
-        likeCount: props.likeList.length,
+        likeCount: props.likeList ? props.likeList.length: 0,
         userID: localStorage.getItem('userID'),
         iconPath: mdiCardsHeartOutline
     };
@@ -24,6 +24,7 @@ class LikeButton extends React.Component {
   }
 
   componentDidMount() {
+    if(this.state.likeList){
     for(let i = 0; i < this.state.likeList.length; i++) {
       let innerList = this.state.likeList[i];
       if (innerList[0] == this.state.userID){
@@ -32,6 +33,7 @@ class LikeButton extends React.Component {
       }
     }
     setTimeout(() => {console.log(this.state.liked)}, 500);
+  }
     //console.log(this.state.liked);
     //console.log(this.state.likeList.length)
   }
