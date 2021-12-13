@@ -6,7 +6,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.postory.BuildConfig;
 import com.example.postory.R;
@@ -17,6 +20,7 @@ import com.example.postory.models.UserModel;
 import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,8 +38,19 @@ public class OtherProfilePageActivity extends ToolbarActivity {
     private Request requestUserData;
     private UserModel thisUser;
     private OkHttpClient client;
+    private Button followButton;
+
+    private TextView name;
+    private TextView surname;
+    private TextView username;
+    private TextView followedBy;
+    private TextView following;
+    private TextView numPosts;
+
+    private TextView followingWarning;
     private SharedPreferences sharedPreferences;
     private String userId;
+    String accessToken;
     private ListView listView;
     public static final String TAG = "OtherProfilePageActivity";
     private Post[] posts;
@@ -69,29 +84,92 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_other_profile_page);
         super.initToolbar();
+        userId = getIntent().getStringExtra("user_id");
         listView = (ListView) findViewById(R.id.list_view_posts);
-        sharedPreferences = getSharedPreferences("MY_APP",MODE_PRIVATE);
-        int viewerId = Integer.parseInt(sharedPreferences.getString("user_id",""));
-        if (thisUser.getFollowerUsers().contains(viewerId)){
+        followButton = (Button) findViewById(R.id.followButton);
+        followingWarning = (TextView) findViewById(R.id.followingWarning);
 
-        }
+        name = (TextView) findViewById(R.id.name);
+        surname = (TextView) findViewById(R.id.surname);
+        username = (TextView) findViewById(R.id.username);
+        followedBy = (TextView) findViewById(R.id.followedBy);
+        following = (TextView) findViewById(R.id.following);
+        numPosts = (TextView) findViewById(R.id.numPosts);
+
+        sharedPreferences = getSharedPreferences("MY_APP",MODE_PRIVATE);
+        accessToken = sharedPreferences.getString("access_token","");
+        int viewerId = Integer.parseInt(sharedPreferences.getString("user_id",""));
+        String url1 = BuildConfig.API_IP + "/user/get/" + userId;
         client = new OkHttpClient();
-        String url1 = BuildConfig.API_IP + "/post/all/user/" + userId;
+        requestUserData = new Request.Builder()
+                .url(url1)
+                .addHeader("Authorization","JWT "+ accessToken)
+                .build();
+        client.newCall(requestUserData).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Log.i(TAG, "onFailure: ");
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                Gson gson = new Gson();
+                thisUser = gson.fromJson(response.body().string(),UserModel.class);
+            }
+        });
+        if (thisUser.getFollowerUsers().contains(viewerId)){
+            showAlreadyFollowed();
+        }
+        setUserFields();
+        callForPosts();
+        followButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                followButtonClicked();
+            }
+        });
+    }
+    private void callForPosts(){
+        String url2 = BuildConfig.API_IP + "/post/all/user/" + userId;
 
         requestPosts = new Request.Builder()
-                .url(url1)
+                .url(url2)
+                .addHeader("Authorization","JWT "+ accessToken)
                 .build();
 
         callAllPosts();
-
-        String url2 = BuildConfig.API_IP + "/user/get/" + userId;
-        requestUserData = new Request.Builder()
-                .url(url2)
-                .build();
     }
-
     private void showAlreadyFollowed(){
+        followingWarning.setVisibility(View.VISIBLE);
+        followButton.setVisibility(View.INVISIBLE);
+    }
+    private void setUserFields(){
+        name.setText(thisUser.getName());
+        surname.setText(thisUser.getSurname());
+        username.setText(thisUser.getUsername());
+        followedBy.setText(thisUser.getFollowerUsers().size());
+        following.setText(thisUser.getFollowedUsers().size());
+        numPosts.setText(thisUser.getPosts().size());
+    }
+    private void followButtonClicked(){
+        String url = BuildConfig.API_IP + "/user/follow/" + userId;
 
+        Request followRequest = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization","JWT "+ accessToken)
+                .build();
+
+        client.newCall(followRequest).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Log.i(TAG, "onFailure: ");
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                OtherProfilePageActivity.this.recreate();
+            }
+        });
     }
 
 
@@ -125,6 +203,5 @@ public class OtherProfilePageActivity extends ToolbarActivity {
                 });
             }
         });
-
     }
 }
