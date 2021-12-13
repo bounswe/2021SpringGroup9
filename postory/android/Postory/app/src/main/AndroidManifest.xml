@@ -24,7 +24,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="XXXXXX" />
+            android:value="XXXXX" />
 
         <activity
             android:name=".activities.RegisterActivity"
@@ -40,12 +40,15 @@
 
         </activity>
 
+        <activity android:name=".activities.SinglePostActivity">
+
+        </activity>
+
         <activity
             android:name=".activities.MainActivity"
             android:exported="true" />
 
         <activity android:name=".activities.LoginActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

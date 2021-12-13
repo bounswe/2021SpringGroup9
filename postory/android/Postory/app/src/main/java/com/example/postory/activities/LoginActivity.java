@@ -74,9 +74,11 @@ public class LoginActivity extends AppCompatActivity {
             String validDateString = sharedPreferences.getString("valid_until","");
             Date validDate = dateFormat.parse(validDateString);
             if(validDate.compareTo(Calendar.getInstance().getTime())>0){
+
                 Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                 startActivity(intent);
                 finish();
+
             }
         } catch (ParseException e) {
             e.printStackTrace();
