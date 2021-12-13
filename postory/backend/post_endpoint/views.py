@@ -104,10 +104,12 @@ class PostCreate(GenericAPIView):
                 tagObject.save()
                 tagsList.append(tagObject)
         data['tags'] = [tag.id for tag in tagsList]
-
         user = User.objects.get(pk = userid)
         data['username'] = user.username
-        data['userPhoto'] = user.images.all()[0].file.url
+        try:
+            data['userPhoto'] = user.images.all()[1].file.url
+        except IndexError:
+            pass
         serializer = PostSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
