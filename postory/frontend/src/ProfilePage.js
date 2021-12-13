@@ -36,7 +36,8 @@ export const ProfilePageUpper = () => {
         }).then(response => response.json())
             .then( (data) => {
                 setUserPosts(data);
-                setFetchedPosts(true)
+                setPostCount(data.length);
+                setFetchedPosts(true);
                 console.log(data);
             })
     }, [userID])
@@ -62,7 +63,7 @@ export const ProfilePageUpper = () => {
                 }
                 console.log(data);
         })
-    }, [userID])
+    }, [userID, showFollowButton])
 
     useEffect(() => {
         setUserID( () => {
