@@ -1,4 +1,4 @@
-const BACKEND_URL = 'http://' + '3.125.114.231' + ':8000'
+const BACKEND_URL = 'http://' + '3.67.83.253' + ':8000'
 
 export function post(url, body_json) {
     if (url.startsWith('/')) {

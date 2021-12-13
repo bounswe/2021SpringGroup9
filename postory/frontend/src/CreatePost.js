@@ -15,7 +15,7 @@ import {TextField, Snackbar} from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import * as requests from './requests';
 
-const backendIP = 'localhost:8000';
+const BACKEND_IP = '3.67.83.253';
 
 class CreatePost extends React.Component{
     constructor(props){
@@ -198,7 +198,7 @@ class CreatePost extends React.Component{
             formData.set('images', []);
 
         //requests.post_jwt(`/api/post/create`, formData)
-        fetch('http://3.125.114.231:8000/api/post/create', {
+        fetch(`http://${BACKEND_IP}:8000/api/post/create`, {
             method: 'POST',
             headers: {
                 'Authorization': `JWT ${localStorage.getItem('access')}`

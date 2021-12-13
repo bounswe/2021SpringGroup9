@@ -10,6 +10,8 @@ import { mdiAlertCircleOutline } from '@mdi/js';
 import { mdiBookmarkOutline } from '@mdi/js';
 import { mdiDragVerticalVariant } from '@mdi/js';
 import { Link } from "react-router-dom";
+import * as requests from './requests'
+
 class LikeButton extends React.Component {
   constructor(props) {
     super(props);
@@ -41,6 +43,7 @@ class LikeButton extends React.Component {
   updateLikeNumber = () => {
     console.log(this.state.userID)
     console.log(this.state.id)
+    /*
     fetch(`http://3.125.114.231:8000/api/post/like/${this.state.id}`, {
             method: 'POST',
             headers: {
@@ -48,7 +51,8 @@ class LikeButton extends React.Component {
                 'Content-Type': 'application/json',
                 'Authorization': `JWT ${localStorage.getItem('access')}`
             }
-    }).then(response => response.json())
+    })*/
+    requests.post_jwt(`/api/post/like/${this.state.id}`,{}).then(response => response.json())
     .then( (data) => {
       var likeList = data.likeList;
       console.log(data);

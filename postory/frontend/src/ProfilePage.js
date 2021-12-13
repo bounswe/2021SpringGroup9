@@ -9,6 +9,8 @@ import Post from './Post';
 import {Snackbar} from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 
+const BACKEND_IP = '3.67.83.253';
+
 export const ProfilePageUpper = () => {
     const [followingCount, setFollowingCount] = React.useState(0);
     const [followerCount, setFollowerCount] = React.useState(0);
@@ -24,7 +26,7 @@ export const ProfilePageUpper = () => {
     const [profilePhoto, setProfilePhoto] = React.useState(false);
 
     useEffect(() => {
-        fetch(`http://3.125.114.231:8000/api/post/all/user/${userID}`, {
+        fetch(`http://${BACKEND_IP}:8000/api/post/all/user/${userID}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -40,7 +42,7 @@ export const ProfilePageUpper = () => {
     }, [userID])
 
     useEffect(() => {
-        fetch(`http://3.125.114.231:8000/api/user/get/${userID}`, {
+        fetch(`http://${BACKEND_IP}:8000/api/user/get/${userID}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -81,7 +83,7 @@ export const ProfilePageUpper = () => {
     }, [])
 
     const onClickFollow = () =>{
-        fetch(`http://3.125.114.231:8000/api/user/follow/${userID}`, {
+        fetch(`http://${BACKEND_IP}:8000/api/user/follow/${userID}`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -107,14 +109,14 @@ export const ProfilePageUpper = () => {
                 <Col sm={4} >
                     <div className = {'sliderContainer'} >
                         
-                        <img class = "circle" width = "50px" height = "50px" src = {profilePhoto? profilePhoto:"./static/media/postory_logo_no_text.ec3bad21.png"} />
-                        {photo && (parseInt(localStorage.getItem('userID')) == userID) && <div className = {'ppup'}>
+                        <img onClick = {() => setPhoto(st => !st)} class = "circle" width = "50px" height = "50px" src = {profilePhoto? profilePhoto:"./static/media/postory_logo_no_text.ec3bad21.png"} />
+                        {photo  && (parseInt(localStorage.getItem('userID')) == userID) && <div className = {'ppup'}>
                         <input onChange = {(e) => 
                         {
                             let formData = new FormData();
                             formData.append('image', e.target.files[0]);
                             
-                            fetch('http://3.125.114.231:8000/api/user/addPhoto', {
+                            fetch(`http://${BACKEND_IP}:8000/api/user/addPhoto`, {
                             method: 'POST',
                             headers: {
                                 'Authorization': `JWT ${localStorage.getItem('access')}`

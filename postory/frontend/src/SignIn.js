@@ -4,6 +4,7 @@ import {createHash} from 'crypto'
 import './SignIn.css'
 import jwt_decode from "jwt-decode";
 import {Link, Navigate} from "react-router-dom";
+import * as requests from './requests'
 
 function isEmail(str) {
     return /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(str)
@@ -28,7 +29,7 @@ class SignIn extends React.Component {
     handleButtonClick(e) {
         if (e.target.disabled) return;
 
-        fetch(`${BACKEND_URL}/auth/jwt/create/`, {
+        /*fetch(`${BACKEND_URL}/auth/jwt/create/`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -38,6 +39,10 @@ class SignIn extends React.Component {
                 email: this.state.email,
                 password: this.state.password
             })
+        })*/
+        requests.post_jwt(`/auth/jwt/create/`,{
+            email: this.state.email,
+            password: this.state.password
         }).then(
             res => {
                 if (Math.floor(res.status / 100) === 2) {

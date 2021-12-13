@@ -13,7 +13,6 @@ import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-map
 
 
 
-const backendIP = '3.125.114.231:8000';
 
 class ViewPost extends React.Component{
     constructor(props){
@@ -22,7 +21,6 @@ class ViewPost extends React.Component{
         owner : "Daniel Jones", locations: ["The World", "Ankara"], storyDate: "2021", tags: ["Cool"] };
 
         //TODO: change this?
-        console.log(window.location.href);
         const regex = /id=/g;
         const url = window.location.href;
         const idx = url.search(regex);
@@ -32,7 +30,6 @@ class ViewPost extends React.Component{
             id: id,
             api_key: ""
         }
-        console.log(process.env.REACT_APP_GOOGLE_API_KEY);
         if(process.env.REACT_APP_GOOGLE_API_KEY != undefined)
             this.state = {
                 id: id,
@@ -44,7 +41,6 @@ class ViewPost extends React.Component{
                         ...state,
                         post: data
                     }});
-                    console.log("posdf", this.state.post);
                 }
             );
     }
