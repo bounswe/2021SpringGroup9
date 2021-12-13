@@ -28,7 +28,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     isAdmin = models.BooleanField(default=False)   
     isPrivate = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
-    images = models.ManyToManyField(Image, blank=True)
+    userPhoto = models.OneToOneField(Image, blank=True, on_delete=models.CASCADE)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', "surname", "username"]

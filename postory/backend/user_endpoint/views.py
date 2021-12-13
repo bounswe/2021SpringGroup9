@@ -31,17 +31,11 @@ class AddPhoto(GenericAPIView):
         userid = request.auth['user_id']
         data = dict(request.data)
         
-        images = data['images']
-        imagesList = []
-        for image in images:
-            if image:
-                imageObject = Image(file=image)
-                imageObject.save()
-                imagesList.append(imageObject.id)
-        
+        image = data['image'][0]
+        imageObject = Image(file=image)
+        imageObject.save()
         user = self.get_object(userid)
-        user.images.set(imagesList)
-    
+        user.userPhoto = imageObject
         try:
             user.save()
             return Response(status=status.HTTP_200_OK)
