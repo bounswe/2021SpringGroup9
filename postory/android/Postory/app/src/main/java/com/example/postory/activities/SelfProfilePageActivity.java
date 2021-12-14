@@ -29,6 +29,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.postory.BuildConfig;
 import com.example.postory.R;
 import com.example.postory.adapters.PostAdapter;
@@ -195,6 +197,14 @@ public class SelfProfilePageActivity extends ToolbarActivity {
         followedBy.setText(""+thisUser.getFollowerUsers().size());
         following.setText(""+thisUser.getFollowedUsers().size());
         numPosts.setText(""+thisUser.getPosts().size());
+        Glide
+                .with(SelfProfilePageActivity.this)
+                .load(thisUser.getUserPhoto())
+                .placeholder(R.drawable.placeholder)
+                .apply(new RequestOptions().override(400,400))
+                .centerCrop()
+                .into(profilePicture);
+
     }
 
 
