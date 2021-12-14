@@ -184,6 +184,9 @@ public class SinglePostActivity extends ToolbarActivity{
 
         accessToken = sharedPreferences.getString("access_token","");
         selfId = sharedPreferences.getString("user_id","");
+
+
+
         client = new OkHttpClient();
         url = BuildConfig.API_IP + "/post/get/" + postId;
         RequestBody reqbody = RequestBody.create(null, new byte[0]);
@@ -211,7 +214,8 @@ public class SinglePostActivity extends ToolbarActivity{
 
                 Log.i(TAG, "onResponse: ");
                 Gson gson = new Gson();
-                post = gson.fromJson(response.body().string(), Post.class);
+                String respStr = response.body().string();
+                post = gson.fromJson(respStr, Post.class);
                 Log.i(TAG, "onResponse: ");
 
                 for(List<Object> singleComment : post.getComments()) {
@@ -354,6 +358,10 @@ public class SinglePostActivity extends ToolbarActivity{
                         if(post.getPostDate() != null) {
                             sharedDateText.setText(formatDate(post.getPostDate()));
                         }
+                        if(!post.getOwner().equals(selfId)){
+                            editText.setVisibility(View.INVISIBLE);
+                        }
+
 
                     }
                 });
@@ -361,7 +369,21 @@ public class SinglePostActivity extends ToolbarActivity{
 
 
 
+            }
+        });
 
+        opName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i;
+                if (selfId.equals(post.getOwner())){
+                    i = new Intent(SinglePostActivity.this, SelfProfilePageActivity.class);
+                }
+                else{
+                    i = new Intent(SinglePostActivity.this, OtherProfilePageActivity.class);
+                    i.putExtra("user_id",post.getOwner());
+                }
+                startActivity(i);
             }
         });
 

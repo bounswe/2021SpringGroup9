@@ -82,8 +82,14 @@
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/op_shared_on"
-            android:text="15/11/2021"></TextView>
-
+            android:text="14/12/2021"></TextView>
+         <ImageView
+             android:id="@+id/view_single_post"
+             android:layout_width="50dp"
+             android:layout_height="match_parent"
+             android:layout_alignParentRight="true"
+             android:src="@drawable/outline_remove_red_eye_black_24dp"
+             ></ImageView>
     </RelativeLayout>
 
 

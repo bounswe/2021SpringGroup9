@@ -106,6 +106,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
         ImageView profilePicture = (ImageView) convertView.findViewById(R.id.profile_picture);
         postPicture.setImageResource(R.drawable.placeholder);
         ImageView editText = (ImageView) convertView.findViewById(R.id.edit_text);
+        ImageView viewSinglePost = (ImageView) convertView.findViewById(R.id.view_single_post);
 
 
         if(!post.getOwner().equals(userId)){
@@ -175,6 +176,16 @@ public class PostAdapter extends ArrayAdapter<Post> {
                 context.startActivity(i);
             }
         });
+
+        viewSinglePost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(context,SinglePostActivity.class);
+                i.putExtra("post_id",""+post.getId());
+                context.startActivity(i);
+            }
+        });
+
 
         postText.setText(post.getStory());
         opTitle.setText(post.getTitle());

@@ -84,7 +84,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         setContentView(R.layout.activity_other_profile_page);
         super.initToolbar();
         userId = getIntent().getStringExtra("user_id");
-        listView = (ListView) findViewById(R.id.list_view_posts);
+        listView = (ListView) findViewById(R.id.list_posts);
         followButton = (Button) findViewById(R.id.followButton);
         followingWarning = (TextView) findViewById(R.id.followingWarning);
         name = (TextView) findViewById(R.id.name);
@@ -154,9 +154,9 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         name.setText(thisUser.getName());
         surname.setText(thisUser.getSurname());
         username.setText(thisUser.getUsername());
-        followedBy.setText(thisUser.getFollowerUsers().size());
-        following.setText(thisUser.getFollowedUsers().size());
-        numPosts.setText(thisUser.getPosts().size());
+        followedBy.setText(""+thisUser.getFollowerUsers().size());
+        following.setText(""+thisUser.getFollowedUsers().size());
+        numPosts.setText(""+thisUser.getPosts().size());
     }
 
     private void followButtonClicked() {
