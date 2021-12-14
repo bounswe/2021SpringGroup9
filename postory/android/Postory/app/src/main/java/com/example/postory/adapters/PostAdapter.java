@@ -1,7 +1,10 @@
 package com.example.postory.adapters;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.util.Base64;
@@ -25,6 +28,9 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.postory.R;
 import com.example.postory.activities.CreatePostActivity;
 import com.example.postory.activities.MainActivity;
+import com.example.postory.activities.OtherProfilePageActivity;
+import com.example.postory.activities.SelfProfilePageActivity;
+import com.example.postory.activities.SinglePostActivity;
 import com.example.postory.models.Post;
 
 import com.example.postory.models.TagItem;
@@ -42,9 +48,13 @@ public class PostAdapter extends ArrayAdapter<Post> {
     private String imageUrl;
     private String location;
     private Context context;
+    private String userId;
+
     public PostAdapter(Context context, ArrayList<Post> posts) {
         super(context, 0, posts);
         this.context = context;
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MY_APP", MODE_PRIVATE);
+        userId = sharedPreferences.getString("user_id","");
     }
 
     @NonNull
@@ -98,7 +108,9 @@ public class PostAdapter extends ArrayAdapter<Post> {
         ImageView editText = (ImageView) convertView.findViewById(R.id.edit_text);
 
 
-
+        if(!post.getOwner().equals(userId)){
+            editText.setVisibility(View.INVISIBLE);
+        }
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,6 +161,21 @@ public class PostAdapter extends ArrayAdapter<Post> {
         }
 
         opName.setText(post.getUsername());
+        opName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i;
+                if (userId.equals(post.getOwner())){
+                    i = new Intent(context, SelfProfilePageActivity.class);
+                }
+                else{
+                    i = new Intent(context, OtherProfilePageActivity.class);
+                    i.putExtra("user_id",post.getOwner());
+                }
+                context.startActivity(i);
+            }
+        });
+
         postText.setText(post.getStory());
         opTitle.setText(post.getTitle());
 
