@@ -197,8 +197,8 @@ class CreatePost extends React.Component{
         if(!at_least_one)
             formData.set('images', []);
 
-        formData.set('locations', formData.get('locations') || []);
-        formData.set('tags', formData.get('tags') || []);
+        //formData.set('locations', formData.getAll('locations') || []);
+        //formData.set('tags', formData.getAll('tags') || []);
         //requests.post_jwt(`/api/post/create`, formData)
         fetch(`http://${BACKEND_IP}:8000/api/post/create`, {
             method: 'POST',
