@@ -7,6 +7,34 @@
   background-color: rgb(235, 235, 235);
 }
 
+<<<<<<< HEAD
+.placeholder {
+  box-sizing: content-box;
+  height: 45px;
+}
+
+.CommentContainer{
+  border:1px solid black;
+  border-radius: 25px;
+  width : 450px;
+  height: 400px;
+  margin: 10px;
+  padding: 10px;
+  background-color: rgb(235, 235, 235);
+  overflow-y: scroll;
+}
+
+.Comment{
+  border:1px solid black;
+  border-radius: 25px;
+  width : 400px;
+  margin: 10px;
+  padding: 10px;
+  background-color: rgb(235, 235, 235);
+}
+
+=======
+>>>>>>> master
 .hide{
   display: none !important;
   color: rgb(255, 0, 0) !important;
@@ -51,7 +79,11 @@
   margin-left: auto;
 }
 
+<<<<<<< HEAD
+.row2{
+=======
 .row{
+>>>>>>> master
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -111,5 +143,40 @@
   font-size: calc(10px + 2vmin);
 }
 
+<<<<<<< HEAD
+.overflow{
+  overflow-y:scroll; 
+}
 
+.sliderContainer{
+  position: relative;
+}
+
+.sliderLeft{
+  position: absolute;
+  top: 50%;
+  left: 25px;
+  cursor: pointer;
+}
+
+.sliderRight{
+  position: absolute;
+  top: 50%;
+  right: 25px;
+  cursor: pointer;
+}
+
+.sliderContainer img {
+  max-height: 500px;
+  max-width:500px;
+  object-fit: cover;
+  margin-top: 50px;
+}
+
+.ppup{
+  position: absolute;
+}
+=======
+
+>>>>>>> master
 

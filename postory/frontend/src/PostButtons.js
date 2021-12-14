@@ -9,33 +9,73 @@ import { mdiCommentTextOutline } from '@mdi/js';
 import { mdiAlertCircleOutline } from '@mdi/js';
 import { mdiBookmarkOutline } from '@mdi/js';
 import { mdiDragVerticalVariant } from '@mdi/js';
-  
-class LikeButton extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            liked: false,
-            likeNumber: 0
-        };
-      }
+import { Link } from "react-router-dom";
+import * as requests from './requests'
 
-  updateLikeNumber = () => {
-    this.setState({ liked: !this.state.liked, likeNumber: this.state.liked ? 0 : 1 });
+class LikeButton extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+        ...props,
+        liked: false,
+        likeCount: props.likeList ? props.likeList.length: 0,
+        userID: localStorage.getItem('userID'),
+        iconPath: mdiCardsHeartOutline
+    };
+    
   }
 
-  getIconPath = () => this.state.liked ? mdiCardsHeart : mdiCardsHeartOutline
+  componentDidMount() {
+    if(this.state.likeList){
+    for(let i = 0; i < this.state.likeList.length; i++) {
+      let innerList = this.state.likeList[i];
+      if (innerList[0] == this.state.userID){
+        //console.log("This user has already liked this post")
+        this.setState({liked: true, iconPath: mdiCardsHeart});
+      }
+    }
+    setTimeout(() => {console.log(this.state.liked)}, 500);
+  }
+    //console.log(this.state.liked);
+    //console.log(this.state.likeList.length)
+  }
+
+  updateLikeNumber = () => {
+    console.log(this.state.userID)
+    console.log(this.state.id)
+    /*
+    fetch(`http://3.125.114.231:8000/api/post/like/${this.state.id}`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`
+            }
+    })*/
+    requests.post_jwt(`/api/post/like/${this.state.id}`,{}).then(response => response.json())
+    .then( (data) => {
+      var likeList = data.likeList;
+      console.log(data);
+      console.log(likeList.length);
+      setTimeout(() => {this.setState({likeCount: data.likeList.length})}, 300);
+      if (!this.state.liked){
+        setTimeout(() => {this.setState({liked: true, iconPath: mdiCardsHeart})}, 300);
+      } else {
+        setTimeout(() => {this.setState({liked: false, iconPath: mdiCardsHeartOutline})}, 300);
+      }
+    })
+  }
 
   render() {
-    const imageName = this.getIconPath();
     return (
-      <div class= "row">
+      <div class= "row2">
         <Icon 
-          path={imageName} 
+          path={this.state.iconPath} 
           size={2}
           onClick={this.updateLikeNumber} 
         />
         <div>
-          {this.state.likeNumber}
+          {this.state.likeCount}
         </div>
       </div>
     );
@@ -55,8 +95,10 @@ class PostButtons extends React.Component {
     super(props);
 
     this.state = {
+      ...props,
       popupState: false
     }
+    console.log(this.state);
   }
 
   showPopup = () => {
@@ -70,14 +112,19 @@ class PostButtons extends React.Component {
   render(){
     return(
       <div>
-        <div class= "row">
-          <LikeButton></LikeButton>
+        <div class= "row2">
+          <LikeButton {...this.props}></LikeButton>
           <VerticalSeperator></VerticalSeperator>
+          {this.props.id ? 
+          <Link class = "push" to= {`/viewPost?id=${this.state.id}`}>
           <Icon 
             path={mdiCommentTextOutline} 
             size={2}
-            onClick={this.showPopup} 
           />
+          </Link> : <Icon 
+            path={mdiCommentTextOutline} 
+            size={2}
+          />}
           <VerticalSeperator></VerticalSeperator>
           <Icon 
             path={mdiShareVariantOutline} 
