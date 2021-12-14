@@ -59,17 +59,18 @@ public class RegisterActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (passwordCheck()){ //TODO: Also check if required fields are empty.
+                if (passwordCheck()) {
                     sendSignUp();
                 }
 
             }
         });
     }
-    protected boolean passwordCheck(){
+
+    protected boolean passwordCheck() {
         String passwordText = password.getText().toString();
         String repeatPasswordText = repeatPassword.getText().toString();
-        if(!passwordText.equals(repeatPasswordText)){
+        if (!passwordText.equals(repeatPasswordText)) {
             SuperActivityToast.create(RegisterActivity.this, new Style(), Style.TYPE_BUTTON)
                     .setProgressBarColor(Color.WHITE)
                     .setText("The passwords do not match.")
@@ -78,8 +79,7 @@ public class RegisterActivity extends AppCompatActivity {
                     .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
                     .setAnimations(Style.ANIMATIONS_POP).show();
             return false;
-        }
-        else{
+        } else {
             PasswordController passwordController = new PasswordController(passwordText);
             List<String> errors = passwordController.getErrors();
             if (errors.size() > 0) {
@@ -103,9 +103,10 @@ public class RegisterActivity extends AppCompatActivity {
             return true;
         }
     }
+
     protected void sendSignUp() {
         final OkHttpClient client = new OkHttpClient();
-        String url = "http://3.67.83.253:8000/auth/jwt/users";
+        String url = "http://3.67.83.253:8000/auth/users/";
         String nameString = name.getText().toString();
         String surnameString = surname.getText().toString();
         String mailString = mail.getText().toString();
@@ -113,6 +114,18 @@ public class RegisterActivity extends AppCompatActivity {
         String passwordString = password.getText().toString();
         String repeatPasswordString = password.getText().toString();
 
+        if (nameString.equals("") || surnameString.equals("") || mailString.equals("") || usernameString.equals("")
+                || passwordString.equals("") || repeatPasswordString.equals("")) {
+            SuperActivityToast.create(RegisterActivity.this, new Style(), Style.TYPE_BUTTON)
+                    .setProgressBarColor(Color.WHITE)
+                    .setText("Fill in all the fields.")
+                    .setDuration(Style.DURATION_SHORT)
+                    .setFrame(Style.FRAME_LOLLIPOP)
+                    .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                    .setAnimations(Style.ANIMATIONS_POP).show();
+
+            return;
+        }
 
 
         RequestBody requestBody = null;
@@ -132,7 +145,6 @@ public class RegisterActivity extends AppCompatActivity {
                     .post(requestBody)
                     .build();
 
-            dialog.show(getSupportFragmentManager(), "Sign up request is sent.");
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -143,7 +155,6 @@ public class RegisterActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                     ResponseBody signUpResponse = response.body();
-                    //TODO: Read the response fields
 
                 }
             });
