@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PasswordController {
-    final int MIN_PASSWORD_LENGTH = 10;
+    final int MIN_PASSWORD_LENGTH = 8;
     String password;
 
     public PasswordController(String password) {
