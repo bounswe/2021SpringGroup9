@@ -5,7 +5,7 @@ import './SignUp.css'
 import {Link, Navigate} from "react-router-dom";
 import * as requests from './requests';
 
-const BACKEND_URL = 'http://' + window.location.hostname + ':8000'
+const BACKEND_URL = 'http://' + '3.67.83.253' + ':8000'
 
 function isEmail(str) {
     return /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(str)
@@ -69,7 +69,7 @@ class SignUp extends React.Component {
                 re_password: this.state.password2
             })
         })*/
-        requests.post_jwt('/auth/users/', {
+        requests.post('/auth/users/', {
             email: this.state.email,
             name: this.state.name,
             surname: this.state.surname,
@@ -93,6 +93,8 @@ class SignUp extends React.Component {
     render() {
         if (this.state.status === 'success') {
             setTimeout(() => this.setState(state => ({...state, redirect: true})), 2000)
+            localStorage.removeItem('access')
+            localStorage.removeItem('refresh')
 
             return <header className={'App-header'}>
                 <div id={'signup'}>
@@ -100,8 +102,8 @@ class SignUp extends React.Component {
                     <br />
                     <span>Check your inbox to activate your account.</span>
                     <br />
-                    <span>Redirecting to homepage..</span>
-                    {this.state.redirect && <Navigate to={'/'} />}
+                    <span>Redirecting to sing in page.</span>
+                    {this.state.redirect && <Navigate to={'/signIn'} />}
                 </div>
             </header>
         }
