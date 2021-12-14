@@ -8,5 +8,10 @@ urlpatterns = [
     path('get/<int:pk>', PostListDetail.as_view(), name="get_post"),
     path('put/<int:pk>', PostUpdate.as_view(), name="update_post"),
     path('delete/<int:pk>', PostDelete.as_view(), name="delete_post"),
-    path('all', GetAllPosts.as_view(), name="get_all_posts"),
+    path('all', GetFollowedUsersPosts.as_view(), name="get_all_posts_followed_users"),
+    path('all/admin', GetAllPosts.as_view(), name="get_all_posts_admin"),
+    path('all/user/<int:user_id>', GetUsersPosts.as_view(), name="get_all_posts_of_user"),
+    path('all/discover',GetPostsDiscover.as_view(), name="discover"),
+    path('comment/<int:pk>', CommentRequest.as_view(), name="comment_post"),
+    path('like/<int:pk>', LikeRequest.as_view(), name="like_post"),
 ]
