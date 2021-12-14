@@ -173,29 +173,10 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
     @Override
     public boolean onMarkerClick(@NonNull @NotNull Marker marker) {
 
-        SuperActivityToast.create(ExploreActivity.this, new Style(), Style.TYPE_BUTTON)
-                .setProgressBarColor(Color.WHITE)
-                .setText("Welcome to " + marker.getTitle() + ".")
-                .setDuration(Style.DURATION_LONG)
-                .setFrame(Style.FRAME_LOLLIPOP)
-                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_BLUE))
-                .setAnimations(Style.ANIMATIONS_POP).show();
 
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent i = new Intent(ExploreActivity.this, SinglePostActivity.class);
-                i.putExtra("post_id",markerId.get(marker.getId()) + "");
-                startActivity(i);
-
-            }
-        },3000);
-
-
-
-
-
+        Intent i = new Intent(ExploreActivity.this, SinglePostActivity.class);
+        i.putExtra("post_id",markerId.get(marker.getId()) + "");
+        startActivity(i);
 
 
         return  true;
