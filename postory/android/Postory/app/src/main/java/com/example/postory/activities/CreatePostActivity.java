@@ -194,7 +194,13 @@ public class CreatePostActivity extends ToolbarActivity {
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
                     Log.i(TAG, "onFailure: ");
-                    dialog.cancel();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialog.cancel();
+                        }
+                    });
+
                 }
 
                 @Override
@@ -373,14 +379,28 @@ public class CreatePostActivity extends ToolbarActivity {
                         client.newCall(request).enqueue(new Callback() {
                             @Override
                             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                                dialog.cancel();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        dialog.cancel();
+
+                                    }
+                                });
+
                                 Log.i(TAG, "onFailure: ");
                             }
 
                             @Override
                             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                                 Log.i(TAG, "onResponse: ");
-                                dialog.cancel();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        dialog.cancel();
+
+                                    }
+                                });
+
                                 CreatePostActivity.this.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -440,13 +460,26 @@ public class CreatePostActivity extends ToolbarActivity {
                             @Override
                             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                                 Log.i(TAG, "onFailure: ");
-                                dialog.cancel();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        dialog.cancel();
+
+                                    }
+                                });
+
                             }
 
                             @Override
                             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                                 Log.i(TAG, "onResponse: ");
-                                dialog.cancel();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        dialog.cancel();
+                                    }
+                                });
+
                                 CreatePostActivity.this.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {

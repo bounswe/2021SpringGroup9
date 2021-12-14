@@ -121,7 +121,6 @@
 
             <RelativeLayout
                 android:layout_gravity="center"
-                android:gravity="center"
                 android:id="@+id/op_info_layout_2"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"

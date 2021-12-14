@@ -193,7 +193,6 @@ public class SinglePostActivity extends ToolbarActivity{
 
                         String comment = editText.getText().toString();
 
-
                         Gson gson = new Gson();
                         CommentInputModel model = new CommentInputModel(comment);
                         RequestBody requestBody = RequestBody.create(gson.toJson(model).toString(),JSON);
