@@ -70,11 +70,7 @@ class LocationChooser extends React.Component{
         return(
             <div id={'locationchooser-div'}>
                 <label htmlFor={'locationchooser-title'} id={'locationchooser-title-label'}>Location</label>
-<<<<<<< HEAD
                 <div class= "row2">
-=======
-                <div class= "row">
->>>>>>> master
                 <input
                     type="text"
                     value={this.state.value}
