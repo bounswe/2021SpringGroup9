@@ -46,6 +46,7 @@ public class MapFragment extends Fragment {
                         ((CreatePostActivity)getActivity()).locationEditText.setText( ((CreatePostActivity)getActivity()).locationEditText.getText().toString() + " " + editText.getText().toString());
                         ((CreatePostActivity)getActivity()).addLocation(new LocationModel(editText.getText().toString(),locationChosen.latitude,locationChosen.longitude));
                         ((CreatePostActivity)getActivity()).getSupportFragmentManager().beginTransaction().remove(MapFragment.this).commit();
+                        ((CreatePostActivity)getActivity()).refreshLocations();
 
                     }
                 })

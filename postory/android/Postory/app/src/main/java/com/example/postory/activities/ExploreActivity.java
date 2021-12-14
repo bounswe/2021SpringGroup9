@@ -65,7 +65,6 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
     @Override
     protected void refreshClicked() {
         callAllPosts();
-
     }
 
     @Override
@@ -163,11 +162,9 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(41.085097, 29.043101), 10));
         mMap.setOnMarkerClickListener(ExploreActivity.this);
         mMap.setOnMapLongClickListener(ExploreActivity.this);
-
-
     }
 
     @Override

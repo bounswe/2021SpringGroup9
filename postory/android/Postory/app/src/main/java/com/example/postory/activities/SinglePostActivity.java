@@ -470,6 +470,7 @@ public class SinglePostActivity extends ToolbarActivity{
                         else{
 
                         }
+
                         if(post.getPostDate() != null) {
                             sharedDateText.setText(formatDate(post.getPostDate()));
                         }

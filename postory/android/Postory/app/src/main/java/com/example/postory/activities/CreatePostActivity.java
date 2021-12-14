@@ -60,6 +60,7 @@ import com.google.gson.Gson;
 
 import okhttp3.*;
 
+import okio.Buffer;
 import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Text;
 
@@ -69,6 +70,7 @@ import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CreatePostActivity extends ToolbarActivity {
 
@@ -88,10 +90,11 @@ public class CreatePostActivity extends ToolbarActivity {
     Handler handler;
     EditText titleEditText;
     EditText storyEditText;
-    EditText dateEditText;
+
     EditText tagEditText;
     public TextView locationEditText;
     TextView title;
+    public TextView dateText;
     ImageView postImage;
     ImageView timeChoose;
     AlertDialog alertDialog;
@@ -102,6 +105,8 @@ public class CreatePostActivity extends ToolbarActivity {
     public FrameLayout mapContainer;
     private SharedPreferences sharedPreferences;
     private String accessToken;
+
+    private static final int CAMERA_REQUEST = 1888;
 
     boolean isScrollable = true;
 
@@ -165,17 +170,22 @@ public class CreatePostActivity extends ToolbarActivity {
         titleEditText = (EditText) findViewById(R.id.op_enter_title);
         title = (TextView) findViewById(R.id.create_new_post);
         storyEditText = (EditText) findViewById(R.id.post_story_text_field);
-        dateEditText = (EditText) findViewById(R.id.op_date_text);
         locationEditText = (TextView) findViewById(R.id.op_location_text);
+        dateText = (TextView) findViewById(R.id.op_date_text);
 
         from = getIntent().getStringExtra("goal");
+
+        verifyStoragePermissions(this);
 
         if (from.equals("edit")) {
             title.setText("Edit The Post");
 
+            locationChoose.setEnabled(false);
+
             final OkHttpClient client = new OkHttpClient();
             String url = BuildConfig.API_IP + "/post/get/" + getIntent().getStringExtra("id");
             final Request request = new Request.Builder()
+                    .addHeader("Authorization", "JWT " + accessToken)
                     .url(url)
                     .build();
             dialog.show(getSupportFragmentManager(), "ASDASD");
@@ -189,7 +199,13 @@ public class CreatePostActivity extends ToolbarActivity {
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    dialog.cancel();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialog.cancel();
+                        }
+                    });
+
                     Log.i(TAG, "onResponse: ");
                     Gson gson = new Gson();
                     post = gson.fromJson(response.body().string(), Post.class);
@@ -206,14 +222,62 @@ public class CreatePostActivity extends ToolbarActivity {
                                         .into(postImage);
                             }
 
+                            List <Integer> yearList = post.getYear();
+                            List <Integer> monthList = post.getMonth();
+                            List <Integer> dayList = post.getDay();
+                            List <Integer> hourList = post.getHour();
+                            List <Integer> minuteList = post.getMinute();
+                            if(minuteList.size()>0){
+                                t = new TimeController(yearList.get(0),yearList.get(1),
+                                        monthList.get(0),monthList.get(1),
+                                        dayList.get(0),dayList.get(1),
+                                        hourList.get(0),hourList.get(1),
+                                        minuteList.get(0),minuteList.get(1));
+                                t.createDate();
+                                String startDateString = t.getDateFormat().format(t.getStartDate());
+                                String endDateString = t.getDateFormat().format(t.getEndDate());
+                                dateText.setText(startDateString + " - " + endDateString);
+                            }
+                            else if(dayList.size()>0){
+                                t = new TimeController(yearList.get(0),yearList.get(1),
+                                        monthList.get(0),monthList.get(1),
+                                        dayList.get(0),dayList.get(1));
+                                t.createDate();
+                                String startDateString = t.getDateFormat().format(t.getStartDate());
+                                String endDateString = t.getDateFormat().format(t.getEndDate());
+                                dateText.setText(startDateString + " - " + endDateString);
+                            }
+                            else if(monthList.size()>0){
+                                t = new TimeController(yearList.get(0),yearList.get(1),
+                                        monthList.get(0),monthList.get(1));
+                                t.createDate();
+                                String startDateString = t.getDateFormat().format(t.getStartDate());
+                                String endDateString = t.getDateFormat().format(t.getEndDate());
+                                dateText.setText(startDateString + " - " + endDateString);
+                            }
+                            else if(yearList.size()>0){
+                                t = new TimeController(yearList.get(0),yearList.get(1));
+                                t.createDate();
+                                String startDateString = t.getDateFormat().format(t.getStartDate());
+                                String endDateString = t.getDateFormat().format(t.getEndDate());
+                                dateText.setText(startDateString + " - " + endDateString);
+                            }
+
                             titleEditText.setText(post.getTitle());
                             if (post.getLocations().size() != 0) {
-                                locationEditText.setText((String) post.getLocations().get(0).get(0));
+                                String locations = "";
+                                for(List<Object> singleLoc : post.getLocations()) {
+                                    locations += (String) singleLoc.get(0) + " ";
+                                }
+                                locationEditText.setText(locations);
                             }
                             if (post.getTags().size() != 0) {
-                                tagEditText.setText(post.getTags().get(0));
+                                String tags ="";
+                                for(String tag : post.getTags()) {
+                                    tags += tag + " ";
+                                }
+                                tagEditText.setText(tags);
                             }
-                            dateEditText.setText(new SimpleDateFormat("dd/MM/yyyy").format(post.getStoryDate()));
                             storyEditText.setText(post.getStory());
 
                         }
@@ -226,7 +290,7 @@ public class CreatePostActivity extends ToolbarActivity {
             title.setText("Create New Post");
         }
 
-        verifyStoragePermissions(this);
+
 
         postImage = (ImageView) findViewById(R.id.post_photo);
 
@@ -284,10 +348,8 @@ public class CreatePostActivity extends ToolbarActivity {
 
                 if (from.equals("edit")) {
 
-
                     if (checkNecessaryData()) {
                         File file;
-
                         if (imageUri == null) {
                             BitmapDrawable drawable = (BitmapDrawable) postImage.getDrawable();
                             Bitmap bitmap = drawable.getBitmap();
@@ -439,6 +501,16 @@ public class CreatePostActivity extends ToolbarActivity {
         super.onResume();
     }
 
+
+    public void refreshLocations() {
+        String locationString = "";
+        for(LocationModel loco : locations) {
+            locationString += loco.getName() + " ";
+        }
+
+        locationEditText.setText(locationString);
+
+    };
     private Request buildEditCreateRequest(String url, File file) {
         RequestBody requestBody = null;
         int [] years = new int[2];
@@ -503,7 +575,6 @@ public class CreatePostActivity extends ToolbarActivity {
                 builder.addFormDataPart("year", years[0] + "");
                 builder.addFormDataPart("year", years[1] + "");
 
-
                 break;
         }
 
@@ -512,16 +583,19 @@ public class CreatePostActivity extends ToolbarActivity {
 
         try {
 
-
-
-
-
             String [] arr = tagEditText.getText().toString().split(" ");
-
-
-
-
             Gson gson = new Gson();
+
+
+
+            if(from.equals("edit")) {
+                List<List<Object>> locs = post.getLocations();
+                for(List<Object> singleLocation : locs) {
+                    LocationModel location = new LocationModel((String) singleLocation.get(0),(Double)singleLocation.get(1), (Double)singleLocation.get(2));
+                    locations.add(location);
+                }
+            }
+
 
             for(LocationModel loc : locations) {
                 String key = gson.toJson(loc);
@@ -538,8 +612,6 @@ public class CreatePostActivity extends ToolbarActivity {
             requestBody = builder
                     .addFormDataPart("title", titleEditText.getText().toString())
                     .addFormDataPart("story", storyEditText.getText().toString())
-                    //.addFormDataPart("owner", nicknameEditText.getText().toString())
-
                     .addFormDataPart("images", file.getName(), RequestBody.create(MediaType.parse("image/jpeg"), file))
                     .build();
 
@@ -556,12 +628,32 @@ public class CreatePostActivity extends ToolbarActivity {
             e.printStackTrace();
         }
 
-        Request request = new Request.Builder()
-                .url(url)
-                .post(requestBody)
-                .addHeader("Authorization", "JWT " + accessToken)
-                .build();
+        Request request;
+        if(from.equals("edit")) {
+             request = new Request.Builder()
+                    .url(url)
+                    .put(requestBody)
+                    .addHeader("Authorization", "JWT " + accessToken)
+                    .build();
+        }
+        else {
+             request = new Request.Builder()
+                    .url(url)
+                    .post(requestBody)
+                    .addHeader("Authorization", "JWT " + accessToken)
+                    .build();
 
+        }
+
+        final Request copy = request.newBuilder().build();
+        final Buffer buffer = new Buffer();
+        try {
+            copy.body().writeTo(buffer);
+            String ReqBody =  buffer.readUtf8();
+            Log.i(TAG, "buildEditCreateRequest: ");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return request;
     }
 
@@ -613,14 +705,19 @@ public class CreatePostActivity extends ToolbarActivity {
             public void onClick(DialogInterface dialog, int item) {
 
                 if (options[item].equals("Take Photo with Camera")) {
-                    /*
+
                         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 
                             requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST);
                         }
-                        Intent useCamera = new Intent("android.media.action.IMAGE_CAPTURE");
-                        startActivityForResult(useCamera, TAKE_PHOTO);
-                    */
+                        else {
+                            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                            startActivityForResult(cameraIntent, CAMERA_REQUEST);
+
+                        }
+
+
+                    /*
                     SuperActivityToast.create(CreatePostActivity.this, new Style(), Style.TYPE_BUTTON)
                             .setProgressBarColor(Color.WHITE)
                             .setText("This feature is not available now.")
@@ -628,6 +725,9 @@ public class CreatePostActivity extends ToolbarActivity {
                             .setFrame(Style.FRAME_LOLLIPOP)
                             .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
                             .setAnimations(Style.ANIMATIONS_POP).show();
+
+
+                     */
 
 
                 } else if (options[item].equals("Choose from Gallery")) {
@@ -647,15 +747,39 @@ public class CreatePostActivity extends ToolbarActivity {
         Log.i(TAG, "addLocation: ");
     };
 
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_CANCELED) {
             switch (requestCode) {
-                case TAKE_PHOTO:
+                case CAMERA_REQUEST:
                     if (resultCode == RESULT_OK && data != null) {
-                        //TODO: use image from camera
+                        Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
+                        imageUri = getImageUri(CreatePostActivity.this,selectedImage);
+                        try {
+                            File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                            String fileName = "Image_post.jpg";
+                            File file = new File(storageDir, fileName);
+                            FileOutputStream out = new FileOutputStream(file);
+                            selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                            ExifInterface exif = new ExifInterface(new File(getRealPathFromURI(imageUri)));
+                            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+                            postImage.setImageBitmap(rotateBitmap(selectedImage, orientation));
+                            out.flush();
+                            out.close();
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     break;
@@ -687,6 +811,7 @@ public class CreatePostActivity extends ToolbarActivity {
                     break;
             }
         }
+
     }
 
     @Override
@@ -702,9 +827,7 @@ public class CreatePostActivity extends ToolbarActivity {
         if (storyEditText.getText().toString().trim().equals("")) {
             return false;
         }
-        if (dateEditText.getText().toString().trim().equals("")) {
-            return false;
-        }
+
         return true;
     }
 

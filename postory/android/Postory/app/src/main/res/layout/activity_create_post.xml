@@ -94,14 +94,16 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:layout_marginStart="10dp"
+                    android:layout_alignParentStart="true"
                     android:id="@+id/btn_location_choose"
                     android:layout_width="20dp"
                     android:layout_height="match_parent"
-                    android:layout_toLeftOf="@id/op_location_text"
                     android:src="@drawable/outline_location_on_black_24dp"></ImageView>
 
 
                 <TextView
+                    android:layout_toEndOf="@id/btn_location_choose"
                     android:layout_marginStart="5dp"
                     android:text="Click the pin on the left to enter multiple locations"
                     android:id="@+id/op_location_text"
@@ -112,7 +114,15 @@
                     android:textStyle="bold"></TextView>
 
 
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
                 <ImageView
+                    android:layout_marginStart="10dp"
                     android:id="@+id/choose_time"
                     android:layout_width="20dp"
                     android:layout_height="match_parent"
@@ -120,20 +130,20 @@
                     android:gravity="center_vertical"
                     android:src="@drawable/baseline_calendar_today_black_24dp"></ImageView>
 
-                <EditText
+                <TextView
+                    android:text="Click on the calendar to the left to tell the time of your story."
+                    android:layout_toRightOf="@id/choose_time"
                     android:id="@+id/op_date_text"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="20dp"
                     android:gravity="center_vertical"
-                    android:hint="@string/pick_date_hint"
-                    android:textStyle="bold">
-
-                </EditText>
-
+                    android:layout_marginStart="5dp"
+                    android:textStyle="bold"></TextView>
 
             </RelativeLayout>
+
+
+
 
             <EditText
                 android:id="@+id/post_story_text_field"
@@ -144,6 +154,8 @@
                 android:hint="@string/write_story_hint">
 
             </EditText>
+
+
 
 
 
