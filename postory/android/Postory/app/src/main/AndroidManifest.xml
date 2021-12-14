@@ -27,7 +27,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="XXXX" />
+            android:value="AIzaSyCCESOmoZHUZd63Mg9e7HeBKNjGoCcLO_Q" />
         <activity
             android:name=".activities.SelfProfilePageActivity"
             android:exported="true" />

@@ -300,6 +300,10 @@ public class TimeChooserFragment extends Fragment {
         }
         if (correctInput){
             ((CreatePostActivity)getActivity()).setT(t);
+            t.createDate();
+            String startDateString = t.getDateFormat().format(t.getStartDate());
+            String endDateString = t.getDateFormat().format(t.getEndDate());
+            ((CreatePostActivity)getActivity()).dateText.setText(startDateString + " - " + endDateString);
         }
 
         ((CreatePostActivity)getActivity()).stdLayout.setVisibility(View.VISIBLE);
