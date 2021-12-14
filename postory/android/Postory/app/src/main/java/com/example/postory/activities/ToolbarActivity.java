@@ -27,6 +27,10 @@ public abstract class ToolbarActivity extends AppCompatActivity {
 
     protected abstract void goExploreClicked();
 
+    protected abstract void goProfileClicked();
+
+    protected abstract void logoutClicked();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +62,12 @@ public abstract class ToolbarActivity extends AppCompatActivity {
                 goHomeClicked();
                 return true;
 
+            case R.id.go_profile:
+                goProfileClicked();
+                return true;
+            case R.id.logout:
+                logoutClicked();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

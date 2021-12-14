@@ -4,13 +4,13 @@
     <item
         android:id="@+id/refresh"
         android:icon="@drawable/baseline_refresh_black_24dp"
-        android:title="TODO"
-        app:showAsAction="always" />
+        android:title="Refresh"
+        />
 
     <item
         android:id="@+id/go_create_post"
         android:icon="@drawable/baseline_add_circle_black_24dp"
-        android:title="TODO"
+        android:title="Create Post"
         app:showAsAction="always" />
 
     <item
@@ -24,6 +24,18 @@
         android:icon="@drawable/baseline_home_black_24dp"
         android:title="TODO"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/go_profile"
+        android:icon="@drawable/baseline_person_outline_black_24dp"
+        android:title="Your Profile"
+        />
+
+    <item
+        android:id="@+id/logout"
+        android:icon="@drawable/baseline_refresh_black_24dp"
+        android:title="Logout"
+        />
 
 
 </menu>

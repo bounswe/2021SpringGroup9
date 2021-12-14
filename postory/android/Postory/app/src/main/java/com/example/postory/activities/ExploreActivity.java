@@ -72,7 +72,24 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
 
         return;
     }
+    @Override
+    protected void goProfileClicked() {
+        Intent i = new Intent(ExploreActivity.this, SelfProfilePageActivity.class);
+        startActivity(i);
+    }
 
+    @Override
+    protected void logoutClicked() {
+        sharedPreferences = getSharedPreferences("MY_APP",MODE_PRIVATE);
+        sharedPreferences.edit().remove("valid_until").apply();
+        sharedPreferences.edit().remove("user_id").apply();
+        sharedPreferences.edit().remove("access_token").apply();
+        Intent i = new Intent(ExploreActivity.this, LoginActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
