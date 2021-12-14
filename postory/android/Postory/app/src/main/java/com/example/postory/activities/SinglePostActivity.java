@@ -1,5 +1,6 @@
 package com.example.postory.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.*;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,10 +20,9 @@ import com.example.postory.adapters.CommentsAdapter;
 import com.example.postory.adapters.LocationAdapter;
 import com.example.postory.adapters.PostAdapter;
 import com.example.postory.adapters.TagsAdapter;
-import com.example.postory.models.CommentModel;
-import com.example.postory.models.Post;
+import com.example.postory.fragments.MapFragment;
+import com.example.postory.models.*;
 import com.example.postory.utils.TimeController;
-import com.example.postory.models.TagItem;
 import com.google.gson.Gson;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
@@ -40,6 +41,7 @@ public class SinglePostActivity extends ToolbarActivity{
 
     private Request request;
     private Request likeRequest;
+    private Request commentRequest;
     private OkHttpClient client;
     private String url;
     private SharedPreferences sharedPreferences;
@@ -70,9 +72,13 @@ public class SinglePostActivity extends ToolbarActivity{
     TextView postText;
     LinearLayout likeLayout;
     TextView likesText;
+    AlertDialog alertDialogComment;
     String selfId;
     int likeCount = 0;
     boolean liked = false;
+
+    public static final MediaType JSON
+            = MediaType.parse("application/json; charset=utf-8");
 
 
 
@@ -177,6 +183,53 @@ public class SinglePostActivity extends ToolbarActivity{
 
 
 
+        EditText editText = new EditText(this);
+        alertDialogComment = new AlertDialog.Builder(SinglePostActivity.this)
+                .setTitle("Choose The Location Name")
+                .setView(editText)
+                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        String comment = editText.getText().toString();
+
+
+                        Gson gson = new Gson();
+                        CommentInputModel model = new CommentInputModel(comment);
+                        RequestBody requestBody = RequestBody.create(gson.toJson(model).toString(),JSON);
+                        commentRequest = new Request.Builder()
+                                .addHeader("Authorization", "JWT " + accessToken)
+                                .url(BuildConfig.API_IP + "/post/comment/" + postId )
+                                .post(requestBody)
+                                .build();
+
+                        client.newCall(commentRequest).enqueue(new Callback() {
+                            @Override
+                            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                                Log.i(TAG, "onFailure: ");
+                            }
+
+                            @Override
+                            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+
+                                if(response.code() == 200) {
+
+                                    sendRefreshRequest();
+
+                                }
+                            }
+                        });
+
+
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .create();
 
 
         sharedPreferences = getSharedPreferences("MY_APP",MODE_PRIVATE);
@@ -199,6 +252,72 @@ public class SinglePostActivity extends ToolbarActivity{
                 .build();
 
 
+
+
+        sendRefreshRequest();
+
+
+
+
+
+        commentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialogComment.show();
+                Log.i(TAG, "onClick: ");
+            }
+        });
+
+        likeButton.setOnLikeListener(new OnLikeListener() {
+            @Override
+            public void liked(LikeButton likeButton) {
+                Log.i(TAG, "liked: ");
+                client.newCall(likeRequest).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        Log.i(TAG, "onFailure: ");
+                    }
+
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                        Log.i(TAG, "onResponse: ");
+                        if(response.code() == 200) {
+                            likeCount += 1;
+                            setLikeCount();
+
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+                Log.i(TAG, "unLiked: ");
+                client.newCall(likeRequest).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        Log.i(TAG, "onFailure: ");
+                    }
+
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                        Log.i(TAG, "onResponse: ");
+                        if(response.code() == 200) {
+                            likeCount -= 1;
+                            setLikeCount();
+
+                        }
+                    }
+                });
+
+            }
+        });
+
+    }
+
+
+
+    public void sendRefreshRequest() {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -209,6 +328,7 @@ public class SinglePostActivity extends ToolbarActivity{
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 
+                commentModels.clear();
                 Log.i(TAG, "onResponse: ");
                 Gson gson = new Gson();
                 post = gson.fromJson(response.body().string(), Post.class);
@@ -228,6 +348,7 @@ public class SinglePostActivity extends ToolbarActivity{
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         commentsAdapter =  new CommentsAdapter(SinglePostActivity.this, commentModels);
                         commentsList.setAdapter(commentsAdapter);
                         if(post.getImages().size() != 0) {
@@ -239,7 +360,7 @@ public class SinglePostActivity extends ToolbarActivity{
                                     .centerCrop()
                                     .into(postPicture);
                         }
-                       likeCount =  post.getLikeList().size();
+                        likeCount =  post.getLikeList().size();
 
 
                         setLikeCount();
@@ -258,7 +379,6 @@ public class SinglePostActivity extends ToolbarActivity{
                             }
                         }
 
-
                         ArrayList<TagItem> locationList = new ArrayList<>();
                         LocationAdapter locationsAdapter = new LocationAdapter(R.layout.single_tag,locationList);
                         locationRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -268,7 +388,6 @@ public class SinglePostActivity extends ToolbarActivity{
                                 locationList.add(new TagItem((String) tag.get(0)));
                             }
                         }
-
 
                         ArrayList<String> likedPeople = new ArrayList<>();
                         for (int i = 0; i < list.size() ; i++) {
@@ -364,69 +483,8 @@ public class SinglePostActivity extends ToolbarActivity{
 
             }
         });
-
-
-
-
-
-
-        commentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG, "onClick: ");
-            }
-        });
-
-        likeButton.setOnLikeListener(new OnLikeListener() {
-            @Override
-            public void liked(LikeButton likeButton) {
-                Log.i(TAG, "liked: ");
-                client.newCall(likeRequest).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                        Log.i(TAG, "onFailure: ");
-                    }
-
-                    @Override
-                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                        Log.i(TAG, "onResponse: ");
-                        if(response.code() == 200) {
-                            likeCount += 1;
-                            setLikeCount();
-
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void unLiked(LikeButton likeButton) {
-                Log.i(TAG, "unLiked: ");
-                client.newCall(likeRequest).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                        Log.i(TAG, "onFailure: ");
-                    }
-
-                    @Override
-                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                        Log.i(TAG, "onResponse: ");
-                        if(response.code() == 200) {
-                            likeCount -= 1;
-                            setLikeCount();
-
-                        }
-                    }
-                });
-
-            }
-        });
-
     }
 
-    public void sendLikeRequest() {
-
-    }
 
     public void setLikeCount() {
 

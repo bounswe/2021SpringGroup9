@@ -282,7 +282,7 @@ Donec pharetra justo vel pulvinar pulvinar. Aenean placerat est id consequat ves
                 <ListView
                     android:id="@+id/comments_section"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="600dp">
 
                 </ListView>
 
