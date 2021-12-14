@@ -1,0 +1,115 @@
+.Post{
+  border:1px solid black;
+  border-radius: 25px;
+  width : 450px;
+  margin: 10px;
+  padding: 10px;
+  background-color: rgb(235, 235, 235);
+}
+
+.hide{
+  display: none !important;
+  color: rgb(255, 0, 0) !important;
+}
+
+
+
+.homePageCreatePostButton{
+  position: fixed;
+  float: right;
+  right:10%;
+  bottom:10%;
+  padding: 1%;
+}
+
+.createPostBtn{
+  width: 200px;
+  height : 50px;
+  margin: 10px;
+}
+
+.buttons{
+  margin-left: 10%;
+  bottom: 5%;
+}
+.someSpacing{
+  justify-content: space-evenly;
+}
+
+.inputArea{
+  border:1px solid black;
+  border-radius: 25px;
+  width : 700px;
+  height: 500px;
+  margin-top: 60px;
+  margin-left: 0px;
+  padding: 10px;
+  background-color: rgb(235, 235, 235);
+}
+
+.push {
+  margin-left: auto;
+}
+
+.row{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.col{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.fitText{
+  display: block; 
+}
+
+.mainContent{
+  /* Fit Text */
+  width: intrinsic;           
+  width: -moz-fit-content;    
+  width: -webkit-fit-content; 
+
+  display: inline-block; 
+  font-size: small;
+}
+
+.tag{
+  margin: 5px;
+  background-color: #07686E;
+  font-size: small;
+  align-items: center;
+}
+
+.circle {
+  background-color:#fff;
+  border:2px solid #FF8F49;    
+  border-radius:50%;
+  -moz-border-radius:50%;
+  -webkit-border-radius:50%;
+}
+
+.image{
+  justify-content: space-between;
+}
+
+.App {
+  text-align: center;
+}
+
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+}
+
+
+
