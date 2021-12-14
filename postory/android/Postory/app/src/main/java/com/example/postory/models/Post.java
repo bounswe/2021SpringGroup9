@@ -6,6 +6,7 @@ import java.util.List;
 public class Post {
     public int id;
 
+
     public int getId() {
         return id;
     }
@@ -97,11 +98,94 @@ public class Post {
     public String title;
     public String story;
     public String owner;
+    public String username;
+    public String userPhoto;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUserPhoto() {
+        return userPhoto;
+    }
+
+    public void setUserPhoto(String userPhoto) {
+        this.userPhoto = userPhoto;
+    }
+
     public List<String> tags;
     public List<List<Object>> locations;
+    public List<List<Object>> likeList;
+
+    public List<List<Object>> getLikeList() {
+        return likeList;
+    }
+
+    public void setLikeList(List<List<Object>> likeList) {
+        this.likeList = likeList;
+    }
+
+    public List<List<Object>> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<List<Object>> comments) {
+        this.comments = comments;
+    }
+
+    public List<List<Object>> comments;
     public List<String> images;
     public Date postDate;
     public Date editDate;
     public Date storyDate;
     public int viewCount;
+    public List<Integer> year;
+    public List<Integer> month;
+    public List<Integer> day;
+    public List<Integer> hour;
+    public List<Integer> minute;
+
+    public List<Integer> getYear() {
+        return year;
+    }
+
+    public void setYear(List<Integer> year) {
+        this.year = year;
+    }
+
+    public List<Integer> getMonth() {
+        return month;
+    }
+
+    public void setMonth(List<Integer> month) {
+        this.month = month;
+    }
+
+    public List<Integer> getDay() {
+        return day;
+    }
+
+    public void setDay(List<Integer> day) {
+        this.day = day;
+    }
+
+    public List<Integer> getHour() {
+        return hour;
+    }
+
+    public void setHour(List<Integer> hour) {
+        this.hour = hour;
+    }
+
+    public List<Integer> getMinute() {
+        return minute;
+    }
+
+    public void setMinute(List<Integer> minute) {
+        this.minute = minute;
+    }
 }

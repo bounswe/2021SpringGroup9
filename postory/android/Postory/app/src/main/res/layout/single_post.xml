@@ -42,12 +42,26 @@
             android:id="@+id/op_name_field"
             android:layout_width="100dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="0dp"
+            android:layout_marginStart="30dp"
             android:gravity="center_vertical"
             android:text="Ahmet Gülmez"
             android:textStyle="bold"></TextView>
 
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="30dp"
+            android:gravity="center_vertical"
+            android:src="@drawable/baseline_calendar_today_black_24dp"></ImageView>
 
+        <TextView
+            android:id="@+id/op_date_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginStart="5dp"
+            android:textStyle="bold"></TextView>
     </LinearLayout>
 
     <RelativeLayout
@@ -68,8 +82,14 @@
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/op_shared_on"
-            android:text="15/11/2021"></TextView>
-
+            android:text="14/12/2021"></TextView>
+         <ImageView
+             android:id="@+id/view_single_post"
+             android:layout_width="50dp"
+             android:layout_height="match_parent"
+             android:layout_alignParentRight="true"
+             android:src="@drawable/outline_remove_red_eye_black_24dp"
+             ></ImageView>
     </RelativeLayout>
 
 
@@ -85,7 +105,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tags_list"
         android:layout_width="wrap_content"
-        android:layout_height="20dp"
+        android:layout_height="30dp"
         android:layout_gravity="end"
         android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp">
@@ -112,24 +132,7 @@
             android:layout_gravity="end"></androidx.recyclerview.widget.RecyclerView>
 
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:gravity="center_vertical"
-            android:src="@drawable/baseline_calendar_today_black_24dp"></ImageView>
 
-        <TextView
-            android:id="@+id/op_date_text"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="20dp"
-            android:gravity="center_vertical"
-            android:text="22.01.1998"
-            android:textStyle="bold">
-
-        </TextView>
 
 
 
