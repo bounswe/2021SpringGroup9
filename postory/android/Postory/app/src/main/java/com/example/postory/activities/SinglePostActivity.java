@@ -185,7 +185,7 @@ public class SinglePostActivity extends ToolbarActivity{
 
         EditText editText = new EditText(this);
         alertDialogComment = new AlertDialog.Builder(SinglePostActivity.this)
-                .setTitle("Choose The Location Name")
+                .setTitle("Leave A Comment")
                 .setView(editText)
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
