@@ -62,7 +62,11 @@ class PeopleChooser extends React.Component{
         return(
             <div id={'peoplechooser-div'}>
                 <label htmlFor={'peoplechooser-title'} id={'peoplechooser-title-label'}>People</label>
+<<<<<<< HEAD
                 <div class= "row2">
+=======
+                <div class= "row">
+>>>>>>> master
                 <input
                     type="text"
                     value={this.state.value}

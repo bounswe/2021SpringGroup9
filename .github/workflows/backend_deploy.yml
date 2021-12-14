@@ -1,0 +1,59 @@
+name: Backend Deployment
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  test-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+        
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: postory/backend/.
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest
+          
+  test-deploy:
+    needs: test-build
+    runs-on: ubuntu-latest
+    steps:  
+      - name: executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            sudo docker rm -f mongo || true
+            sudo docker run -d --restart always -p 2717:27017 --volume mongo_database:/data/db --env MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_USERNAME }} --env MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_PASSWORD }} --name mongo mongo:latest || true
+            sudo docker rm -f backend || true
+            sudo docker image rm ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest || true
+            sudo docker run -d --restart always -p 8000:8000 --link mongo --name backend \
+              --env MONGO_USERNAME=${{ secrets.MONGO_USERNAME }} \
+              --env MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} \
+              --env SECRET_KEY="${{ secrets.SECRET_KEY }}" \
+              --env GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }} \
+              --env MONGO_CONTAINER_NAME=mongo \
+              --env MONGO_PORT=27017 \
+              --env AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
+              --env AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
+              --env AWS_STORAGE_BUCKET_NAME=${{ secrets.AWS_STORAGE_BUCKET_NAME }} \
+              ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest bash -c "python manage.py makemigrations post_endpoint && python manage.py migrate && python manage.py runserver 0.0.0.0:8000" || true

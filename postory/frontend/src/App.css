@@ -7,6 +7,7 @@
   background-color: rgb(235, 235, 235);
 }
 
+<<<<<<< HEAD
 .placeholder {
   box-sizing: content-box;
   height: 45px;
@@ -32,6 +33,8 @@
   background-color: rgb(235, 235, 235);
 }
 
+=======
+>>>>>>> master
 .hide{
   display: none !important;
   color: rgb(255, 0, 0) !important;
@@ -76,7 +79,11 @@
   margin-left: auto;
 }
 
+<<<<<<< HEAD
 .row2{
+=======
+.row{
+>>>>>>> master
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -136,6 +143,7 @@
   font-size: calc(10px + 2vmin);
 }
 
+<<<<<<< HEAD
 .overflow{
   overflow-y:scroll; 
 }
@@ -168,4 +176,7 @@
 .ppup{
   position: absolute;
 }
+=======
+
+>>>>>>> master
 
