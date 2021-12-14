@@ -37,6 +37,7 @@ ReactDOM.render(
     <Route path="/profilePage" element={<div><TopBar/> <ProfilePageUpper /></div>} />
     <Route path="/viewPost" element={<div><Redirector/><TopBar/> <ViewPost /></div>} />
     </Routes>
+    </BrowserRouter>
 );
 */
 // If you want to start measuring performance in your app, pass a function
