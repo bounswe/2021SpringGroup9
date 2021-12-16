@@ -40,7 +40,7 @@ class SignIn extends React.Component {
                 password: this.state.password
             })
         })*/
-        requests.post_jwt(`/auth/jwt/create/`,{
+        requests.post(`/auth/jwt/create/`,{
             email: this.state.email,
             password: this.state.password
         }).then(
