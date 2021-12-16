@@ -12,7 +12,7 @@ import SignUp from "./SignUp";
 import ViewPost from './ViewPost';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
-  BrowserRouter,
+  HashRouter,
   Routes,
   Route
 } from "react-router-dom";
@@ -23,7 +23,7 @@ import { ProfilePageUpper } from './ProfilePage';
 import Redirector from "./Redirector";
 
 ReactDOM.render(
-  <BrowserRouter>
+  <HashRouter>
     <Routes>
     <Route path="/" element={<div><Redirector/><TopBar/> <App /></div>} />
     <Route path="/createPost" element={<div><Redirector/><TopBar/> <CreatePost /></div>} />
@@ -38,7 +38,7 @@ ReactDOM.render(
     <Route path="/profilePage" element={<div><TopBar/> <ProfilePageUpper /></div>} />
     <Route path="/viewPost" element={<div><Redirector/><TopBar/> <ViewPost /></div>} />
     </Routes>
-  </BrowserRouter>,
+  </HashRouter>,
   document.getElementById('root')
 );
 
