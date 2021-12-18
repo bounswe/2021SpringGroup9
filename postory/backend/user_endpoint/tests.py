@@ -34,13 +34,26 @@ class TestFollow(APITestCase):
             isPrivate = False,
             is_active = False,
         )
-        #self.user = User.objects.create_user('user1@email.com', password='Password123%', **{'username':"user1", 'name':'Name1', 'surname':'Surname1'})
+        self.user3 = User.objects.create(
+            id = 3, 
+            username = "user3",
+            name = "Name3",
+            surname = "Surname3",
+            email = "user3@email.com",
+            isBanned = False,
+            isAdmin = False,
+            isPrivate = True,
+            is_active = False,
+        )
+        self.user = User.objects.create_user(email='user3@email.com', password='Password123%', username="user3", name='Name1', surname='Surname1')
+        self.user.followedUsers.set([2])
+        self.user.followerUsers.set([])
         self.user1.followedUsers.set([2])
         self.user1.followerUsers.set([])
         self.user2.followedUsers.set([])
-        self.user2.followerUsers.set([1])
-        self.user = User.objects.create_user(email='user3@email.com', password='Password123%', username="user3", name='Name1', surname='Surname1')
-
+        self.user2.followerUsers.set([1, 4])
+        self.user3.followedUsers.set([])
+        self.user3.followerUsers.set([])
         self.client = APIClient()
    
 
@@ -71,5 +84,27 @@ class TestFollow(APITestCase):
         self.client.credentials(Authorization=token.data['access'])
 
         response = self.client.post(reverse('follow_user', args=[self.user.id]), format='json')
-        assert response.status_code == 200
+        assert response.status_code == 400
+
+    def test_follow_again(self):
+        login_data = {
+            "email": "user3@email.com",
+            "password": "Password123%"
+        }
+        token = self.client.post('/auth/jwt/create/', json.dumps(login_data), content_type='application/json')
+        self.client.credentials(Authorization=token.data['access'])
+
+        response = self.client.post(reverse('follow_user', args=[self.user2.id]), format='json')
+        assert response.status_code == 409
+
+    def test_follow_private(self):
+        login_data = {
+            "email": "user3@email.com",
+            "password": "Password123%"
+        }
+        token = self.client.post('/auth/jwt/create/', json.dumps(login_data), content_type='application/json')
+        self.client.credentials(Authorization=token.data['access'])
+
+        response = self.client.post(reverse('follow_user', args=[self.user3.id]), format='json')
+        assert response.status_code == 403
 
