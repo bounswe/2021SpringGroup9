@@ -16,6 +16,7 @@ import {
   Routes,
   Route
 } from "react-router-dom";
+import ForgotPassword from "./ForgotPassword";
 import ForgotPasswordConfirm from "./ForgotPasswordConfirm";
 import Activation from "./Activation";
 import { ProfilePageUpper } from './ProfilePage';
@@ -37,6 +38,16 @@ ReactDOM.render(
     <Route path="/profilePage" element={<div><TopBar/> <ProfilePageUpper /></div>} />
     <Route path="/viewPost" element={<div><Redirector/><TopBar/> <ViewPost /></div>} />
     </Routes>
+  </BrowserRouter>,
+  document.getElementById('root')
+);
+
+/*
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root')
 );
 */
 // If you want to start measuring performance in your app, pass a function

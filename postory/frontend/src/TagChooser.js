@@ -69,11 +69,7 @@ class TagChooser extends React.Component{
         return(
             <div id={'tagchooser-div'}>
                 <label htmlFor={'tagchooser-title'} id={'textchooser-title-label'}>#Tags</label>
-<<<<<<< HEAD
                 <div class= "row2">
-=======
-                <div class= "row">
->>>>>>> master
                 <input
                     type="text"
                     value={this.state.value}
