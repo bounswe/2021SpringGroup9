@@ -33,7 +33,7 @@ class Activation extends React.Component {
         }).then(
             res => {
                 this.setState(state => ({...state, activationCompleted: true}))
-                setTimeout(() => this.setState(state => ({...state, redirect: true})))
+                setTimeout(() => this.setState(state => ({...state, redirect: true})), 2000)
             }
         )
     }
