@@ -10,42 +10,42 @@ class GetPosts(APITestCase):
     token = ""
     def setUp(self):
         apiClient = APIClient()
-        user1 = User.objects.create(
-            id = 1, 
-            username = "user1",
-            name = "Name1",
-            password = "password",
-            surname = "Surname1",
-            email = "user1@email.com",
-            isBanned = False,
-            isAdmin = False,
-            isPrivate = False,
-            is_active = True,
-        )
-        user2 = User.objects.create(
-            id = 2, 
-            username = "user2",
-            name = "Name2",
-            password = "password",
-            surname = "Surname2",
-            email = "user2@email.com",
-            isBanned = False,
-            isAdmin = False,
-            isPrivate = False,
-            is_active = True,
-        )
-        user3 = User.objects.create(
-            id = 3, 
-            username = "user3",
-            name = "Name3",
-            password = "password",
-            surname = "Surname3",
-            email = "user3@email.com",
-            isBanned = False,
-            isAdmin = False,
-            isPrivate = False,
-            is_active = True,
-        )
+        user1 = {
+            "name": "Name1",
+            "surname": "Surname1",
+            "email" : "user1@mail.com",
+            "username": "user1",
+            "password": "PASSword123*",
+            "re_password": "PASSword123*"
+        }
+        user2 = {
+            "name": "Name2",
+            "surname": "Surname2",
+            "email" : "user2@mail.com",
+            "username": "user2",
+            "password": "PASSword123*",
+            "re_password": "PASSword123*"
+        }
+        user3 = {
+            "name": "Name3",
+            "surname": "Surname3",
+            "email" : "user3@mail.com",
+            "username": "user3",
+            "password": "PASSword123*",
+            "re_password": "PASSword123*"
+        }
+        apiClient.post("/auth/users/",user1)
+        apiClient.post("/auth/users/",user2)
+        apiClient.post("/auth/users/",user3)
+        user1Object = User.objects.filter(username = "user1").first()
+        user2Object = User.objects.filter(username = "user2").first()
+        user3Object = User.objects.filter(username = "user3").first()
+        user1Object.is_active = True
+        user2Object.is_active = True
+        user3Object.is_active = True
+        user1Object.save()
+        user2Object.save()
+        user3Object.save()
         post2_1 = Post.objects.create(
             id = 1,
             title = "Title2_1",
@@ -56,18 +56,19 @@ class GetPosts(APITestCase):
             id = 2,
             title = "Title3_1",
             story = "Story3_1",
-            owner = 3
+            owner = 2
         )
 
     def test_AdminGetPosts(self):
         apiClient = APIClient()
         apiClient.credentials(HTTP_AUTHORIZATION="JWT deneme")
         resp = apiClient.get("/api/post/all/admin")
-        print(Post.objects.filter(id = 1).first().title)
         assert resp.status_code==401
 
     def test_OnlyFollowedPosts(self):
         apiClient = APIClient()
-        token = apiClient.post("/auth/jwt/create",{"email":"user1@email.com","password":"password"})
-        assert token.status_code==401
+        print(User.objects.filter(username = "user1").first().is_active)
+        token = apiClient.post("/auth/jwt/create",{"email":"user1@mail.com","password":"PASSword123*"})
+        print(token.json())
+        assert token.status_code==200
         
