@@ -6,6 +6,7 @@ describe('ProfilePageUpper', () => {
   test('renders ProfilePage component', () => {
     render(<ProfilePage.ProfilePageUpper />);
 
-    screen.debug();
+    expect(screen.getByText('Follow')).toBeInTheDocument();
+    expect(screen.getByRole('button')).toBeInTheDocument();
   });
 });
