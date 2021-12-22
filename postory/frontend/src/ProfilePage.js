@@ -11,7 +11,7 @@ import Alert from '@material-ui/lab/Alert';
 
 const BACKEND_IP = '3.67.83.253';
 
-export const ProfilePageUpper = () => {
+export function ProfilePageUpper () {
     const [followingCount, setFollowingCount] = React.useState(0);
     const [followerCount, setFollowerCount] = React.useState(0);
     const [postCount, setPostCount] = React.useState(0);
@@ -111,7 +111,7 @@ export const ProfilePageUpper = () => {
                 <Col sm={4} >
                     <div className = {'sliderContainer'} >
                         
-                        <img onClick = {() => setPhoto(st => !st)} class = "circle" width = "50px" height = "50px" src = {profilePhoto? profilePhoto:"./static/media/postory_logo_no_text.ec3bad21.png"} />
+                        <img onClick = {() => setPhoto(st => !st)} className = "circle" width = "50px" height = "50px" src = {profilePhoto? profilePhoto:"./static/media/postory_logo_no_text.ec3bad21.png"} />
                         {photo  && (parseInt(localStorage.getItem('userID')) == userID) && <div className = {'ppup'}>
                         <input onChange = {(e) => 
                         {

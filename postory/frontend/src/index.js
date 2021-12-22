@@ -19,7 +19,7 @@ import {
 import ForgotPassword from "./ForgotPassword";
 import ForgotPasswordConfirm from "./ForgotPasswordConfirm";
 import Activation from "./Activation";
-import { ProfilePageUpper } from './ProfilePage';
+import * as ProfilePage from './ProfilePage.js'
 import Redirector from "./Redirector";
 
 ReactDOM.render(
@@ -35,7 +35,7 @@ ReactDOM.render(
     <Route path="/password/reset/confirm/:uid/:token" element={<div><TopBar /><ForgotPasswordConfirm /></div>} />
     <Route path="/activate/:uid/:token" element={<div><TopBar /><Activation /></div>} />
     <Route path="/viewPost" element={<div><TopBar/> <ViewPost /></div>} />
-    <Route path="/profilePage" element={<div><TopBar/> <ProfilePageUpper /></div>} />
+    <Route path="/profilePage" element={<div><TopBar/> <ProfilePage.ProfilePageUpper /></div>} />
     <Route path="/viewPost" element={<div><Redirector/><TopBar/> <ViewPost /></div>} />
     </Routes>
   </BrowserRouter>,
