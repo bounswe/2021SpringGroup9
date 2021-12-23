@@ -14,4 +14,5 @@ urlpatterns = [
     path('all/discover',GetPostsDiscover.as_view(), name="discover"),
     path('comment/<int:pk>', CommentRequest.as_view(), name="comment_post"),
     path('like/<int:pk>', LikeRequest.as_view(), name="like_post"),
+    path('all/nearby',nearbyStories.as_view(), name="nearby_stories")
 ]

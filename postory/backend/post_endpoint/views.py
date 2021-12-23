@@ -24,6 +24,8 @@ import json
 import datetime
 import environ
 import jwt
+from geopy import distance
+
 
 class GetAllPosts(GenericAPIView):
     """
@@ -56,7 +58,6 @@ class PostCreate(GenericAPIView):
     def post(self, request, format=None):
         userid = request.auth['user_id']
         data = dict(request.data)
-        print(data)
         data['title'] = data['title'][0]
         data['story'] = data['story'][0]
         data['owner'] = userid
@@ -367,6 +368,41 @@ class LikeRequest(GenericAPIView):
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
     
+
+class nearbyStories(GenericAPIView):
+    """
+    
+    """
+    serializer_class = PostSerializer
+
+    def get(self, request, format=None):
+        authorization = request.headers['Authorization']
+        token = authorization.split()[1]
+        decoded = jwt.decode(token,options={"verify_signature": False})
+        user_id = decoded['user_id']
+        user = User.objects.filter(id = user_id).first()
+        data = dict(request.data)
+
+        requestedDistance = float(data['distance'][0])
+        pinPoint = json.loads(data['location'][0])
+        pinPoint = [pinPoint["name"],pinPoint["latitude"],pinPoint["longitude"]]
+
+        posts = Post.objects.all()
+        serializer = {}
+        for story in posts:
+            story_instance = get_story(story)
+            locations = story_instance['locations']
+            toBeReturned = False
+            for location in locations:
+                distanceBetween = getDistanceBetween(location,pinPoint)
+                if(distanceBetween < requestedDistance):
+                    toBeReturned = True
+                    break
+            if(toBeReturned):
+                serializer[story.id] = get_story(story)
+        return Response(serializer.values(), status=200)
+
+
 def get_story(story):
     username = story.username
     user = User.objects.filter(username = username).first()
@@ -443,3 +479,11 @@ def get_story(story):
     serializer['username'] = username
     serializer['userPhoto'] = userPhoto
     return serializer
+
+
+def getDistanceBetween(loc1,loc2):
+    lat1 = loc1[1]
+    lon1 = loc1[2]
+    lat2 = loc2[1]
+    lon2 = loc2[2]
+    return distance.distance((lat1,lon1),(lat2,lon2)).km
