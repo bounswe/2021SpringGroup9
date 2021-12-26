@@ -3,11 +3,13 @@ import FormControl from 'react-bootstrap/FormControl';
 import Row from 'react-bootstrap/Row';
 import React, { useEffect } from 'react';
 import * as requests from './requests';
+import {Navigate} from "react-router-dom";
 
 const SearchUserComponent = (props) => {
     const [value, setValue] = React.useState('');
     const [users, setUsers] = React.useState([]);
     const [menu, setMenu] = React.useState(false);
+    const [id, setId] = React.useState(false);
     const [req, setReq] = React.useState(null);
 
     useEffect(() => {
@@ -29,7 +31,7 @@ const SearchUserComponent = (props) => {
             
             <Dropdown.Menu 
             onFocus = {(e) => setMenu(true)}
-                onBlur = {(e) => {setMenu(false); setUsers([]); setValue('')}} show class = 'Dropdown_style'>
+                onBlur = {(e) => {setTimeout(() => {setMenu(false); setUsers([]); setValue('')}, 200)}} show class = 'Dropdown_style'>
                 <FormControl
                 className="mx-1 pt-0 w-auto"
                 placeholder="Type to search users..."
@@ -37,9 +39,10 @@ const SearchUserComponent = (props) => {
                 
                 value={value}
                 />
-                {menu && users && Array.isArray(users) && users.map((obj,i) => <Dropdown.Item >{obj.name}</Dropdown.Item>)}
+                {menu && users && Array.isArray(users) && users.map((obj,i) => 
+                <Dropdown.Item onClick ={() => {console.log(obj);setId(obj.id)}}>{obj.username}</Dropdown.Item>)}
             </Dropdown.Menu>
-        
+            {id && <Navigate class = "push" to= {`/profilePage?id=${id}`}> </Navigate>}
     </div>);
 }
 
