@@ -31,8 +31,10 @@ import java.util.Collections;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class OtherProfilePageActivity extends ToolbarActivity {
@@ -57,6 +59,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
     private ListView listView;
     public static final String TAG = "OtherProfilePageActivity";
     private Post[] posts;
+    private boolean followed;
 
     @Override
     protected void goProfileClicked() {
@@ -141,8 +144,14 @@ public class OtherProfilePageActivity extends ToolbarActivity {
                     public void run() {
                         setUserFields();
                         if (thisUser.getFollowerUsers().contains(viewerId)) {
-                            showAlreadyFollowed();
+                            followed = true;
+                            followButton.setText("Unfollow");
                         }
+                        else {
+                            followed = false;
+                            followButton.setText("Follow");
+                        }
+
                     }
                 });
             }
@@ -168,10 +177,17 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         callAllPosts();
     }
 
-    private void showAlreadyFollowed() {
-        followingWarning.setVisibility(View.VISIBLE);
-        followButton.setVisibility(View.INVISIBLE);
+
+    private void changeFollowStatus(){
+        followed = !followed;
+        if(followed){
+            followButton.setText("Unfollow");
+        }
+        else{
+            followButton.setText("Follow");
+        }
     }
+
 
     private void setUserFields() {
         name.setText(thisUser.getName());
@@ -190,10 +206,14 @@ public class OtherProfilePageActivity extends ToolbarActivity {
     }
 
     private void followButtonClicked() {
-        String url = BuildConfig.API_IP + "/user/follow/" + userId;
+        String url = BuildConfig.API_IP + "/user/follow/" + userId ;
+        MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
+        MultipartBody.Builder builder = bodyBuilder.setType(MultipartBody.FORM);
+        RequestBody body = RequestBody.create(null, new byte[]{});
 
         Request followRequest = new Request.Builder()
                 .url(url)
+                .post(body)
                 .addHeader("Authorization", "JWT " + accessToken)
                 .build();
 
@@ -205,7 +225,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                OtherProfilePageActivity.this.recreate();
+                changeFollowStatus();
             }
         });
     }
