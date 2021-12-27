@@ -52,7 +52,6 @@ public class OtherProfilePageActivity extends ToolbarActivity {
     private TextView following;
     private TextView numPosts;
     private ImageView profilePicture;
-    private TextView followingWarning;
     private SharedPreferences sharedPreferences;
     private String userId;
     String accessToken;
@@ -111,7 +110,6 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         userId = getIntent().getStringExtra("user_id");
         listView = (ListView) findViewById(R.id.list_posts);
         followButton = (Button) findViewById(R.id.followButton);
-        followingWarning = (TextView) findViewById(R.id.followingWarning);
         name = (TextView) findViewById(R.id.name);
         surname = (TextView) findViewById(R.id.surname);
         username = (TextView) findViewById(R.id.username);
