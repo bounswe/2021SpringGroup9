@@ -64,7 +64,7 @@ class UserFollowing(GenericAPIView):
             return User.objects.get(pk=pk)
         except User.DoesNotExist:
             raise Http404
-
+    
     def post(self, request, pk, format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
@@ -74,22 +74,33 @@ class UserFollowing(GenericAPIView):
         user1 = self.get_object(pk=user_id)
         user2 = self.get_object(pk=pk)
 
-        if user2.isPrivate: # if private can't follow
-            return Response(status=status.HTTP_403_FORBIDDEN)
-        if user2 in user1.followedUsers.all(): # if user1 already followed user2
-            return Response(status=status.HTTP_409_CONFLICT)
         if user1.id==user2.id: # if the user wants to follow itself
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "can't follow yourself"}, status=status.HTTP_400_BAD_REQUEST)
         
-        try:
-            user1.followedUsers.add(user2.id)
-            user2.followerUsers.add(user1.id)
+        elif user2 in user1.followedUsers.all(): # if user1 already followed user2, unfollow
+            try:
+                user1.followedUsers.remove(user2.id)
+                user2.followerUsers.remove(user1.id)
 
-            user1.save()
-            user2.save()
-            return Response({'followed': user2.id, 'follower': user1.id}, status=status.HTTP_200_OK)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+                user1.save()
+                user2.save()
+                return Response({'message': f"{user1.id} successfuly unfollowed {user2.id}"}, status=status.HTTP_200_OK)
+            except:
+                return Response({"message": "unfollow failed"}, status=status.HTTP_400_BAD_REQUEST)
+
+        elif user2.isPrivate: # if private can't follow
+            return Response({"message": "cant' follow private profile"}, status=status.HTTP_403_FORBIDDEN)
+        
+        else: #follow
+            try:
+                user1.followedUsers.add(user2.id)
+                user2.followerUsers.add(user1.id)
+
+                user1.save()
+                user2.save()
+                return Response({'message': f"{user1.id} successfuly followed {user2.id}"}, status=status.HTTP_200_OK)
+            except:
+                return Response({"message": "follow failed"}, status=status.HTTP_400_BAD_REQUEST)
 
 class UserGet(GenericAPIView):
 
