@@ -136,6 +136,15 @@ class DiscoverPage extends React.Component{
             selectedKeywords: [],
             startYear: null,
             endYear: null,
+            startMonth: null,
+            endMonth: null,
+            startDay: null,
+            endDay: null,
+            startTime: null,
+            endTime: null,
+            searchAreaKm: null,
+            searchAreaKmCurrent: null,
+            showKm: false,
         };
     }
 
@@ -322,9 +331,9 @@ class DiscoverPage extends React.Component{
                         <InputGroup className="mb-3">
                             <FormControl
                                 type="number"
-                                value={this.state.searchAreaKm || ""}
+                                value={this.state.searchAreaKmCurrent || ""}
                                 onChange={
-                                    e => this.setState(state => ({...state, searchAreaKm: e.target.value.toString()}))
+                                    e => this.setState(state => ({...state, searchAreaKmCurrent: e.target.value.toString()}))
                                 }
                                 style={{width: "100px"}}
                                 placeholder="Enter km"
@@ -332,8 +341,8 @@ class DiscoverPage extends React.Component{
                             <Button 
                                 variant="outline-secondary"
                                 type="button"
-                                onClick={() => this.setState(state => ({...state, showKm: true}))}
-                                disabled={!this.state.searchAreaKm}>
+                                onClick={() => this.setState(state => ({...state, showKm: true, searchAreaKm: this.state.searchAreaKmCurrent, searchAreaKmCurrent: ''}))}
+                                disabled={!this.state.searchAreaKmCurrent}>
                             Enter
                             </Button>
                         </InputGroup>
@@ -460,6 +469,14 @@ class DiscoverPage extends React.Component{
                         </Button>
                         </div>
                     }          
+                    </Col>
+                </Row>
+                <Row style={{alignItems: `center`}}>
+                    <Col sm={7}>
+                        <Button variant="primary">Filter & Browse on Map</Button>
+                    </Col>
+                    <Col sm={2}>
+                        <Button variant="primary">Show Resulting Posts on a Different Page</Button>
                     </Col>
                 </Row>
                
