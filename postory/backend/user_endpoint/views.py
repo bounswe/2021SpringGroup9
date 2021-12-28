@@ -13,9 +13,12 @@ from .models import User
 from .serializers import UserSerializer
 from post_endpoint.models import Post, Image
 from post_endpoint.serializers import PostSerializer
+import activityStream.views as activityStream
 
 from .models import User
 import jwt
+from django.urls.base import resolve
+from django.urls import reverse
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -38,8 +41,10 @@ class AddPhoto(GenericAPIView):
         user.userPhoto.set([imageObject])
         try:
             user.save()
+            activityStream.createActivity(userid,"added photo",imageObject.id,resolve(request.path_info).route,"UserAddPhoto",True)
             return Response(status=status.HTTP_200_OK)
         except:
+            activityStream.createActivity(userid,"added photo","None",resolve(request.path_info).route,"UserAddPhoto",False)
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
 class SearchUser(GenericAPIView):
@@ -75,10 +80,13 @@ class UserFollowing(GenericAPIView):
         user2 = self.get_object(pk=pk)
 
         if user2.isPrivate: # if private can't follow
+            activityStream.createActivity(user1.id,"followed",user2.id,resolve(request.path_info).route,"UserFollow",False)       
             return Response(status=status.HTTP_403_FORBIDDEN)
         if user2 in user1.followedUsers.all(): # if user1 already followed user2
+            activityStream.createActivity(user1.id,"followed",user2.id,resolve(request.path_info).route,"UserFollow",False)
             return Response(status=status.HTTP_409_CONFLICT)
         if user1.id==user2.id: # if the user wants to follow itself
+            activityStream.createActivity(user1.id,"followed",user2.id,resolve(request.path_info).route,"UserFollow",False)
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
         try:
@@ -87,8 +95,10 @@ class UserFollowing(GenericAPIView):
 
             user1.save()
             user2.save()
+            activityStream.createActivity(user1.id,"followed",user2.id,resolve(request.path_info).route,"UserFollow",True)
             return Response({'followed': user2.id, 'follower': user1.id}, status=status.HTTP_200_OK)
         except:
+            activityStream.createActivity(user1.id,"followed",user2.id,resolve(request.path_info).route,"UserFollow",False)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class UserGet(GenericAPIView):
@@ -113,6 +123,8 @@ class UserGet(GenericAPIView):
                 serializer['userPhoto'] = userPhoto.file.url
             except:
                 serializer['userPhoto'] = ""
+            activityStream.createActivity(requester_user.id,"requested user",requested_user.id,resolve(request.path_info).route,"UserRequest",True)
             return Response(serializer)
         else:
+            activityStream.createActivity(requester_user.id,"requested user",requested_user.id,resolve(request.path_info).route,"UserRequest",False)
             return Response(status=status.HTTP_401_UNAUTHORIZED)

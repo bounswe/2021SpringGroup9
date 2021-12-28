@@ -5,5 +5,5 @@ from .models import *
 class ActivityStreamSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActivityStream
-        fields = ['action','actor','date','object','url']
+        fields = ['summary','actor','date','object','url','type','success']
         read_only_fields = []
