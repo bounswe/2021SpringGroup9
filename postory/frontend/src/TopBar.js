@@ -6,6 +6,7 @@ import menuIcon from './menu_icon.png'
 import SearchBar from './SearchBar'
 import {Snackbar} from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
+import SearchUserComponent from './SearchUser';
 
 import { Link } from "react-router-dom";
 
@@ -71,8 +72,8 @@ class TopBar extends React.Component {
                 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
             </style>
 
-            <div style={itemStyleLeft}>
-                <SearchBar />
+            <div style = {{marginLeft: '200px'}}>
+                <SearchUserComponent />
             </div>
 
             <a href={'/'} style={itemStyleLeft}>
