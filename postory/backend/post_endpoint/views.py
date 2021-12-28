@@ -382,7 +382,7 @@ class nearbyStories(GenericAPIView):
         user_id = decoded['user_id']
         user = User.objects.filter(id = user_id).first()
         data = dict(request.data)
-
+        
         requestedDistance = float(data['distance'][0])
         pinPoint = json.loads(data['location'][0])
         pinPoint = [pinPoint["name"],pinPoint["latitude"],pinPoint["longitude"]]
@@ -480,6 +480,24 @@ def get_story(story):
     serializer['userPhoto'] = userPhoto
     return serializer
 
+
+def getQuerySetOfNearby(data):
+    requestedDistance = float(data['distance'][0])
+    pinPoint = json.loads(data['location'][0])
+    pinPoint = [pinPoint["name"],pinPoint["latitude"],pinPoint["longitude"]]
+    posts = Post.objects.all()
+    for story in posts:
+        story_instance = get_story(story)
+        locations = story_instance['locations']
+        toBeReturned = False
+        for location in locations:
+            distanceBetween = getDistanceBetween(location,pinPoint)
+            if(distanceBetween < requestedDistance):
+                toBeReturned = True
+                break
+        if(not toBeReturned):
+            posts.exclude(id = story_instance.id)
+    return posts
 
 def getDistanceBetween(loc1,loc2):
     lat1 = loc1[1]
