@@ -2,6 +2,7 @@ from django.http import Http404
 from django.http import HttpResponse
 
 from django.shortcuts import render
+from django.urls.base import resolve
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 
@@ -24,6 +25,8 @@ import json
 import datetime
 import environ
 import jwt
+import activityStream.views as activityStream
+from django.urls import reverse
 
 class GetAllPosts(GenericAPIView):
     """
@@ -262,6 +265,7 @@ class GetUsersPosts(GenericAPIView):
             serializer = {}
             for story in posts:
                 serializer[story.id] = get_story(story)
+            activityStream.createActivity(requester_user.id,"requested posts of",requested_user.id,resolve(request.path_info).route)
             return Response(serializer.values(), status=200)
         else:
             return Response(status = 401)

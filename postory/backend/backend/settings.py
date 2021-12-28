@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     'post_endpoint',
     'user_endpoint',
-    'storages'
+    'storages',
+    'activityStream'
 ]
 
 MIDDLEWARE = [
@@ -266,7 +267,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     'post_endpoint',
     'user_endpoint',
-    'storages'
+    'storages',
+    'activityStream'
 ]
 
 MIDDLEWARE = [
