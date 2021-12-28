@@ -11,6 +11,7 @@ import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
+import Badge from 'react-bootstrap/Badge'
 
 import { mdiPound, mdiCalendarRange, mdiFountainPenTip, mdiAccount, mdiMapMarkerRadius } from '@mdi/js';
 
@@ -190,6 +191,42 @@ class DiscoverPage extends React.Component{
         });
     };
 
+    removeKeyword = i => {
+        {/* Called when user clicks on x button next to each tag added previously to the post.
+            It filters the tag that wanted to be removed from selectedTags array returns it */}
+        this.setState(state => {
+          const selectedKeywords = state.selectedKeywords.filter((item, j) => i !== j);
+     
+          return {
+            selectedKeywords,
+          };
+        });
+    };
+
+    removeTag = i => {
+        {/* Called when user clicks on x button next to each tag added previously to the post.
+            It filters the tag that wanted to be removed from selectedTags array returns it */}
+        this.setState(state => {
+          const selectedTags = state.selectedTags.filter((item, j) => i !== j);
+     
+          return {
+            selectedTags,
+          };
+        });
+    };
+
+    removeUser = i => {
+        {/* Called when user clicks on x button next to each user added previously.
+            It filters the user that wanted to be removed from selectedUsers array returns it */}
+        this.setState(state => {
+          const selectedUsers = state.selectedUsers.filter((item, j) => i !== j);
+     
+          return {
+            selectedUsers,
+          };
+        });
+    };
+
 
     render(){
         let key = process.env.REACT_APP_GOOGLE_API_KEY?(`key=` + process.env.REACT_APP_GOOGLE_API_KEY + "&") : "";
@@ -215,7 +252,6 @@ class DiscoverPage extends React.Component{
                         <Icon path={mdiMapMarkerRadius} size={1}/> Area (km)
                     </Col>
                 </Row>
-
                 <Row style={{alignItems: `center`}}>
                     <Col sm={2}>
                         <InputGroup className="mb-3">
@@ -302,7 +338,79 @@ class DiscoverPage extends React.Component{
                             </Button>
                         </InputGroup>
                     </Col>
-                    
+                </Row>
+                <Row style={{alignItems: `center`}}>
+                    <Col sm={2} style={{maxHeight: 70, overflow: 'auto'}}>
+                        {this.state.selectedTags.map((item, index) => (
+                            <div>
+                            <Badge pill bg="primary">
+                                {item}
+                            </Badge>
+                            <Button
+                                type="button"
+                                variant="outline-secondary"
+                                size="sm"
+                                onClick={() => this.removeTag(index)}
+                            >
+                                x
+                            </Button>
+                            </div>
+                        ))}
+                    </Col>
+                    <Col sm={3}>
+                        {this.state.startYear && this.state.endYear &&
+                            <InputGroup className="mb-3">
+                                <InputGroup.Text>Month</InputGroup.Text>
+                                <FormControl placeholder="Start month" type="number" min="1" max="12" step="1" value={this.state.startMonth || ""}  onChange={
+                                    e => this.setState(state => ({...state, startMonth: e.target.value.toString()}))
+                                }/>
+                                <FormControl placeholder="End month" type="number" min="1" max="12" step="1" value={this.state.endMonth || ""}  onChange={
+                                    e => this.setState(state => ({...state, endMonth: e.target.value.toString()}))
+                                }/>
+                            </InputGroup>
+                        }
+                        
+                    </Col>
+                    <Col sm={2} style={{maxHeight: 70, overflow: 'auto'}}>
+                        {this.state.selectedKeywords.map((item, index) => (
+                            <div>
+                            <Badge pill bg="success">
+                                {item}
+                            </Badge>
+                            <Button
+                                type="button"
+                                variant="outline-secondary"
+                                size="sm"
+                                onClick={() => this.removeKeyword(index)}
+                            >
+                                x
+                            </Button>
+                            </div>
+                        ))}
+                        
+                    </Col>
+                    <Col sm={3} style={{maxHeight: 70, overflow: 'auto'}}>
+                        {this.state.selectedUsers.map((item, index) => (
+                            <div>
+                            <Badge pill bg="secondary">
+                                {item}
+                            </Badge>
+                            <Button
+                                type="button"
+                                variant="outline-secondary"
+                                size="sm"
+                                onClick={() => this.removeUser(index)}
+                            >
+                                x
+                            </Button>
+                            </div>
+                        ))}
+                    </Col>
+                    <Col sm={2}>
+                    <div style={{ fontSize: `14px`, fontColor: `#C40303`, fontStyle: `italic` }}>
+                        You can drag the blue marker on the map representing the center of the area will be searched
+                    </div>
+                    </Col>
                 </Row>
                
             </Container>
