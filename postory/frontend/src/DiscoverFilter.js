@@ -8,6 +8,9 @@ import * as requests from './requests'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
+import InputGroup from 'react-bootstrap/InputGroup'
+import FormControl from 'react-bootstrap/FormControl'
 
 import { mdiPound, mdiCalendarRange, mdiFountainPenTip, mdiAccount, mdiMapMarkerRadius } from '@mdi/js';
 
@@ -95,18 +98,14 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
                         <div style={{ fontSize: `12px`, fontColor: `#08233B`, fontStyle: `italic` }}>
                             by: {selectedPost.username}
                         </div>
-                        
                         <div class= "row2" onClick = {() => props.redirect(selectedPost.id)}>
                                 <Icon 
-                                    
                                     path={mdiGestureTap} 
                                     size={1}
                                 />
                                 <div style={{ fontSize: `10px`, fontColor: `#C40303` }}>
                                     Click here to be redirected to the post page.
-                                
                                 </div>
-                            
                         </div>
                     </div>
                 </InfoBox>
@@ -127,9 +126,70 @@ class DiscoverPage extends React.Component{
         super(props);
         this.state = {
             selectedPost : null,
-            searchCenter: { lat: 43, lng: 25 }
+            searchCenter: { lat: 43, lng: 25 },
+            tagValue: '', // Holds the last entered tag as an input
+            selectedTags: [], // Holds all the tags that are entered by the user
+            userValue: '', // Holds the last entered user as an input
+            selectedUsers: [], // Holds all the users that are entered by the user
+            keyword: '',
+            selectedKeywords: [],
+            startYear: null,
+            endYear: null,
         };
     }
+
+    onChangeTagValue = event => {
+        {/* Called when when there is change in the input box allows user to enter tag*/}
+        this.setState({ tagValue: event.target.value });
+    };
+
+    onChangeUserValue = event => {
+        {/* Called when when there is change in the input box allows user to enter user*/}
+        this.setState({ userValue: event.target.value });
+    };
+
+    onChangeKeywordValue = event => {
+        {/* Called when when there is change in the input box allows user to enter keyword*/}
+        this.setState({ keyword: event.target.value });
+    };
+
+    addTagToSelectedTags = () => {
+        {/* Called when user clicks on add button to add the last entered tag (state.tagValue)
+            It then concats the previous selectedTags list with the last entered tag and returns */}
+        this.setState(state => {
+            const selectedTags = state.selectedTags.concat(state.tagValue);
+            return {
+                selectedTags,
+                tagValue: '',
+            };
+        });
+    };
+
+    addTagToSelectedKeywords = () => {
+        {/* Called when user clicks on add button to add the last entered keyword (state.keyword)
+            It then concats the previous selectedKeywords list with the last entered keyword and returns */}
+        this.setState(state => {
+            const selectedKeywords = state.selectedKeywords.concat(state.keyword);
+            return {
+                selectedKeywords,
+                keyword: '',
+            };
+        });
+    };
+
+    addTagToSelectedUsers = () => {
+        {/* Called when user clicks on add button to add the last entered user (state.userValue)
+            It then concats the previous selectedUsers list with the last entered user and returns */}
+        this.setState(state => {
+          const selectedUsers = state.selectedUsers.concat(state.userValue);
+     
+          return {
+            selectedUsers,
+            userValue: '',
+          };
+        });
+    };
+
 
     render(){
         let key = process.env.REACT_APP_GOOGLE_API_KEY?(`key=` + process.env.REACT_APP_GOOGLE_API_KEY + "&") : "";
@@ -154,6 +214,95 @@ class DiscoverPage extends React.Component{
                     <Col sm={2} >
                         <Icon path={mdiMapMarkerRadius} size={1}/> Area (km)
                     </Col>
+                </Row>
+
+                <Row style={{alignItems: `center`}}>
+                    <Col sm={2}>
+                        <InputGroup className="mb-3">
+                            <FormControl
+                                type="text"
+                                value={this.state.tagValue}
+                                onChange={this.onChangeTagValue}
+                                style={{width: "100px"}}
+                                placeholder="Enter a tag"
+                            />
+                            <Button 
+                                variant="outline-secondary"
+                                type="button"
+                                onClick={this.addTagToSelectedTags}
+                                disabled={!this.state.tagValue}>
+                            Add
+                            </Button>
+                        </InputGroup>
+                    </Col>
+                    <Col sm={3}>
+                        <InputGroup className="mb-3">
+                            <InputGroup.Text>Year</InputGroup.Text>
+                            <FormControl placeholder="Start year*" type="number" min="1900" max="2099" step="1" value={this.state.startYear || ""}  onChange={
+                                e => this.setState(state => ({...state, startYear: e.target.value.toString()}))
+                            }/>
+                            <FormControl placeholder="End year" type="number" min="1900" max="2099" step="1" value={this.state.endYear || ""}  onChange={
+                                e => this.setState(state => ({...state, endYear: e.target.value.toString()}))
+                            }/>
+                        </InputGroup>
+                    </Col>
+                    <Col sm={2}>
+                        <InputGroup className="mb-3">
+                            <FormControl
+                                type="text"
+                                value={this.state.keyword}
+                                onChange={this.onChangeKeywordValue}
+                                style={{width: "100px"}}
+                                placeholder="Enter a keyword"
+                            />
+                            <Button 
+                                variant="outline-secondary"
+                                type="button"
+                                onClick={this.addTagToSelectedKeywords}
+                                disabled={!this.state.keyword}>
+                            Add
+                            </Button>
+                        </InputGroup>
+                    </Col>
+                    <Col sm={3}>
+                        <InputGroup className="mb-3">
+                            <FormControl
+                                type="text"
+                                value={this.state.userValue}
+                                onChange={this.onChangeUserValue}
+                                style={{width: "100px"}}
+                                placeholder="Enter a user"
+                            />
+                            <Button 
+                                variant="outline-secondary"
+                                type="button"
+                                onClick={this.addTagToSelectedUsers}
+                                disabled={!this.state.userValue}>
+                            Add
+                            </Button>
+                        </InputGroup>
+                    </Col>
+                    <Col sm={2}>
+                        <InputGroup className="mb-3">
+                            <FormControl
+                                type="number"
+                                value={this.state.searchAreaKm || ""}
+                                onChange={
+                                    e => this.setState(state => ({...state, searchAreaKm: e.target.value.toString()}))
+                                }
+                                style={{width: "100px"}}
+                                placeholder="Enter km"
+                            />
+                            <Button 
+                                variant="outline-secondary"
+                                type="button"
+                                onClick={() => this.setState(state => ({...state, showKm: true}))}
+                                disabled={!this.state.searchAreaKm}>
+                            Enter
+                            </Button>
+                        </InputGroup>
+                    </Col>
+                    
                 </Row>
                
             </Container>
