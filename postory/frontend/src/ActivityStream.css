@@ -1,0 +1,13 @@
+#astream {
+    min-width: 500px;
+    min-height: 500px;
+    background-color: rgb(235, 235, 235);
+    padding: 10px;
+}
+
+.astream-link {
+    font-size: 50%;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
