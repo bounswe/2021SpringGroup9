@@ -412,6 +412,56 @@ class DiscoverPage extends React.Component{
                     </div>
                     </Col>
                 </Row>
+                <Row style={{alignItems: `center`}}>
+                    <Col sm={2}></Col>
+                    <Col sm={3}>
+                        {this.state.startMonth && this.state.endMonth &&
+                        <InputGroup className="mb-3">
+                            <InputGroup.Text>Day</InputGroup.Text>
+                            <FormControl placeholder="Start day" type="number" min="1" max="31" step="1" value={this.state.startDay || ""}  onChange={
+                                e => this.setState(state => ({...state, startDay: e.target.value.toString()}))
+                            }/>
+                            <FormControl placeholder="End month" type="number" min="1" max="31" step="1" value={this.state.endDay || ""}  onChange={
+                                e => this.setState(state => ({...state, endDay: e.target.value.toString()}))
+                            }/>
+                        </InputGroup>
+                        }
+                    </Col>
+                    <Col sm={7}> </Col>
+                </Row>
+                <Row style={{alignItems: `center`}}>
+                    <Col sm={2}></Col>
+                    <Col sm={3}>
+                        {this.state.startDay && this.state.endDay &&
+                        <InputGroup className="mb-3">
+                            <InputGroup.Text>Hour</InputGroup.Text>
+                            <FormControl placeholder="Start hour" type="number" min="1" max="31" step="1" value={this.state.startTime || ""}  onChange={
+                                e => this.setState(state => ({...state, startTime: e.target.value.toString()}))
+                            }/>
+                            <FormControl placeholder="End hour" type="number" min="1" max="31" step="1" value={this.state.endTime || ""}  onChange={
+                                e => this.setState(state => ({...state, endTime: e.target.value.toString()}))
+                            }/>
+                        </InputGroup>
+                        }
+                    </Col>
+                    <Col sm={5}> </Col>
+                    <Col sm={2}>
+                    {this.state.showKm &&
+                        <div>
+                            {this.state.searchAreaKm} km2
+                        
+                        <Button
+                            type="button"
+                            variant="outline-secondary"
+                            size="sm"
+                            onClick={() => this.setState(state => ({...state, showKm: false, searchAreaKm: null}))}
+                        >
+                            x
+                        </Button>
+                        </div>
+                    }          
+                    </Col>
+                </Row>
                
             </Container>
             <div style={{ height: window.innerHeight * 1/40, width: window.innerWidth }}/>
