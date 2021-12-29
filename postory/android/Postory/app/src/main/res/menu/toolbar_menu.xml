@@ -4,8 +4,7 @@
     <item
         android:id="@+id/refresh"
         android:icon="@drawable/baseline_refresh_black_24dp"
-        android:title="Refresh"
-        />
+        android:title="Refresh" />
 
     <item
         android:id="@+id/go_create_post"
@@ -22,20 +21,25 @@
     <item
         android:id="@+id/go_home"
         android:icon="@drawable/baseline_home_black_24dp"
-        android:title="TODO"
-        app:showAsAction="always" />
+        android:title="Home" />
 
     <item
         android:id="@+id/go_profile"
         android:icon="@drawable/baseline_person_outline_black_24dp"
-        android:title="Your Profile"
-        />
+        android:title="Your Profile" />
+
+    <item
+        android:id="@+id/search"
+        android:title="Search User"
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="collapseActionView|ifRoom" />
+
 
     <item
         android:id="@+id/logout"
         android:icon="@drawable/baseline_refresh_black_24dp"
-        android:title="Logout"
-        />
+        android:title="Logout" />
+
 
 
 </menu>
