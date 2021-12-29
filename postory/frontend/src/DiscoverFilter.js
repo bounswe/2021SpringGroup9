@@ -16,8 +16,6 @@ import Badge from 'react-bootstrap/Badge'
 import { mdiPound, mdiCalendarRange, mdiFountainPenTip, mdiAccount, mdiMapMarkerRadius } from '@mdi/js';
 
 const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
-    const [markers, setMarkers] = React.useState([]);
-    const [posts, setPosts] = React.useState([]);
     const [selectedPost, setSelectedPost] = React.useState(null);
     const [currentLocation, setCurrentLocation] = React.useState({ lat: 41.048, lng: 29.0510 });
     const [searchLocation, setSearchLocation] = React.useState({ lat: 43, lng: 25 });
@@ -26,25 +24,6 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
     const [displayInfoBox, setDisplayInfoBox] = React.useState(false);
 
 
-    useEffect(() => {
-        requests.get_jwt('/api/post/all/discover',{})
-            .then(response => response.json())
-            .then( (data) => {
-                setPosts(data);
-                const markerList = [];
-                for(let i = 0; i < data.length; i++) {
-                    console.log(data[i]);
-                    let id = data[i].id;
-                    for(let j = 0; j < data[i].locations.length; j++) {
-                        let lat = data[i].locations[j][1];
-                        let lng = data[i].locations[j][2];
-                        markerList.push({id: id, lat: lat, lng: lng});
-                    }
-                }
-                console.log(markerList);
-                setMarkers(markerList);
-            })
-    }, [])
 
     useEffect(() => {
         if (selectedPost != null){
@@ -58,9 +37,9 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
         setCurrentLocation({lat:obj.lat, lng:obj.lng});
         setSelectedPost(() =>{
             let newPost = null;
-            for(let i =0 ; i< posts.length; i++){
-                if(posts[i].id == markers[index].id){
-                    newPost = posts[i];
+            for(let i =0 ; i< props.posts.length; i++){
+                if(props.posts[i].id == props.markerList[index].id){
+                    newPost = props.posts[i];
                 }
             }
             console.log(newPost);
@@ -111,7 +90,7 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
                     </div>
                 </InfoBox>
                 } 
-                {markers.map((obj,i) => {
+                {props.markerList.map((obj,i) => {
                     return (<Marker onClick = {() => onClickMarker(i, obj)} position = {{lat:obj.lat, lng:obj.lng}} key = {i}/>);
                 })}
                 <Marker draggable={true} position = {{lat:searchLocation.lat, lng:searchLocation.lng}} 
@@ -145,7 +124,62 @@ class DiscoverPage extends React.Component{
             searchAreaKm: null,
             searchAreaKmCurrent: null,
             showKm: false,
+            markerList: [],
+            posts: [],
+            differentPage: false
         };
+    }
+
+    componentDidMount() {
+        requests.get_jwt('/api/post/all/discover',{})
+            .then(response => response.json())
+            .then( (data) => {
+                this.setState({ posts: data });
+                const markerList = [];
+                for(let i = 0; i < data.length; i++) {
+                    console.log(data[i]);
+                    let id = data[i].id;
+                    for(let j = 0; j < data[i].locations.length; j++) {
+                        let lat = data[i].locations[j][1];
+                        let lng = data[i].locations[j][2];
+                        markerList.push({id: id, lat: lat, lng: lng});
+                    }
+                }
+                console.log(markerList);
+                this.setState({ markerList: markerList });
+        })
+    }
+
+    onClickBrowse = () => {
+        console.log('onclick browse girdik')
+        requests.get_jwt('/api/post/all',{})
+            .then(response => response.json())
+            .then( (data) => {
+                this.setState({ posts: data });
+                const markerList = [];
+                for(let i = 0; i < data.length; i++) {
+                    console.log(data[i]);
+                    let id = data[i].id;
+                    for(let j = 0; j < data[i].locations.length; j++) {
+                        let lat = data[i].locations[j][1];
+                        let lng = data[i].locations[j][2];
+                        markerList.push({id: id, lat: lat, lng: lng});
+                    }
+                }
+                console.log(markerList);
+                this.setState({ markerList: markerList });
+        })
+    };
+
+    onClickNewPage = () => {
+        requests.get_jwt('/api/post/all/discover',{})
+            .then(response => response.json())
+            .then( (data) => {
+                localStorage.setItem('filteredPosts', JSON.stringify(data));
+                this.setState({ differentPage: true });
+                
+        })
+
     }
 
     onChangeTagValue = event => {
@@ -473,10 +507,18 @@ class DiscoverPage extends React.Component{
                 </Row>
                 <Row style={{alignItems: `center`}}>
                     <Col sm={7}>
-                        <Button variant="primary">Filter & Browse on Map</Button>
+                        <Button 
+                            variant="primary"
+                            onClick={this.onClickBrowse}
+                            >Filter & Browse on Map  
+                        </Button>
                     </Col>
                     <Col sm={2}>
-                        <Button variant="primary">Show Resulting Posts on a Different Page</Button>
+                        <Button 
+                            variant="primary"
+                            onClick={this.onClickNewPage}
+                            >Show Resulting Posts on a Different Page
+                        </Button>
                     </Col>
                 </Row>
                
@@ -486,6 +528,8 @@ class DiscoverPage extends React.Component{
         <MyMapComponent 
                     redirect = {(id) => this.setState({selectedPost : id})}
                     searchCenter = {({lat, lng}) => this.setState({searchCenter : {lat, lng}})}
+                    markerList = {this.state.markerList}
+                    posts = {this.state.posts}
                     isMarkerShown
                     googleMapURL={`https://maps.googleapis.com/maps/api/js?${key}v=3.exp&libraries=geometry,drawing,places`}
                     loadingElement={<div style={{ height: `100%` }} />}
@@ -494,6 +538,7 @@ class DiscoverPage extends React.Component{
                 />
         </header>
         {this.state.selectedPost && <Navigate class = "push" to= {`/viewPost?id=${this.state.selectedPost}`}> click here to see the full post</Navigate>}
+        {this.state.differentPage && <Navigate class = "push" to= {`/filteredPosts`}> </Navigate>}
         </div>      
         )
     }
