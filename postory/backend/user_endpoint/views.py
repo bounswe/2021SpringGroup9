@@ -9,12 +9,11 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 
-from .models import User
-from .serializers import UserSerializer
+from .serializers import UserSerializer, FollowRequestSerializer
 from post_endpoint.models import Post, Image
 from post_endpoint.serializers import PostSerializer
 
-from .models import User
+from .models import User, FollowRequest
 import jwt
 
 from django.contrib.auth import get_user_model
@@ -56,7 +55,6 @@ def get_user(user):
     # Blog.objects.filter(pk__in=[1, 4, 7])
     pass
     
-
 class UserFollowing(GenericAPIView):
 
     def get_object(self, pk):
@@ -66,6 +64,8 @@ class UserFollowing(GenericAPIView):
             raise Http404
     
     def post(self, request, pk, format=None):
+        data = dict([])
+
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
         decoded = jwt.decode(token,options={"verify_signature": False})
@@ -89,7 +89,21 @@ class UserFollowing(GenericAPIView):
                 return Response({"message": "unfollow failed"}, status=status.HTTP_400_BAD_REQUEST)
 
         elif user2.isPrivate: # if private can't follow
-            return Response({"message": "cant' follow private profile"}, status=status.HTTP_403_FORBIDDEN)
+            try:
+                data['fromUser'] = user1.id
+                data['toUser'] = user2.id
+
+                if FollowRequest.objects.filter(fromUser=user1, toUser=user2).exists():
+                    return Response({"message": "request already sent"}, status=status.HTTP_400_BAD_REQUEST)
+                
+                serializer = FollowRequestSerializer(data=data)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response({"message": "succesfuly sent request to private profile", 'data': serializer.data}, status=status.HTTP_200_OK)
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            except:
+                return Response({"message": "private profile follow failed"}, status=status.HTTP_400_BAD_REQUEST)
         
         else: #follow
             try:
@@ -117,9 +131,7 @@ class UserGet(GenericAPIView):
         requester_user = User.objects.filter(id = user_id).first()
         requested_user = User.objects.filter(id = pk).first()
         if(not requested_user.isPrivate or requested_user in requester_user.followedUsers):
-            #print(followers)
             serializer = dict(UserSerializer(requested_user).data)
-            #print(serializer)
             followers = []
             for followerUser in requested_user.followerUsers.all():
                 temp = {}
