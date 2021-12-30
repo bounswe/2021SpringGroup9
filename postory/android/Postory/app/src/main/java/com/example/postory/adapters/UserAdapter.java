@@ -23,6 +23,7 @@ import com.example.postory.activities.SelfProfilePageActivity;
 import com.example.postory.models.UserModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserAdapter extends ArrayAdapter<UserModel> {
     private Context context;
@@ -38,6 +39,7 @@ public class UserAdapter extends ArrayAdapter<UserModel> {
         userId = sharedPreferences.getString("user_id","");
     }
 
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -50,7 +52,7 @@ public class UserAdapter extends ArrayAdapter<UserModel> {
         username = (TextView) convertView.findViewById(R.id.username);
 
         String userPhoto = user.getUserPhoto();
-        if (!userPhoto.equals("")) {
+        if (userPhoto!=null && !userPhoto.equals("")) {
             Glide
                     .with(getContext())
                     .load(userPhoto)
@@ -70,7 +72,7 @@ public class UserAdapter extends ArrayAdapter<UserModel> {
                 }
                 else{
                     i = new Intent(context, OtherProfilePageActivity.class);
-                    i.putExtra("user_id",user.getId());
+                    i.putExtra("user_id",""+user.getId());
                 }
                 context.startActivity(i);
             }
