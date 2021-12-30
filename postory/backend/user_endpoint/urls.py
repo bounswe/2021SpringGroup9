@@ -8,5 +8,6 @@ urlpatterns = [
     path('addPhoto', AddPhoto.as_view(), name="add_photo"),
     path('follow/<int:pk>', UserFollowing.as_view(), name="follow_user"),
     path('get/<int:pk>', UserGet.as_view(), name="get_user"),
-    path('getRequests/<int:pk>', FollowRequests.as_view(), name="get_pending_request"),
+    path('getRequests', FollowRequests.as_view(), name="get_pending_request"),
+    path('acceptRequest/<int:pk>', AcceptFollowRequest.as_view(), name="accept_pending_request"),
 ]

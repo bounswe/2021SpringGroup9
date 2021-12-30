@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -88,7 +89,7 @@ class UserFollowing(GenericAPIView):
             except:
                 return Response({"message": "unfollow failed"}, status=status.HTTP_400_BAD_REQUEST)
 
-        elif user2.isPrivate: # if private can't follow
+        elif user2.isPrivate: # if private send request
             try:
                 data['fromUser'] = user1.id
                 data['toUser'] = user2.id
@@ -112,43 +113,43 @@ class UserFollowing(GenericAPIView):
 
                 user1.save()
                 user2.save()
-                return Response({'message': f"{user1.id} successfuly followed {user2.id}"}, status=status.HTTP_200_OK)
+                return Response({"message": f"{user1.id} successfuly followed {user2.id}"}, status=status.HTTP_200_OK)
             except:
                 return Response({"message": "follow failed"}, status=status.HTTP_400_BAD_REQUEST)
 
 class FollowRequests(GenericAPIView):
-    
-    def get(self, request, pk, format=None):
+    def get(self, request, format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
         decoded = jwt.decode(token,options={"verify_signature": False})
         user_id = decoded['user_id']
-        requester_user = User.objects.filter(id = user_id).first()
-        requested_user = User.objects.filter(id = pk).first()
+        user = User.objects.filter(id = user_id).first()
 
-        if(requester_user == requested_user):
-            pendingRequests = FollowRequest.objects.filter(toUser = requested_user)
+        pendingRequests = FollowRequest.objects.filter(toUser=user)
+        #print(pendingRequests)
 
-            requests = []
-            try:
-                for follow_request in pendingRequests.all():
-                    serializer = dict(UserSerializer(requested_user).data)
-                    serializer = get_user(follow_request.fromUser, serializer)
-                    
-                    requests.append(serializer)
-                
-                return Response(requests, status=status.HTTP_200_OK)
-            except:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
+        requests = []
+        try:
+            for follow_request in pendingRequests.all():
+                serializer = get_user(follow_request.fromUser)
 
-        else:
-            return Response({"message": "unauthorized"}, status=status.HTTP_400_BAD_REQUEST)
+                requests.append(serializer)
+            
+            return Response(requests, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
-    def accept_follow_request(self):
-        pass
+    
+class AcceptFollowRequest(GenericAPIView):
+    def get_object(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404
 
-    def decline_follow_request(self):
-        pass
+
+class DeclineFollowRequest(GenericAPIView):
+    pass
 
 
 class UserGet(GenericAPIView):
@@ -167,12 +168,13 @@ class UserGet(GenericAPIView):
         requested_user = User.objects.filter(id = pk).first()
         if(not requested_user.isPrivate or requested_user in requester_user.followedUsers.all()):
             serializer = dict(UserSerializer(requested_user).data)
-            serializer = get_user(requested_user, serializer)
+            serializer = get_user(requested_user)
             return Response(serializer)
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-def get_user(user, serializer):
+def get_user(user):
+    serializer = dict(UserSerializer(user).data)
     followers = []
     for followerUser in user.followerUsers.all():
         temp = {}
