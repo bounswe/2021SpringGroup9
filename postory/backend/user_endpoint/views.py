@@ -79,8 +79,8 @@ class UserFollowing(GenericAPIView):
         
         elif user2 in user1.followedUsers.all(): # if user1 already followed user2, unfollow
             try:
-                user1.followedUsers.remove(user2.id)
-                user2.followerUsers.remove(user1.id)
+                user1.followedUsers.remove(user2)
+                user2.followerUsers.remove(user1)
 
                 user1.save()
                 user2.save()
@@ -93,8 +93,8 @@ class UserFollowing(GenericAPIView):
         
         else: #follow
             try:
-                user1.followedUsers.add(user2.id)
-                user2.followerUsers.add(user1.id)
+                user1.followedUsers.add(user2)
+                user2.followerUsers.add(user1)
 
                 user1.save()
                 user2.save()
@@ -103,7 +103,6 @@ class UserFollowing(GenericAPIView):
                 return Response({"message": "follow failed"}, status=status.HTTP_400_BAD_REQUEST)
 
 class UserGet(GenericAPIView):
-
     def get_object(self, pk):
         try:
             return User.objects.get(pk=pk)
@@ -118,7 +117,37 @@ class UserGet(GenericAPIView):
         requester_user = User.objects.filter(id = user_id).first()
         requested_user = User.objects.filter(id = pk).first()
         if(not requested_user.isPrivate or requested_user in requester_user.followedUsers):
+            #print(followers)
             serializer = dict(UserSerializer(requested_user).data)
+            #print(serializer)
+            followers = []
+            for followerUser in requested_user.followerUsers.all():
+                temp = {}
+                temp['id'] = followerUser.id
+                temp['username'] = followerUser.username
+                temp['name'] = followerUser.name
+                temp['surname'] = followerUser.surname
+                temp['email'] = followerUser.email
+                temp['isBanned'] = followerUser.isBanned
+                temp['isAdmin'] = followerUser.isAdmin
+                temp['isPrivate'] = followerUser.isPrivate
+                temp['is_active'] = followerUser.is_active
+                followers.append(temp)
+            followed = []
+            for followedUser in requested_user.followedUsers.all():
+                temp = {}
+                temp['id'] = followedUser.id
+                temp['username'] = followedUser.username
+                temp['name'] = followedUser.name
+                temp['surname'] = followedUser.surname
+                temp['email'] = followedUser.email
+                temp['isBanned'] = followedUser.isBanned
+                temp['isAdmin'] = followedUser.isAdmin
+                temp['isPrivate'] = followedUser.isPrivate
+                temp['is_active'] = followedUser.is_active
+                followed.append(temp)
+            serializer['followerUsers'] = followers
+            serializer['followedUsers'] = followed
             try:
                 userPhoto = Image.objects.filter(user = requested_user.id).first()
                 serializer['userPhoto'] = userPhoto.file.url
