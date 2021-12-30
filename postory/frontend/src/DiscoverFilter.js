@@ -304,13 +304,15 @@ class DiscoverPage extends React.Component{
                                 onChange={this.onChangeTagValue}
                                 style={{width: "100px"}}
                                 placeholder="Enter a tag"
+                                id='enterTagInput'
                             />
                             <Button 
                                 variant="outline-secondary"
                                 type="button"
                                 onClick={this.addTagToSelectedTags}
-                                disabled={!this.state.tagValue}>
-                            Add
+                                disabled={!this.state.tagValue}
+                                id='addTagButton'>
+                            Add Tag
                             </Button>
                         </InputGroup>
                     </Col>
@@ -385,7 +387,7 @@ class DiscoverPage extends React.Component{
                 <Row style={{alignItems: `center`}}>
                     <Col sm={2} style={{maxHeight: 70, overflow: 'auto'}}>
                         {this.state.selectedTags.map((item, index) => (
-                            <div>
+                            <div key={item}>
                             <Badge pill bg="primary">
                                 {item}
                             </Badge>
@@ -416,7 +418,7 @@ class DiscoverPage extends React.Component{
                     </Col>
                     <Col sm={2} style={{maxHeight: 70, overflow: 'auto'}}>
                         {this.state.selectedKeywords.map((item, index) => (
-                            <div>
+                            <div key={item}>
                             <Badge pill bg="success">
                                 {item}
                             </Badge>
@@ -434,7 +436,7 @@ class DiscoverPage extends React.Component{
                     </Col>
                     <Col sm={3} style={{maxHeight: 70, overflow: 'auto'}}>
                         {this.state.selectedUsers.map((item, index) => (
-                            <div>
+                            <div key={item}>
                             <Badge pill bg="secondary">
                                 {item}
                             </Badge>
@@ -538,7 +540,7 @@ class DiscoverPage extends React.Component{
                 />
         </header>
         {this.state.selectedPost && <Navigate class = "push" to= {`/viewPost?id=${this.state.selectedPost}`}> click here to see the full post</Navigate>}
-        {this.state.differentPage && <Navigate class = "push" to= {`/filteredPosts`}> </Navigate>}
+        {this.state.differentPage && <Navigate class = "push" to= {`/filteredPosts`}>Navigating to filteredPosts page</Navigate>}
         </div>      
         )
     }
