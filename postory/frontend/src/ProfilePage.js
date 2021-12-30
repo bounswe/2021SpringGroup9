@@ -24,6 +24,7 @@ export const ProfilePageUpper = () => {
     const [popupState, setPopupState] = React.useState(false);
     const [photo, setPhoto] = React.useState(false);
     const [profilePhoto, setProfilePhoto] = React.useState(false);
+    const [followText, setFollowText] = React.useState('Follow');
 
     useEffect(() => {
         fetch(`http://${BACKEND_IP}:8000/api/post/all/user/${userID}`, {
@@ -59,7 +60,8 @@ export const ProfilePageUpper = () => {
                 setFollowerCount(data.followerUsers.length);
                 for(let i =0 ; i< data.followerUsers.length; i++){
                     if(data.followerUsers[i] == sessionUserID){
-                        setShowFollowButton(false);
+                        closePopup();
+                        //setShowFollowButton(false);
                     }
                 }
                 console.log(data);
@@ -99,7 +101,11 @@ export const ProfilePageUpper = () => {
 
     const closePopup = () => {
         setPopupState(false);
-        setShowFollowButton(false);
+        //setShowFollowButton(false);
+        if(followText == 'Follow')
+            setFollowText('Unfollow');
+        else
+            setFollowText('Follow');
       };
 
     return ( 
@@ -143,7 +149,7 @@ export const ProfilePageUpper = () => {
                 </Col>
             </Row>
             <div style={{ height: window.innerHeight * 1/50, width: window.innerWidth }}/>
-            {showFollowButton && <Button variant="secondary" size="sm" onClick={() => onClickFollow()} >Follow</Button>}
+            {showFollowButton && <Button variant="secondary" size="sm" onClick={() => onClickFollow()} >{followText}</Button>}
         </Container>
         <div className="App-header">
         {fetchedPosts && userPosts.map((obj, i) => {
@@ -152,7 +158,7 @@ export const ProfilePageUpper = () => {
         </div>
         <Snackbar open={popupState} autoHideDuration={3000} onClose={() => closePopup()} >
             <Alert onClose={() => closePopup()} severity="info" sx={{ width: '100%' }}>
-              You have successfully followed {username}!
+              You have successfully followed/unfollowed {username}!
             </Alert>
         </Snackbar>
         </div>
