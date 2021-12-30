@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from .models import User as U
+from .models import FollowRequest as F
 
 User = get_user_model()
 
@@ -18,5 +19,10 @@ class UserCreateSerializer(UserCreateSerializer):
         model = User
         fields = ('id', 'username', 'password', 'name', 'surname', 'email')
 
+class FollowRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = F
+        fields = ['id', 'fromUser', 'toUser']
+        read_only_fields = []
 
 
