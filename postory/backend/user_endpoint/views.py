@@ -130,41 +130,45 @@ class UserGet(GenericAPIView):
         user_id = decoded['user_id']
         requester_user = User.objects.filter(id = user_id).first()
         requested_user = User.objects.filter(id = pk).first()
-        if(not requested_user.isPrivate or requested_user in requester_user.followedUsers):
+        if(not requested_user.isPrivate or requested_user in requester_user.followedUsers.all()):
             serializer = dict(UserSerializer(requested_user).data)
-            followers = []
-            for followerUser in requested_user.followerUsers.all():
-                temp = {}
-                temp['id'] = followerUser.id
-                temp['username'] = followerUser.username
-                temp['name'] = followerUser.name
-                temp['surname'] = followerUser.surname
-                temp['email'] = followerUser.email
-                temp['isBanned'] = followerUser.isBanned
-                temp['isAdmin'] = followerUser.isAdmin
-                temp['isPrivate'] = followerUser.isPrivate
-                temp['is_active'] = followerUser.is_active
-                followers.append(temp)
-            followed = []
-            for followedUser in requested_user.followedUsers.all():
-                temp = {}
-                temp['id'] = followedUser.id
-                temp['username'] = followedUser.username
-                temp['name'] = followedUser.name
-                temp['surname'] = followedUser.surname
-                temp['email'] = followedUser.email
-                temp['isBanned'] = followedUser.isBanned
-                temp['isAdmin'] = followedUser.isAdmin
-                temp['isPrivate'] = followedUser.isPrivate
-                temp['is_active'] = followedUser.is_active
-                followed.append(temp)
-            serializer['followerUsers'] = followers
-            serializer['followedUsers'] = followed
-            try:
-                userPhoto = Image.objects.filter(user = requested_user.id).first()
-                serializer['userPhoto'] = userPhoto.file.url
-            except:
-                serializer['userPhoto'] = ""
+            serializer = get_user(requested_user, serializer)
             return Response(serializer)
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+def get_user(user, serializer):
+    followers = []
+    for followerUser in user.followerUsers.all():
+        temp = {}
+        temp['id'] = followerUser.id
+        temp['username'] = followerUser.username
+        temp['name'] = followerUser.name
+        temp['surname'] = followerUser.surname
+        temp['email'] = followerUser.email
+        temp['isBanned'] = followerUser.isBanned
+        temp['isAdmin'] = followerUser.isAdmin
+        temp['isPrivate'] = followerUser.isPrivate
+        temp['is_active'] = followerUser.is_active
+        followers.append(temp)
+    followed = []
+    for followedUser in user.followedUsers.all():
+        temp = {}
+        temp['id'] = followedUser.id
+        temp['username'] = followedUser.username
+        temp['name'] = followedUser.name
+        temp['surname'] = followedUser.surname
+        temp['email'] = followedUser.email
+        temp['isBanned'] = followedUser.isBanned
+        temp['isAdmin'] = followedUser.isAdmin
+        temp['isPrivate'] = followedUser.isPrivate
+        temp['is_active'] = followedUser.is_active
+        followed.append(temp)
+    serializer['followerUsers'] = followers
+    serializer['followedUsers'] = followed
+    try:
+        userPhoto = Image.objects.filter(user = user.id).first()
+        serializer['userPhoto'] = userPhoto.file.url
+    except:
+        serializer['userPhoto'] = ""
+    return serializer
