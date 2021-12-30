@@ -116,6 +116,41 @@ class UserFollowing(GenericAPIView):
             except:
                 return Response({"message": "follow failed"}, status=status.HTTP_400_BAD_REQUEST)
 
+class FollowRequests(GenericAPIView):
+    
+    def get(self, request, pk, format=None):
+        authorization = request.headers['Authorization']
+        token = authorization.split()[1]
+        decoded = jwt.decode(token,options={"verify_signature": False})
+        user_id = decoded['user_id']
+        requester_user = User.objects.filter(id = user_id).first()
+        requested_user = User.objects.filter(id = pk).first()
+
+        if(requester_user == requested_user):
+            pendingRequests = FollowRequest.objects.filter(toUser = requested_user)
+
+            requests = []
+            try:
+                for follow_request in pendingRequests.all():
+                    serializer = dict(UserSerializer(requested_user).data)
+                    serializer = get_user(follow_request.fromUser, serializer)
+                    
+                    requests.append(serializer)
+                
+                return Response(requests, status=status.HTTP_200_OK)
+            except:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        else:
+            return Response({"message": "unauthorized"}, status=status.HTTP_400_BAD_REQUEST)
+
+    def accept_follow_request(self):
+        pass
+
+    def decline_follow_request(self):
+        pass
+
+
 class UserGet(GenericAPIView):
     def get_object(self, pk):
         try:
