@@ -41,24 +41,3 @@ test('Clicks on add a tag successfully', () => {
     userEvent.click(screen.getByText('Add Tag'))
     expect(screen.getByText('tag1')).toBeInTheDocument();
 })
-//test('Redirecting to different page to show resulting posts successfully', async () => {
-//    render(<DiscoverFilter />, container);
-//  
-//    userEvent.click(screen.getByText('Show Resulting Posts on a Different Page'))
-//    await screen.findByText('Navigating to filteredPosts page');
-//})
-
-//test('Correct username & password results with success', async () => {
-//    render(<SignIn />, container);
-//    fireEvent.change(
-//        screen.getByLabelText('Username or E-mail:'),
-//        {target: {value: 'amelih6@gmail.com'}}
-//    );
-//    fireEvent.change(
-//        screen.getByLabelText('Password:'),
-//        {target: {value: 'MyPassword123%%'}}
-//    );
-//
-//    fireEvent.click(screen.getByRole('button'))
-//    await screen.findByText('Sign in success.')
-//})
