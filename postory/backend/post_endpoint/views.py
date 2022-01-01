@@ -375,14 +375,17 @@ class LikeRequest(GenericAPIView):
 
     def post(self, request, pk, format=None):
         userid = request.auth['user_id']
+        user = User.objects.get(id = userid)
 
         story = self.get_object(pk)
         likeList = story.likeList.split(',')
         if likeList[0] == "":
             likeList = []
         if str(userid) in likeList:
+            user.likedPosts.remove(story)
             likeList.remove(str(userid))
         else:
+            user.likedPosts.add(story)
             likeList.append(str(userid))
         story.likeList = ','.join(likeList)
         
@@ -398,8 +401,8 @@ class GetPostsDiscoverFilter(GenericAPIView):
     
     def get(self,request,format=None):
         # users = User.objects.filter(username__contains=term)
-        user_id = request.auth['user_id']
-        user = User.objects.filter(id = user_id).first()
+        userid = request.auth['user_id']
+        user = User.objects.get(id = userid)
         followedUsers = user.followedUsers.all()
         followedUsers = [followedUser.id for followedUser in followedUsers]
         query_parameters = dict(request.query_params)
@@ -499,25 +502,48 @@ class GetPostsDiscoverFilter(GenericAPIView):
             owner_of_post = User.objects.get(id=post.owner)
             if owner_of_post.isPrivate == False:
                 posts_set.add(post)
-            elif owner_of_post.id == user_id:
+            elif owner_of_post.id == userid:
                 posts_set.add(post)
             elif owner_of_post.isPrivate == True and owner_of_post.id in followedUsers:
                 posts_set.add(post) 
         serializer = {}
         for story in posts_set:
             serializer[story.id] = get_story(story)
+        activityStream.createActivity(userid,"filtered posts","allFilter",resolve(request.path_info).route,"PostFilter",True)
         return Response(serializer.values(), status=200)
 
 class GetRelatedTags(GenericAPIView):
     def get(self, request, query, format=None):
+        userid = request.auth['user_id']
         if request.auth:
             try:
                 tag_list = list(getRelatedTags(query))
+                activityStream.createActivity(userid,"got related tags","related",resolve(request.path_info).route,"GetRelatedTags",True)
                 return Response(tag_list, status = 200)
             except:
+                activityStream.createActivity(userid,"got related tags","related",resolve(request.path_info).route,"GetRelatedTags",False)
                 return Response(status = 503)
         else:
+            activityStream.createActivity(userid,"got related tags","related",resolve(request.path_info).route,"GetRelatedTags",False)
             return Response(status = 401)
+        
+class SavePost(GenericAPIView):
+    
+    def post(self, request, pk, format=None):
+        userid = request.auth['user_id']
+        user = User.objects.get(id = userid)
+        try:
+            post = Post.objects.get(id = pk)
+        except Post.DoesNotExist:
+            raise Http404 
+        
+        if post in user.savedPosts.all():
+            activityStream.createActivity(userid,"saved post",post.id,resolve(request.path_info).route,"SavePost",True)
+            user.savedPosts.remove(post)
+        else:
+            activityStream.createActivity(userid,"unsaved post",post.id,resolve(request.path_info).route,"SavePost",True)
+            user.savedPosts.add(post)
+        return Response(status=200)
                 
 def getRelatedTags(query):
     url = "https://www.wikidata.org/w/api.php"

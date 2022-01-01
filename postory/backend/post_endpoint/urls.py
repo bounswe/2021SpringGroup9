@@ -16,4 +16,5 @@ urlpatterns = [
     path('comment/<int:pk>', CommentRequest.as_view(), name="comment_post"),
     path('like/<int:pk>', LikeRequest.as_view(), name="like_post"),
     path('related/<slug:query>', GetRelatedTags.as_view(), name="get_tags"),
+    path('save/<int:pk>', SavePost.as_view(), name="save_post"),
 ]
