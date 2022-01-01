@@ -8,7 +8,11 @@ const NavbarMenu = (props) => {
             <Dropdown.Item onClick = {() => navigate("/")}>Home</Dropdown.Item>
             <Dropdown.Item onClick = {() => navigate("/discover")}>Discover</Dropdown.Item>
             <Dropdown.Item onClick = {() => navigate("/createPost")}>Create a Post</Dropdown.Item>
-            <Dropdown.Item onClick = {() => navigate(`/profilePage?id=${localStorage.getItem('userID')}`)}>My Profile Page</Dropdown.Item>
+            <Dropdown.Item onClick = {() => {
+                navigate(`/profilePage?id=${localStorage.getItem('userID')}`)
+                window.location.reload();
+            }
+                }>My Profile Page</Dropdown.Item>
         </Dropdown.Menu>);
 }
 
