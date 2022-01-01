@@ -354,10 +354,10 @@ class CommentRequest(GenericAPIView):
         
         try:
             story.save()
-            activityStream.createActivity(userid,"commented on post",commentObject.id,resolve(request.path_info).route,"PostComment",True)
+            activityStream.createActivity(userid,"commented on post",story.id,resolve(request.path_info).route,"PostComment",True)
             return Response(get_story(story), status=200)
         except:
-            activityStream.createActivity(userid,"commented on post",commentObject.id,resolve(request.path_info).route,"PostComment",False)
+            activityStream.createActivity(userid,"commented on post",story.id,resolve(request.path_info).route,"PostComment",False)
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
 class LikeRequest(GenericAPIView):
