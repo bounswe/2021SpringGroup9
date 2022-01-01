@@ -34,3 +34,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['name', "surname", "username"]
     
     objects = UserAccountManager()
+
+class FollowRequest(models.Model):
+    fromUser = models.ForeignKey(User, on_delete=models.CASCADE, related_name="requestFrom", blank=True)
+    toUser = models.ForeignKey(User, on_delete=models.CASCADE, related_name="requestTo", blank=True)
+
+class Report(models.Model):
+    fromUser = models.ForeignKey(User, on_delete=models.CASCADE, related_name="fromUser", blank=True)
+    toUserorPost = models.ForeignKey(User, on_delete=models.CASCADE, related_name="toUserorPost", blank=True)
+    type = models.IntegerField(default=0)  # 0: user report, 1: post report
