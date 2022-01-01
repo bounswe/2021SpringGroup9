@@ -12,4 +12,5 @@ urlpatterns = [
     path('acceptRequest/<int:pk>', AcceptFollowRequest.as_view(), name="accept_pending_request"),
     path('declineRequest/<int:pk>', DeclineFollowRequest.as_view(), name="decline_pending_request"),
     path('report/<int:pk>/<int:type>', Report.as_view(), name="report"),
+    path('changeProfile', ChangePrivate.as_view(), name="change_profile_settings"),
 ]

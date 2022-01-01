@@ -50,6 +50,30 @@ class AddPhoto(GenericAPIView):
         except:
             activityStream.createActivity(userid,"added photo","None",resolve(request.path_info).route,"UserAddPhoto",False)
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+class ChangePrivate(GenericAPIView):
+    def get_object(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404
+
+    def put(self, request, format = None):
+        authorization = request.headers['Authorization']
+        token = authorization.split()[1]
+        decoded = jwt.decode(token,options={"verify_signature": False})
+        user_id = decoded['user_id']
+        user = self.get_object(pk=user_id)
+
+        try:
+            user.isPrivate = not user.isPrivate
+            user.save()
+
+            activityStream.createActivity(user.id,"changed profile settings",user.id,resolve(request.path_info).route,"UserChangePrivate",True) 
+            return Response(status=status.HTTP_200_OK)
+        except:
+            activityStream.createActivity(user.id,"changed profile settings",user.id,resolve(request.path_info).route,"UserChangePrivate",False) 
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         
 class SearchUser(GenericAPIView):
 
