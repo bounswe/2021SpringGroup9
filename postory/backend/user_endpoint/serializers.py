@@ -4,6 +4,7 @@ from rest_framework import serializers
 
 from .models import User as U
 from .models import FollowRequest as F
+from .models import Report as R
 
 User = get_user_model()
 
@@ -23,6 +24,12 @@ class FollowRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = F
         fields = ['id', 'fromUser', 'toUser']
+        read_only_fields = []
+
+class ReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = R
+        fields = ['id', 'fromUser', 'toUser', 'type']
         read_only_fields = []
 
 
