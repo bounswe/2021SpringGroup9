@@ -1,6 +1,7 @@
 import {fireEvent, screen } from '@testing-library/react';
 import { render, unmountComponentAtNode } from "react-dom";
 import NavbarMenu from './NavbarMenu';
+import {MemoryRouter, Routes, Route} from "react-router-dom";
 
 
 
@@ -22,12 +23,15 @@ afterEach(() => {
   });
 
 test('Renders the menu', () => {
-    render(<NavbarMenu noNavigate/>, container);
+    render(<MemoryRouter>
+      <NavbarMenu noNavigate/>
+    </MemoryRouter>, container);
     const c = container.firstChild.children;
     expect(c[0].text).toBe('Home');
     expect(c[1].text).toBe('Discover');
     expect(c[2].text).toBe('Create a Post');
     expect(c[3].text).toBe('My Profile Page');
+    expect(c[0].text).not.toBe('Random text');
   }
 );
 
