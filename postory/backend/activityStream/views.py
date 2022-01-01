@@ -164,6 +164,11 @@ def get_user(user):
         temp['isAdmin'] = followerUser.isAdmin
         temp['isPrivate'] = followerUser.isPrivate
         temp['is_active'] = followerUser.is_active
+        try:
+            userPhoto = Image.objects.filter(user = user.id).first()
+            temp['userPhoto'] = userPhoto.file.url
+        except:
+            temp['userPhoto'] = ""
         followers.append(temp)
     followed = []
     for followedUser in user.followedUsers.all():
@@ -177,6 +182,11 @@ def get_user(user):
         temp['isAdmin'] = followedUser.isAdmin
         temp['isPrivate'] = followedUser.isPrivate
         temp['is_active'] = followedUser.is_active
+        try:
+            userPhoto = Image.objects.filter(user = user.id).first()
+            temp['userPhoto'] = userPhoto.file.url
+        except:
+            temp['userPhoto'] = ""
         followed.append(temp)
     serializer['followerUsers'] = followers
     serializer['followedUsers'] = followed
