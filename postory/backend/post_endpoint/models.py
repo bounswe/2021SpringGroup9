@@ -5,18 +5,29 @@ from backend.storage import ImageStorage
 class Image(models.Model):
     uploadDate = models.DateTimeField(auto_now_add=True)
     file = models.FileField(storage=ImageStorage())
+    
+    def __str__(self):
+        return self.file.url
 
 class Location(models.Model):
     name = models.CharField(max_length=200)
     coordsLatitude = models.FloatField()
     coordsLongitude = models.FloatField()
+    
+    def __str__(self):
+        return self.name
 
 class Comment(models.Model):
     userid = models.IntegerField()
     comment = models.TextField()
+    
+    def __str__(self):
+        return self.comment
 
 class Tag(models.Model):
     content = models.CharField(max_length=50)
+    def __str__(self):
+        return self.content
 
 class Post(models.Model):
     title = models.CharField(max_length=200)
@@ -36,3 +47,6 @@ class Post(models.Model):
     day = models.CharField(default="",max_length=20)
     hour = models.CharField(default="",max_length=20)
     minute = models.CharField(default="",max_length=20)
+    
+    def __str__(self):
+        return self.title

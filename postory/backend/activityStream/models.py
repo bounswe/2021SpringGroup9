@@ -9,3 +9,6 @@ class ActivityStream(models.Model):
     url = models.TextField()
     type = models.TextField()
     success = models.BooleanField()
+    
+    def __str__(self):
+        return self.actor + " " + self.type
