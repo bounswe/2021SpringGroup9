@@ -8,6 +8,7 @@ import Col from 'react-bootstrap/Col'
 import Post from './Post';
 import {Snackbar} from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
+import * as requests from './requests'
 
 const BACKEND_IP = '3.67.83.253';
 
@@ -154,6 +155,7 @@ export const ProfilePageUpper = () => {
                 {localStorage.getItem('userID') == userID && <Col  sm={2}>  
                     <button disabled = {!bEnabled} onClick = {() => {
                         //call backend enpoint
+                        requests.put_jwt('/api/user/changeProfile').then(() => window.location.reload());
                         setbEnabled(false);
                         return;
                     }}> {`Make my account ` +  (isPrivate ? 'Public':'Private')}</button>
