@@ -108,6 +108,12 @@ export const ProfilePageUpper = () => {
             setFollowText('Follow');
       };
 
+      useEffect(()=> {
+        console.log('test');
+        if(photo)
+            console.log(document.getElementById('file').click());
+    } ,[photo]);
+
     return ( 
         <div style={{ backgroundColor: `#EBEBEB`}}>
         <div style={{ height: window.innerHeight * 1/20, width: window.innerWidth }}/>
@@ -117,9 +123,9 @@ export const ProfilePageUpper = () => {
                 <Col sm={4} >
                     <div className = {'sliderContainer'} >
                         
-                        <img onClick = {() => setPhoto(st => !st)} class = "circle" width = "50px" height = "50px" src = {profilePhoto? profilePhoto:"./static/media/postory_logo_no_text.ec3bad21.png"} />
+                        <img onClick = {() => setPhoto(st => !st )} class = "circle" width = "50px" height = "50px" src = {profilePhoto? profilePhoto:"./static/media/postory_logo_no_text.ec3bad21.png"} />
                         {photo  && (parseInt(localStorage.getItem('userID')) == userID) && <div className = {'ppup'}>
-                        <input onChange = {(e) => 
+                        <input style = {{display: 'none'}}id = 'test' onChange = {(e) => 
                         {
                             let formData = new FormData();
                             formData.append('image', e.target.files[0]);
@@ -130,7 +136,7 @@ export const ProfilePageUpper = () => {
                                 'Authorization': `JWT ${localStorage.getItem('access')}`
                             },
                             body: formData
-                                });
+                                }).then(window.location.reload());
                             setPhoto(st => !st);}
                         }
                             type="file" id="file" accept=".jpg, .png"/>
