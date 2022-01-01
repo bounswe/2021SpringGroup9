@@ -147,6 +147,7 @@ def get_story(story):
     serializer['minute'] = minute
     serializer['username'] = username
     serializer['userPhoto'] = userPhoto
+    serializer['id'] = story.id
     return serializer
 
 def get_user(user):
@@ -184,4 +185,5 @@ def get_user(user):
         serializer['userPhoto'] = userPhoto.file.url
     except:
         serializer['userPhoto'] = ""
+    serializer['id'] = user.id
     return serializer
