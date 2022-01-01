@@ -2,6 +2,7 @@ from django.http import Http404
 from django.http import HttpResponse
 
 from django.shortcuts import render
+from django.urls.base import resolve
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 
@@ -29,6 +30,9 @@ import string
 import re
 from geopy import distance
 
+import activityStream.views as activityStream
+from django.urls import reverse
+
 class GetAllPosts(GenericAPIView):
     """
     Get all posts from the database. 
@@ -46,8 +50,10 @@ class GetAllPosts(GenericAPIView):
             serializer = {}
             for story in posts:
                 serializer[story.id] = get_story(story)
+            activityStream.createActivity(user.id,"requested all posts","allPosts",resolve(request.path_info).route,"PostAllRequest",True)
             return Response(serializer.values(), status=200)
         else:
+            activityStream.createActivity(user.id,"requested all posts","allPosts",resolve(request.path_info).route,"PostAllRequest",False)
             return Response(status = 401)
 
 env = environ.Env(DEBUG=(bool, True))
@@ -115,7 +121,9 @@ class PostCreate(GenericAPIView):
             serializer.save()
             story = Post.objects.get(pk = serializer.data["id"])
             user.posts.add(story)
+            activityStream.createActivity(user.id,"created a post",story.id,resolve(request.path_info).route,"PostCreate",True)
             return Response(get_story(story), status=200)
+        activityStream.createActivity(user.id,"created a post","None",resolve(request.path_info).route,"PostCreate",False)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class PostListDetail(GenericAPIView):
@@ -143,8 +151,10 @@ class PostListDetail(GenericAPIView):
         # only if the user is admin or is a follower of the post owner or it is the post owner or the post is public
         if not user2.isPrivate or user1.isAdmin or (user1 in user2.followerUsers.all()) or (user1.id == user2.id):
             serializer = get_story(story)
+            activityStream.createActivity(user1.id,"requested post",story.id,resolve(request.path_info).route,"PostRequest",True)
             return Response(serializer, status=200)
         else:
+            activityStream.createActivity(user1.id,"requested post",story.id,resolve(request.path_info).route,"PostRequest",False)
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         
 class PostUpdate(GenericAPIView):
@@ -222,9 +232,12 @@ class PostUpdate(GenericAPIView):
             if serializer.is_valid():
                 serializer.save(editDate=timezone.now())
                 story = self.get_object(pk)
+                activityStream.createActivity(user1.id,"updated post",story.id,resolve(request.path_info).route,"PostUpdate",True)
                 return Response(get_story(story), status=200)
+            activityStream.createActivity(user1.id,"updated post",story.id,resolve(request.path_info).route,"PostUpdate",False)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
+            activityStream.createActivity(user1.id,"updated post",story.id,resolve(request.path_info).route,"PostUpdate",False)
             return Response(status=status.HTTP_401_UNAUTHORIZED)
     
 class PostDelete(GenericAPIView):
@@ -247,7 +260,9 @@ class PostDelete(GenericAPIView):
         story = self.get_object(pk)
 
         if(not user_id == story.owner):
+            activityStream.createActivity(user_id,"deleted post",story.id,resolve(request.path_info).route,"PostDelete",False)
             return Response(status = 401)
+        activityStream.createActivity(user_id,"deleted post",story.id,resolve(request.path_info).route,"PostDelete",True)
         story.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
@@ -266,8 +281,10 @@ class GetUsersPosts(GenericAPIView):
             serializer = {}
             for story in posts:
                 serializer[story.id] = get_story(story)
+            activityStream.createActivity(requester_user.id,"requested posts of",requested_user.id,resolve(request.path_info).route,"PostRequestOfUser",True)
             return Response(serializer.values(), status=200)
         else:
+            activityStream.createActivity(requester_user.id,"requested posts of",requested_user.id,resolve(request.path_info).route,"PostRequestOfUser",False)
             return Response(status = 401)
 
 
@@ -289,6 +306,7 @@ class GetFollowedUsersPosts(GenericAPIView):
         serializer = {}
         for story in posts:
             serializer[story.id] = get_story(story)
+        activityStream.createActivity(user_id,"requested posts of followed","allFollowed",resolve(request.path_info).route,"PostRequestOfFollowed",True)
         return Response(serializer.values(), status=200)
 
 
@@ -312,6 +330,7 @@ class GetPostsDiscover(GenericAPIView):
         serializer = {}
         for story in posts:
             serializer[story.id] = get_story(story)
+        activityStream.createActivity(user_id,"requested posts for discover","allDiscover",resolve(request.path_info).route,"PostRequestDiscover",True)
         return Response(serializer.values(), status=200)
 
 class CommentRequest(GenericAPIView):
@@ -340,8 +359,10 @@ class CommentRequest(GenericAPIView):
         
         try:
             story.save()
+            activityStream.createActivity(userid,"commented on post",story.id,resolve(request.path_info).route,"PostComment",True)
             return Response(get_story(story), status=200)
         except:
+            activityStream.createActivity(userid,"commented on post",story.id,resolve(request.path_info).route,"PostComment",False)
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
 class LikeRequest(GenericAPIView):
@@ -367,8 +388,10 @@ class LikeRequest(GenericAPIView):
         
         try:
             story.save()
+            activityStream.createActivity(userid,"liked post",story.id,resolve(request.path_info).route,"PostLike",True)
             return Response(get_story(story), status=200)
         except:
+            activityStream.createActivity(userid,"liked post",story.id,resolve(request.path_info).route,"PostLike",False)
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
 class GetPostsDiscoverFilter(GenericAPIView):

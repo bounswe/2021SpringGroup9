@@ -1,0 +1,13 @@
+#peoplechooser-div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#peoplechooser-title-label {
+    align-self: flex-start;
+}
+
+#peoplechooser-plus-button {
+    align-self: flex-end;
+}
