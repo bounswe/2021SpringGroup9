@@ -3,7 +3,9 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 const NavbarMenu = (props) => {
-    const navigate = useNavigate();
+    let navigate; 
+    if(!props.noNavigate)
+        navigate = useNavigate();
     return(<Dropdown.Menu show >
             <Dropdown.Item onClick = {() => navigate("/")}>Home</Dropdown.Item>
             <Dropdown.Item onClick = {() => navigate("/discover")}>Discover</Dropdown.Item>
