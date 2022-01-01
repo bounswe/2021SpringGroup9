@@ -8,6 +8,7 @@ import Col from 'react-bootstrap/Col'
 import Post from './Post';
 import {Snackbar} from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
+import plus_thick from './plus-thick.png'
 
 const BACKEND_IP = '3.67.83.253';
 
@@ -25,6 +26,7 @@ export const ProfilePageUpper = () => {
     const [photo, setPhoto] = React.useState(false);
     const [profilePhoto, setProfilePhoto] = React.useState(false);
     const [followText, setFollowText] = React.useState('Follow');
+    const [hoverPhoto, setHoverPhoto] = React.useState(false);
 
     useEffect(() => {
         fetch(`http://${BACKEND_IP}:8000/api/post/all/user/${userID}`, {
@@ -110,7 +112,7 @@ export const ProfilePageUpper = () => {
 
       useEffect(()=> {
         console.log('test');
-        if(photo)
+        if(photo && (parseInt(localStorage.getItem('userID')) == userID))
             console.log(document.getElementById('file').click());
     } ,[photo]);
 
@@ -123,9 +125,10 @@ export const ProfilePageUpper = () => {
                 <Col sm={4} >
                     <div className = {'sliderContainer'} >
                         
-                        <img onClick = {() => setPhoto(st => !st )} class = "circle" width = "50px" height = "50px" src = {profilePhoto? profilePhoto:"./static/media/postory_logo_no_text.ec3bad21.png"} />
+                        <img onMouseEnter = {() => setHoverPhoto(true)} onMouseLeave = {() => setHoverPhoto(false)}
+                         onClick = {() => setPhoto(st => !st )} class = "circle" width = "50px" height = "50px" src = {(hoverPhoto && (parseInt(localStorage.getItem('userID')) == userID))? plus_thick:(profilePhoto? profilePhoto:"./static/media/postory_logo_no_text.ec3bad21.png")} />
                         {photo  && (parseInt(localStorage.getItem('userID')) == userID) && <div className = {'ppup'}>
-                        <input style = {{display: 'none'}}id = 'test' onChange = {(e) => 
+                        <input style = {{display: 'none'}} onChange = {(e) => 
                         {
                             let formData = new FormData();
                             formData.append('image', e.target.files[0]);
