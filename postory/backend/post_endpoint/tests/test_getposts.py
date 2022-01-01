@@ -1,10 +1,8 @@
 from django.test import TestCase
-from .models import Post
+from post_endpoint.models import Post
 from user_endpoint.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient, APITestCase
-
-# Create your tests here.
 
 def setUpUsers():
     apiClient = APIClient()
@@ -148,5 +146,3 @@ class GetPosts(APITestCase):
         postsOfUser10 = resp.json()
         ids = [post['id'] for post in postsOfUser10]
         self.assertCountEqual(ids,[3,4]) 
-
-
