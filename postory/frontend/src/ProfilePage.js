@@ -25,6 +25,8 @@ export const ProfilePageUpper = () => {
     const [photo, setPhoto] = React.useState(false);
     const [profilePhoto, setProfilePhoto] = React.useState(false);
     const [followText, setFollowText] = React.useState('Follow');
+    const [isPrivate, setIsPrivate] = React.useState(false);
+    const [bEnabled, setbEnabled] = React.useState(true);
 
     useEffect(() => {
         fetch(`http://${BACKEND_IP}:8000/api/post/all/user/${userID}`, {
@@ -58,6 +60,8 @@ export const ProfilePageUpper = () => {
                 setUsername(data.username);
                 setFollowingCount(data.followedUsers.length);
                 setFollowerCount(data.followerUsers.length);
+                
+                setIsPrivate(data.isPrivate);
                 for(let i =0 ; i< data.followerUsers.length; i++){
                     if(data.followerUsers[i] == sessionUserID){
                         closePopup();
@@ -147,6 +151,13 @@ export const ProfilePageUpper = () => {
                 <Col  sm={2}>  
                     <div style={{ fontSize: `16px`, fontColor: `#08233B` }}>posts: {postCount}</div>
                 </Col>
+                {localStorage.getItem('userID') == userID && <Col  sm={2}>  
+                    <button disabled = {!bEnabled} onClick = {() => {
+                        //call backend enpoint
+                        setbEnabled(false);
+                        return;
+                    }}> {`Make my account ` +  (isPrivate ? 'Public':'Private')}</button>
+                </Col>}
             </Row>
             <div style={{ height: window.innerHeight * 1/50, width: window.innerWidth }}/>
             {showFollowButton && <Button variant="secondary" size="sm" onClick={() => onClickFollow()} >{followText}</Button>}
