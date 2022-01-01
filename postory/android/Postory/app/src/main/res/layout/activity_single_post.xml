@@ -184,6 +184,18 @@
 
                 </LinearLayout>
 
+                <ImageView
+                    android:id="@+id/report"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/like_layout"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:src="@drawable/baseline_report_black_24dp" />
+
                 <LinearLayout
                     android:layout_width="130dp"
                     android:layout_height="match_parent"
