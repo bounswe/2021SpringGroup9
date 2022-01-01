@@ -1,4 +1,7 @@
 from django.shortcuts import render
+from post_endpoint.serializers import PostSerializer
+
+from user_endpoint.serializers import UserSerializer
 
 from .models import ActivityStream
 from post_endpoint.models import Post
@@ -137,7 +140,7 @@ def get_story(story):
         minute = [int(time) for time in story.minute.split(',')]
     else:
         minute = []
-    serializer = dict()
+    serializer = dict(PostSerializer(story).data)
     serializer['tags'] = tags
     serializer['locations'] = locations
     serializer['images'] = images
@@ -154,7 +157,7 @@ def get_story(story):
     return serializer
 
 def get_user(user):
-    serializer = dict()
+    serializer = dict(UserSerializer(user).data)
     followers = []
     for followerUser in user.followerUsers.all():
         temp = {}
