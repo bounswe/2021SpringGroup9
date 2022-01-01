@@ -148,10 +148,8 @@ class FollowRequests(GenericAPIView):
             for follow_request in pendingRequests.all():
                 serializer = get_user(follow_request.fromUser)
                 requests.append(serializer)
-            activityStream.createActivity(user1.id,"followed",user2.id,resolve(request.path_info).route,"UserFollow",True)
             return Response(requests, status=status.HTTP_200_OK)
         except:
-            activityStream.createActivity(user1.id,"followed",user2.id,resolve(request.path_info).route,"UserFollow",False)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
     
@@ -203,9 +201,10 @@ class DeclineFollowRequest(GenericAPIView):
         user1 = self.get_object(pk=user_id)
         user2 = self.get_object(pk=pk)
 
-        pendingRequest = FollowRequest.objects.filter(fromUser=user2)
+        pendingRequest = FollowRequest.objects.filter(fromUser=user2).all()
 
         if pendingRequest is not None:
+            print(pendingRequest)
             try:
                 FollowRequest.objects.filter(fromUser=user2).delete()
                 return Response({"message": f"{user1.id} successfuly declined the request from {user2.id}"}, status=status.HTTP_200_OK)
@@ -256,10 +255,10 @@ class Report(GenericAPIView):
 
         if type == 0:
             subject = "User Reported"
-            content = f"User with id {user_id} reported user with id {pk}."
+            content = f"User with id {user_id} reported user with id {pk}. \nVisit the website for more details: http://3.67.83.253:8000/admin. \n\n- The Postory team"
         elif type == 1:
             subject = "Story Reported"
-            content = f"User with id {user_id} reported story with id {pk}."
+            content = f"User with id {user_id} reported story with id {pk}. \nVisit the website for more details: http://3.67.83.253:8000/admin. \n\n- The Postory team"
         else:
             return Response({"message": "invalid report type {type}"}, status=status.HTTP_400_BAD_REQUEST)
     
@@ -275,7 +274,7 @@ class Report(GenericAPIView):
                     subject,
                     content,
                     'from@example.com',
-                    ['zcanfes@gmail.com'],
+                    [x.email for x in User.objects.filter(is_superuser__in = [True]).all()], # send to all superusers
                     fail_silently=False,
                 )
                 return Response({"message": "successfuly reported", 'data': serializer.data}, status=status.HTTP_200_OK)
