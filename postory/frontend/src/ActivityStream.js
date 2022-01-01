@@ -75,16 +75,10 @@ class Activity extends React.Component {
             return <li>
                 {this.getUser1()} has commented on {this.getPost()} of {this.getUser2()}
             </li>
-        }
+        } // TODO cover all cases
     }
 }
 
-class FollowRequestActivity extends React.Component {
-    constructor(props) {
-        super(props);
-
-    }
-}
 
 class ActivityStream extends React.Component {
     constructor(props) {
@@ -103,11 +97,15 @@ class ActivityStream extends React.Component {
     }
 
     render() {
-        return (<div id="astream">
-            <ul>
-                {/* TODO map this.state.activities */}
-            </ul>
-        </div>)
+        return (
+            <header className='App-header'>
+                <div id="astream">
+                    <ul>
+                        {/* TODO map this.state.activities */}
+                    </ul>
+                </div>
+            </header>
+        )
     }
 }
 

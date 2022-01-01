@@ -1,8 +1,9 @@
 #astream {
-    min-width: 500px;
+    width: 800px;
     min-height: 500px;
     background-color: rgb(235, 235, 235);
     padding: 10px;
+    overflow: auto;
 }
 
 .astream-link {
