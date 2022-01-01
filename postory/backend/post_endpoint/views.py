@@ -405,24 +405,17 @@ class GetPostsDiscoverFilter(GenericAPIView):
             related = 'true'
         if 'tag' in query_parameters:
             tags = query_parameters['tag']
-            all_tags = []
+            all_tags = set()
             if related.lower() == 'true':
                 for tag in tags:
-                    all_tags = all_tags + getRelatedTags(tag)
+                    all_tags = all_tags | getRelatedTags(tag)
+                    all_tags.add(tag)
             else:
-                all_tags = tags
+                all_tags = set(tags)
             for post in posts:
                 for post_tag in post.tags.all():
                     if post_tag.content not in all_tags:
                         posts = posts.exclude(id = post.id)
-        
-        # Location
-        if 'latitude' in query_parameters and 'longitude' in query_parameters and 'distance' in query_parameters:
-            latitude = query_parameters['latitude'][0].replace(',', '.')
-            longitude = query_parameters['longitude'][0].replace(',', '.')
-            distance = query_parameters['distance'][0].replace(',', '.')
-            posts_location = getQuerySetOfNearby(latitude, longitude, distance).distinct()
-            posts = (posts & posts_location)
             
         # Username
         if 'user' in query_parameters:
@@ -471,6 +464,13 @@ class GetPostsDiscoverFilter(GenericAPIView):
                     if minute[0] > endMinute and minute[1] < startMinute:
                         posts = posts.exclude(id = post.id)
                         
+        # Location
+        if 'latitude' in query_parameters and 'longitude' in query_parameters and 'distance' in query_parameters:
+            latitude = query_parameters['latitude'][0].replace(',', '.')
+            longitude = query_parameters['longitude'][0].replace(',', '.')
+            distance = query_parameters['distance'][0].replace(',', '.')
+            posts = getQuerySetOfNearby(posts, latitude, longitude, distance)
+                        
         posts_set = set()
         for post in posts:
             owner_of_post = User.objects.get(id=post.owner)
@@ -489,7 +489,7 @@ class GetRelatedTags(GenericAPIView):
     def get(self, request, query, format=None):
         if request.auth:
             try:
-                tag_list = getRelatedTags(query)
+                tag_list = list(getRelatedTags(query))
                 return Response(tag_list, status = 200)
             except:
                 return Response(status = 503)
@@ -509,16 +509,18 @@ def getRelatedTags(query):
     tag_list = set()
     tag_list.add(query.lower())
     for info in data['search']:
-        words = re.split('; |, |\*|\n|;|\. | |-|\'', info['description'].lower())
+        try:
+            words = re.split('; |, |\*|\n|;|\. | |-|\'', info['description'].lower())
+        except KeyError:
+            words = re.split('; |, |\*|\n|;|\. | |-|\'', info['label'].lower())
         words = [re.sub('[' + string.punctuation + ']', '', s) for s in words]
         for value in words:
-            tag_list.add(value)
-    return list(tag_list)   
+            tag_list.add(value.lower())
+    return tag_list
 
-def getQuerySetOfNearby(latitude, longitude, distance):
+def getQuerySetOfNearby(posts, latitude, longitude, distance):
     requestedDistance = float(distance)
     pinPoint = [float(latitude),float(longitude)]
-    posts = Post.objects.all()
     for story in posts:
         story_instance = get_story(story)
         locations = story_instance['locations']
@@ -529,12 +531,12 @@ def getQuerySetOfNearby(latitude, longitude, distance):
                 toBeReturned = True
                 break
         if(not toBeReturned):
-            posts.exclude(id = story_instance.id)
+            posts = posts.exclude(id = story_instance['id'])
     return posts
 
 def getDistanceBetween(loc1,loc2):
-    lat1 = loc1[0]
-    lon1 = loc1[1]
+    lat1 = loc1[1]
+    lon1 = loc1[2]
     lat2 = loc2[0]
     lon2 = loc2[1]
     return distance.distance((lat1,lon1),(lat2,lon2)).km
