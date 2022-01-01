@@ -112,19 +112,6 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
-            android:id="@+id/followingWarning"
-            android:layout_width="90dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="25dp"
-            android:background="@color/colorPrimary"
-            android:visibility="invisible"
-            android:text="@string/you_re_following_this_user"
-            android:textAllCaps="false"
-            app:layout_constraintStart_toEndOf="@id/numPostsHint"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <TextView
             android:id="@+id/followedByHint"
             android:layout_width="70dp"
             android:layout_height="35dp"
