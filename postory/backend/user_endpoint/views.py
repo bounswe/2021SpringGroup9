@@ -141,15 +141,16 @@ class FollowRequests(GenericAPIView):
         user = User.objects.filter(id = user_id).first()
 
         pendingRequests = FollowRequest.objects.filter(toUser=user)
-        #print(pendingRequests)
 
         requests = []
         try:
             for follow_request in pendingRequests.all():
                 serializer = get_user(follow_request.fromUser)
                 requests.append(serializer)
+            activityStream.createActivity(user.id,"requested pending requests",user.id,resolve(request.path_info).route,"UserPendingRequest",True)
             return Response(requests, status=status.HTTP_200_OK)
         except:
+            activityStream.createActivity(user.id,"requested pending requests",user.id,resolve(request.path_info).route,"UserPendingRequest",False)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
     
@@ -180,9 +181,12 @@ class AcceptFollowRequest(GenericAPIView):
                 user2.save()
 
                 FollowRequest.objects.filter(fromUser=user2).delete()
+                activityStream.createActivity(user1.id,"accepted request from",user2.id,resolve(request.path_info).route,"UserAcceptRequest",True)
                 return Response({"message": f"{user1.id} successfuly accepted the request from {user2.id}"}, status=status.HTTP_200_OK)
             except:
+                activityStream.createActivity(user1.id,"accepted request from",user2.id,resolve(request.path_info).route,"UserAcceptRequest",False)
                 return Response({"message": "request accept failed"}, status=status.HTTP_400_BAD_REQUEST)
+        activityStream.createActivity(user1.id,"accepted request from",user2.id,resolve(request.path_info).route,"UserAcceptRequest",False)
         return Response({"message": f"no follow request from {user2.id}"}, status=status.HTTP_400_BAD_REQUEST)
 
 class DeclineFollowRequest(GenericAPIView):
@@ -207,8 +211,10 @@ class DeclineFollowRequest(GenericAPIView):
             print(pendingRequest)
             try:
                 FollowRequest.objects.filter(fromUser=user2).delete()
+                activityStream.createActivity(user1.id,"declined request from",user2.id,resolve(request.path_info).route,"UserDeclineRequest",True)
                 return Response({"message": f"{user1.id} successfuly declined the request from {user2.id}"}, status=status.HTTP_200_OK)
             except:
+                activityStream.createActivity(user1.id,"declined request from",user2.id,resolve(request.path_info).route,"UserDeclineRequest",False)
                 return Response({"message": "request decline failed"}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"message": f"no follow request from {user2.id}"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -277,10 +283,16 @@ class Report(GenericAPIView):
                     [x.email for x in User.objects.filter(is_superuser__in = [True]).all()], # send to all superusers
                     fail_silently=False,
                 )
+                if type==0: activityStream.createActivity(user.id,"reported ",pk ,resolve(request.path_info).route,"UserReport",True)
+                else: activityStream.createActivity(user.id,"reported ",pk ,resolve(request.path_info).route,"StoryReport",True)
                 return Response({"message": "successfuly reported", 'data': serializer.data}, status=status.HTTP_200_OK)
             else:
+                if type==0: activityStream.createActivity(user.id,"reported ",pk ,resolve(request.path_info).route,"UserReport",False)
+                else: activityStream.createActivity(user.id,"reported ",pk ,resolve(request.path_info).route,"StoryReport",False)
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except:
+            if type==0: activityStream.createActivity(user.id,"reported ",pk ,resolve(request.path_info).route,"UserReport",False)
+            else: activityStream.createActivity(user.id,"reported ",pk ,resolve(request.path_info).route,"StoryReport",False)
             return Response({"message": "report failed"}, status=status.HTTP_400_BAD_REQUEST)
 
 
