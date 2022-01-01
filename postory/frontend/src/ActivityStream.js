@@ -6,8 +6,6 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 
-const IP = window.location.hostname
-
 class Activity extends React.Component {
     constructor(props) {
         super(props);
@@ -15,12 +13,22 @@ class Activity extends React.Component {
             type: props.type,
             actor: props.actor,
             object: props.object,
-            accepted: false
+            status: 'neither'  // neither, accepted, rejected
         }
         this.getUser1 = this.getUser1.bind(this)
         this.getUser2 = this.getUser2.bind(this)
         this.getPost = this.getPost.bind(this)
         this.getAccept = this.getAccept.bind(this)
+    }
+
+    componentDidMount() {
+        if (this.state.type === "UserFollow") {
+            requests.get_jwt(`/api/user/get/${this.object.id}`)
+                .then(res => res.json())
+                .then(data => {
+                    this.setState(state => ({...state, object: {...state.object, username: data.username}}))
+                })
+        }
     }
 
     getUser1() {
@@ -36,14 +44,27 @@ class Activity extends React.Component {
     }
 
     getAccept() {
-        if (this.state.accepted) {
-            return <span> Accepted </span>
+        if (this.state.status === "accepted") {
+            return <span> Accepted. </span>
+        } else if (this.state.status === "rejected") {
+          return <span> Rejected.</span>
         } else {
-            return <span className="astream-link" onClick={() => {
-                // TODO
-            }}>
-                Click here to accept
-            </span>
+            return <>
+                <button onClick={() => {
+                    requests.get_jwt(`/api/user/acceptRequest/${this.state.actor.id}`)
+                        .then(() => this.setState(state => ({...state, status: 'accepted'})))
+                }}>
+                    Accept
+                </button>
+                &nbsp;
+                <button onClick={() => {
+                    requests.get_jwt(`/api/user/declineRequest/${this.state.actor.id}`)
+                        .then(() => this.setState(state => ({...state, status: 'rejected'})))
+                }}>
+                    Reject
+                </button>
+            </>
+
         }
     }
 
@@ -51,7 +72,8 @@ class Activity extends React.Component {
         if (this.state.type === "FollowRequest") {
             return <div>
                 <img className="circle" width="50px" height="50px" style={{float: 'left'}} src={this.state.actor.userPhoto || "./static/media/postory_logo_no_text.ec3bad21.png"}/>
-                {this.getUser1()} wants to follow you.
+                {this.getUser1()}
+                {this.getAccept()}
             </div>
         } else if (this.state.type === "PostLike") {
             return <div>
@@ -81,7 +103,7 @@ class Activity extends React.Component {
         } else if (this.state.type === "UserAddPhoto") {
             return <div>
                 <img className="circle" width="50px" height="50px" style={{float: 'left'}} src={this.state.actor.userPhoto || "./static/media/postory_logo_no_text.ec3bad21.png"}/>
-                {this.getUser1()} has added a photo
+                {this.getUser1()} has added a photo.
             </div>
         }
     }
@@ -109,7 +131,11 @@ class ActivityStream extends React.Component {
             .then(data => {
                 this.setState(state => ({...state, followed_activities: data}))
             })
-        // TODO
+        requests.get_jwt('/api/user/getRequests', {})
+            .then(res => res.json())
+            .then(data => {
+                this.setState(state => ({...state, follow_requests: data}))
+            })
     }
 
     render() {
@@ -138,7 +164,12 @@ class ActivityStream extends React.Component {
                 </Tab>
                 <Tab eventKey="Follow Requests" title="Follow Requests">
                     <div id="astream">
-                        {/* TODO */}
+                        {this.state.follow_requests.map((user, index) => (
+                            <React.Fragment key={index}>
+                                <Activity actor={user} type="FollowRequest" />
+                                <br />
+                            </React.Fragment>
+                        ))}
                     </div>
                 </Tab>
             </Tabs>
