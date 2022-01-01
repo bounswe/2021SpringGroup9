@@ -78,11 +78,13 @@ class ChangePrivate(GenericAPIView):
 class SearchUser(GenericAPIView):
 
     def post(self, request, term, format=None):
+        userid = request.auth['user_id']
         users = User.objects.filter(username__contains=term)
         values = []
         for user in users:
-            data = dict(UserSerializer(user).data)
+            data = get_user(user)
             values.append(data)
+        activityStream.createActivity(userid,"searched users","search",resolve(request.path_info).route,"SearchUser",True)
         return Response(values, status=200)
         
     
@@ -318,7 +320,15 @@ class Report(GenericAPIView):
             if type==0: activityStream.createActivity(user.id,"reported ",pk ,resolve(request.path_info).route,"UserReport",False)
             else: activityStream.createActivity(user.id,"reported ",pk ,resolve(request.path_info).route,"StoryReport",False)
             return Response({"message": "report failed"}, status=status.HTTP_400_BAD_REQUEST)
-
+        
+class BanControl(GenericAPIView):
+    
+    def get(self, request, format=None):
+        userid = request.auth['user_id']
+        user = User.objects.get(id = userid)
+        activityStream.createActivity(user.id,"'s ban controlled","ban",resolve(request.path_info).route,"BanControl",False)
+        return Response({"isBanned": user.isBanned}, status=200)
+        
 
 def get_user(user):
     serializer = dict(UserSerializer(user).data)
