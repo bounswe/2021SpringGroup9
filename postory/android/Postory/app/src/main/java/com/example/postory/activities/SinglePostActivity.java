@@ -162,7 +162,7 @@ public class SinglePostActivity extends ToolbarActivity{
         postText = (TextView) findViewById(R.id.post_story_text_field);
         continueReading = (Button) findViewById(R.id.post_continue_reading);
         commentsList = (ListView) findViewById(R.id.comments_section);
-        report = (ImageView) findViewById(R.id.report)
+        report = (ImageView) findViewById(R.id.report);
 
 
         likeLayout.setOnClickListener(new View.OnClickListener() {
