@@ -63,7 +63,10 @@ def get_activity(activity):
     if(activity.type.startswith("Post")):
         story = Post.objects.filter(id = activity.object).first()
         object = get_story(story)
-    elif(activity.type.startswith("User")):
+    elif(activity.type == "UserAddPhoto"):
+        image = Image.objects.filter(id = activity.object).first()
+        object = image.file.url
+    elif(activity.type == "UserFollow"):
         affectedUser = User.objects.filter(id = activity.object).first()
         object = get_user(affectedUser)
     serializer['actor'] = get_user(user)
