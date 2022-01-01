@@ -28,6 +28,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     isAdmin = models.BooleanField(default=False)   
     isPrivate = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
     userPhoto = models.ManyToManyField(Image, blank=True)
 
     USERNAME_FIELD = 'email'

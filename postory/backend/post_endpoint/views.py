@@ -20,11 +20,16 @@ from user_endpoint.models import User
 from django.utils import timezone
 import pytz
 
+from django.db.models import QuerySet
 import requests
 import json
 import datetime
 import environ
 import jwt
+import string
+import re
+from geopy import distance
+
 import activityStream.views as activityStream
 from django.urls import reverse
 
@@ -388,7 +393,177 @@ class LikeRequest(GenericAPIView):
         except:
             activityStream.createActivity(userid,"liked post",story.id,resolve(request.path_info).route,"PostLike",False)
             return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+class GetPostsDiscoverFilter(GenericAPIView):
     
+    def get(self,request,format=None):
+        # users = User.objects.filter(username__contains=term)
+        user_id = request.auth['user_id']
+        user = User.objects.filter(id = user_id).first()
+        followedUsers = user.followedUsers.all()
+        followedUsers = [followedUser.id for followedUser in followedUsers]
+        query_parameters = dict(request.query_params)
+        
+        posts = Post.objects.all().distinct()
+        # Keyword
+        if 'keyword' in query_parameters:
+            keywords = query_parameters['keyword'][0].split()
+            for index, keyword in enumerate(keywords):
+                if index == 0:
+                    posts_story = posts.filter(story__icontains=keyword)
+                else:
+                    posts_story = (posts_story | posts.filter(story__icontains=keyword)).distinct()
+            for index, keyword in enumerate(keywords):
+                if index == 0:
+                    posts_title = posts.filter(story__icontains=keyword)
+                else:
+                    posts_title = (posts_title | posts.filter(story__icontains=keyword)).distinct()
+            post_story_title = (posts_story | posts_title).distinct()
+            posts = (posts & post_story_title)
+            
+        # Tag
+        if 'related' in query_parameters:
+            related = query_parameters['related'][0]
+        else:
+            related = 'true'
+        if 'tag' in query_parameters:
+            tags = query_parameters['tag']
+            all_tags = set()
+            if related.lower() == 'true':
+                for tag in tags:
+                    all_tags = all_tags | getRelatedTags(tag)
+                    all_tags.add(tag)
+            else:
+                all_tags = set(tags)
+            for post in posts:
+                for post_tag in post.tags.all():
+                    if post_tag.content not in all_tags:
+                        posts = posts.exclude(id = post.id)
+            
+        # Username
+        if 'user' in query_parameters:
+            usernames = query_parameters['user'][0].split()
+            for post in posts:
+                user = User.objects.get(id=post.owner)
+                if user.username not in usernames:
+                    posts = posts.exclude(id = post.id)
+            
+        # Time
+        startYear, endYear, startMonth, endMonth, startDay, endDay, startHour, endHour, startMinute, endMinute = None, None, None, None, None, None, None, None, None, None
+        if 'startYear' in query_parameters and 'endYear' in query_parameters:    
+            startYear = int(query_parameters['startYear'][0])
+            endYear = int(query_parameters['endYear'][0])
+            if 'startMonth' in query_parameters and 'endMonth' in query_parameters:
+                startMonth = int(query_parameters['startMonth'][0])
+                endMonth = int(query_parameters['endMonth'][0])
+                if 'startDay' in query_parameters and 'endDay' in query_parameters:
+                    startDay = int(query_parameters['startDay'][0])
+                    endDay = int(query_parameters['endDay'][0])
+                    if 'startHour' in query_parameters and 'endHour' in query_parameters:
+                        startHour = int(query_parameters['startHour'][0])
+                        endHour = int(query_parameters['endHour'][0])
+                        if 'startMinute' in query_parameters and 'endMinute' in query_parameters:
+                            startMinute = int(query_parameters['startMinute'][0])
+                            endMinute = int(query_parameters['endMinute'][0])
+            for post in posts:
+                year = [int(x) for x in post.year.split(',')] if post.year != '' else []
+                month = [int(x) for x in post.month.split(',')] if post.month != '' else []
+                day = [int(x) for x in post.day.split(',')] if post.day != '' else []
+                hour = [int(x) for x in post.hour.split(',')] if post.hour != '' else []
+                minute = [int(x) for x in post.minute.split(',')] if post.minute != '' else []
+                if year and startYear and endYear:
+                    if year[0] > endYear or year[1] < startYear: 
+                        posts = posts.exclude(id = post.id)
+                if month and startMonth and endMonth:
+                    if month[0] > endMonth and month[1] < startMonth:
+                        posts = posts.exclude(id = post.id)
+                if day and startDay and endDay:
+                    if day[0] > endDay and day[1] < startDay:
+                        posts = posts.exclude(id = post.id)
+                if hour and startHour and endHour:
+                    if hour[0] > endHour and hour[1] < startHour:
+                        posts = posts.exclude(id = post.id)
+                if minute and startMinute and endMinute:
+                    if minute[0] > endMinute and minute[1] < startMinute:
+                        posts = posts.exclude(id = post.id)
+                        
+        # Location
+        if 'latitude' in query_parameters and 'longitude' in query_parameters and 'distance' in query_parameters:
+            latitude = query_parameters['latitude'][0].replace(',', '.')
+            longitude = query_parameters['longitude'][0].replace(',', '.')
+            distance = query_parameters['distance'][0].replace(',', '.')
+            posts = getQuerySetOfNearby(posts, latitude, longitude, distance)
+                        
+        posts_set = set()
+        for post in posts:
+            owner_of_post = User.objects.get(id=post.owner)
+            if owner_of_post.isPrivate == False:
+                posts_set.add(post)
+            elif owner_of_post.id == user_id:
+                posts_set.add(post)
+            elif owner_of_post.isPrivate == True and owner_of_post.id in followedUsers:
+                posts_set.add(post) 
+        serializer = {}
+        for story in posts_set:
+            serializer[story.id] = get_story(story)
+        return Response(serializer.values(), status=200)
+
+class GetRelatedTags(GenericAPIView):
+    def get(self, request, query, format=None):
+        if request.auth:
+            try:
+                tag_list = list(getRelatedTags(query))
+                return Response(tag_list, status = 200)
+            except:
+                return Response(status = 503)
+        else:
+            return Response(status = 401)
+                
+def getRelatedTags(query):
+    url = "https://www.wikidata.org/w/api.php"
+    params = {
+        "action" : "wbsearchentities",
+        "language" : "en",
+        "format" : "json",
+        "type": "item",
+        "search" : query 
+        }
+    data = requests.get(url,params=params).json()
+    tag_list = set()
+    tag_list.add(query.lower())
+    for info in data['search']:
+        try:
+            words = re.split('; |, |\*|\n|;|\. | |-|\'', info['description'].lower())
+        except KeyError:
+            words = re.split('; |, |\*|\n|;|\. | |-|\'', info['label'].lower())
+        words = [re.sub('[' + string.punctuation + ']', '', s) for s in words]
+        for value in words:
+            tag_list.add(value.lower())
+    return tag_list
+
+def getQuerySetOfNearby(posts, latitude, longitude, distance):
+    requestedDistance = float(distance)
+    pinPoint = [float(latitude),float(longitude)]
+    for story in posts:
+        story_instance = get_story(story)
+        locations = story_instance['locations']
+        toBeReturned = False
+        for location in locations:
+            distanceBetween = getDistanceBetween(location,pinPoint)
+            if(distanceBetween < requestedDistance):
+                toBeReturned = True
+                break
+        if(not toBeReturned):
+            posts = posts.exclude(id = story_instance['id'])
+    return posts
+
+def getDistanceBetween(loc1,loc2):
+    lat1 = loc1[1]
+    lon1 = loc1[2]
+    lat2 = loc2[0]
+    lon2 = loc2[1]
+    return distance.distance((lat1,lon1),(lat2,lon2)).km
+
 def get_story(story):
     username = story.username
     user = User.objects.filter(username = username).first()
