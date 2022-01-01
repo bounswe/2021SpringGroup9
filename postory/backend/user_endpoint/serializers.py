@@ -29,7 +29,7 @@ class FollowRequestSerializer(serializers.ModelSerializer):
 class ReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = R
-        fields = ['id', 'fromUser', 'toUser', 'type']
+        fields = ['id', 'fromUser', 'toUserorPost', 'type']
         read_only_fields = []
 
 
