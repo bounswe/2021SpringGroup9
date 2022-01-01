@@ -13,10 +13,16 @@ from rest_framework.generics import GenericAPIView
 from .serializers import UserSerializer, FollowRequestSerializer, ReportSerializer
 from post_endpoint.models import Post, Image
 from post_endpoint.serializers import PostSerializer
+
+import activityStream.views as activityStream
+
 from django.core.mail import send_mail
+
 
 from .models import User, FollowRequest
 import jwt
+from django.urls.base import resolve
+from django.urls import reverse
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -39,8 +45,10 @@ class AddPhoto(GenericAPIView):
         user.userPhoto.set([imageObject])
         try:
             user.save()
+            activityStream.createActivity(userid,"added photo",imageObject.id,resolve(request.path_info).route,"UserAddPhoto",True)
             return Response(status=status.HTTP_200_OK)
         except:
+            activityStream.createActivity(userid,"added photo","None",resolve(request.path_info).route,"UserAddPhoto",False)
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
 class SearchUser(GenericAPIView):
@@ -74,6 +82,7 @@ class UserFollowing(GenericAPIView):
         user2 = self.get_object(pk=pk)
 
         if user1.id==user2.id: # if the user wants to follow itself
+            activityStream.createActivity(user1.id,"followed",user2.id,resolve(request.path_info).route,"UserFollow",False) 
             return Response({"message": "can't follow yourself"}, status=status.HTTP_400_BAD_REQUEST)
         
         elif user2 in user1.followedUsers.all(): # if user1 already followed user2, unfollow
@@ -83,8 +92,10 @@ class UserFollowing(GenericAPIView):
 
                 user1.save()
                 user2.save()
+                activityStream.createActivity(user1.id,"followed",user2.id,resolve(request.path_info).route,"UserFollow",True) 
                 return Response({'message': f"{user1.id} successfuly unfollowed {user2.id}"}, status=status.HTTP_200_OK)
             except:
+                activityStream.createActivity(user1.id,"followed",user2.id,resolve(request.path_info).route,"UserFollow",False) 
                 return Response({"message": "unfollow failed"}, status=status.HTTP_400_BAD_REQUEST)
 
         elif user2.isPrivate: # if private send request
@@ -93,15 +104,19 @@ class UserFollowing(GenericAPIView):
                 data['toUser'] = user2.id
 
                 if FollowRequest.objects.filter(fromUser=user1, toUser=user2).exists():
+                    activityStream.createActivity(user1.id,"followed",user2.id,resolve(request.path_info).route,"UserFollow",False) 
                     return Response({"message": "request already sent"}, status=status.HTTP_400_BAD_REQUEST)
                 
                 serializer = FollowRequestSerializer(data=data)
                 if serializer.is_valid():
                     serializer.save()
+                    activityStream.createActivity(user1.id,"followed",user2.id,resolve(request.path_info).route,"UserFollow",True) 
                     return Response({"message": "successfuly sent request to private profile", 'data': serializer.data}, status=status.HTTP_200_OK)
                 else:
+                    activityStream.createActivity(user1.id,"followed",user2.id,resolve(request.path_info).route,"UserFollow",False) 
                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             except:
+                activityStream.createActivity(user1.id,"followed",user2.id,resolve(request.path_info).route,"UserFollow",False) 
                 return Response({"message": "private profile follow failed"}, status=status.HTTP_400_BAD_REQUEST)
         
         else: #follow
@@ -111,8 +126,10 @@ class UserFollowing(GenericAPIView):
 
                 user1.save()
                 user2.save()
+                activityStream.createActivity(user1.id,"followed",user2.id,resolve(request.path_info).route,"UserFollow",True) 
                 return Response({"message": f"{user1.id} successfuly followed {user2.id}"}, status=status.HTTP_200_OK)
             except:
+                activityStream.createActivity(user1.id,"followed",user2.id,resolve(request.path_info).route,"UserFollow",False) 
                 return Response({"message": "follow failed"}, status=status.HTTP_400_BAD_REQUEST)
 
 class FollowRequests(GenericAPIView):
@@ -130,11 +147,11 @@ class FollowRequests(GenericAPIView):
         try:
             for follow_request in pendingRequests.all():
                 serializer = get_user(follow_request.fromUser)
-
                 requests.append(serializer)
-            
+            activityStream.createActivity(user1.id,"followed",user2.id,resolve(request.path_info).route,"UserFollow",True)
             return Response(requests, status=status.HTTP_200_OK)
         except:
+            activityStream.createActivity(user1.id,"followed",user2.id,resolve(request.path_info).route,"UserFollow",False)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
     
@@ -214,8 +231,10 @@ class UserGet(GenericAPIView):
         if(not requested_user.isPrivate or requested_user in requester_user.followedUsers.all() or user_id==pk):
             serializer = dict(UserSerializer(requested_user).data)
             serializer = get_user(requested_user)
+            activityStream.createActivity(requester_user.id,"requested user",requested_user.id,resolve(request.path_info).route,"UserRequest",True)
             return Response(serializer)
         else:
+            activityStream.createActivity(requester_user.id,"requested user",requested_user.id,resolve(request.path_info).route,"UserRequest",False)
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 class Report(GenericAPIView):
