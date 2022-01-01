@@ -10,7 +10,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 
-from .serializers import UserSerializer, FollowRequestSerializer
+from .serializers import UserSerializer, FollowRequestSerializer, ReportSerializer
 from post_endpoint.models import Post, Image
 from post_endpoint.serializers import PostSerializer
 from django.core.mail import send_mail
@@ -217,6 +217,54 @@ class UserGet(GenericAPIView):
             return Response(serializer)
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+class Report(GenericAPIView):
+    def get_object(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404
+    
+    def post(self, request, type, pk, format=None):
+        authorization = request.headers['Authorization']
+        token = authorization.split()[1]
+        decoded = jwt.decode(token,options={"verify_signature": False})
+        user_id = decoded['user_id']
+
+        user = self.get_object(user_id)
+        
+        data = dict([])
+
+        if type == 0:
+            subject = "User Reported"
+            content = f"User with id {user_id} reported user with id {pk}."
+        elif type == 1:
+            subject = "Story Reported"
+            content = f"User with id {user_id} reported story with id {pk}."
+        else:
+            return Response({"message": "invalid report type {type}"}, status=status.HTTP_400_BAD_REQUEST)
+    
+        try:
+            data['fromUser'] = user_id
+            data['toUserorPost'] = pk
+            data['type'] = type
+            
+            serializer = ReportSerializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+                send_mail(
+                    subject,
+                    content,
+                    'from@example.com',
+                    ['zcanfes@gmail.com'],
+                    fail_silently=False,
+                )
+                return Response({"message": "successfuly reported", 'data': serializer.data}, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response({"message": "report failed"}, status=status.HTTP_400_BAD_REQUEST)
+
 
 def get_user(user):
     serializer = dict(UserSerializer(user).data)
