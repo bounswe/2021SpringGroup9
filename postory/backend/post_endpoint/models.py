@@ -7,7 +7,7 @@ class Image(models.Model):
     file = models.FileField(storage=ImageStorage())
     
     def __str__(self):
-        return self.file.url
+        return str(self.id) + " - " + self.file.url
 
 class Location(models.Model):
     name = models.CharField(max_length=200)
@@ -15,19 +15,19 @@ class Location(models.Model):
     coordsLongitude = models.FloatField()
     
     def __str__(self):
-        return self.name
+        return str(self.id) + " - " + self.name
 
 class Comment(models.Model):
     userid = models.IntegerField()
     comment = models.TextField()
     
     def __str__(self):
-        return self.comment
+        return str(self.id) + " - " + self.comment
 
 class Tag(models.Model):
     content = models.CharField(max_length=50)
     def __str__(self):
-        return self.content
+        return str(self.id) + " - " + self.content
 
 class Post(models.Model):
     title = models.CharField(max_length=200)
@@ -49,4 +49,4 @@ class Post(models.Model):
     minute = models.CharField(default="",max_length=20)
     
     def __str__(self):
-        return self.title
+        return str(self.id) + " - " + self.title

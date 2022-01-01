@@ -41,7 +41,7 @@ class FollowRequest(models.Model):
     toUser = models.ForeignKey(User, on_delete=models.CASCADE, related_name="requestTo", blank=True)
     
     def __str__(self):
-        return "From " + self.fromUser + " to " + self.toUser
+        return str(self.id) + " - " + "From " + self.fromUser + " to " + self.toUser
 
 class Report(models.Model):
     fromUser = models.ForeignKey(User, on_delete=models.CASCADE, related_name="fromUser", blank=True)
@@ -49,4 +49,4 @@ class Report(models.Model):
     type = models.IntegerField(default=0)  # 0: user report, 1: post report
     
     def __str__(self):
-        return self.type + " - From " + self.fromUser + " to " + self.toUserorPost
+        return str(self.id) + " - " + self.type + " - From " + self.fromUser + " to " + self.toUserorPost
