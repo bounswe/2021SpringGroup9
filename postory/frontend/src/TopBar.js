@@ -16,10 +16,11 @@ import { Link } from "react-router-dom";
 const topBarColor = 'rgb(235, 235, 235)'
 
 const topBarStyle = {
-    position: 'fixed',
+    position: 'absolute',
     width: '100%',
     height: '50px',
-    backgroundColor: topBarColor
+    backgroundColor: topBarColor,
+    zindex: -1
 }
 
 const itemStyleLeft = {
