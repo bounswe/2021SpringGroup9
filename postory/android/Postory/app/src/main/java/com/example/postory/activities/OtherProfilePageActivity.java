@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,9 @@ import com.example.postory.R;
 import com.example.postory.adapters.PostAdapter;
 import com.example.postory.models.Post;
 import com.example.postory.models.UserModel;
+import com.github.johnpersano.supertoasts.library.Style;
+import com.github.johnpersano.supertoasts.library.SuperActivityToast;
+import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
@@ -52,6 +56,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
     private TextView following;
     private TextView numPosts;
     private ImageView profilePicture;
+    private ImageView report;
     private SharedPreferences sharedPreferences;
     private String userId;
     String accessToken;
@@ -68,7 +73,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
 
     @Override
     protected void logoutClicked() {
-        sharedPreferences = getSharedPreferences("MY_APP",MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("MY_APP", MODE_PRIVATE);
         sharedPreferences.edit().remove("valid_until").apply();
         sharedPreferences.edit().remove("user_id").apply();
         sharedPreferences.edit().remove("access_token").apply();
@@ -78,6 +83,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
     }
+
     @Override
     protected void goHomeClicked() {
         Intent intent = new Intent(OtherProfilePageActivity.this, MainActivity.class);
@@ -117,6 +123,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         following = (TextView) findViewById(R.id.following);
         numPosts = (TextView) findViewById(R.id.numPosts);
         profilePicture = (ImageView) findViewById(R.id.profilePicture);
+        report = (ImageView) findViewById(R.id.report);
 
         sharedPreferences = getSharedPreferences("MY_APP", MODE_PRIVATE);
         accessToken = sharedPreferences.getString("access_token", "");
@@ -138,15 +145,14 @@ public class OtherProfilePageActivity extends ToolbarActivity {
                 Gson gson = new Gson();
                 String respString = response.body().string();
                 thisUser = gson.fromJson(respString, UserModel.class);
-                runOnUiThread(new Runnable(){
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         setUserFields();
                         if (thisUser.getFollowerUsers().contains(viewerId)) {
                             followed = true;
                             followButton.setText("Unfollow");
-                        }
-                        else {
+                        } else {
                             followed = false;
                             followButton.setText("Follow");
                         }
@@ -163,6 +169,41 @@ public class OtherProfilePageActivity extends ToolbarActivity {
                 followButtonClicked();
             }
         });
+        report.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = BuildConfig.API_IP + "/user/report/" + userId + "/0";
+                MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
+                MultipartBody.Builder builder = bodyBuilder.setType(MultipartBody.FORM);
+                RequestBody body = RequestBody.create(null, new byte[]{});
+
+                Request reportRequest = new Request.Builder()
+                        .url(url)
+                        .post(body)
+                        .addHeader("Authorization", "JWT " + accessToken)
+                        .build();
+
+                client.newCall(reportRequest).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        Log.i(TAG, "onFailure: ");
+                    }
+
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            SuperActivityToast.create(OtherProfilePageActivity.this, new Style(), Style.TYPE_BUTTON)
+                                    .setProgressBarColor(Color.WHITE)
+                                    .setText("The user is reported.")
+                                    .setDuration(Style.DURATION_LONG)
+                                    .setFrame(Style.FRAME_LOLLIPOP)
+                                    .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_BLUE))
+                                    .setAnimations(Style.ANIMATIONS_POP).show();
+                        }
+                    }
+                });
+            }
+        });
     }
 
     private void callForPosts() {
@@ -177,12 +218,11 @@ public class OtherProfilePageActivity extends ToolbarActivity {
     }
 
 
-    private void changeFollowStatus(){
+    private void changeFollowStatus() {
         followed = !followed;
-        if(followed){
+        if (followed) {
             followButton.setText("Unfollow");
-        }
-        else{
+        } else {
             followButton.setText("Follow");
         }
     }
@@ -192,20 +232,20 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         name.setText(thisUser.getName());
         surname.setText(thisUser.getSurname());
         username.setText(thisUser.getUsername());
-        followedBy.setText(""+thisUser.getFollowerUsers().size());
-        following.setText(""+thisUser.getFollowedUsers().size());
-        numPosts.setText(""+thisUser.getPosts().size());
+        followedBy.setText("" + thisUser.getFollowerUsers().size());
+        following.setText("" + thisUser.getFollowedUsers().size());
+        numPosts.setText("" + thisUser.getPosts().size());
         Glide
                 .with(OtherProfilePageActivity.this)
                 .load(thisUser.getUserPhoto())
                 .placeholder(R.drawable.placeholder)
-                .apply(new RequestOptions().override(400,400))
+                .apply(new RequestOptions().override(400, 400))
                 .centerCrop()
                 .into(profilePicture);
     }
 
     private void followButtonClicked() {
-        String url = BuildConfig.API_IP + "/user/follow/" + userId ;
+        String url = BuildConfig.API_IP + "/user/follow/" + userId;
         MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
         MultipartBody.Builder builder = bodyBuilder.setType(MultipartBody.FORM);
         RequestBody body = RequestBody.create(null, new byte[]{});
