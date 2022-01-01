@@ -36,5 +36,5 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserAccountManager()
 
 class FollowRequest(models.Model):
-    fromUser = models.ForeignKey(User, on_delete=models.CASCADE, related_name="fromUser", blank=True)
-    toUser = models.ForeignKey(User, on_delete=models.CASCADE, related_name="toUser", blank=True)
+    fromUser = models.ForeignKey(User, on_delete=models.CASCADE, related_name="requestFrom", blank=True)
+    toUser = models.ForeignKey(User, on_delete=models.CASCADE, related_name="requestTo", blank=True)
