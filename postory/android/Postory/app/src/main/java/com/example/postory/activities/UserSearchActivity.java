@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.postory.BuildConfig;
 import com.example.postory.R;
@@ -38,6 +40,7 @@ public class UserSearchActivity extends ToolbarActivity {
 
     private OkHttpClient client;
     private ListView userList;
+    private TextView noResultWarning;
 
     @Override
     protected void goProfileClicked() {
@@ -57,6 +60,7 @@ public class UserSearchActivity extends ToolbarActivity {
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
     }
+
     @Override
     protected void goHomeClicked() {
         return;
@@ -86,16 +90,19 @@ public class UserSearchActivity extends ToolbarActivity {
         setContentView(R.layout.activity_user_search);
         super.initToolbar();
         userList = (ListView) findViewById(R.id.userList);
-        apiString = BuildConfig.API_IP+"/user/search/";
+        noResultWarning = (TextView) findViewById(R.id.noResultWarning);
+
+        apiString = BuildConfig.API_IP + "/user/search/";
 
         SharedPreferences sharedPreferences = getSharedPreferences("MY_APP", MODE_PRIVATE);
-        accessToken = sharedPreferences.getString("access_token","");
+        accessToken = sharedPreferences.getString("access_token", "");
         client = new OkHttpClient();
         Intent intent = getIntent();
         String usernameString = intent.getStringExtra("query");
         listUsers(usernameString);
     }
-    private void listUsers(String usernameString){
+
+    private void listUsers(String usernameString) {
         String url = apiString + usernameString;
         MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
         MultipartBody.Builder builder = bodyBuilder.setType(MultipartBody.FORM);
@@ -121,6 +128,9 @@ public class UserSearchActivity extends ToolbarActivity {
                 Log.i(TAG, "onResponse: ");
                 ArrayList<UserModel> userArray = new ArrayList<>();
                 Collections.addAll(userArray, users);
+                if (userArray.size() != 0) {
+                    noResultWarning.setVisibility(View.GONE);
+                }
                 UserAdapter adapter = new UserAdapter(UserSearchActivity.this, userArray);
                 runOnUiThread(new Runnable() {
                     @Override

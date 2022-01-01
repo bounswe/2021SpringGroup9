@@ -136,7 +136,8 @@ public class OtherProfilePageActivity extends ToolbarActivity {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 Gson gson = new Gson();
-                thisUser = gson.fromJson(response.body().string(), UserModel.class);
+                String respString = response.body().string();
+                thisUser = gson.fromJson(respString, UserModel.class);
                 runOnUiThread(new Runnable(){
                     @Override
                     public void run() {
