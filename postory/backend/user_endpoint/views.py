@@ -13,6 +13,7 @@ from rest_framework.generics import GenericAPIView
 from .serializers import UserSerializer, FollowRequestSerializer
 from post_endpoint.models import Post, Image
 from post_endpoint.serializers import PostSerializer
+from django.core.mail import send_mail
 
 from .models import User, FollowRequest
 import jwt
@@ -52,9 +53,6 @@ class SearchUser(GenericAPIView):
             values.append(data)
         return Response(values, status=200)
         
-def get_user(user):
-    # Blog.objects.filter(pk__in=[1, 4, 7])
-    pass
     
 class UserFollowing(GenericAPIView):
 
@@ -100,7 +98,7 @@ class UserFollowing(GenericAPIView):
                 serializer = FollowRequestSerializer(data=data)
                 if serializer.is_valid():
                     serializer.save()
-                    return Response({"message": "succesfuly sent request to private profile", 'data': serializer.data}, status=status.HTTP_200_OK)
+                    return Response({"message": "successfuly sent request to private profile", 'data': serializer.data}, status=status.HTTP_200_OK)
                 else:
                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             except:
@@ -147,9 +145,56 @@ class AcceptFollowRequest(GenericAPIView):
         except User.DoesNotExist:
             raise Http404
 
+    def post(self, request, pk, format=None):
+        authorization = request.headers['Authorization']
+        token = authorization.split()[1]
+        decoded = jwt.decode(token,options={"verify_signature": False})
+        user_id = decoded['user_id']
+
+        user1 = self.get_object(pk=user_id)
+        user2 = self.get_object(pk=pk)
+
+        pendingRequest = FollowRequest.objects.filter(fromUser=user2)
+
+        if pendingRequest is not None:
+            try:
+                user2.followedUsers.add(user1)
+                user1.followerUsers.add(user2)
+
+                user1.save()
+                user2.save()
+
+                FollowRequest.objects.filter(fromUser=user2).delete()
+                return Response({"message": f"{user1.id} successfuly accepted the request from {user2.id}"}, status=status.HTTP_200_OK)
+            except:
+                return Response({"message": "request accept failed"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"message": f"no follow request from {user2.id}"}, status=status.HTTP_400_BAD_REQUEST)
 
 class DeclineFollowRequest(GenericAPIView):
-    pass
+    def get_object(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404
+
+    def post(self, request, pk, format=None):
+        authorization = request.headers['Authorization']
+        token = authorization.split()[1]
+        decoded = jwt.decode(token,options={"verify_signature": False})
+        user_id = decoded['user_id']
+
+        user1 = self.get_object(pk=user_id)
+        user2 = self.get_object(pk=pk)
+
+        pendingRequest = FollowRequest.objects.filter(fromUser=user2)
+
+        if pendingRequest is not None:
+            try:
+                FollowRequest.objects.filter(fromUser=user2).delete()
+                return Response({"message": f"{user1.id} successfuly declined the request from {user2.id}"}, status=status.HTTP_200_OK)
+            except:
+                return Response({"message": "request decline failed"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"message": f"no follow request from {user2.id}"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserGet(GenericAPIView):
@@ -166,7 +211,7 @@ class UserGet(GenericAPIView):
         user_id = decoded['user_id']
         requester_user = User.objects.filter(id = user_id).first()
         requested_user = User.objects.filter(id = pk).first()
-        if(not requested_user.isPrivate or requested_user in requester_user.followedUsers.all()):
+        if(not requested_user.isPrivate or requested_user in requester_user.followedUsers.all() or user_id==pk):
             serializer = dict(UserSerializer(requested_user).data)
             serializer = get_user(requested_user)
             return Response(serializer)
@@ -187,6 +232,11 @@ def get_user(user):
         temp['isAdmin'] = followerUser.isAdmin
         temp['isPrivate'] = followerUser.isPrivate
         temp['is_active'] = followerUser.is_active
+        try:
+            userPhoto = Image.objects.filter(user = user.id).first()
+            temp['userPhoto'] = userPhoto.file.url
+        except:
+            temp['userPhoto'] = ""
         followers.append(temp)
     followed = []
     for followedUser in user.followedUsers.all():
@@ -200,6 +250,11 @@ def get_user(user):
         temp['isAdmin'] = followedUser.isAdmin
         temp['isPrivate'] = followedUser.isPrivate
         temp['is_active'] = followedUser.is_active
+        try:
+            userPhoto = Image.objects.filter(user = user.id).first()
+            temp['userPhoto'] = userPhoto.file.url
+        except:
+            temp['userPhoto'] = ""
         followed.append(temp)
     serializer['followerUsers'] = followers
     serializer['followedUsers'] = followed
