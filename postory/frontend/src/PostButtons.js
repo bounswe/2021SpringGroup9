@@ -119,6 +119,7 @@ class PostButtons extends React.Component {
           <Link class = "push" to= {`/viewPost?id=${this.state.id}`}>
           <Icon 
             path={mdiCommentTextOutline} 
+            color = 'black'
             size={2}
           />
           </Link> : <Icon 
@@ -135,13 +136,17 @@ class PostButtons extends React.Component {
           <Icon 
             path={mdiBookmarkOutline} 
             size={2}
-            onClick={this.showPopup} 
+            onClick={() => {
+              requests.post_jwt(`/api/post/save/${this.state.id}`, {});
+            }} 
           />
           <VerticalSeperator></VerticalSeperator>
           <Icon 
             path={mdiAlertCircleOutline} 
             size={2}
-            onClick={this.showPopup} 
+            onClick={() => {
+              requests.post_jwt(`/api/user/report/${this.state.id}/1`, {});
+            }} 
           />
         </div>
         <Snackbar open={this.state.popupState} autoHideDuration={3000} onClose={this.closePopup} >
