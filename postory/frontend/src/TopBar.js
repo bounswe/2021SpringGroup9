@@ -68,14 +68,14 @@ class TopBar extends React.Component {
 
     render() {
         
-        return (<div>
+        return (<div >
             <div class = 'navb'>{this.state.menu && <NavbarMenu ></NavbarMenu>}</div><div style={topBarStyle}>
             <style>
                 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
             </style>
 
             <div style = {{marginLeft: '200px'}}>
-                <SearchUserComponent />
+                <SearchUserComponent class = 'Dropdown_style'/>
             </div>
 
             <a href={'/'} style={itemStyleLeft}>
