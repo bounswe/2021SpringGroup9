@@ -6,7 +6,8 @@ import CreatePost from './CreatePost';
 import EditPost from './EditPost';
 import reportWebVitals from './reportWebVitals';
 import TopBar from './TopBar';
-import DiscoverPage from './DiscoverPage';
+//import DiscoverPage from './DiscoverPage';
+import DiscoverPage from './DiscoverFilter';
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import ViewPost from './ViewPost';
@@ -21,6 +22,7 @@ import ForgotPasswordConfirm from "./ForgotPasswordConfirm";
 import Activation from "./Activation";
 import { ProfilePageUpper } from './ProfilePage';
 import Redirector from "./Redirector";
+import FilteredPosts from './FilteredPosts';
 
 ReactDOM.render(
   <BrowserRouter>
@@ -37,6 +39,7 @@ ReactDOM.render(
     <Route path="/viewPost" element={<div><TopBar/> <ViewPost /></div>} />
     <Route path="/profilePage" element={<div><TopBar/> <ProfilePageUpper /></div>} />
     <Route path="/viewPost" element={<div><Redirector/><TopBar/> <ViewPost /></div>} />
+    <Route path="/filteredPosts" element={<div><Redirector/><TopBar/> <FilteredPosts /></div>} />
     </Routes>
   </BrowserRouter>,
   document.getElementById('root')
