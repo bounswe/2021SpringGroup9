@@ -485,13 +485,12 @@ class GetPostsDiscoverFilter(GenericAPIView):
             related = 'true'
         if 'tag' in query_parameters:
             tags = query_parameters['tag']
-            all_tags = set()
+            all_tags = []
             if related.lower() == 'true':
                 for tag in tags:
-                    all_tags = all_tags | getRelatedTags(tag)
-                    all_tags.add(tag)
+                    all_tags = getRelatedTags(tag, all_tags)
             else:
-                all_tags = set(tags)
+                all_tags = tags
             for post in posts:
                 hasTag = False
                 for post_tag in post.tags.all():
@@ -536,7 +535,7 @@ class GetRelatedTags(GenericAPIView):
         userid = request.auth['user_id']
         if request.auth:
             try:
-                tag_list = list(getRelatedTags(query))
+                tag_list = list(getRelatedTags(query, None))
                 activityStream.createActivity(userid,"got related tags","related",resolve(request.path_info).route,"GetRelatedTags",True)
                 return Response(tag_list, status = 200)
             except:
@@ -564,48 +563,84 @@ class SavePost(GenericAPIView):
             user.savedPosts.add(post)
         return Response(status=200)
                 
-def getRelatedTags(query):
+def getRelatedTags(query, all_tags):
+    if all_tags == None:
+        all_tags = []
     url = "https://www.wikidata.org/w/api.php"
     params = {
         "action" : "wbsearchentities",
         "language" : "en",
         "format" : "json",
         "type": "item",
-        "search" : query,
-        "limit" : 50 
+        "search" : query
         }
     data = requests.get(url,params=params).json()
-    tag_list = set()
-    tag_list.add(query.lower())
-    for info in data['search']:
+    id = data['search'][0]['id']
+    
+    params = {
+        "action" : "wbgetentities",
+        "format" : "json",
+        "languages" : "en",
+        "ids": id
+    }
+    
+    data = requests.get(url,params=params).json()
+    claims = []
+    for claim_id in data['entities'][id]['claims'].values():
+        for value in claim_id:
+            try:
+                claims.append(value['mainsnak']['datavalue']['value']['id'])   
+            except:
+                pass
+                    
+    params = {
+        "action" : "wbgetentities",
+        "format" : "json",
+        "languages" : "en",
+        "ids": "|".join(claims[0:50])
+    }
+    data = requests.get(url,params=params).json()
+    
+    if query.lower() not in all_tags:
+        all_tags.append(query.lower())
+    for entity in list(data['entities'].values())[0:9]:
         try:
-            words = re.split('; |, |\*|\n|;|\. | |-|\'', info['label'].lower())
-        except KeyError:
+            words = entity['labels']['en']['value'].lower()
+            if words.startswith('category:'):
+                words = words.replace('category:', '')
+            if words.startswith('template:'):
+                words = words.replace('template:', '')
+            if words.startswith('wikipedia:'):
+                words = words.replace('wikipedia:', '')
+            if words not in all_tags:
+                all_tags.append(words)
+            if words.startswith(query + ' '):
+                words = words.replace(query + ' ', '')
+            if words not in all_tags:
+                all_tags.append(words)
+        except:
             pass
-        words = [re.sub('[' + string.punctuation + ']', '', s) for s in words]
-        for value in words:
-            tag_list.add(value.lower())
-    return tag_list
+        
+    return all_tags
 
 def getQuerySetOfNearby(posts, latitude, longitude, distance):
     requestedDistance = float(distance)
     pinPoint = [float(latitude),float(longitude)]
     for story in posts:
-        story_instance = get_story(story)
-        locations = story_instance['locations']
+        locations = story.locations.all()
         toBeReturned = False
         for location in locations:
-            distanceBetween = getDistanceBetween(location,pinPoint)
+            distanceBetween = getDistanceBetween([location.coordsLatitude, location.coordsLongitude],pinPoint)
             if(distanceBetween < requestedDistance):
                 toBeReturned = True
                 break
         if(not toBeReturned):
-            posts = posts.exclude(id = story_instance['id'])
+            posts = posts.exclude(id = story.id)
     return posts
 
 def getDistanceBetween(loc1,loc2):
-    lat1 = loc1[1]
-    lon1 = loc1[2]
+    lat1 = loc1[0]
+    lon1 = loc1[1]
     lat2 = loc2[0]
     lon2 = loc2[1]
     return distance.distance((lat1,lon1),(lat2,lon2)).km
