@@ -149,7 +149,7 @@ class PostButtons extends React.Component {
             path={mdiAlertCircleOutline} 
             size={2}
             onClick={() => {
-              requests.post_jwt(`/api/user/report/${this.state.id}/1`, {});
+              requests.post_jwt(`/api/user/report/story/${this.state.id}`, {});
             }} 
           />
         </div>
