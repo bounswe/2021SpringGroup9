@@ -538,10 +538,10 @@ class SavePost(GenericAPIView):
             raise Http404 
         
         if post in user.savedPosts.all():
-            activityStream.createActivity(userid,"saved post",post.id,resolve(request.path_info).route,"SavePost",True)
+            activityStream.createActivity(userid,"saved post",post.id,resolve(request.path_info).route,"PostSave",True)
             user.savedPosts.remove(post)
         else:
-            activityStream.createActivity(userid,"unsaved post",post.id,resolve(request.path_info).route,"SavePost",True)
+            activityStream.createActivity(userid,"unsaved post",post.id,resolve(request.path_info).route,"PostSave",True)
             user.savedPosts.add(post)
         return Response(status=200)
                 
