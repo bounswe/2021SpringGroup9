@@ -6,6 +6,7 @@ WORKDIR /app
 
 # add `/app/node_modules/.bin` to $PATH
 ENV PATH /app/node_modules/.bin:$PATH
+ARG REACT_APP_GOOGLE_API_KEY
 
 # install app dependencies
 COPY package.json ./
@@ -15,7 +16,7 @@ RUN npm install serve --silent
 
 # add app
 COPY . .
-RUN npm run build
+RUN REACT_APP_GOOGLE_API_KEY=$REACT_APP_GOOGLE_API_KEY npm run build
 
 
 # start app
