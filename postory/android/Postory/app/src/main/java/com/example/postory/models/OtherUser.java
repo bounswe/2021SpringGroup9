@@ -2,7 +2,7 @@ package com.example.postory.models;
 
 import java.util.List;
 
-public class UserModel {
+public class OtherUser {
 
     public int getId() {
         return id;
@@ -42,54 +42,6 @@ public class UserModel {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public List<OtherUser> getFollowedUsers() {
-        return followedUsers;
-    }
-
-    public void setFollowedUsers(List<OtherUser> followedUsers) {
-        this.followedUsers = followedUsers;
-    }
-
-    public List<OtherUser> getFollowerUsers() {
-        return followerUsers;
-    }
-
-    public void setFollowerUsers(List<OtherUser> followerUsers) {
-        this.followerUsers = followerUsers;
-    }
-
-    public List<Integer> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(List<Integer> posts) {
-        this.posts = posts;
-    }
-
-    public List<Integer> getSavedPosts() {
-        return savedPosts;
-    }
-
-    public void setSavedPosts(List<Integer> savedPosts) {
-        this.savedPosts = savedPosts;
-    }
-
-    public List<Integer> getLikedPosts() {
-        return likedPosts;
-    }
-
-    public void setLikedPosts(List<Integer> likedPosts) {
-        this.likedPosts = likedPosts;
-    }
-
-    public List<Integer> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Integer> comments) {
-        this.comments = comments;
     }
 
     public boolean isBanned() {
@@ -132,22 +84,14 @@ public class UserModel {
         this.userPhoto = userPhoto;
     }
 
-
     int id;
     String username;
     String name;
     String surname;
     String email;
-    List<OtherUser> followedUsers;
-    List<OtherUser> followerUsers;
-    List<Integer> posts;
-    List<Integer> savedPosts;
-    List<Integer> likedPosts;
-    List<Integer> comments;
     boolean isBanned;
     boolean isAdmin;
     boolean isPrivate;
     boolean is_active;
     String userPhoto;
-
 }
