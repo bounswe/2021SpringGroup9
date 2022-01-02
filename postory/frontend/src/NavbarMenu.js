@@ -13,6 +13,8 @@ const NavbarMenu = (props) => {
                 window.location.reload();
             }
                 }>My Profile Page</Dropdown.Item>
+            <Dropdown.Item onClick = {() => navigate("/signIn")}>Sign In</Dropdown.Item>
+            <Dropdown.Item onClick = {() => navigate("/signUp")}>Sign Up</Dropdown.Item>
         </Dropdown.Menu>);
 }
 
