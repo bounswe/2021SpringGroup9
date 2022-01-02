@@ -40,7 +40,7 @@
             android:layout_marginTop="10dp"
             android:background="@color/colorLightGray"
             android:gravity="center_vertical"
-            android:text=" memo06 "
+
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toEndOf="@id/usernameHint"
             app:layout_constraintTop_toTopOf="parent" />
@@ -63,7 +63,6 @@
             android:layout_marginTop="5dp"
             android:background="@color/colorLightGray"
             android:gravity="center_vertical"
-            android:text=" Mehmet "
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toEndOf="@id/nameHint"
             app:layout_constraintTop_toBottomOf="@id/username" />
@@ -86,12 +85,21 @@
             android:layout_marginTop="5dp"
             android:background="@color/colorLightGray"
             android:gravity="center_vertical"
-
-            android:text=" Demir "
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toEndOf="@id/surnameHint"
             app:layout_constraintTop_toBottomOf="@id/name" />
 
+        <ImageView
+            android:id="@+id/report"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/baseline_report_black_24dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -117,7 +125,6 @@
             android:layout_height="35dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
-            android:background="@color/colorLightGray"
             android:gravity="center_horizontal"
             android:text="@string/followed_by"
             app:layout_constraintStart_toStartOf="parent"

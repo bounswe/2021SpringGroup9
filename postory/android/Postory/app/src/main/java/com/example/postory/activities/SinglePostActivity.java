@@ -3,6 +3,7 @@ package com.example.postory.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +24,9 @@ import com.example.postory.adapters.TagsAdapter;
 import com.example.postory.fragments.MapFragment;
 import com.example.postory.models.*;
 import com.example.postory.utils.TimeController;
+import com.github.johnpersano.supertoasts.library.Style;
+import com.github.johnpersano.supertoasts.library.SuperActivityToast;
+import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.google.gson.Gson;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
@@ -72,6 +76,7 @@ public class SinglePostActivity extends ToolbarActivity{
     TextView postText;
     LinearLayout likeLayout;
     TextView likesText;
+    ImageView report;
     AlertDialog alertDialogComment;
     String selfId;
     int likeCount = 0;
@@ -157,7 +162,7 @@ public class SinglePostActivity extends ToolbarActivity{
         postText = (TextView) findViewById(R.id.post_story_text_field);
         continueReading = (Button) findViewById(R.id.post_continue_reading);
         commentsList = (ListView) findViewById(R.id.comments_section);
-
+        report = (ImageView) findViewById(R.id.report);
 
 
         likeLayout.setOnClickListener(new View.OnClickListener() {
@@ -329,6 +334,48 @@ public class SinglePostActivity extends ToolbarActivity{
                     }
                 });
 
+            }
+        });
+
+        report.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = BuildConfig.API_IP + "/user/report/story/" + postId ;
+                MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
+                MultipartBody.Builder builder = bodyBuilder.setType(MultipartBody.FORM);
+                RequestBody body = RequestBody.create(null, new byte[]{});
+
+                Request reportRequest = new Request.Builder()
+                        .url(url)
+                        .post(body)
+                        .addHeader("Authorization", "JWT " + accessToken)
+                        .build();
+
+                client.newCall(reportRequest).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        Log.i(TAG, "onFailure: ");
+                    }
+
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    SuperActivityToast.create(SinglePostActivity.this, new Style(), Style.TYPE_BUTTON)
+                                            .setProgressBarColor(Color.WHITE)
+                                            .setText("The post is reported.")
+                                            .setDuration(Style.DURATION_LONG)
+                                            .setFrame(Style.FRAME_LOLLIPOP)
+                                            .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_BLUE))
+                                            .setAnimations(Style.ANIMATIONS_POP).show();
+                                }
+                            });
+
+                        }
+                    }
+                });
             }
         });
 
