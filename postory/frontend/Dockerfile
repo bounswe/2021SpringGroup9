@@ -16,7 +16,7 @@ RUN npm install serve --silent
 
 # add app
 COPY . .
-RUN $REACT_APP_GOOGLE_API_KEY npm run build
+RUN REACT_APP_GOOGLE_API_KEY=$REACT_APP_GOOGLE_API_KEY npm run build
 
 
 # start app
