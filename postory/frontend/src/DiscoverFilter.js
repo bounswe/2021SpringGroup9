@@ -12,6 +12,9 @@ import Button from 'react-bootstrap/Button'
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import Badge from 'react-bootstrap/Badge'
+import Tooltip from '@mui/material/Tooltip';
+import {Snackbar} from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 
 import { mdiPound, mdiCalendarRange, mdiFountainPenTip, mdiAccount, mdiMapMarkerRadius } from '@mdi/js';
 
@@ -126,7 +129,10 @@ class DiscoverPage extends React.Component{
             showKm: false,
             markerList: [],
             posts: [],
-            differentPage: false
+            differentPage: false,
+            isRelatedSearch: false,
+            wikiData: '',
+            showWikiData: false
         };
     }
 
@@ -181,6 +187,31 @@ class DiscoverPage extends React.Component{
         })
 
     }
+
+    onChangeRelatedCheckbox = () => {
+        this.setState({ isRelatedSearch: !this.state.isRelatedSearch });
+    }
+
+    onClickTag = (tag) => {
+        requests.get_jwt(`/api/post/related/${tag}`,{})
+            .then(response => response.json())
+            .then( (data) => {
+                console.log(data);
+                var wikiResponse = ''
+                for(let i = data.length - 1; i >= 0; i--){
+                    wikiResponse += data[i] + ' - '
+                    if (i == data.length - 5)
+                        break
+                }
+                this.setState({ showWikiData: true });
+                this.setState({ wikiData: wikiResponse.slice(0, -2) });
+        })
+
+    }
+
+    closeWikiData = () => {
+        this.setState({ showWikiData: false });
+    };
 
     onChangeTagValue = event => {
         {/* Called when when there is change in the input box allows user to enter tag*/}
@@ -280,7 +311,14 @@ class DiscoverPage extends React.Component{
             <Container>
                 <Row style={{alignItems: `center`}}> 
                     <Col sm={2}> 
-                        <Icon path={mdiPound} size={1}/> Tags 
+                        <Icon path={mdiPound} size={1}/> Tags &nbsp;&nbsp;
+                        <Tooltip describeChild title="Check this box if you want to include all the related tags..">
+                        <input
+                            type="checkbox"
+                            checked={this.state.isRelatedSearch}
+                            onChange={this.onChangeRelatedCheckbox}
+                        />
+                        </Tooltip>
                     </Col>
                     <Col sm={3} >
                         <Icon path={mdiCalendarRange} size={1}/> Date
@@ -388,7 +426,7 @@ class DiscoverPage extends React.Component{
                     <Col sm={2} style={{maxHeight: 70, overflow: 'auto'}}>
                         {this.state.selectedTags.map((item, index) => (
                             <div key={item}>
-                            <Badge pill bg="primary">
+                            <Badge bg="primary" onClick={() => this.onClickTag(item)}>
                                 {item}
                             </Badge>
                             <Button
@@ -419,7 +457,7 @@ class DiscoverPage extends React.Component{
                     <Col sm={2} style={{maxHeight: 70, overflow: 'auto'}}>
                         {this.state.selectedKeywords.map((item, index) => (
                             <div key={item}>
-                            <Badge pill bg="success">
+                            <Badge bg="success">
                                 {item}
                             </Badge>
                             <Button
@@ -437,7 +475,7 @@ class DiscoverPage extends React.Component{
                     <Col sm={3} style={{maxHeight: 70, overflow: 'auto'}}>
                         {this.state.selectedUsers.map((item, index) => (
                             <div key={item}>
-                            <Badge pill bg="secondary">
+                            <Badge bg="secondary">
                                 {item}
                             </Badge>
                             <Button
@@ -541,6 +579,11 @@ class DiscoverPage extends React.Component{
         </header>
         {this.state.selectedPost && <Navigate class = "push" to= {`/viewPost?id=${this.state.selectedPost}`}> click here to see the full post</Navigate>}
         {this.state.differentPage && <Navigate class = "push" to= {`/filteredPosts`}>Navigating to filteredPosts page</Navigate>}
+        <Snackbar open={this.state.showWikiData} autoHideDuration={3000} onClose={this.closeWikiData}>
+            <Alert onClose={this.closeWikiData} severity="info" sx={{ width: '100%' }}>
+              {this.state.wikiData}
+            </Alert>
+        </Snackbar>
         </div>      
         )
     }
