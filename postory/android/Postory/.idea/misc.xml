@@ -3,10 +3,20 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../../../../layout/custom_preview.xml" value="0.1015625" />
+        <entry key="app/src/main/res/drawable/button_round.xml" value="0.20364583333333333" />
+        <entry key="app/src/main/res/drawable/post_border.xml" value="0.20364583333333333" />
+        <entry key="app/src/main/res/drawable/tag_border.xml" value="0.20364583333333333" />
+        <entry key="app/src/main/res/layout/activity_create_post.xml" value="0.12864583333333332" />
+        <entry key="app/src/main/res/layout/activity_explore.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/activity_filter_posts.xml" value="0.10416666666666667" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.12864583333333332" />
         <entry key="app/src/main/res/layout/activity_single_post.xml" value="0.1" />
         <entry key="app/src/main/res/layout/single_comment.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/single_keyword.xml" value="0.25" />
         <entry key="app/src/main/res/layout/single_post.xml" value="0.1" />
         <entry key="app/src/main/res/layout/single_post_preview.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/single_tag.xml" value="0.1381340579710145" />
       </map>
     </option>
   </component>

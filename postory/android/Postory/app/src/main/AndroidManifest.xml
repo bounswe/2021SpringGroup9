@@ -43,6 +43,7 @@
         <activity
             android:name=".activities.CreatePostActivity"
             android:exported="true" />
+        <activity android:name=".activities.ListFilteredPostsActivity" />
 
         <activity android:name=".activities.ExploreActivity">
 
