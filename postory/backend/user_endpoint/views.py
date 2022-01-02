@@ -268,7 +268,7 @@ class UserGet(GenericAPIView):
             activityStream.createActivity(requester_user.id,"requested user",requested_user.id,resolve(request.path_info).route,"UserRequest",False)
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-class UserReport(GenericAPIView):
+class ReportUser(GenericAPIView):
     def get_object(self, pk):
         try:
             return User.objects.get(pk=pk)
@@ -312,7 +312,7 @@ class UserReport(GenericAPIView):
             activityStream.createActivity(user.id,"reported user",pk ,resolve(request.path_info).route,"UserReport",False)
             return Response({"message": "report failed"}, status=status.HTTP_400_BAD_REQUEST)
 
-class StoryReport(GenericAPIView):
+class ReportStory(GenericAPIView):
     def get_object(self, pk):
         try:
             return User.objects.get(pk=pk)
@@ -332,11 +332,9 @@ class StoryReport(GenericAPIView):
         subject = "Story Reported"
         content = f"User with id {user_id} reported story with id {pk}. \nVisit the website for more details: http://3.67.83.253:8000/admin. \n\n- The Postory team"
     
-    
         try:
             data['fromStory'] = user_id
             data['toStory'] = pk
-            
             serializer = StoryReportSerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
