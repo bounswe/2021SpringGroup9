@@ -44,7 +44,7 @@ class FollowRequest(models.Model):
     toUser = models.ForeignKey(User, on_delete=models.CASCADE, related_name="requestTo", blank=True)
     
     def __str__(self):
-        return str(self.id) + " - " + "From " + self.fromUser + " to " + self.toUser
+        return str(self.id) + " - " + "From " + self.fromUser.username + " to " + self.toUser.username
 
 class UserReport(models.Model):
     fromUser = models.ForeignKey(User, on_delete=models.CASCADE, related_name="fromUser", blank=True)
