@@ -22,6 +22,7 @@ import ForgotPasswordConfirm from "./ForgotPasswordConfirm";
 import Activation from "./Activation";
 import { ProfilePageUpper } from './ProfilePage';
 import Redirector from "./Redirector";
+import ActivityStream from "./ActivityStream";
 import FilteredPosts from './FilteredPosts';
 
 ReactDOM.render(
@@ -38,6 +39,7 @@ ReactDOM.render(
     <Route path="/activate/:uid/:token" element={<div><TopBar /><Activation /></div>} />
     <Route path="/viewPost" element={<div><TopBar/> <ViewPost /></div>} />
     <Route path="/profilePage" element={<div><TopBar/> <ProfilePageUpper /></div>} />
+    <Route path="/activityStream" element={<div><Redirector/><TopBar/> <ActivityStream /></div>} />
     <Route path="/viewPost" element={<div><Redirector/><TopBar/> <ViewPost /></div>} />
     <Route path="/filteredPosts" element={<div><Redirector/><TopBar/> <FilteredPosts /></div>} />
     </Routes>
