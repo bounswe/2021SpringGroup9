@@ -40,7 +40,6 @@
             android:layout_marginTop="10dp"
             android:background="@color/colorLightGray"
             android:gravity="center_vertical"
-            android:text=" memo06 "
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toEndOf="@id/usernameHint"
             app:layout_constraintTop_toTopOf="parent" />
@@ -63,7 +62,6 @@
             android:layout_marginTop="5dp"
             android:background="@color/colorLightGray"
             android:gravity="center_vertical"
-            android:text=" Mehmet "
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toEndOf="@id/nameHint"
             app:layout_constraintTop_toBottomOf="@id/username" />
@@ -86,11 +84,11 @@
             android:layout_marginTop="5dp"
             android:background="@color/colorLightGray"
             android:gravity="center_vertical"
-
-            android:text=" Demir "
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toEndOf="@id/surnameHint"
             app:layout_constraintTop_toBottomOf="@id/name" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -100,14 +98,12 @@
         android:background="@drawable/rectangle">
 
 
-
         <TextView
             android:id="@+id/followedByHint"
             android:layout_width="70dp"
             android:layout_height="35dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
-            android:background="@color/colorLightGray"
             android:gravity="center_horizontal"
             android:text="@string/followed_by"
             app:layout_constraintStart_toStartOf="parent"
@@ -121,7 +117,6 @@
             android:layout_height="20dp"
             android:background="@color/colorLightGray"
             android:gravity="center_horizontal"
-            android:text="23"
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toStartOf="@id/followedByHint"
             app:layout_constraintTop_toBottomOf="@id/followedByHint" />
@@ -145,7 +140,6 @@
             android:layout_height="20dp"
             android:background="@color/colorLightGray"
             android:gravity="center_horizontal"
-            android:text="25"
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toStartOf="@id/followingHint"
             app:layout_constraintTop_toBottomOf="@id/followingHint" />
@@ -169,11 +163,29 @@
             android:layout_height="20dp"
             android:background="@color/colorLightGray"
             android:gravity="center_horizontal"
-            android:text="3"
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toStartOf="@id/numPostsHint"
             app:layout_constraintTop_toBottomOf="@id/numPostsHint" />
 
+        <TextView
+            android:id="@+id/privateHint"
+            android:layout_width="70dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="5dp"
+            android:text="Private"
+            android:gravity="center_horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="10dp"
+            />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/privateSwitch"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/privateHint" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView

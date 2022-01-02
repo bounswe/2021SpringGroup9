@@ -3,6 +3,7 @@ package com.example.postory.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
@@ -24,6 +25,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -75,6 +77,7 @@ public class SelfProfilePageActivity extends ToolbarActivity {
     private TextView following;
     private TextView numPosts;
     private ImageView profilePicture;
+    private SwitchCompat privateSwitch;
 
     private SharedPreferences sharedPreferences;
     private String userId;
@@ -92,6 +95,7 @@ public class SelfProfilePageActivity extends ToolbarActivity {
     public static final int TAKE_PHOTO = 0;
     public static final int PICK_GALLERY = 1;
     private final int CAMERA_PERMISSION_REQUEST = 1000;
+
     @Override
     protected void goHomeClicked() {
         Intent intent = new Intent(SelfProfilePageActivity.this, MainActivity.class);
@@ -118,7 +122,7 @@ public class SelfProfilePageActivity extends ToolbarActivity {
 
     @Override
     protected void logoutClicked() {
-        sharedPreferences = getSharedPreferences("MY_APP",MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("MY_APP", MODE_PRIVATE);
         sharedPreferences.edit().remove("valid_until").apply();
         sharedPreferences.edit().remove("user_id").apply();
         sharedPreferences.edit().remove("access_token").apply();
@@ -143,9 +147,11 @@ public class SelfProfilePageActivity extends ToolbarActivity {
         following = (TextView) findViewById(R.id.following);
         numPosts = (TextView) findViewById(R.id.numPosts);
         profilePicture = (ImageView) findViewById(R.id.profilePicture);
+        privateSwitch = (SwitchCompat) findViewById(R.id.privateSwitch);
+
         sharedPreferences = getSharedPreferences("MY_APP", MODE_PRIVATE);
         accessToken = sharedPreferences.getString("access_token", "");
-        userId = sharedPreferences.getString("user_id","");
+        userId = sharedPreferences.getString("user_id", "");
         String url1 = BuildConfig.API_IP + "/user/get/" + userId;
         final OkHttpClient client = new OkHttpClient();
         requestUserData = new Request.Builder()
@@ -185,11 +191,20 @@ public class SelfProfilePageActivity extends ToolbarActivity {
             }
         });
 
+        privateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                privateSwitchController(b);
+            }
+        });
+
     }
-    private void setProfilePicture(){
+
+    private void setProfilePicture() {
         verifyStoragePermissions(SelfProfilePageActivity.this);
         addImage();
     }
+
     private void callForPosts() {
         String url2 = BuildConfig.API_IP + "/post/all/user/" + userId;
 
@@ -202,25 +217,23 @@ public class SelfProfilePageActivity extends ToolbarActivity {
     }
 
 
-
     private void setUserFields() {
         name.setText(thisUser.getName());
         surname.setText(thisUser.getSurname());
         username.setText(thisUser.getUsername());
-        followedBy.setText(""+thisUser.getFollowerUsers().size());
-        following.setText(""+thisUser.getFollowedUsers().size());
-        numPosts.setText(""+thisUser.getPosts().size());
+        privateSwitch.setChecked(thisUser.isPrivate());
+        followedBy.setText("" + thisUser.getFollowerUsers().size());
+        following.setText("" + thisUser.getFollowedUsers().size());
+        numPosts.setText("" + thisUser.getPosts().size());
         Glide
                 .with(SelfProfilePageActivity.this)
                 .load(thisUser.getUserPhoto())
                 .placeholder(R.drawable.placeholder)
-                .apply(new RequestOptions().override(400,400))
+                .apply(new RequestOptions().override(400, 400))
                 .centerCrop()
                 .into(profilePicture);
 
     }
-
-
 
 
     private void callAllPosts() {
@@ -266,14 +279,13 @@ public class SelfProfilePageActivity extends ToolbarActivity {
             public void onClick(DialogInterface dialog, int item) {
 
                 if (options[item].equals("Take Photo with Camera")) {
-                        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 
-                            requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST);
-                        }
-                        Intent useCamera = new Intent("android.media.action.IMAGE_CAPTURE")
-                                .putExtra("android.intent.extras.CAMERA_FACING", 1);
-                        startActivityForResult(useCamera, TAKE_PHOTO);
-
+                        requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST);
+                    }
+                    Intent useCamera = new Intent("android.media.action.IMAGE_CAPTURE")
+                            .putExtra("android.intent.extras.CAMERA_FACING", 1);
+                    startActivityForResult(useCamera, TAKE_PHOTO);
 
 
                 } else if (options[item].equals("Choose from Gallery")) {
@@ -287,6 +299,7 @@ public class SelfProfilePageActivity extends ToolbarActivity {
         });
         builder.show();
     }
+
     private String saveImage(Bitmap image) {
         String path = null;
         String imageFileName = "JPEG_" + "FILE_NAME" + ".jpg";
@@ -324,6 +337,7 @@ public class SelfProfilePageActivity extends ToolbarActivity {
             );
         }
     }
+
     private String getRealPathFromURI(Uri contentURI) {
         String result;
         Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
@@ -338,6 +352,7 @@ public class SelfProfilePageActivity extends ToolbarActivity {
         return result;
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -458,11 +473,49 @@ public class SelfProfilePageActivity extends ToolbarActivity {
 
     }
 
+    private void privateSwitchController(boolean isChecked) {
+        String url = BuildConfig.API_IP + "/user/changeProfile";
+        MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
+        MultipartBody.Builder builder = bodyBuilder.setType(MultipartBody.FORM);
+        RequestBody body = RequestBody.create(null, new byte[]{});
+
+        Request changeProfileRequest = new Request.Builder()
+                .url(url)
+                .put(body)
+                .addHeader("Authorization", "JWT " + accessToken)
+                .build();
+        final OkHttpClient client = new OkHttpClient();
+
+        client.newCall(changeProfileRequest).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                Log.i("SelfProfilePageActivity","Profile visibility changed");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        SuperActivityToast.create(SelfProfilePageActivity.this, new Style(), Style.TYPE_BUTTON)
+                                .setProgressBarColor(Color.WHITE)
+                                .setText("Profile privacy option is changed.")
+                                .setDuration(Style.DURATION_LONG)
+                                .setFrame(Style.FRAME_LOLLIPOP)
+                                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_BLUE))
+                                .setAnimations(Style.ANIMATIONS_POP).show();
+                    }
+                });
+            }
+        });
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+
     @Override
     protected void goProfileClicked() {
         return;
