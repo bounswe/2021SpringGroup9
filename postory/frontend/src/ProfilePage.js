@@ -9,6 +9,11 @@ import Post from './Post';
 import {Snackbar} from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 
+import plus_thick from './plus-thick.png'
+
+import * as requests from './requests'
+
+
 const BACKEND_IP = '3.67.83.253';
 
 export const ProfilePageUpper = () => {
@@ -24,6 +29,13 @@ export const ProfilePageUpper = () => {
     const [popupState, setPopupState] = React.useState(false);
     const [photo, setPhoto] = React.useState(false);
     const [profilePhoto, setProfilePhoto] = React.useState(false);
+    const [followText, setFollowText] = React.useState('Follow');
+
+    const [hoverPhoto, setHoverPhoto] = React.useState(false);
+
+    const [isPrivate, setIsPrivate] = React.useState(false);
+    const [bEnabled, setbEnabled] = React.useState(true);
+
 
     useEffect(() => {
         fetch(`http://${BACKEND_IP}:8000/api/post/all/user/${userID}`, {
@@ -57,9 +69,12 @@ export const ProfilePageUpper = () => {
                 setUsername(data.username);
                 setFollowingCount(data.followedUsers.length);
                 setFollowerCount(data.followerUsers.length);
+                
+                setIsPrivate(data.isPrivate);
                 for(let i =0 ; i< data.followerUsers.length; i++){
                     if(data.followerUsers[i] == sessionUserID){
-                        setShowFollowButton(false);
+                        closePopup();
+                        //setShowFollowButton(false);
                     }
                 }
                 console.log(data);
@@ -99,8 +114,18 @@ export const ProfilePageUpper = () => {
 
     const closePopup = () => {
         setPopupState(false);
-        setShowFollowButton(false);
+        //setShowFollowButton(false);
+        if(followText == 'Follow')
+            setFollowText('Unfollow');
+        else
+            setFollowText('Follow');
       };
+
+      useEffect(()=> {
+        console.log('test');
+        if(photo && (parseInt(localStorage.getItem('userID')) == userID))
+            console.log(document.getElementById('file').click());
+    } ,[photo]);
 
     return ( 
         <div style={{ backgroundColor: `#EBEBEB`}}>
@@ -111,9 +136,10 @@ export const ProfilePageUpper = () => {
                 <Col sm={4} >
                     <div className = {'sliderContainer'} >
                         
-                        <img onClick = {() => setPhoto(st => !st)} class = "circle" width = "50px" height = "50px" src = {profilePhoto? profilePhoto:"./static/media/postory_logo_no_text.ec3bad21.png"} />
+                        <img onMouseEnter = {() => setHoverPhoto(true)} onMouseLeave = {() => setHoverPhoto(false)}
+                         onClick = {() => setPhoto(st => !st )} class = "circle" width = "50px" height = "50px" src = {(hoverPhoto && (parseInt(localStorage.getItem('userID')) == userID))? plus_thick:(profilePhoto? profilePhoto:"./static/media/postory_logo_no_text.ec3bad21.png")} />
                         {photo  && (parseInt(localStorage.getItem('userID')) == userID) && <div className = {'ppup'}>
-                        <input onChange = {(e) => 
+                        <input style = {{display: 'none'}} onChange = {(e) => 
                         {
                             let formData = new FormData();
                             formData.append('image', e.target.files[0]);
@@ -124,7 +150,7 @@ export const ProfilePageUpper = () => {
                                 'Authorization': `JWT ${localStorage.getItem('access')}`
                             },
                             body: formData
-                                });
+                                }).then(window.location.reload());
                             setPhoto(st => !st);}
                         }
                             type="file" id="file" accept=".jpg, .png"/>
@@ -141,9 +167,17 @@ export const ProfilePageUpper = () => {
                 <Col  sm={2}>  
                     <div style={{ fontSize: `16px`, fontColor: `#08233B` }}>posts: {postCount}</div>
                 </Col>
+                {localStorage.getItem('userID') == userID && <Col  sm={2}>  
+                    <button disabled = {!bEnabled} onClick = {() => {
+                        //call backend enpoint
+                        requests.put_jwt('/api/user/changeProfile').then(() => window.location.reload());
+                        setbEnabled(false);
+                        return;
+                    }}> {`Make my account ` +  (isPrivate ? 'Public':'Private')}</button>
+                </Col>}
             </Row>
             <div style={{ height: window.innerHeight * 1/50, width: window.innerWidth }}/>
-            {showFollowButton && <Button variant="secondary" size="sm" onClick={() => onClickFollow()} >Follow</Button>}
+            {showFollowButton && <Button variant="secondary" size="sm" onClick={() => onClickFollow()} >{followText}</Button>}
         </Container>
         <div className="App-header">
         {fetchedPosts && userPosts.map((obj, i) => {
@@ -152,7 +186,7 @@ export const ProfilePageUpper = () => {
         </div>
         <Snackbar open={popupState} autoHideDuration={3000} onClose={() => closePopup()} >
             <Alert onClose={() => closePopup()} severity="info" sx={{ width: '100%' }}>
-              You have successfully followed {username}!
+              You have successfully followed/unfollowed {username}!
             </Alert>
         </Snackbar>
         </div>

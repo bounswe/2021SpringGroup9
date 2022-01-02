@@ -7,16 +7,20 @@ import SearchBar from './SearchBar'
 import {Snackbar} from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import SearchUserComponent from './SearchUser';
+import NavbarMenu from './NavbarMenu';
+import Col from 'react-bootstrap/Col'
+import {Offcanvas} from 'react-bootstrap'
 
 import { Link } from "react-router-dom";
 
 const topBarColor = 'rgb(235, 235, 235)'
 
 const topBarStyle = {
-    position: 'fixed',
+    position: 'absolute',
     width: '100%',
     height: '50px',
-    backgroundColor: topBarColor
+    backgroundColor: topBarColor,
+    zindex: -1
 }
 
 const itemStyleLeft = {
@@ -31,6 +35,11 @@ const itemStyleRight = {
     height: '100%',
     marginLeft: '10px',
     marginRight: '10px'
+    
+}
+
+const menuStyle = {
+    overflow: 'visible'
 }
 
 // fits to parent div
@@ -54,26 +63,20 @@ class TopBar extends React.Component {
         this.props = props;
 
         this.state = {
-            popupState: false
+            menu:false
           }
     }
 
-    showPopup = () => {
-        this.setState({ popupState: true });
-    };
-    
-      closePopup = () => {
-        this.setState({ popupState: false });
-    };
-
     render() {
-        return (<div style={topBarStyle}>
+        
+        return (<div >
+            <div class = 'navb'>{this.state.menu && <NavbarMenu ></NavbarMenu>}</div><div style={topBarStyle}>
             <style>
                 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
             </style>
 
             <div style = {{marginLeft: '200px'}}>
-                <SearchUserComponent />
+                <SearchUserComponent class = 'Dropdown_style'/>
             </div>
 
             <a href={'/'} style={itemStyleLeft}>
@@ -82,11 +85,15 @@ class TopBar extends React.Component {
             <a href={'/'} style={{...itemStyleLeft, textDecoration: 'none'}}>
                 <p style={textStyle}>POSTORY</p>
             </a>
-            {/*<a href={'/'} style={itemStyleRight}>*/}
+            
             <div style={itemStyleRight}>
-                <img src={menuIcon} alt={'Menu'} style={imageStyle} onClick={this.showPopup} />
+
+                <img src={menuIcon} alt={'Menu'} style={imageStyle} onClick={() => this.setState(st => {return {menu:!st.menu}})} />
+                 
             </div>
-            {/*</a>*/}
+            
+            
+
             <Link class = "push" to= {`/discover`}>
             <div style={itemStyleRight}>
                 <img src={globeIcon} alt={'Discover'} style={imageStyle}  />
@@ -97,12 +104,8 @@ class TopBar extends React.Component {
                     <img src={homeIcon} alt={'Postory'} style={imageStyle}/>
                 </a>
             </Link>
-            <Snackbar open={this.state.popupState} autoHideDuration={3000} onClose={this.closePopup} >
-                    <Alert onClose={this.closePopup} severity="info" sx={{ width: '100%' }}>
-                         This feature is not available now and coming soon, thanks heaps for your patience!
-                    </Alert>
-            </Snackbar>
-        </div>)
+
+        </div></div>)
 
     }
 }
