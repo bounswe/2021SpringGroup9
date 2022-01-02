@@ -193,15 +193,25 @@ class DiscoverPage extends React.Component{
     }
 
     onClickTag = (tag) => {
-        console.log(tag);
-        this.setState({ showWikiData: true });
-        this.setState({ wikiData: tag });
+        requests.get_jwt(`/api/post/related/${tag}`,{})
+            .then(response => response.json())
+            .then( (data) => {
+                console.log(data);
+                var wikiResponse = ''
+                for(let i = data.length - 1; i >= 0; i--){
+                    wikiResponse += data[i] + ' - '
+                    if (i == data.length - 5)
+                        break
+                }
+                this.setState({ showWikiData: true });
+                this.setState({ wikiData: wikiResponse.slice(0, -2) });
+        })
 
     }
 
     closeWikiData = () => {
         this.setState({ showWikiData: false });
-      };
+    };
 
     onChangeTagValue = event => {
         {/* Called when when there is change in the input box allows user to enter tag*/}
