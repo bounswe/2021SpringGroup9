@@ -172,7 +172,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         report.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = BuildConfig.API_IP + "/user/report/" + userId + "/0";
+                String url = BuildConfig.API_IP + "/user/report/user/" + userId;
                 MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
                 MultipartBody.Builder builder = bodyBuilder.setType(MultipartBody.FORM);
                 RequestBody body = RequestBody.create(null, new byte[]{});

@@ -340,7 +340,7 @@ public class SinglePostActivity extends ToolbarActivity{
         report.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = BuildConfig.API_IP + "/user/report/" + postId + "/1";
+                String url = BuildConfig.API_IP + "/user/report/story/" + postId ;
                 MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
                 MultipartBody.Builder builder = bodyBuilder.setType(MultipartBody.FORM);
                 RequestBody body = RequestBody.create(null, new byte[]{});
