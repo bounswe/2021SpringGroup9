@@ -101,12 +101,12 @@ class PostButtons extends React.Component {
     console.log(this.state);
   }
 
-  showPopup = () => {
-    this.setState({ popupState: true });
+  showPopup = (text) => {
+    this.setState({text:text, popupState: true });
   };
 
   closePopup = () => {
-    this.setState({ popupState: false });
+    this.setState(st => {return {...st, popupState: false }});
   };
 
   render(){
@@ -130,7 +130,10 @@ class PostButtons extends React.Component {
           <Icon 
             path={mdiShareVariantOutline} 
             size={2}
-            onClick={this.showPopup} 
+            onClick={() => {
+              navigator.clipboard.writeText(String(window.location).split('/')[2] + '/viewPost?id=' + this.state.id);
+              this.showPopup('The share link is copied to clipboard!');
+            }} 
           />
           <VerticalSeperator></VerticalSeperator>
           <Icon 
@@ -138,6 +141,7 @@ class PostButtons extends React.Component {
             size={2}
             onClick={() => {
               requests.post_jwt(`/api/post/save/${this.state.id}`, {});
+              this.showPopup('The post is successfully saved.');
             }} 
           />
           <VerticalSeperator></VerticalSeperator>
@@ -151,7 +155,7 @@ class PostButtons extends React.Component {
         </div>
         <Snackbar open={this.state.popupState} autoHideDuration={3000} onClose={this.closePopup} >
             <Alert onClose={this.closePopup} severity="info" sx={{ width: '100%' }}>
-              This feature is not available now and coming soon, thanks heaps for your patience!
+              {this.state.text}
             </Alert>
         </Snackbar>
       </div>);
