@@ -129,7 +129,12 @@ public class UserSearchActivity extends ToolbarActivity {
                 ArrayList<UserModel> userArray = new ArrayList<>();
                 Collections.addAll(userArray, users);
                 if (userArray.size() != 0) {
-                    noResultWarning.setVisibility(View.GONE);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            noResultWarning.setVisibility(View.GONE);
+                        }
+                    });
                 }
                 UserAdapter adapter = new UserAdapter(UserSearchActivity.this, userArray);
                 runOnUiThread(new Runnable() {
