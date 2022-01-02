@@ -571,16 +571,17 @@ def getRelatedTags(query):
         "language" : "en",
         "format" : "json",
         "type": "item",
-        "search" : query 
+        "search" : query,
+        "limit" : 50 
         }
     data = requests.get(url,params=params).json()
     tag_list = set()
     tag_list.add(query.lower())
     for info in data['search']:
         try:
-            words = re.split('; |, |\*|\n|;|\. | |-|\'', info['description'].lower())
-        except KeyError:
             words = re.split('; |, |\*|\n|;|\. | |-|\'', info['label'].lower())
+        except KeyError:
+            pass
         words = [re.sub('[' + string.punctuation + ']', '', s) for s in words]
         for value in words:
             tag_list.add(value.lower())
