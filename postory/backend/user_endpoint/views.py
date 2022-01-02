@@ -19,7 +19,7 @@ import activityStream.views as activityStream
 from django.core.mail import send_mail
 
 from django.utils import timezone
-from .models import User, FollowRequest
+from .models import User, FollowRequest, StoryReport, UserReport
 import jwt
 from django.urls.base import resolve
 from django.urls import reverse
@@ -118,10 +118,10 @@ class UserFollowing(GenericAPIView):
 
                 user1.save()
                 user2.save()
-                activityStream.createActivity(user1.id,"followed",user2.id,resolve(request.path_info).route,"UserFollow",True) 
+                activityStream.createActivity(user1.id,"unfollowed",user2.id,resolve(request.path_info).route,"UserUnfollow",True) 
                 return Response({'message': f"{user1.id} successfuly unfollowed {user2.id}"}, status=status.HTTP_200_OK)
             except:
-                activityStream.createActivity(user1.id,"followed",user2.id,resolve(request.path_info).route,"UserFollow",False) 
+                activityStream.createActivity(user1.id,"unfollowed",user2.id,resolve(request.path_info).route,"UserUnfollow",False) 
                 return Response({"message": "unfollow failed"}, status=status.HTTP_400_BAD_REQUEST)
 
         elif user2.isPrivate: # if private send request
@@ -137,7 +137,7 @@ class UserFollowing(GenericAPIView):
                 if serializer.is_valid():
                     serializer.save()
                     activityStream.createActivity(user1.id,"followed",user2.id,resolve(request.path_info).route,"UserFollow",True) 
-                    return Response({"message": "successfuly sent request to private profile", 'data': serializer.data}, status=status.HTTP_200_OK)
+                    return Response({"message": "successfuly sent request to private profile"}, status=status.HTTP_200_OK)
                 else:
                     activityStream.createActivity(user1.id,"followed",user2.id,resolve(request.path_info).route,"UserFollow",False) 
                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -304,7 +304,7 @@ class UserReport(GenericAPIView):
                     fail_silently=False,
                 )
                 activityStream.createActivity(user.id,"reported user",pk ,resolve(request.path_info).route,"UserReport",True)
-                return Response({"message": "successfuly reported", 'data': serializer.data}, status=status.HTTP_200_OK)
+                return Response({"message": "successfuly reported"}, status=status.HTTP_200_OK)
             else:
                 activityStream.createActivity(user.id,"reported user",pk ,resolve(request.path_info).route,"UserReport",False)
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -348,7 +348,7 @@ class StoryReport(GenericAPIView):
                     fail_silently=False,
                 )
                 activityStream.createActivity(user.id,"reported story",pk ,resolve(request.path_info).route,"StoryReport",True)
-                return Response({"message": "successfuly reported", 'data': serializer.data}, status=status.HTTP_200_OK)
+                return Response({"message": "successfuly reported"}, status=status.HTTP_200_OK)
             else:
                 activityStream.createActivity(user.id,"reported story",pk ,resolve(request.path_info).route,"StoryReport",False)
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
