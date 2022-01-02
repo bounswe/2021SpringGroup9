@@ -566,6 +566,7 @@ class SavePost(GenericAPIView):
 def getRelatedTags(query, all_tags):
     if all_tags == None:
         all_tags = []
+    set_tags = set(all_tags)
     url = "https://www.wikidata.org/w/api.php"
     params = {
         "action" : "wbsearchentities",
@@ -585,6 +586,15 @@ def getRelatedTags(query, all_tags):
     }
     
     data = requests.get(url,params=params).json()
+    for alias in data['entities'][id]['aliases']['en']:
+        try:
+            words = alias['value'].lower()
+            if words not in set_tags:
+                all_tags.append(alias['value'].lower())
+                set_tags.add(words)
+        except:
+            pass
+        
     claims = []
     for claim_id in data['entities'][id]['claims'].values():
         for value in claim_id:
@@ -597,13 +607,14 @@ def getRelatedTags(query, all_tags):
         "action" : "wbgetentities",
         "format" : "json",
         "languages" : "en",
-        "ids": "|".join(claims[0:50])
+        "ids": "|".join(claims[0:9])
     }
     data = requests.get(url,params=params).json()
     
-    if query.lower() not in all_tags:
+    if query.lower() not in set_tags:
         all_tags.append(query.lower())
-    for entity in list(data['entities'].values())[0:9]:
+        set_tags.add(query.lower())
+    for entity in data['entities'].values():
         try:
             words = entity['labels']['en']['value'].lower()
             if words.startswith('category:'):
@@ -612,12 +623,14 @@ def getRelatedTags(query, all_tags):
                 words = words.replace('template:', '')
             if words.startswith('wikipedia:'):
                 words = words.replace('wikipedia:', '')
-            if words not in all_tags:
+            if words not in set_tags:
                 all_tags.append(words)
+                set_tags.add(words)
             if words.startswith(query + ' '):
                 words = words.replace(query + ' ', '')
-            if words not in all_tags:
+            if words not in set_tags:
                 all_tags.append(words)
+                set_tags.add(words)
         except:
             pass
         
