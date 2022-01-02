@@ -375,14 +375,17 @@ class LikeRequest(GenericAPIView):
 
     def post(self, request, pk, format=None):
         userid = request.auth['user_id']
+        user = User.objects.get(id = userid)
 
         story = self.get_object(pk)
         likeList = story.likeList.split(',')
         if likeList[0] == "":
             likeList = []
         if str(userid) in likeList:
+            user.likedPosts.remove(story)
             likeList.remove(str(userid))
         else:
+            user.likedPosts.add(story)
             likeList.append(str(userid))
         story.likeList = ','.join(likeList)
         
@@ -398,28 +401,82 @@ class GetPostsDiscoverFilter(GenericAPIView):
     
     def get(self,request,format=None):
         # users = User.objects.filter(username__contains=term)
-        user_id = request.auth['user_id']
-        user = User.objects.filter(id = user_id).first()
+        userid = request.auth['user_id']
+        user = User.objects.get(id = userid)
         followedUsers = user.followedUsers.all()
         followedUsers = [followedUser.id for followedUser in followedUsers]
         query_parameters = dict(request.query_params)
         
         posts = Post.objects.all().distinct()
-        # Keyword
-        if 'keyword' in query_parameters:
-            keywords = query_parameters['keyword'][0].split()
-            for index, keyword in enumerate(keywords):
-                if index == 0:
-                    posts_story = posts.filter(story__icontains=keyword)
+            
+        # Username
+        if 'user' in query_parameters:
+            usernames = query_parameters['user'][0].split()
+            for post in posts:
+                user = User.objects.get(id=post.owner)
+                if user.username not in usernames:
+                    posts = posts.exclude(id = post.id)
+            
+        # Time
+        startYear, endYear, startMonth, endMonth, startDay, endDay, startHour, endHour, startMinute, endMinute = None, None, None, None, None, None, None, None, None, None
+        if 'startYear' in query_parameters:    
+            startYear = int(query_parameters['startYear'][0])
+            if 'endYear' in query_parameters:
+                endYear = int(query_parameters['endYear'][0])
+            else:
+                endYear = datetime.datetime.now().year
+            if 'startMonth' in query_parameters:
+                startMonth = int(query_parameters['startMonth'][0])
+                if 'endMonth' in query_parameters:
+                    endMonth = int(query_parameters['endMonth'][0])
                 else:
-                    posts_story = (posts_story | posts.filter(story__icontains=keyword)).distinct()
-            for index, keyword in enumerate(keywords):
-                if index == 0:
-                    posts_title = posts.filter(story__icontains=keyword)
-                else:
-                    posts_title = (posts_title | posts.filter(story__icontains=keyword)).distinct()
-            post_story_title = (posts_story | posts_title).distinct()
-            posts = (posts & post_story_title)
+                    endMonth = 12
+                if 'startDay' in query_parameters:
+                    startDay = int(query_parameters['startDay'][0])
+                    if 'endDay' in query_parameters:
+                        endDay = int(query_parameters['endDay'][0])
+                    else:
+                        endDay = 31
+                    if 'startHour' in query_parameters:
+                        startHour = int(query_parameters['startHour'][0])
+                        if 'endHour' in query_parameters:
+                            endHour = int(query_parameters['endHour'][0])
+                        else:
+                            endHour = 24
+                        if 'startMinute' in query_parameters:
+                            startMinute = int(query_parameters['startMinute'][0])
+                            if 'endMinute' in query_parameters:
+                                endMinute = int(query_parameters['endMinute'][0])
+                            else:
+                                endMinute = 60
+            for post in posts:
+                year = [int(x) for x in post.year.split(',')] if post.year != '' else []
+                month = [int(x) for x in post.month.split(',')] if post.month != '' else []
+                day = [int(x) for x in post.day.split(',')] if post.day != '' else []
+                hour = [int(x) for x in post.hour.split(',')] if post.hour != '' else []
+                minute = [int(x) for x in post.minute.split(',')] if post.minute != '' else []
+                if year and startYear and endYear:
+                    if year[0] > endYear or year[1] < startYear: 
+                        posts = posts.exclude(id = post.id)
+                if month and startMonth and endMonth:
+                    if month[0] > endMonth or month[1] < startMonth:
+                        posts = posts.exclude(id = post.id)
+                if day and startDay and endDay:
+                    if day[0] > endDay or day[1] < startDay:
+                        posts = posts.exclude(id = post.id)
+                if hour and startHour and endHour:
+                    if hour[0] > endHour or hour[1] < startHour:
+                        posts = posts.exclude(id = post.id)
+                if minute and startMinute and endMinute:
+                    if minute[0] > endMinute or minute[1] < startMinute:
+                        posts = posts.exclude(id = post.id)
+                        
+        # Location
+        if 'latitude' in query_parameters and 'longitude' in query_parameters and 'distance' in query_parameters:
+            latitude = query_parameters['latitude'][0].replace(',', '.')
+            longitude = query_parameters['longitude'][0].replace(',', '.')
+            distance = query_parameters['distance'][0].replace(',', '.')
+            posts = getQuerySetOfNearby(posts, latitude, longitude, distance)
             
         # Tag
         if 'related' in query_parameters:
@@ -436,88 +493,76 @@ class GetPostsDiscoverFilter(GenericAPIView):
             else:
                 all_tags = set(tags)
             for post in posts:
+                hasTag = False
                 for post_tag in post.tags.all():
-                    if post_tag.content not in all_tags:
-                        posts = posts.exclude(id = post.id)
-            
-        # Username
-        if 'user' in query_parameters:
-            usernames = query_parameters['user'][0].split()
-            for post in posts:
-                user = User.objects.get(id=post.owner)
-                if user.username not in usernames:
+                    if post_tag.content in all_tags:
+                        hasTag = True
+                if hasTag == False:
                     posts = posts.exclude(id = post.id)
             
-        # Time
-        startYear, endYear, startMonth, endMonth, startDay, endDay, startHour, endHour, startMinute, endMinute = None, None, None, None, None, None, None, None, None, None
-        if 'startYear' in query_parameters and 'endYear' in query_parameters:    
-            startYear = int(query_parameters['startYear'][0])
-            endYear = int(query_parameters['endYear'][0])
-            if 'startMonth' in query_parameters and 'endMonth' in query_parameters:
-                startMonth = int(query_parameters['startMonth'][0])
-                endMonth = int(query_parameters['endMonth'][0])
-                if 'startDay' in query_parameters and 'endDay' in query_parameters:
-                    startDay = int(query_parameters['startDay'][0])
-                    endDay = int(query_parameters['endDay'][0])
-                    if 'startHour' in query_parameters and 'endHour' in query_parameters:
-                        startHour = int(query_parameters['startHour'][0])
-                        endHour = int(query_parameters['endHour'][0])
-                        if 'startMinute' in query_parameters and 'endMinute' in query_parameters:
-                            startMinute = int(query_parameters['startMinute'][0])
-                            endMinute = int(query_parameters['endMinute'][0])
-            for post in posts:
-                year = [int(x) for x in post.year.split(',')] if post.year != '' else []
-                month = [int(x) for x in post.month.split(',')] if post.month != '' else []
-                day = [int(x) for x in post.day.split(',')] if post.day != '' else []
-                hour = [int(x) for x in post.hour.split(',')] if post.hour != '' else []
-                minute = [int(x) for x in post.minute.split(',')] if post.minute != '' else []
-                if year and startYear and endYear:
-                    if year[0] > endYear or year[1] < startYear: 
-                        posts = posts.exclude(id = post.id)
-                if month and startMonth and endMonth:
-                    if month[0] > endMonth and month[1] < startMonth:
-                        posts = posts.exclude(id = post.id)
-                if day and startDay and endDay:
-                    if day[0] > endDay and day[1] < startDay:
-                        posts = posts.exclude(id = post.id)
-                if hour and startHour and endHour:
-                    if hour[0] > endHour and hour[1] < startHour:
-                        posts = posts.exclude(id = post.id)
-                if minute and startMinute and endMinute:
-                    if minute[0] > endMinute and minute[1] < startMinute:
-                        posts = posts.exclude(id = post.id)
-                        
-        # Location
-        if 'latitude' in query_parameters and 'longitude' in query_parameters and 'distance' in query_parameters:
-            latitude = query_parameters['latitude'][0].replace(',', '.')
-            longitude = query_parameters['longitude'][0].replace(',', '.')
-            distance = query_parameters['distance'][0].replace(',', '.')
-            posts = getQuerySetOfNearby(posts, latitude, longitude, distance)
+        # Keyword
+        if 'keyword' in query_parameters:
+            keywords = query_parameters['keyword'][0].split()
+            for index, keyword in enumerate(keywords):
+                if index == 0:
+                    posts_story = posts.filter(story__icontains=keyword)
+                else:
+                    posts_story = (posts_story | posts.filter(story__icontains=keyword)).distinct()
+            for index, keyword in enumerate(keywords):
+                if index == 0:
+                    posts_title = posts.filter(story__icontains=keyword)
+                else:
+                    posts_title = (posts_title | posts.filter(story__icontains=keyword)).distinct()
+            post_story_title = (posts_story | posts_title).distinct()
+            posts = (posts & post_story_title)
                         
         posts_set = set()
         for post in posts:
             owner_of_post = User.objects.get(id=post.owner)
             if owner_of_post.isPrivate == False:
                 posts_set.add(post)
-            elif owner_of_post.id == user_id:
+            elif owner_of_post.id == userid:
                 posts_set.add(post)
             elif owner_of_post.isPrivate == True and owner_of_post.id in followedUsers:
                 posts_set.add(post) 
-        serializer = {}
+        serializer = []
         for story in posts_set:
-            serializer[story.id] = get_story(story)
-        return Response(serializer.values(), status=200)
+            serializer.append(get_story(story))
+        activityStream.createActivity(userid,"filtered posts","allFilter",resolve(request.path_info).route,"PostFilter",True)
+        return Response(serializer, status=200)
 
 class GetRelatedTags(GenericAPIView):
     def get(self, request, query, format=None):
+        userid = request.auth['user_id']
         if request.auth:
             try:
                 tag_list = list(getRelatedTags(query))
+                activityStream.createActivity(userid,"got related tags","related",resolve(request.path_info).route,"GetRelatedTags",True)
                 return Response(tag_list, status = 200)
             except:
+                activityStream.createActivity(userid,"got related tags","related",resolve(request.path_info).route,"GetRelatedTags",False)
                 return Response(status = 503)
         else:
+            activityStream.createActivity(userid,"got related tags","related",resolve(request.path_info).route,"GetRelatedTags",False)
             return Response(status = 401)
+        
+class SavePost(GenericAPIView):
+    
+    def post(self, request, pk, format=None):
+        userid = request.auth['user_id']
+        user = User.objects.get(id = userid)
+        try:
+            post = Post.objects.get(id = pk)
+        except Post.DoesNotExist:
+            raise Http404 
+        
+        if post in user.savedPosts.all():
+            activityStream.createActivity(userid,"saved post",post.id,resolve(request.path_info).route,"PostSave",True)
+            user.savedPosts.remove(post)
+        else:
+            activityStream.createActivity(userid,"unsaved post",post.id,resolve(request.path_info).route,"PostSave",True)
+            user.savedPosts.add(post)
+        return Response(status=200)
                 
 def getRelatedTags(query):
     url = "https://www.wikidata.org/w/api.php"

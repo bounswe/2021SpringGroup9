@@ -14,4 +14,5 @@ urlpatterns = [
     path('report/user/<int:pk>', UserReport.as_view(), name="user_report"),
     path('report/story/<int:pk>', StoryReport.as_view(), name="story_report"),
     path('changeProfile', ChangePrivate.as_view(), name="change_profile_settings"),
+    path('banControl', BanControl.as_view(), name="control_ban"),
 ]

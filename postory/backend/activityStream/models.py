@@ -11,4 +11,4 @@ class ActivityStream(models.Model):
     success = models.BooleanField()
     
     def __str__(self):
-        return self.actor + " " + self.type
+        return str(self.id) + " - " + self.type + " - " + str(self.actor) + " (User ID)"
