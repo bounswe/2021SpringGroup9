@@ -329,7 +329,7 @@ class StoryReport(GenericAPIView):
         
         data = dict([])
 
-        subject = "User Reported"
+        subject = "Story Reported"
         content = f"User with id {user_id} reported story with id {pk}. \nVisit the website for more details: http://3.67.83.253:8000/admin. \n\n- The Postory team"
     
     
