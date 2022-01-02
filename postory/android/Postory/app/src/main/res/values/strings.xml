@@ -44,5 +44,6 @@
     <string name="email">Email</string>
     <string name="you_re_following_this_user">Already followed.</string>
     <string name="no_user_found">No user found</string>
+    <string name="private_profile">Private Profile</string>
 
 </resources>
