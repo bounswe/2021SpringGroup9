@@ -10,7 +10,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 
-from .serializers import UserSerializer, FollowRequestSerializer, ReportSerializer
+from .serializers import UserSerializer, FollowRequestSerializer, UserReportSerializer, StoryReportSerializer
 from post_endpoint.models import Post, Image
 from post_endpoint.serializers import PostSerializer
 
@@ -268,14 +268,14 @@ class UserGet(GenericAPIView):
             activityStream.createActivity(requester_user.id,"requested user",requested_user.id,resolve(request.path_info).route,"UserRequest",False)
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-class Report(GenericAPIView):
+class UserReport(GenericAPIView):
     def get_object(self, pk):
         try:
             return User.objects.get(pk=pk)
         except User.DoesNotExist:
             raise Http404
     
-    def post(self, request, type, pk, format=None):
+    def post(self, request, pk, format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
         decoded = jwt.decode(token,options={"verify_signature": False})
@@ -285,21 +285,15 @@ class Report(GenericAPIView):
         
         data = dict([])
 
-        if type == 0:
-            subject = "User Reported"
-            content = f"User with id {user_id} reported user with id {pk}. \nVisit the website for more details: http://3.67.83.253:8000/admin. \n\n- The Postory team"
-        elif type == 1:
-            subject = "Story Reported"
-            content = f"User with id {user_id} reported story with id {pk}. \nVisit the website for more details: http://3.67.83.253:8000/admin. \n\n- The Postory team"
-        else:
-            return Response({"message": "invalid report type {type}"}, status=status.HTTP_400_BAD_REQUEST)
+        subject = "User Reported"
+        content = f"User with id {user_id} reported user with id {pk}. \nVisit the website for more details: http://3.67.83.253:8000/admin. \n\n- The Postory team"
+    
     
         try:
             data['fromUser'] = user_id
-            data['toUserorPost'] = pk
-            data['type'] = type
+            data['toUser'] = pk
             
-            serializer = ReportSerializer(data=data)
+            serializer = UserReportSerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
                 send_mail(
@@ -309,16 +303,57 @@ class Report(GenericAPIView):
                     [x.email for x in User.objects.filter(is_superuser__in = [True]).all()], # send to all superusers
                     fail_silently=False,
                 )
-                if type==0: activityStream.createActivity(user.id,"reported ",pk ,resolve(request.path_info).route,"UserReport",True)
-                else: activityStream.createActivity(user.id,"reported ",pk ,resolve(request.path_info).route,"StoryReport",True)
+                activityStream.createActivity(user.id,"reported user",pk ,resolve(request.path_info).route,"UserReport",True)
                 return Response({"message": "successfuly reported", 'data': serializer.data}, status=status.HTTP_200_OK)
             else:
-                if type==0: activityStream.createActivity(user.id,"reported ",pk ,resolve(request.path_info).route,"UserReport",False)
-                else: activityStream.createActivity(user.id,"reported ",pk ,resolve(request.path_info).route,"StoryReport",False)
+                activityStream.createActivity(user.id,"reported user",pk ,resolve(request.path_info).route,"UserReport",False)
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except:
-            if type==0: activityStream.createActivity(user.id,"reported ",pk ,resolve(request.path_info).route,"UserReport",False)
-            else: activityStream.createActivity(user.id,"reported ",pk ,resolve(request.path_info).route,"StoryReport",False)
+            activityStream.createActivity(user.id,"reported user",pk ,resolve(request.path_info).route,"UserReport",False)
+            return Response({"message": "report failed"}, status=status.HTTP_400_BAD_REQUEST)
+
+class StoryReport(GenericAPIView):
+    def get_object(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404
+    
+    def post(self, request, pk, format=None):
+        authorization = request.headers['Authorization']
+        token = authorization.split()[1]
+        decoded = jwt.decode(token,options={"verify_signature": False})
+        user_id = decoded['user_id']
+
+        user = self.get_object(user_id)
+        
+        data = dict([])
+
+        subject = "User Reported"
+        content = f"User with id {user_id} reported story with id {pk}. \nVisit the website for more details: http://3.67.83.253:8000/admin. \n\n- The Postory team"
+    
+    
+        try:
+            data['fromStory'] = user_id
+            data['toStory'] = pk
+            
+            serializer = StoryReportSerializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+                send_mail(
+                    subject,
+                    content,
+                    'from@example.com',
+                    [x.email for x in User.objects.filter(is_superuser__in = [True]).all()], # send to all superusers
+                    fail_silently=False,
+                )
+                activityStream.createActivity(user.id,"reported story",pk ,resolve(request.path_info).route,"StoryReport",True)
+                return Response({"message": "successfuly reported", 'data': serializer.data}, status=status.HTTP_200_OK)
+            else:
+                activityStream.createActivity(user.id,"reported story",pk ,resolve(request.path_info).route,"StoryReport",False)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            activityStream.createActivity(user.id,"reported story",pk ,resolve(request.path_info).route,"StoryReport",False)
             return Response({"message": "report failed"}, status=status.HTTP_400_BAD_REQUEST)
         
 class BanControl(GenericAPIView):
