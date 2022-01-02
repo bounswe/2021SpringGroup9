@@ -18,7 +18,7 @@ import activityStream.views as activityStream
 
 from django.core.mail import send_mail
 
-
+from django.utils import timezone
 from .models import User, FollowRequest
 import jwt
 from django.urls.base import resolve
@@ -326,6 +326,8 @@ class BanControl(GenericAPIView):
     def get(self, request, format=None):
         userid = request.auth['user_id']
         user = User.objects.get(id = userid)
+        user.last_login = timezone.now()
+        user.save()
         activityStream.createActivity(user.id,"'s ban controlled","ban",resolve(request.path_info).route,"BanControl",False)
         return Response({"isBanned": user.isBanned}, status=200)
         

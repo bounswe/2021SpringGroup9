@@ -41,12 +41,12 @@ class Post(models.Model):
     comments = models.ManyToManyField(Comment, blank=True)
     editDate = models.DateTimeField(auto_now_add=True)
     viewCount = models.IntegerField(default=0)
-    likeList =  models.TextField(default="") 
+    likeList =  models.TextField(default="", blank=True) 
     year = models.CharField(default="",max_length=20)
-    month = models.CharField(default="",max_length=20)
-    day = models.CharField(default="",max_length=20)
-    hour = models.CharField(default="",max_length=20)
-    minute = models.CharField(default="",max_length=20)
+    month = models.CharField(default="",max_length=20, blank=True)
+    day = models.CharField(default="",max_length=20, blank=True)
+    hour = models.CharField(default="",max_length=20, blank=True)
+    minute = models.CharField(default="",max_length=20, blank=True)
     
     def __str__(self):
         return str(self.id) + " - " + self.title
