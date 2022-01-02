@@ -362,9 +362,6 @@ public class SinglePostActivity extends ToolbarActivity{
                 }
 
 
-
-
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
