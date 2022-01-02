@@ -1,5 +1,6 @@
 package com.example.postory.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -7,19 +8,34 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.postory.BuildConfig;
 import com.example.postory.R;
+import com.example.postory.adapters.KeywordAdapter;
 import com.example.postory.adapters.PostAdapter;
+import com.example.postory.adapters.TagFilterAdapter;
+import com.example.postory.dialogs.DelayedProgressDialog;
+import com.example.postory.fragments.TimeChooserFragment;
 import com.example.postory.models.Post;
+import com.example.postory.models.TagItem;
+import com.example.postory.utils.TimeController;
 import com.github.johnpersano.supertoasts.library.Style;
 import com.github.johnpersano.supertoasts.library.SuperActivityToast;
 import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
@@ -27,12 +43,15 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,12 +62,14 @@ import java.util.List;
 public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapLongClickListener {
 
 
+    private TextView enableSearch;
+    private ScrollView searchSection;
     private Post[] posts;
     private Request request;
-    private Request requestGetPost;
+    private Request requestFilter;
     private OkHttpClient client;
     private String url;
-    private String urlGetPost;
+    private String urlFilter;
     private static final String  TAG = "ExploreActivity";
     private GoogleMap mMap;
     private SharedPreferences sharedPreferences;
@@ -56,6 +77,38 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
     private  ArrayList<Post> arrayOfPosts;
     private HashMap<String, Integer > markerId = new HashMap<>();
     private Post post;
+    private Button addTag;
+    private Button addKeyword;
+    private Button displayOnMap;
+    private Button displayAnotherPage;
+    private ImageView pickDate;
+    private EditText addedTag;
+    private EditText addedKeyword;
+    private EditText userField;
+    private EditText distanceField;
+    public TextView dateText;
+    public LinearLayout stdLayout;
+    public FrameLayout mapContainer;
+    private TagFilterAdapter tagAdapter;
+    private KeywordAdapter keywordAdapter;
+    private RecyclerView tagsRecyclerView;
+    private RecyclerView keywordsRecyclerView;
+    private ArrayList<Marker> markers = new ArrayList<>();
+    private String filterId = "";
+    DelayedProgressDialog dialog;
+    Marker m;
+    TimeController t;
+
+    public TimeController getT() {
+        return t;
+    }
+
+    public void setT(TimeController t) {
+        this.t = t;
+    }
+
+    private ArrayList<TagItem> tagsList = new ArrayList<>();
+    private ArrayList<TagItem> keywords = new ArrayList<>();
 
     @Override
     protected void goHomeClicked() {
@@ -101,21 +154,156 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
     }
+
+    public void removeTag (int i) {
+        tagsList.remove(i);
+        tagAdapter = new TagFilterAdapter(R.layout.single_keyword,tagsList, this);
+        tagsRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        tagsRecyclerView.setAdapter(tagAdapter);
+
+    }
+
+    public void removeKeyword (int i) {
+        keywords.remove(i);
+        keywordAdapter = new KeywordAdapter(R.layout.single_keyword,keywords, this);
+        keywordsRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        keywordsRecyclerView.setAdapter(keywordAdapter);
+
+    }
+
+    public void clearAllMarkers() {
+        Marker excls = null;
+        for(Marker mrk : markers) {
+            if(!mrk.getId().equals(filterId)) {
+                mrk.remove();
+            }
+            else {
+                excls = mrk;
+            }
+        }
+        markers.clear();
+        if(excls != null) {
+            markers.add(excls);
+        }
+
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
         super.initToolbar();
         sharedPreferences = getSharedPreferences("MY_APP",MODE_PRIVATE);
+        enableSearch = (TextView) findViewById(R.id.enable_search);
+        searchSection = (ScrollView) findViewById(R.id.search_section);
+        addTag = (Button) findViewById(R.id.add_tag);
+        addKeyword = (Button) findViewById(R.id.add_keyword);
+        displayOnMap = (Button) findViewById(R.id.display_on_map);
+        displayAnotherPage = (Button) findViewById(R.id.display_on_page);
+        pickDate = (ImageView) findViewById(R.id.pick_date_btn);
+        dialog = new DelayedProgressDialog();
+
+        stdLayout = (LinearLayout) findViewById(R.id.explore_std_layout);
+        mapContainer = (FrameLayout) findViewById(R.id.frame_placeholder);
+
+
+        addedTag = (EditText) findViewById(R.id.tag_edit);
+        addedKeyword = (EditText) findViewById(R.id.keyword_edit);
+        tagsRecyclerView = (RecyclerView) findViewById(R.id.list_tags);
+        keywordsRecyclerView = (RecyclerView) findViewById(R.id.list_keywords);
+        userField = (EditText) findViewById(R.id.user_field);
+        distanceField = (EditText) findViewById(R.id.distance_field);
+        dateText = (TextView) findViewById(R.id.date_field);
+
+        LinearLayoutManager tagLayoutManager
+                = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager keywordLayoutManager
+                = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+
+        tagsRecyclerView.setLayoutManager(tagLayoutManager);
+        keywordsRecyclerView.setLayoutManager(keywordLayoutManager);
+        
+        displayAnotherPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                
+                String requestUrl = buildRequest().toString();
+
+                Intent intent = new Intent(ExploreActivity.this,ListFilteredPostsActivity.class);
+                intent.putExtra("request_url",requestUrl);
+                startActivity(intent);
+                Log.i(TAG, "onClick: ");
+                
+            }
+        });
+
+        displayOnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO make call
+
+                filterCall(buildRequest());
+            }
+        });
+
+        pickDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stdLayout.setVisibility(View.GONE);
+                mapContainer.setVisibility(View.VISIBLE);
+                TimeChooserFragment tf = new TimeChooserFragment();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frame_placeholder,tf)
+                        .commit();
+
+            }
+        });
+
+        addKeyword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                keywords.add(new TagItem(addedKeyword.getText().toString()));
+                keywordAdapter = new KeywordAdapter(R.layout.single_keyword,keywords, ExploreActivity.this);
+                keywordsRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                keywordsRecyclerView.setAdapter(keywordAdapter);
+                addedKeyword.setText("");
+                hideSoftKeyboard(ExploreActivity.this);
+            }
+        });
+
+        addTag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tagsList.add(new TagItem(addedTag.getText().toString()));
+                tagAdapter = new TagFilterAdapter(R.layout.single_keyword,tagsList, ExploreActivity.this);
+                tagsRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                tagsRecyclerView.setAdapter(tagAdapter);
+                addedTag.setText("");
+                hideSoftKeyboard(ExploreActivity.this);
+            }
+        });
+
+        enableSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchSection.setVisibility(View.VISIBLE);
+            }
+        });
 
         accessToken = sharedPreferences.getString("access_token","");
 
         client = new OkHttpClient();
         url = BuildConfig.API_IP + "/post/all/discover";
+        urlFilter = BuildConfig.API_IP + "/post/all/filter";
         request = new Request.Builder()
                 .addHeader("Authorization", "JWT " + accessToken)
                 .url(url)
                 .build();
+
+
+
         callAllPosts();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -123,6 +311,162 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
         mapFragment.getMapAsync(this);
         
        
+
+    }
+    
+    public HttpUrl buildRequest() {
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(urlFilter).newBuilder();
+        int [] years = new int[2];
+        int [] months = new int[2];
+        int [] days = new int[2];
+        int [] hours = new int[2];
+        int [] minutes = new int[2];
+        if(t != null) {
+            int precision = t.getPrecision();
+            switch (precision){
+                case 4:
+                    years[0] = t.getStartYear();
+                    years[1] = t.getEndYear();
+                    months[0] = t.getStartMonth();
+                    months[1] = t.getEndMonth();
+                    days[0] = t.getStartDay();
+                    days[1] = t.getEndDay();
+                    hours[0] = t.getStartHour();
+                    hours[1] = t.getEndHour();
+                    minutes[0] = t.getStartMinute();
+                    minutes[1] = t.getEndMinute();
+                    urlBuilder.addQueryParameter("startYear", years[0] + "");
+                    urlBuilder.addQueryParameter("endYear", years[1] + "");
+                    urlBuilder.addQueryParameter("startMonth", months[0] + "");
+                    urlBuilder.addQueryParameter("endMonth", months[1] + "");
+                    urlBuilder.addQueryParameter("startDay", days[0] + "");
+                    urlBuilder.addQueryParameter("endDay", days[1] + "");
+                    urlBuilder.addQueryParameter("startHour", hours[0] + "");
+                    urlBuilder.addQueryParameter("endHour", hours[1] + "");
+                    urlBuilder.addQueryParameter("startMinute", minutes[0] + "");
+                    urlBuilder.addQueryParameter("endMinute", minutes[1] + "");
+                    break;
+                case 3:
+                    years[0] = t.getStartYear();
+                    years[1] = t.getEndYear();
+                    months[0] = t.getStartMonth();
+                    months[1] = t.getEndMonth();
+                    days[0] = t.getStartDay();
+                    days[1] = t.getEndDay();
+                    urlBuilder.addQueryParameter("startYear", years[0] + "");
+                    urlBuilder.addQueryParameter("endYear", years[1] + "");
+                    urlBuilder.addQueryParameter("startMonth", months[0] + "");
+                    urlBuilder.addQueryParameter("endMonth", months[1] + "");
+                    urlBuilder.addQueryParameter("startDay", days[0] + "");
+                    urlBuilder.addQueryParameter("endDay", days[1] + "");
+                    break;
+                case 2:
+                    years[0] = t.getStartYear();
+                    years[1] = t.getEndYear();
+                    months[0] = t.getStartMonth();
+                    months[1] = t.getEndMonth();
+                    urlBuilder.addQueryParameter("startYear", years[0] + "");
+                    urlBuilder.addQueryParameter("endYear", years[1] + "");
+                    urlBuilder.addQueryParameter("startMonth", months[0] + "");
+                    urlBuilder.addQueryParameter("endMonth", months[1] + "");
+                    break;
+                case 1 :
+                    years[0] = t.getStartYear();
+                    years[1] = t.getEndYear();
+
+                    urlBuilder.addQueryParameter("startYear", years[0] + "");
+                    urlBuilder.addQueryParameter("endYear", years[1] + "");
+
+                    break;
+            }
+        }
+
+
+        for(TagItem tag : tagsList) {
+            urlBuilder.addQueryParameter("tag",tag.getTag());
+        }
+
+        String keywordStart = "";
+        for(TagItem keyword : keywords) {
+            keywordStart += " " + keyword.getTag();
+
+        }
+        if(!keywordStart.equals("")) {
+            urlBuilder.addQueryParameter("keyword",keywordStart);
+        }
+
+
+
+        if(!userField.getText().toString().equals("")) {
+            urlBuilder.addQueryParameter("user",userField.getText().toString());
+        }
+
+        if(m != null) {
+            urlBuilder.addQueryParameter("latitude", String.valueOf(m.getPosition().latitude));
+            urlBuilder.addQueryParameter("longitude", String.valueOf(m.getPosition().longitude));
+        }
+
+        if(!distanceField.getText().toString().equals("")) {
+            urlBuilder.addQueryParameter("distance",distanceField.getText().toString());
+        }
+
+        urlBuilder.addQueryParameter("related","true");
+
+
+        
+        
+        return urlBuilder.build();
+    }
+
+    public void filterCall(HttpUrl url) {
+
+        requestFilter = new Request.Builder()
+                .addHeader("Authorization", "JWT " + accessToken)
+                .url(url)
+                .build();
+
+        
+        dialog.show(getSupportFragmentManager(), "Filtering posts...");
+        
+        
+        client.newCall(requestFilter).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.i(TAG, "onFailure: ");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.cancel();
+
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.cancel();
+
+                    }
+                });
+
+                Gson gson = new Gson();
+                posts = gson.fromJson(response.body().string(), Post[].class);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        clearAllMarkers();
+
+                        displayOnMap();
+                    }
+                });
+
+
+                Log.i(TAG, "onResponse: ");
+            }
+        });
 
     }
 
@@ -140,40 +484,61 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
                 Gson gson = new Gson();
                 posts = gson.fromJson(response.body().string(), Post[].class);
                 Log.i(TAG, "onResponse: ");
-                arrayOfPosts = new ArrayList<Post>();
 
-                for (Post post : posts) {
-                    arrayOfPosts.add(post);
+                displayOnMap();
 
-                }
-                Collections.reverse(arrayOfPosts);
-                for(Post post:arrayOfPosts) {
-                    if(post.getLocations() != null) {
-                        for(List<Object> locations : post.getLocations()) {
-                            if(locations.size() == 3) {
-                                LatLng location = new LatLng((Double)locations.get(1),(Double)locations.get(2));
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Marker m = mMap.addMarker(new MarkerOptions()
-                                                .position(location)
-                                                .title((String) locations.get(0)));
 
-                                        markerId.put(m.getId(),post.getId());
-
-                                    }
-                                });
-
-                            }
-                        }
-                    }
-                }
 
 
 
             }
         });
 
+    }
+
+
+    public void displayOnMap() {
+
+        arrayOfPosts = new ArrayList<Post>();
+
+        for (Post post : posts) {
+            arrayOfPosts.add(post);
+
+        }
+        Collections.reverse(arrayOfPosts);
+        for(Post post:arrayOfPosts) {
+            if(post.getLocations() != null) {
+                for(List<Object> locations : post.getLocations()) {
+                    if(locations.size() == 3) {
+                        LatLng location = new LatLng((Double)locations.get(1),(Double)locations.get(2));
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Marker m = mMap.addMarker(new MarkerOptions()
+                                        .position(location)
+                                        .title((String) locations.get(0)));
+
+                                markers.add(m);
+
+                                markerId.put(m.getId(),post.getId());
+
+                            }
+                        });
+
+                    }
+                }
+            }
+        }
+
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = activity.getCurrentFocus();
+        if (view == null) {
+            view = new View(activity);
+        }
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
 
@@ -203,7 +568,9 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
             @Nullable
             @Override
             public View getInfoContents(@NonNull Marker marker) {
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(800, 150);
                 View v = getLayoutInflater().inflate(R.layout.single_post_preview, null);
+                v.setLayoutParams(layoutParams);
                 v.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -252,15 +619,45 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
 
     @Override
     public boolean onMarkerClick(@NonNull @NotNull Marker marker) {
-        marker.showInfoWindow();
+
+        if(!marker.getId().equals(filterId)) {
+            marker.showInfoWindow();
+        }
+
         return  true;
     }
 
     @Override
     public void onMapLongClick(@NonNull @NotNull LatLng latLng) {
-        mMap.addMarker(new MarkerOptions()
+
+        if (!filterId.equals("")) {
+            Marker remove = null;
+            for(Marker m : markers) {
+                if(m.getId().equals(filterId)) {
+                    remove = m;
+                    markers.remove(m);
+                    break;
+                }
+            }
+            if(remove != null) {
+                remove.remove();
+            }
+        }
+
+
+         m = mMap.addMarker(new MarkerOptions()
                 .position(latLng)
-                .title("New Marker"));
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                .title("Filter location"));
+
+        markers.add(m);
+        filterId = m.getId();
+
+
+
+
+
+
 
     }
 }

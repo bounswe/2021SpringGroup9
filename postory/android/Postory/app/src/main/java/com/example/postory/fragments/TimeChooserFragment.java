@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.postory.R;
 import com.example.postory.activities.CreatePostActivity;
+import com.example.postory.activities.ExploreActivity;
 import com.example.postory.utils.HourMinuteHandler;
 import com.example.postory.utils.TimeController;
 
@@ -211,6 +212,8 @@ public class TimeChooserFragment extends Fragment {
 
     }
     private void confirmButtonClick(){
+
+
         TimeController t = null;
         boolean correctInput = false;
         if(timeSwitch.isChecked()){
@@ -298,18 +301,37 @@ public class TimeChooserFragment extends Fragment {
             }
 
         }
-        if (correctInput){
-            ((CreatePostActivity)getActivity()).setT(t);
-            t.createDate();
-            String startDateString = t.getDateFormat().format(t.getStartDate());
-            String endDateString = t.getDateFormat().format(t.getEndDate());
-            ((CreatePostActivity)getActivity()).dateText.setText(startDateString + " - " + endDateString);
+
+        if(getActivity() instanceof CreatePostActivity) {
+            if (correctInput){
+                ((CreatePostActivity)getActivity()).setT(t);
+                t.createDate();
+                String startDateString = t.getDateFormat().format(t.getStartDate());
+                String endDateString = t.getDateFormat().format(t.getEndDate());
+                ((CreatePostActivity)getActivity()).dateText.setText(startDateString + " - " + endDateString);
+            }
+
+            ((CreatePostActivity)getActivity()).stdLayout.setVisibility(View.VISIBLE);
+            ((CreatePostActivity)getActivity()).mapContainer.setVisibility(View.GONE);
+            ((CreatePostActivity)getActivity()).getSupportFragmentManager().beginTransaction().remove(TimeChooserFragment.this).commit();
         }
 
-        ((CreatePostActivity)getActivity()).stdLayout.setVisibility(View.VISIBLE);
-        ((CreatePostActivity)getActivity()).mapContainer.setVisibility(View.GONE);
+        else {
+            if (correctInput){
+                ((ExploreActivity)getActivity()).setT(t);
+                t.createDate();
+                String startDateString = t.getDateFormat().format(t.getStartDate());
+                String endDateString = t.getDateFormat().format(t.getEndDate());
+                ((ExploreActivity)getActivity()).dateText.setText(startDateString + " - " + endDateString);
+            }
 
-        ((CreatePostActivity)getActivity()).getSupportFragmentManager().beginTransaction().remove(TimeChooserFragment.this).commit();
+            ((ExploreActivity)getActivity()).stdLayout.setVisibility(View.VISIBLE);
+            ((ExploreActivity)getActivity()).mapContainer.setVisibility(View.GONE);
+            ((ExploreActivity)getActivity()).getSupportFragmentManager().beginTransaction().remove(TimeChooserFragment.this).commit();
+
+        }
+
+
 
     }
 

@@ -54,8 +54,18 @@
         <activity
             android:name=".activities.CreatePostActivity"
             android:exported="true" />
-        <activity android:name=".activities.ExploreActivity"></activity>
-        <activity android:name=".activities.SinglePostActivity"></activity>
+
+        <activity android:name=".activities.ListFilteredPostsActivity" />
+
+        <activity android:name=".activities.ExploreActivity"
+            android:windowSoftInputMode="adjustPan">
+
+        </activity>
+
+        <activity android:name=".activities.SinglePostActivity">
+
+        </activity>
+
         <activity
             android:name=".activities.MainActivity"
             android:exported="true" />
