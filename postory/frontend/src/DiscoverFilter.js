@@ -157,8 +157,64 @@ class DiscoverPage extends React.Component{
     }
 
     onClickBrowse = () => {
-        console.log('onclick browse girdik')
-        requests.get_jwt('/api/post/all',{})
+        var filterURL = 'filter?'
+
+        for(let k = 0; k < this.state.selectedKeywords.length; k++){
+            if (k == 0)
+                filterURL += 'keyword='
+            filterURL +=  this.state.selectedKeywords[k];
+            if (k+1 == this.state.selectedTags.length){
+                filterURL += '&';
+            }else{
+                filterURL += ' '
+            }
+        }
+
+        if(this.state.searchAreaKm){
+            filterURL += 'latitude=' + this.state.searchCenter['lat'] + '&';
+            filterURL += 'longitude=' + this.state.searchCenter['lng'] + '&';
+            filterURL += 'distance=' + this.state.searchAreaKm + '&';
+        }
+
+        if(this.state.selectedTags){
+            filterURL += 'related=' + this.state.isRelatedSearch + '&';
+        }
+
+        for(let k = 0; k < this.state.selectedTags.length; k++){
+            filterURL += 'tag=' + this.state.selectedTags[k] + '&'; 
+        }
+
+        for(let k = 0; k < this.state.selectedUsers.length; k++){
+            filterURL += 'user=' + this.state.selectedUsers[k] + '&'; 
+        }
+
+        if(this.state.startYear){
+            filterURL += 'startYear=' + this.state.startYear + '&';
+        }
+        if(this.state.endYear){
+            filterURL += 'endYear=' + this.state.endYear + '&';
+        }
+        if(this.state.startMonth){
+            filterURL += 'startMonth=' + this.state.startMonth + '&';
+        }
+        if(this.state.endMonth){
+            filterURL += 'endMonth=' + this.state.endMonth + '&';
+        }
+        if(this.state.startDay){
+            filterURL += 'startDay=' + this.state.startDay + '&';
+        }
+        if(this.state.endDay){
+            filterURL += 'endDay=' + this.state.endDay + '&';
+        }
+        if(this.state.startTime){
+            filterURL += 'startTime=' + this.state.startTime + '&';
+        }
+        if(this.state.endTime){
+            filterURL += 'endTime=' + this.state.endTime + '&';
+        }
+
+        filterURL = filterURL.slice(0, -1);
+        requests.get_jwt(`/api/post/all/${filterURL}`,{})
             .then(response => response.json())
             .then( (data) => {
                 this.setState({ posts: data });
@@ -178,9 +234,69 @@ class DiscoverPage extends React.Component{
     };
 
     onClickNewPage = () => {
-        requests.get_jwt('/api/post/all/discover',{})
+        var filterURL = 'filter?'
+
+        for(let k = 0; k < this.state.selectedKeywords.length; k++){
+            if (k == 0)
+                filterURL += 'keyword='
+            filterURL +=  this.state.selectedKeywords[k];
+            if (k+1 == this.state.selectedTags.length){
+                filterURL += '&';
+            }else{
+                filterURL += ' '
+            }
+        }
+
+        if(this.state.searchAreaKm){
+            filterURL += 'latitude=' + this.state.searchCenter['lat'] + '&';
+            filterURL += 'longitude=' + this.state.searchCenter['lng'] + '&';
+            filterURL += 'distance=' + this.state.searchAreaKm + '&';
+        }
+
+        if(this.state.selectedTags){
+            filterURL += 'related=' + this.state.isRelatedSearch + '&';
+        }
+
+        for(let k = 0; k < this.state.selectedTags.length; k++){
+            filterURL += 'tag=' + this.state.selectedTags[k] + '&'; 
+        }
+
+        for(let k = 0; k < this.state.selectedUsers.length; k++){
+            filterURL += 'user=' + this.state.selectedUsers[k] + '&'; 
+        }
+
+        if(this.state.startYear){
+            filterURL += 'startYear=' + this.state.startYear + '&';
+        }
+        if(this.state.endYear){
+            filterURL += 'endYear=' + this.state.endYear + '&';
+        }
+        if(this.state.startMonth){
+            filterURL += 'startMonth=' + this.state.startMonth + '&';
+        }
+        if(this.state.endMonth){
+            filterURL += 'endMonth=' + this.state.endMonth + '&';
+        }
+        if(this.state.startDay){
+            filterURL += 'startDay=' + this.state.startDay + '&';
+        }
+        if(this.state.endDay){
+            filterURL += 'endDay=' + this.state.endDay + '&';
+        }
+        if(this.state.startTime){
+            filterURL += 'startTime=' + this.state.startTime + '&';
+        }
+        if(this.state.endTime){
+            filterURL += 'endTime=' + this.state.endTime + '&';
+        }
+
+        filterURL = filterURL.slice(0, -1);
+        console.log(filterURL)
+        console.log(`/api/post/all/${filterURL}`)
+        requests.get_jwt(`/api/post/all/${filterURL}`,{})
             .then(response => response.json())
             .then( (data) => {
+                console.log(data)
                 localStorage.setItem('filteredPosts', JSON.stringify(data));
                 this.setState({ differentPage: true });
                 
@@ -188,8 +304,37 @@ class DiscoverPage extends React.Component{
 
     }
 
+
     onChangeRelatedCheckbox = () => {
         this.setState({ isRelatedSearch: !this.state.isRelatedSearch });
+    }
+
+    clearFilters = () => {
+        this.setState({ 
+            isRelatedSearch: !this.state.isRelatedSearch,
+            selectedPost: null,
+            tagValue: '',
+            selectedTags: [], 
+            userValue: '', 
+            selectedUsers: [], 
+            keyword: '',
+            selectedKeywords: [],
+            startYear: null,
+            endYear: null,
+            startMonth: null,
+            endMonth: null,
+            startDay: null,
+            endDay: null,
+            startTime: null,
+            endTime: null,
+            searchAreaKm: null,
+            searchAreaKmCurrent: null,
+            showKm: false,
+            differentPage: false,
+            isRelatedSearch: false,
+            wikiData: '',
+            showWikiData: false
+         });
     }
 
     onClickTag = (tag) => {
@@ -546,18 +691,25 @@ class DiscoverPage extends React.Component{
                     </Col>
                 </Row>
                 <Row style={{alignItems: `center`}}>
-                    <Col sm={7}>
+                    <Col sm={4}>
                         <Button 
                             variant="primary"
                             onClick={this.onClickBrowse}
                             >Filter & Browse on Map  
                         </Button>
                     </Col>
-                    <Col sm={2}>
+                    <Col sm={4}>
                         <Button 
                             variant="primary"
                             onClick={this.onClickNewPage}
                             >Show Resulting Posts on a Different Page
+                        </Button>
+                    </Col>
+                    <Col sm={4}>
+                        <Button 
+                            variant="danger"
+                            onClick={this.clearFilters}
+                            >Clear Filters
                         </Button>
                     </Col>
                 </Row>
