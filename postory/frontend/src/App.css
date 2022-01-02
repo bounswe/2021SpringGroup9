@@ -6,6 +6,19 @@
   padding: 10px;
   background-color: rgb(235, 235, 235);
 }
+.Dropdown_style{
+  clear: both;
+}
+
+.navb{
+  z-index: 99;
+  overflow:visible;
+  position: fixed;
+  float: right;
+  right:120px;
+  top:40px;
+  padding: 1%;
+}
 
 .placeholder {
   box-sizing: content-box;

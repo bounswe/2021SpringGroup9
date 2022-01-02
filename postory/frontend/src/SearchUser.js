@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import React, { useEffect } from 'react';
 import * as requests from './requests';
 import {Navigate} from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 const SearchUserComponent = (props) => {
     const [value, setValue] = React.useState('');
@@ -11,6 +12,7 @@ const SearchUserComponent = (props) => {
     const [menu, setMenu] = React.useState(false);
     const [id, setId] = React.useState(false);
     const [req, setReq] = React.useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if(req != null){
@@ -40,9 +42,10 @@ const SearchUserComponent = (props) => {
                 value={value}
                 />
                 {menu && users && Array.isArray(users) && users.map((obj,i) => 
-                <Dropdown.Item onClick ={() => {console.log(obj);setId(obj.id)}}>{obj.username}</Dropdown.Item>)}
+                <Dropdown.Item onClick ={() => {
+                    navigate(`/profilePage?id=${obj.id}`);
+                    window.location.reload();}}>{obj.username}</Dropdown.Item>)}
             </Dropdown.Menu>
-            {id && <Navigate class = "push" to= {`/profilePage?id=${id}`}> </Navigate>}
     </div>);
 }
 
