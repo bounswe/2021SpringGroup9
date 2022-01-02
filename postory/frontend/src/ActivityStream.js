@@ -105,8 +105,11 @@ class ActivityStream extends React.Component {
         super(props);
         this.state = {
             own_activities: [],
+            own_activities_loading: true,
             followed_activities: [],
+            followed_activities_loading: true,
             follow_requests: [],
+            follow_requests_loading: true
         }
     }
 
@@ -114,17 +117,17 @@ class ActivityStream extends React.Component {
         requests.get_jwt('/api/activitystream/own', {})
             .then(res => res.json())
             .then(data => {
-                this.setState(state => ({...state, own_activities: data}))
+                this.setState(state => ({...state, own_activities_loading: false, own_activities: data}))
             })
         requests.get_jwt('/api/activitystream/followed', {})
             .then(res => res.json())
             .then(data => {
-                this.setState(state => ({...state, followed_activities: data}))
+                this.setState(state => ({...state, followed_activities_loading: false, followed_activities: data}))
             })
         requests.get_jwt('/api/user/getRequests', {})
             .then(res => res.json())
             .then(data => {
-                this.setState(state => ({...state, follow_requests: data}))
+                this.setState(state => ({...state, follow_requests_loading: false, follow_requests: data}))
             })
     }
 
@@ -133,7 +136,7 @@ class ActivityStream extends React.Component {
             <Tabs defaultActiveKey="Own" className="mb-3" style={{backgroundColor: "rgb(235, 235, 235)"}}>
                 <Tab eventKey="Own" title="Own">
                     <div id="astream">
-                        {this.state.own_activities.map((activity, index) => (
+                        {this.state.own_activities_loading ? 'Loading...' : this.state.own_activities.map((activity, index) => (
                             <React.Fragment key={index}>
                                 <Activity actor={activity.actor} type={activity.type} object={activity.object}/>
                                 <br />
@@ -144,7 +147,7 @@ class ActivityStream extends React.Component {
                 </Tab>
                 <Tab eventKey="Followed" title="Followed">
                     <div id="astream">
-                        {this.state.followed_activities.map((activity, index) => (
+                        {this.state.followed_activities_loading ? 'Loading...' : this.state.followed_activities.map((activity, index) => (
                             <React.Fragment key={index}>
                                 <Activity actor={activity.actor} type={activity.type} object={activity.object}/>
                                 <br />
@@ -154,7 +157,7 @@ class ActivityStream extends React.Component {
                 </Tab>
                 <Tab eventKey="Follow Requests" title="Follow Requests">
                     <div id="astream">
-                        {this.state.follow_requests.map((user, index) => (
+                        {this.state.follow_requests_loading ? 'Loading...' :  this.state.follow_requests.map((user, index) => (
                             <React.Fragment key={index}>
                                 <Activity actor={user} type="FollowRequest" />
                                 <br />
