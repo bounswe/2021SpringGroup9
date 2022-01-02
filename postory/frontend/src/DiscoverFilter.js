@@ -24,6 +24,7 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
     const [searchLocation, setSearchLocation] = React.useState({ lat: 43, lng: 25 });
     const [displayPost, setDisplayPost] = React.useState(false);
     const [clickCount, setClickCount] = React.useState(0);
+    const [clearInfoBox, setClearInfoBox] = React.useState(0);
     const [displayInfoBox, setDisplayInfoBox] = React.useState(false);
 
 
@@ -36,19 +37,27 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
         console.log("Selected post has been changed");
     }, [clickCount])
 
+    useEffect(() => {
+        setDisplayInfoBox(false);
+    }, [clearInfoBox])
+
     const onClickMarker = (index, obj) =>{
-        setCurrentLocation({lat:obj.lat, lng:obj.lng});
-        setSelectedPost(() =>{
-            let newPost = null;
-            for(let i =0 ; i< props.posts.length; i++){
-                if(props.posts[i].id == props.markerList[index].id){
-                    newPost = props.posts[i];
+        if (obj.lat==currentLocation.lat & obj.lng==currentLocation.lng){
+            setClearInfoBox(clearInfoBox + 1);
+        }else {
+            setCurrentLocation({lat:obj.lat, lng:obj.lng});
+            setSelectedPost(() =>{
+                let newPost = null;
+                for(let i =0 ; i< props.posts.length; i++){
+                    if(props.posts[i].id == props.markerList[index].id){
+                        newPost = props.posts[i];
+                    }
                 }
-            }
-            console.log(newPost);
-            setClickCount(clickCount + 1);
-            return newPost;
-        });       
+                console.log(newPost);
+                setClickCount(clickCount + 1);
+                return newPost;
+            });    
+        }   
     }
 
     const onDragMarkerSearch = (t) =>{
