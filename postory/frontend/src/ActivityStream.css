@@ -1,6 +1,6 @@
 #astream {
     width: 800px;
-    min-height: 500px;
+    height: 500px;
     background-color: rgb(235, 235, 235);
     padding: 10px;
     overflow: auto;

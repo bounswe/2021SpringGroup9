@@ -21,16 +21,6 @@ class Activity extends React.Component {
         this.getAccept = this.getAccept.bind(this)
     }
 
-    componentDidMount() {
-        if (this.state.type === "UserFollow") {
-            requests.get_jwt(`/api/user/get/${this.object.id}`)
-                .then(res => res.json())
-                .then(data => {
-                    this.setState(state => ({...state, object: {...state.object, username: data.username}}))
-                })
-        }
-    }
-
     getUser1() {
         return <Link to={`/profilePage?id=${this.state.actor.id}`}>{this.state.actor.username}</Link>
     }
