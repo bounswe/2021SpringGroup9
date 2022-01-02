@@ -360,13 +360,19 @@ public class SinglePostActivity extends ToolbarActivity{
                     @Override
                     public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                         if (response.isSuccessful()) {
-                            SuperActivityToast.create(SinglePostActivity.this, new Style(), Style.TYPE_BUTTON)
-                                    .setProgressBarColor(Color.WHITE)
-                                    .setText("The post is reported.")
-                                    .setDuration(Style.DURATION_LONG)
-                                    .setFrame(Style.FRAME_LOLLIPOP)
-                                    .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_BLUE))
-                                    .setAnimations(Style.ANIMATIONS_POP).show();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    SuperActivityToast.create(SinglePostActivity.this, new Style(), Style.TYPE_BUTTON)
+                                            .setProgressBarColor(Color.WHITE)
+                                            .setText("The post is reported.")
+                                            .setDuration(Style.DURATION_LONG)
+                                            .setFrame(Style.FRAME_LOLLIPOP)
+                                            .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_BLUE))
+                                            .setAnimations(Style.ANIMATIONS_POP).show();
+                                }
+                            });
+
                         }
                     }
                 });
