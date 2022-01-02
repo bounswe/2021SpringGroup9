@@ -51,11 +51,11 @@ class UserReport(models.Model):
     toUser = models.ForeignKey(User, on_delete=models.CASCADE, related_name="toUser", blank=True)
     
     def __str__(self):
-        return "User report from " + self.fromUser + " to " + self.toUser
+        return "User report from " + self.fromUser.username + " to " + self.toUser.username
 
 class StoryReport(models.Model):
     fromStory = models.ForeignKey(User, on_delete=models.CASCADE, related_name="fromStory", blank=True)
     toStory = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="toStory", blank=True)
     
     def __str__(self):
-        return "Story report from " + self.fromStory + " to " + self.toStory
+        return "Story report from " + self.fromStory.username + " to " + self.toStory.title
