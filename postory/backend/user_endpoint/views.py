@@ -206,7 +206,7 @@ class AcceptFollowRequest(GenericAPIView):
                 user1.save()
                 user2.save()
 
-                FollowRequest.objects.filter(fromUser=user2).delete()
+                FollowRequest.objects.filter(fromUser=user2, toUser=user1).delete()
                 activityStream.createActivity(user1.id,"accepted request from",user2.id,resolve(request.path_info).route,"UserAcceptRequest",True)
                 return Response({"message": f"{user1.id} successfuly accepted the request from {user2.id}"}, status=status.HTTP_200_OK)
             except:
@@ -231,7 +231,7 @@ class DeclineFollowRequest(GenericAPIView):
         user1 = self.get_object(pk=user_id)
         user2 = self.get_object(pk=pk)
 
-        pendingRequest = FollowRequest.objects.filter(fromUser=user2).all()
+        pendingRequest = FollowRequest.objects.filter(fromUser=user2, toUser=user1).all()
 
         if pendingRequest is not None:
             print(pendingRequest)
