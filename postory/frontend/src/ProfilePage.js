@@ -35,6 +35,7 @@ export const ProfilePageUpper = () => {
 
     const [isPrivate, setIsPrivate] = React.useState(false);
     const [bEnabled, setbEnabled] = React.useState(true);
+    const [followbuttonEnabled, setFollowbuttonEnabled] = React.useState(true);
 
 
     useEffect(() => {
@@ -51,7 +52,7 @@ export const ProfilePageUpper = () => {
                 setUserPosts(data);
                 setPostCount(data.length);
                 setFetchedPosts(true);
-                console.log(data);
+                console.log('TEEEEESTS',data);
             })
     }, [userID])
 
@@ -69,7 +70,6 @@ export const ProfilePageUpper = () => {
                 setUsername(data.username);
                 setFollowingCount(data.followedUsers.length);
                 setFollowerCount(data.followerUsers.length);
-                
                 setIsPrivate(data.isPrivate);
                 for(let i =0 ; i< data.followerUsers.length; i++){
                     if(data.followerUsers[i].id == sessionUserID){
@@ -100,6 +100,7 @@ export const ProfilePageUpper = () => {
     }, [])
 
     const onClickFollow = () =>{
+        setFollowbuttonEnabled(false);
         fetch(`http://${BACKEND_IP}:8000/api/user/follow/${userID}`, {
             method: 'POST',
             headers: {
@@ -114,8 +115,12 @@ export const ProfilePageUpper = () => {
 
     const closePopup = () => {
         setPopupState(false);
-        //setShowFollowButton(false);
-        if(followText == 'Follow')
+        if(!isPrivate)
+            setFollowbuttonEnabled(true);
+        console.log(isPrivate);
+        if(isPrivate)
+            setFollowText('Request is sent');
+        else if(followText == 'Follow')
             setFollowText('Unfollow');
         else
             setFollowText('Follow');
@@ -177,14 +182,14 @@ export const ProfilePageUpper = () => {
                 </Col>}
             </Row>
             <div style={{ height: window.innerHeight * 1/50, width: window.innerWidth }}/>
-            {showFollowButton && <Button variant="secondary" size="sm" onClick={() => onClickFollow()} >{followText}</Button>}
+            {showFollowButton && <Button disabled = {!followbuttonEnabled}variant="secondary" size="sm" onClick={() => onClickFollow()} >{followText}</Button>}
         </Container>
         <div className="App-header">
         {fetchedPosts && userPosts.map((obj, i) => {
             return <Post key = {i} {...obj}></Post>;
         })}
         </div>
-        <Snackbar open={popupState} autoHideDuration={3000} onClose={() => closePopup()} >
+        <Snackbar open={popupState} autoHideDuration={1000} onClose={() => closePopup()} >
             <Alert onClose={() => closePopup()} severity="info" sx={{ width: '100%' }}>
               You have successfully followed/unfollowed {username}!
             </Alert>

@@ -41,14 +41,14 @@ class Activity extends React.Component {
         } else {
             return <>
                 <button onClick={() => {
-                    requests.get_jwt(`/api/user/acceptRequest/${this.state.actor.id}`)
+                    requests.post_jwt(`/api/user/acceptRequest/${this.state.actor.id}`, {})
                         .then(() => this.setState(state => ({...state, status: 'accepted'})))
                 }}>
                     Accept
                 </button>
                 &nbsp;
                 <button onClick={() => {
-                    requests.get_jwt(`/api/user/declineRequest/${this.state.actor.id}`)
+                    requests.post_jwt(`/api/user/declineRequest/${this.state.actor.id}`, {})
                         .then(() => this.setState(state => ({...state, status: 'rejected'})))
                 }}>
                     Reject
@@ -108,6 +108,8 @@ class ActivityStream extends React.Component {
             own_activities_loading: true,
             followed_activities: [],
             followed_activities_loading: true,
+            all_activities: [],
+            all_activities_loading: true,
             follow_requests: [],
             follow_requests_loading: true
         }
@@ -123,6 +125,11 @@ class ActivityStream extends React.Component {
             .then(res => res.json())
             .then(data => {
                 this.setState(state => ({...state, followed_activities_loading: false, followed_activities: data}))
+            })
+        requests.get_jwt('/api/activitystream/all', {})
+            .then(res => res.json())
+            .then(data => {
+                this.setState(state => ({...state, all_activities_loading: false, all_activities: data}))
             })
         requests.get_jwt('/api/user/getRequests', {})
             .then(res => res.json())
@@ -148,6 +155,16 @@ class ActivityStream extends React.Component {
                 <Tab eventKey="Followed" title="Followed">
                     <div id="astream">
                         {this.state.followed_activities_loading ? 'Loading...' : this.state.followed_activities.map((activity, index) => (
+                            <React.Fragment key={index}>
+                                <Activity actor={activity.actor} type={activity.type} object={activity.object}/>
+                                <br />
+                            </React.Fragment>
+                        ))}
+                    </div>
+                </Tab>
+                <Tab eventKey="All" title="All">
+                    <div id="astream">
+                        {this.state.all_activities_loading ? 'Loading...' : this.state.all_activities.map((activity, index) => (
                             <React.Fragment key={index}>
                                 <Activity actor={activity.actor} type={activity.type} object={activity.object}/>
                                 <br />
