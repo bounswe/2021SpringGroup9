@@ -1,10 +1,11 @@
 from django.test import TestCase
 from post_endpoint.models import Post
+from activityStream.models import ActivityStream
 from user_endpoint.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient, APITestCase
-    
-class GetPosts(APITestCase):
+
+class GetActivities(APITestCase):
     def setUp(self):
         apiClient = APIClient()
         user1 = {
@@ -105,34 +106,70 @@ class GetPosts(APITestCase):
             story = "Story4_2",
             owner = self.user4Object.id
         )
-    
-    def test_DiscoverPosts(self):
-        apiClient = APIClient()
-        resp = apiClient.post("/auth/jwt/create",{"email":"user1@mail.com","password":"PASSword123*"})
-        token = resp.json()["access"]
-        apiClient.credentials(HTTP_AUTHORIZATION="JWT "+token)
-        resp = apiClient.get("/api/post/all/discover")
-        posts = resp.json()
-        ids = [post['id'] for post in posts]
-        self.assertCountEqual(ids,[1,2,3,4,5,6])
 
-    def test_FollowedUserPosts(self):
+    def test_GetAll(self):
         apiClient = APIClient()
         resp = apiClient.post("/auth/jwt/create",{"email":"user1@mail.com","password":"PASSword123*"})
         token = resp.json()["access"]
         apiClient.credentials(HTTP_AUTHORIZATION="JWT "+token)
-        resp = apiClient.post("/api/user/follow/"+str(self.user2Object.id))
-        resp = apiClient.get("/api/post/all")
-        posts = resp.json()
-        ids = [post['id'] for post in posts]
-        self.assertCountEqual(ids,[1,2,3,4])
+        resp = apiClient.post("/api/post/like/1")
+        resp = apiClient.post("/auth/jwt/create",{"email":"user2@mail.com","password":"PASSword123*"})
+        token = resp.json()["access"]
+        apiClient.credentials(HTTP_AUTHORIZATION="JWT "+token)
+        resp = apiClient.post("/api/post/like/1")
+        resp = apiClient.post("/auth/jwt/create",{"email":"user3@mail.com","password":"PASSword123*"})
+        token = resp.json()["access"]
+        apiClient.credentials(HTTP_AUTHORIZATION="JWT "+token)
+        resp = apiClient.post("/api/post/like/1")
 
-    def test_SpecificUserPosts(self):
+        resp = apiClient.get("/api/activitystream/all")
+        activities = resp.json()
+        assert len(activities) == 3
+
+    def test_GetFollowed(self):
         apiClient = APIClient()
         resp = apiClient.post("/auth/jwt/create",{"email":"user1@mail.com","password":"PASSword123*"})
         token = resp.json()["access"]
         apiClient.credentials(HTTP_AUTHORIZATION="JWT "+token)
-        resp = apiClient.get("/api/post/all/user/"+str(self.user2Object.id))
-        postsOfUser10 = resp.json()
-        ids = [post['id'] for post in postsOfUser10]
-        self.assertCountEqual(ids,[3,4]) 
+        resp = apiClient.post("/api/post/like/1")
+        resp = apiClient.post("/auth/jwt/create",{"email":"user2@mail.com","password":"PASSword123*"})
+        token = resp.json()["access"]
+        apiClient.credentials(HTTP_AUTHORIZATION="JWT "+token)
+        resp = apiClient.post("/api/post/like/1")
+        resp = apiClient.post("/auth/jwt/create",{"email":"user3@mail.com","password":"PASSword123*"})
+        token = resp.json()["access"]
+        apiClient.credentials(HTTP_AUTHORIZATION="JWT "+token)
+        resp = apiClient.post("/api/post/like/1")
+
+        resp = apiClient.get("/api/activitystream/followed")
+        activities = resp.json()
+        followedOnly = True
+        for activity in activities:
+            if(not activity['actor']['id'] == self.user1Object.id):
+                followedOnly = False
+        assert followedOnly
+
+
+    def test_GetOwn(self):
+        apiClient = APIClient()
+        resp = apiClient.post("/auth/jwt/create",{"email":"user1@mail.com","password":"PASSword123*"})
+        token = resp.json()["access"]
+        apiClient.credentials(HTTP_AUTHORIZATION="JWT "+token)
+        resp = apiClient.post("/api/post/like/1")
+        resp = apiClient.post("/auth/jwt/create",{"email":"user2@mail.com","password":"PASSword123*"})
+        token = resp.json()["access"]
+        apiClient.credentials(HTTP_AUTHORIZATION="JWT "+token)
+        resp = apiClient.post("/api/post/like/1")
+        resp = apiClient.post("/auth/jwt/create",{"email":"user3@mail.com","password":"PASSword123*"})
+        token = resp.json()["access"]
+        apiClient.credentials(HTTP_AUTHORIZATION="JWT "+token)
+        resp = apiClient.post("/api/post/like/1")
+
+        resp = apiClient.get("/api/activitystream/own")
+        activities = resp.json()
+        ownOnly = True
+        for activity in activities:
+            if(not activity['actor']['id'] == self.user3Object.id):
+                ownOnly = False
+        assert ownOnly
+        
