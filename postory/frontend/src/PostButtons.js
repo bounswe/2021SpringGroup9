@@ -72,7 +72,6 @@ class LikeButton extends React.Component {
         <Icon 
           path={this.state.iconPath} 
           size={2}
-          color = 'black'
           onClick={this.updateLikeNumber} 
         />
         <div>
@@ -125,14 +124,12 @@ class PostButtons extends React.Component {
           />
           </Link> : <Icon 
             path={mdiCommentTextOutline} 
-            color = 'black'
             size={2}
           />}
           <VerticalSeperator></VerticalSeperator>
           <Icon 
             path={mdiShareVariantOutline} 
             size={2}
-            color = 'black'
             onClick={() => {
               navigator.clipboard.writeText(String(window.location).split('/')[2] + '/viewPost?id=' + this.state.id);
               this.showPopup('The share link is copied to clipboard!');
@@ -142,7 +139,6 @@ class PostButtons extends React.Component {
           <Icon 
             path={mdiBookmarkOutline} 
             size={2}
-            color = 'black'
             onClick={() => {
               requests.post_jwt(`/api/post/save/${this.state.id}`, {});
               this.showPopup('The post is successfully saved.');
@@ -152,10 +148,8 @@ class PostButtons extends React.Component {
           <Icon 
             path={mdiAlertCircleOutline} 
             size={2}
-            color = 'black'
             onClick={() => {
               requests.post_jwt(`/api/user/report/story/${this.state.id}`, {});
-              this.showPopup('Successfully reported the post. Admins will receive the report.');
             }} 
           />
         </div>
