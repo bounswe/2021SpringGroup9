@@ -15,6 +15,12 @@ const NavbarMenu = (props) => {
                 }>My Profile Page</Dropdown.Item>
             <Dropdown.Item onClick = {() => navigate("/signIn")}>Sign In</Dropdown.Item>
             <Dropdown.Item onClick = {() => navigate("/signUp")}>Sign Up</Dropdown.Item>
+            <Dropdown.Item onClick = {() => {
+                localStorage.removeItem('access');
+                window.location.reload();
+            }}>Logout</Dropdown.Item>
+            <Dropdown.Item onClick = {() => navigate("/activityStream")}>Activities</Dropdown.Item>
+
         </Dropdown.Menu>);
 }
 

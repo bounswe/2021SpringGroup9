@@ -181,7 +181,7 @@ const SliderComponent = (props ) => {
             });
         }
                 } path={mdiArrowLeftThick }
-                        title="Post"
+                        title="Slider"
                         size={2}
                         color="black"
                     />
@@ -193,7 +193,7 @@ const SliderComponent = (props ) => {
             });
         }
                 } path={mdiArrowRightThick }
-                        title="Post"
+                        title="Slider"
                         size={2}
                         color="black"
                     />
