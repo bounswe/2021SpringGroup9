@@ -27,6 +27,23 @@ def createActivity(actor,summary,object,url,type,success):
         serializer.save()
     return
 
+class GetAllActivities(GenericAPIView):
+
+    def get(self,request,format=None):
+        authorization = request.headers['Authorization']
+        token = authorization.split()[1]
+        decoded = jwt.decode(token,options={"verify_signature": False})
+        user_id = decoded['user_id']
+        allUsers = [user.id for user in User.objects.all()]
+        activities = ActivityStream.objects.filter(actor__in = allUsers).filter(success__in = [True]).all()
+        serializer = dict()
+        for activity in activities:
+            if(activity.type == "PostCreate" or activity.type == "PostUpdate" or activity.type == "PostComment" or activity.type == "PostLike" or activity.type == "UserAddPhoto" or activity.type == "UserFollow"):
+                serializer[activity.id] = get_activity(activity)
+            else:
+                pass
+        return Response(serializer.values(), status=200)    
+
 class GetOwnActivities(GenericAPIView):
 
     def get(self,request,format=None):
