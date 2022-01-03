@@ -23,16 +23,14 @@ afterEach(() => {
   });
 
 test('Renders the menu', () => {
+  //MemoryRouter is needed because of useNavigate hook.
     render(<MemoryRouter>
       <NavbarMenu noNavigate/>
     </MemoryRouter>, container);
     const c = container.firstChild.children;
-    expect(c[0].text).toBe('Home');
-    expect(c[1].text).toBe('Discover');
-    expect(c[2].text).toBe('Create a Post');
-    expect(c[3].text).toBe('My Profile Page');
-    expect(c[4].text).toBe('Sign In');
-    expect(c[5].text).toBe('Sign Up');
+    const links = ['Home', 'Discover', 'Activities', 'Create a Post', 'My Profile Page', 'Sign In', 'Sign Up', 'Logout'];
+    for(let i = 0; i<links.length;i++)
+      expect(c[i].text).toBe(links[i]);
     expect(c[0].text).not.toBe('Random text');
   }
 );

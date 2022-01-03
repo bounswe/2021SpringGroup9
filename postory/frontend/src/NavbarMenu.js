@@ -7,6 +7,7 @@ const NavbarMenu = (props) => {
     return(<Dropdown.Menu show >
             <Dropdown.Item onClick = {() => navigate("/")}>Home</Dropdown.Item>
             <Dropdown.Item onClick = {() => navigate("/discover")}>Discover</Dropdown.Item>
+            <Dropdown.Item onClick = {() => navigate("/activityStream")}>Activities</Dropdown.Item>
             <Dropdown.Item onClick = {() => navigate("/createPost")}>Create a Post</Dropdown.Item>
             <Dropdown.Item onClick = {() => {
                 navigate(`/profilePage?id=${localStorage.getItem('userID')}`)
@@ -19,7 +20,7 @@ const NavbarMenu = (props) => {
                 localStorage.removeItem('access');
                 window.location.reload();
             }}>Logout</Dropdown.Item>
-            <Dropdown.Item onClick = {() => navigate("/activityStream")}>Activities</Dropdown.Item>
+            
 
         </Dropdown.Menu>);
 }
