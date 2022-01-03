@@ -19,6 +19,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.postory.BuildConfig;
 import com.example.postory.R;
 import com.example.postory.adapters.PostAdapter;
+import com.example.postory.dialogs.DelayedProgressDialog;
 import com.example.postory.models.Post;
 import com.example.postory.models.UserModel;
 import com.github.johnpersano.supertoasts.library.Style;
@@ -64,6 +65,8 @@ public class OtherProfilePageActivity extends ToolbarActivity {
     public static final String TAG = "OtherProfilePageActivity";
     private Post[] posts;
     private boolean followed;
+
+    private DelayedProgressDialog dialog;
 
     @Override
     protected void goProfileClicked() {
@@ -125,6 +128,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         profilePicture = (ImageView) findViewById(R.id.profilePicture);
         report = (ImageView) findViewById(R.id.report);
 
+        dialog = new DelayedProgressDialog();
         sharedPreferences = getSharedPreferences("MY_APP", MODE_PRIVATE);
         accessToken = sharedPreferences.getString("access_token", "");
         int viewerId = Integer.parseInt(sharedPreferences.getString("user_id", ""));
@@ -172,6 +176,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         report.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dialog.show(getSupportFragmentManager(),"The user is being reported...");
                 String url = BuildConfig.API_IP + "/user/report/user/" + userId;
                 MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
                 MultipartBody.Builder builder = bodyBuilder.setType(MultipartBody.FORM);
@@ -187,6 +192,12 @@ public class OtherProfilePageActivity extends ToolbarActivity {
                     @Override
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
                         Log.i(TAG, "onFailure: ");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.cancel();
+                            }
+                        });
                     }
 
                     @Override
@@ -195,6 +206,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    dialog.cancel();
                                     SuperActivityToast.create(OtherProfilePageActivity.this, new Style(), Style.TYPE_BUTTON)
                                             .setProgressBarColor(Color.WHITE)
                                             .setText("The user is reported.")
