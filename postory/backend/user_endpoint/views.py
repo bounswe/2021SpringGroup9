@@ -265,8 +265,17 @@ class UserGet(GenericAPIView):
             activityStream.createActivity(requester_user.id,"requested user",requested_user.id,resolve(request.path_info).route,"UserRequest",True)
             return Response(serializer)
         else:
-            activityStream.createActivity(requester_user.id,"requested user",requested_user.id,resolve(request.path_info).route,"UserRequest",False)
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
+            if requested_user.isPrivate:
+                serializer = dict(UserSerializer(requested_user).data)
+                serializer.pop('posts')
+                serializer.pop('savedPosts')
+                serializer.pop('likedPosts')
+                serializer.pop('comments')
+                activityStream.createActivity(requester_user.id,"requested user",requested_user.id,resolve(request.path_info).route,"UserRequest",True)
+                return Response(serializer, status=status.HTTP_200_OK)
+            else: 
+                activityStream.createActivity(requester_user.id,"requested user",requested_user.id,resolve(request.path_info).route,"UserRequest",False)
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 class ReportUser(GenericAPIView):
     def get_object(self, pk):
