@@ -108,6 +108,7 @@ class UserFollowing(GenericAPIView):
         user2 = self.get_object(pk=pk)
 
         if user1.id==user2.id: # if the user wants to follow itself
+            print("AAA")
             activityStream.createActivity(user1.id,"followed",user2.id,resolve(request.path_info).route,"UserFollow",False) 
             return Response({"message": "can't follow yourself"}, status=status.HTTP_400_BAD_REQUEST)
         
@@ -196,9 +197,9 @@ class AcceptFollowRequest(GenericAPIView):
         user1 = self.get_object(pk=user_id)
         user2 = self.get_object(pk=pk)
 
-        pendingRequest = FollowRequest.objects.filter(fromUser=user2)
+        pendingRequest = FollowRequest.objects.filter(fromUser=user2, toUser=user1)
 
-        if pendingRequest is not None:
+        if pendingRequest.count() != 0:
             try:
                 user2.followedUsers.add(user1)
                 user1.followerUsers.add(user2)
@@ -206,7 +207,7 @@ class AcceptFollowRequest(GenericAPIView):
                 user1.save()
                 user2.save()
 
-                FollowRequest.objects.filter(fromUser=user2).delete()
+                pendingRequest.delete()
                 activityStream.createActivity(user1.id,"accepted request from",user2.id,resolve(request.path_info).route,"UserAcceptRequest",True)
                 return Response({"message": f"{user1.id} successfuly accepted the request from {user2.id}"}, status=status.HTTP_200_OK)
             except:
@@ -231,12 +232,11 @@ class DeclineFollowRequest(GenericAPIView):
         user1 = self.get_object(pk=user_id)
         user2 = self.get_object(pk=pk)
 
-        pendingRequest = FollowRequest.objects.filter(fromUser=user2).all()
+        pendingRequest = FollowRequest.objects.filter(fromUser=user2, toUser=user1)
 
-        if pendingRequest is not None:
-            print(pendingRequest)
+        if pendingRequest.count() != 0:
             try:
-                FollowRequest.objects.filter(fromUser=user2).delete()
+                pendingRequest.delete()
                 activityStream.createActivity(user1.id,"declined request from",user2.id,resolve(request.path_info).route,"UserDeclineRequest",True)
                 return Response({"message": f"{user1.id} successfuly declined the request from {user2.id}"}, status=status.HTTP_200_OK)
             except:
