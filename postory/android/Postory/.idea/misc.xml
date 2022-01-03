@@ -13,6 +13,8 @@
         <entry key="app/src/main/res/layout/activity_filter_posts.xml" value="0.10416666666666667" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_single_post.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_followed_activity_stream.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_own_activity_stream.xml" value="0.1" />
         <entry key="app/src/main/res/layout/single_comment.xml" value="0.1" />
         <entry key="app/src/main/res/layout/single_keyword.xml" value="0.25" />
         <entry key="app/src/main/res/layout/single_post.xml" value="0.1" />
