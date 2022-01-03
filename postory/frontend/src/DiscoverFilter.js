@@ -551,7 +551,7 @@ class DiscoverPage extends React.Component{
                                 type="button"
                                 onClick={this.addTagToSelectedUsers}
                                 disabled={!this.state.userValue}>
-                            Add
+                            Add User
                             </Button>
                         </InputGroup>
                     </Col>
