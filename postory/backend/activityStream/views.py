@@ -92,6 +92,7 @@ def get_activity(activity):
     serializer['actor'] = get_user(user)
     serializer['object'] = object
     serializer['type'] = activity.type
+    serializer['date'] = activity.date
     return serializer
 
 
