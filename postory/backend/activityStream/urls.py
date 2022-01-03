@@ -6,4 +6,5 @@ from .views import *
 urlpatterns = [
     path('own', GetOwnActivities.as_view(), name="get_own_activities"),
     path('followed', GetFollowedActivities.as_view(), name="get_followed_activities"),
+    path('all', GetAllActivities.as_view(), name="get_all_activities"),
 ]
