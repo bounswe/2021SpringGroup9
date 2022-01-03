@@ -411,7 +411,7 @@ class GetPostsDiscoverFilter(GenericAPIView):
             
         # Username
         if 'user' in query_parameters:
-            usernames = query_parameters['user'][0].split()
+            usernames = query_parameters['user']
             for post in posts:
                 user = User.objects.get(id=post.owner)
                 if user.username not in usernames:
