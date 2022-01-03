@@ -4,9 +4,10 @@ import { mdiMapMarker, mdiClockTimeEight, mdiTag, mdiCardsHeartOutline, mdiCards
 import PostButtons from './PostButtons';
 import Badge from 'react-bootstrap/Badge'
 import { Link } from "react-router-dom";
-import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
 
 
 class Post extends React.Component{
@@ -25,6 +26,7 @@ class PostUpper extends React.Component{
 
     this.state = {
       ...props,
+      onPreview: !('id' in props),
       contentSmall : (props.story && props.story.length > 200) ? props.story.slice(0,200): props.story,
       continueReading: (props.story && props.story.length > 200),
     };
@@ -67,7 +69,21 @@ class PostUpper extends React.Component{
       </Container>
       <div class= "row2 fitText">
       
-        {this.state.locations && this.state.locations.filter(obj => typeof obj[0] === 'string' && obj[0] != '').map((obj,i) => {
+        {this.state.locations && 
+        this.state.onPreview?
+        this.state.locations.filter(obj => typeof obj['name'] === 'string' && obj['name'] != '').map((obj,i) => {
+          return(
+            <Badge pill bg="secondary" style={{ fontSize: `10px`}}>
+              <Icon path={mdiMapMarker}
+                title="Location"
+                size={0.7}
+                color="#53BEC6"
+              />
+              {obj['name']}
+             </Badge>);
+        })
+        :
+        this.state.locations.filter(obj => typeof obj[0] === 'string' && obj[0] != '').map((obj,i) => {
           return(
             <Badge pill bg="secondary" style={{ fontSize: `10px`}}>
               <Icon path={mdiMapMarker}
@@ -90,7 +106,7 @@ class PostUpper extends React.Component{
         </Badge>}
         {this.state.tags && this.state.tags.map((obj,i) => {
           return(
-            <Badge pill bg="danger" style={{ fontSize: `10px`}} >
+            <Badge pill bg="danger" style={{ fontSize: `10px`}}>
               <Icon path={mdiTag}
                 title="Tag"
                 size={0.7}
@@ -121,46 +137,6 @@ class PostUpper extends React.Component{
   }
 }
 
-class PostLower extends React.Component{
-  constructor(props){
-    super(props);
-    this.state = {
-      clicked: false
-    };
-    this.clickHeart = this.clickHeart.bind(this);
-  }
-
-  clickHeart(){
-    this.setState(state => {
-      return {clicked: !state.clicked};
-    })
-  }
-
-  render(){
-    return(
-      <div class = "row2">
-        {!this.state.clicked ?
-        <Icon path={mdiCardsHeartOutline}
-          title="Like"
-          size={2}
-          color="#53BEC6"
-          onClick = {this.clickHeart}
-          /> : 
-          <Icon path={mdiCardsHeart}
-          title="Like"
-          size={2}
-          color="#53BEC6"
-          onClick = {this.clickHeart}
-          /> }
-        <Icon path={mdiShareVariant}
-          title="Share"
-          size={2}
-          color="#53BEC6"
-          />
-      </div>
-    )
-  }
-}
 
 
 

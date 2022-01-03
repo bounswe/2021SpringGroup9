@@ -33,7 +33,7 @@ const MapComponent = withScriptjs(withGoogleMap((props) =>{
     const addMarker = (e) =>{
         if(markers.length  < markersLimit)
             setMarkers(state => {
-                const newState =  [...state, {lat: e.latLng.lat(), lng : e.latLng.lng()}]; 
+                const newState =  [...state, {name : '', lat: e.latLng.lat(), lng : e.latLng.lng()}]; 
                 props.setParentLocation(newState);
                 return newState;
             });
@@ -111,7 +111,7 @@ class LocationChooser extends React.Component{
             <div id={'locationchooser-div'}>
                 <div>
             {this.state.edit && <MapComponent 
-                editLocations = {this.state.selectedLocations.map((obj) => {return {lat: obj['lat'], lng: obj['lng']};})}
+                editLocations = {this.state.selectedLocations.map((obj) => {return {name:obj['name'] ,lat: obj['lat'], lng: obj['lng']};})}
                 setParentLocation = {this.setLocations}
                 isMarkerShown
                 googleMapURL={`https://maps.googleapis.com/maps/api/js?${key}v=3.exp&libraries=geometry,drawing,places`}
