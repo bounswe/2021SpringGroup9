@@ -72,7 +72,7 @@ export const ProfilePageUpper = () => {
                 
                 setIsPrivate(data.isPrivate);
                 for(let i =0 ; i< data.followerUsers.length; i++){
-                    if(data.followerUsers[i] == sessionUserID){
+                    if(data.followerUsers[i].id == sessionUserID){
                         closePopup();
                         //setShowFollowButton(false);
                     }
