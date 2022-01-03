@@ -306,4 +306,9 @@ public class OtherProfilePageActivity extends ToolbarActivity {
             }
         });
     }
+    @Override
+    protected void goActivitiesClicked() {
+        Intent i = new Intent(OtherProfilePageActivity.this, ActivityStreamActivity.class);
+        startActivity(i);
+    }
 }

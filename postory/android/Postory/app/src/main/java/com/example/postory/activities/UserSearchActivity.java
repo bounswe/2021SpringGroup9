@@ -147,4 +147,9 @@ public class UserSearchActivity extends ToolbarActivity {
         });
 
     }
+    @Override
+    protected void goActivitiesClicked() {
+        Intent i = new Intent(UserSearchActivity.this, ActivityStreamActivity.class);
+        startActivity(i);
+    }
 }

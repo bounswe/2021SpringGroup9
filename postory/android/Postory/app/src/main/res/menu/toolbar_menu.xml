@@ -15,7 +15,7 @@
     <item
         android:id="@+id/go_explore"
         android:icon="@drawable/baseline_world_black_24dp"
-        android:title="TODO"
+        android:title="Discover"
         app:showAsAction="always" />
 
     <item
@@ -34,6 +34,9 @@
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="collapseActionView|ifRoom" />
 
+    <item
+        android:id="@+id/go_activities"
+        android:title="Activities" />
 
     <item
         android:id="@+id/logout"

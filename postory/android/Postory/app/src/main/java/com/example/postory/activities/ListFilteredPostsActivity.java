@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -137,5 +138,11 @@ public class ListFilteredPostsActivity extends ToolbarActivity{
 
         Intent intent = new Intent(ListFilteredPostsActivity.this, ExploreActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void goActivitiesClicked() {
+        Intent i = new Intent(ListFilteredPostsActivity.this, ActivityStreamActivity.class);
+        startActivity(i);
     }
 }

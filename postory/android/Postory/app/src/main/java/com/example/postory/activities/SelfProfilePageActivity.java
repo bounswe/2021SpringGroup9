@@ -521,4 +521,10 @@ public class SelfProfilePageActivity extends ToolbarActivity {
     protected void goProfileClicked() {
         return;
     }
+
+    @Override
+    protected void goActivitiesClicked() {
+        Intent i = new Intent(SelfProfilePageActivity.this, ActivityStreamActivity.class);
+        startActivity(i);
+    }
 }

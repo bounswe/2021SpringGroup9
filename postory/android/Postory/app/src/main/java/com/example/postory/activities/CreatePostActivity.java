@@ -934,6 +934,12 @@ public class CreatePostActivity extends ToolbarActivity {
     }
 
     @Override
+    protected void goActivitiesClicked() {
+        Intent i = new Intent(CreatePostActivity.this, ActivityStreamActivity.class);
+        startActivity(i);
+    }
+
+    @Override
     protected void goHomeClicked() {
         Intent i = new Intent(CreatePostActivity.this, MainActivity.class);
         finish();
