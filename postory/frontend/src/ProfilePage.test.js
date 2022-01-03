@@ -3,6 +3,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { unmountComponentAtNode } from "react-dom";
+import userEvent from '@testing-library/user-event'
 import * as ProfilePage from './ProfilePage.js'
 
 let container = null;
@@ -20,12 +21,18 @@ afterEach(() => {
     container = null;
 });
 
-describe('ProfilePageUpper', () => {
-  test('renders ProfilePage component', () => {
-    render(<ProfilePage.ProfilePageUpper />);
-
+describe('Profile page tests', () => {
+  test('Profile page components render successfully', () => {
+    render(<ProfilePage.ProfilePageUpper />, container);
     expect(screen.getByText('Follow')).toBeInTheDocument();
     expect(screen.getByRole('button')).toBeInTheDocument();
+  });
+
+  test('On click follow button successfully', () => {
+    render(<ProfilePage.ProfilePageUpper />, container);
+
+    userEvent.click(screen.getByText('Follow'))
+    expect(screen.getByText("You Have Successfully Followed !")).toBeInTheDocument();
   });
 
   test('fetches mock user info', () => {
