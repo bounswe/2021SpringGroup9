@@ -551,7 +551,7 @@ class DiscoverPage extends React.Component{
                                 type="button"
                                 onClick={this.addTagToSelectedUsers}
                                 disabled={!this.state.userValue}>
-                            Add
+                            Add User
                             </Button>
                         </InputGroup>
                     </Col>
@@ -713,7 +713,7 @@ class DiscoverPage extends React.Component{
                         <Button 
                             variant="primary"
                             onClick={this.onClickNewPage}
-                            >Show Resulting Posts on a Different Page
+                            >Show Resulting Posts
                         </Button>
                     </Col>
                     <Col sm={4}>
