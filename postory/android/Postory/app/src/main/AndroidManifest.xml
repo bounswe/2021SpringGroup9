@@ -42,6 +42,7 @@
         <activity
             android:name=".activities.SelfProfilePageActivity"
             android:exported="true" />
+        <activity android:name=".activities.ActivityStreamActivity" />
         <activity
             android:name=".activities.OtherProfilePageActivity"
             android:exported="true" />
