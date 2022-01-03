@@ -71,13 +71,8 @@ public class MainActivity extends ToolbarActivity {
 
     @Override
     protected void goCreatePostClicked() {
-        /*
         Intent createPostIntent = new Intent(MainActivity.this, CreatePostActivity.class);
         createPostIntent.putExtra("goal", "create");
-        startActivity(createPostIntent);
-         */
-
-        Intent createPostIntent = new Intent(MainActivity.this, ActivityStreamActivity.class);
         startActivity(createPostIntent);
     }
 
