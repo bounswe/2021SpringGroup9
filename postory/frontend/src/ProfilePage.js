@@ -186,7 +186,7 @@ export const ProfilePageUpper = () => {
         </div>
         <Snackbar open={popupState} autoHideDuration={3000} onClose={() => closePopup()} >
             <Alert onClose={() => closePopup()} severity="info" sx={{ width: '100%' }}>
-              You have successfully followed/unfollowed {username}!
+              You Have Successfully {followText}ed {username}!
             </Alert>
         </Snackbar>
         </div>
