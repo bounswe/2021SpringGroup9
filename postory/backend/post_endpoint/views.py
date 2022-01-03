@@ -276,7 +276,7 @@ class GetUsersPosts(GenericAPIView):
         requester_user = User.objects.filter(id = requester_user_id).first()
         requested_user = User.objects.filter(id = user_id).first()
 
-        if(requested_user.id in requester_user.followedUsers.all() or not requested_user.isPrivate or requested_user.id == requester_user.id):
+        if(requested_user in requester_user.followedUsers.all() or not requested_user.isPrivate or requested_user.id == requester_user.id):
             posts = Post.objects.filter(owner = requested_user.id)
             serializer = {}
             for story in posts:
