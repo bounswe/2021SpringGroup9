@@ -7,11 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.postory.R;
+import com.google.android.material.tabs.TabLayout;
 
 
 public class FollowedActivityStreamFragment extends Fragment {
+
+
 
 
     @Override
