@@ -103,6 +103,7 @@ public class FollowedActivityStreamFragment extends Fragment {
                     generalModel.add(new ActorObjectGeneralModel(model.getActor(), objectUser, objectPost,model.getType()));
                 }
 
+                Log.i(TAG, "onResponse: ");
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
