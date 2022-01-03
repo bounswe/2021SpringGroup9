@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,9 +14,16 @@ import androidx.fragment.app.Fragment;
 
 import com.example.postory.BuildConfig;
 import com.example.postory.R;
+import com.example.postory.adapters.ActivityStreamAdapter;
+import com.example.postory.models.ActorObjectGeneralModel;
+import com.example.postory.models.ActorObjectModel;
+import com.example.postory.models.Post;
+import com.example.postory.models.UserModel;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -31,13 +39,21 @@ public class FollowedActivityStreamFragment extends Fragment {
     private OkHttpClient client;
     private Request request;
     private String url;
+    private ListView listView;
+
+
     private SharedPreferences sharedPreferences;
+    private ActorObjectModel[] actions;
+    private ArrayList<ActorObjectGeneralModel> generalModel = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_followed_activity_stream, container, false);
+        View view = inflater.inflate(R.layout.fragment_own_activity_stream, container, false);
+        listView = (ListView) view.findViewById(R.id.list_activity_stream);
+
+        return view;
     }
 
     @Override
@@ -67,6 +83,35 @@ public class FollowedActivityStreamFragment extends Fragment {
                 Log.i(TAG, "onResponse: ");
                 String respStr = response.body().string();
                 Gson gson = new Gson();
+                actions = gson.fromJson(respStr, ActorObjectModel[].class);
+                Log.i(TAG, "onResponse: ");
+                for(ActorObjectModel model : actions) {
+                    UserModel objectUser = null;
+                    Post objectPost = null;
+
+                    if(model.getType().toLowerCase().contains("post"))
+                    {
+                        objectUser = null;
+                        objectPost = gson.fromJson(model.getObject(),Post.class);
+                    }
+                    else {
+                        objectUser = gson.fromJson(model.getObject(),UserModel.class);
+                        objectPost = null;
+
+                    }
+
+                    generalModel.add(new ActorObjectGeneralModel(model.getActor(), objectUser, objectPost,model.getType()));
+                }
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ActivityStreamAdapter adapter = new ActivityStreamAdapter(getContext(),0,generalModel);
+                        listView.setAdapter(adapter);
+
+                    }
+                });
+
 
             }
         });

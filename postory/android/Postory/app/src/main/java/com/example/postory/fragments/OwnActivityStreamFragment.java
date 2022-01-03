@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import com.example.postory.BuildConfig;
 import com.example.postory.R;
 import com.example.postory.adapters.ActivityStreamAdapter;
+import com.example.postory.dialogs.DelayedProgressDialog;
 import com.example.postory.models.ActorObjectGeneralModel;
 import com.example.postory.models.ActorObjectModel;
 import com.example.postory.models.Post;
@@ -23,6 +24,7 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -38,7 +40,8 @@ public class OwnActivityStreamFragment extends Fragment {
     private OkHttpClient client;
     private Request request;
     private String url;
-    private ListView url;
+    private ListView listView;
+    DelayedProgressDialog dialog;
 
 
     private SharedPreferences sharedPreferences;
@@ -49,7 +52,9 @@ public class OwnActivityStreamFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_own_activity_stream, container, false);
+        View view = inflater.inflate(R.layout.fragment_own_activity_stream, container, false);
+        listView = (ListView) view.findViewById(R.id.list_activity_stream);
+        return view;
     }
 
     @Override
@@ -58,11 +63,13 @@ public class OwnActivityStreamFragment extends Fragment {
         sharedPreferences = getActivity().getSharedPreferences("MY_APP",getContext().MODE_PRIVATE);
         accessToken = sharedPreferences.getString("access_token","");
         client = new OkHttpClient();
+        dialog = new DelayedProgressDialog();
         url = BuildConfig.API_IP + "/activitystream/own";
         request = new Request.Builder()
                 .addHeader("Authorization", "JWT " + accessToken)
                 .url(url)
                 .build();
+        dialog.show(getActivity().getSupportFragmentManager(), "Filtering posts...");
         callActivityStreamAPI();
 
     }
@@ -71,11 +78,23 @@ public class OwnActivityStreamFragment extends Fragment {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.cancel();
+                    }
+                });
                 Log.i(TAG, "onFailure: ");
             }
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.cancel();
+                    }
+                });
                 Log.i(TAG, "onResponse: ");
                 String respStr = response.body().string();
                 Gson gson = new Gson();
@@ -99,9 +118,15 @@ public class OwnActivityStreamFragment extends Fragment {
                     generalModel.add(new ActorObjectGeneralModel(model.getActor(), objectUser, objectPost,model.getType()));
                 }
 
-                ActivityStreamAdapter adapter = new ActivityStreamAdapter(getContext(),0,generalModel);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ActivityStreamAdapter adapter = new ActivityStreamAdapter(getContext(),0,generalModel);
+                        listView.setAdapter(adapter);
 
-                Log.i(TAG, "onResponse: ");
+                    }
+                });
+
 
             }
         });
