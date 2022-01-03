@@ -41,14 +41,14 @@ class Activity extends React.Component {
         } else {
             return <>
                 <button onClick={() => {
-                    requests.get_jwt(`/api/user/acceptRequest/${this.state.actor.id}`)
+                    requests.post_jwt(`/api/user/acceptRequest/${this.state.actor.id}`, {})
                         .then(() => this.setState(state => ({...state, status: 'accepted'})))
                 }}>
                     Accept
                 </button>
                 &nbsp;
                 <button onClick={() => {
-                    requests.get_jwt(`/api/user/declineRequest/${this.state.actor.id}`)
+                    requests.post_jwt(`/api/user/declineRequest/${this.state.actor.id}`, {})
                         .then(() => this.setState(state => ({...state, status: 'rejected'})))
                 }}>
                     Reject
