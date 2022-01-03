@@ -352,9 +352,9 @@ class DiscoverPage extends React.Component{
             .then( (data) => {
                 console.log(data);
                 var wikiResponse = ''
-                for(let i = data.length - 1; i >= 0; i--){
+                for(let i = 0; i < data.length; i++){
                     wikiResponse += data[i] + ' - '
-                    if (i == data.length - 5)
+                    if (i == 5)
                         break
                 }
                 this.setState({ showWikiData: true });
@@ -466,7 +466,7 @@ class DiscoverPage extends React.Component{
                 <Row style={{alignItems: `center`}}> 
                     <Col sm={2}> 
                         <Icon path={mdiPound} size={1}/> Tags &nbsp;&nbsp;
-                        <Tooltip describeChild title="Check this box if you want to include all the related tags..">
+                        <Tooltip describeChild title="Check this box if you want to include all the related tags">
                         <input
                             type="checkbox"
                             checked={this.state.isRelatedSearch}
@@ -580,9 +580,11 @@ class DiscoverPage extends React.Component{
                     <Col sm={2} style={{maxHeight: 70, overflow: 'auto'}}>
                         {this.state.selectedTags.map((item, index) => (
                             <div key={item}>
+                            <Tooltip describeChild title='Click to see the related tags'>
                             <Badge bg="primary" onClick={() => this.onClickTag(item)}>
                                 {item}
                             </Badge>
+                            </Tooltip>
                             <Button
                                 type="button"
                                 variant="outline-secondary"
