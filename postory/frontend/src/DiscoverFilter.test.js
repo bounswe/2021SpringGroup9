@@ -57,3 +57,13 @@ test('Clicks on add a user successfully', () => {
     userEvent.click(screen.getByText('Add User'))
     expect(screen.getByText('user1')).toBeInTheDocument();
 })
+
+test('Clicks on clear filters and clears the filters successfully', () => {
+    render(<DiscoverFilter />, container);
+    const input = screen.getByPlaceholderText('Enter a tag')
+    userEvent.type(input, 'tag1')
+    userEvent.click(screen.getByText('Add Tag'))
+    expect(screen.getByText('tag1')).toBeInTheDocument();
+    userEvent.click(screen.getByText('Clear Filters'))
+    expect(screen.queryByText('tag1')).toBeNull();
+})
