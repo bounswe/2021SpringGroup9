@@ -71,13 +71,8 @@ public class MainActivity extends ToolbarActivity {
 
     @Override
     protected void goCreatePostClicked() {
-        /*
         Intent createPostIntent = new Intent(MainActivity.this, CreatePostActivity.class);
         createPostIntent.putExtra("goal", "create");
-        startActivity(createPostIntent);
-         */
-
-        Intent createPostIntent = new Intent(MainActivity.this, ActivityStreamActivity.class);
         startActivity(createPostIntent);
     }
 
@@ -154,5 +149,11 @@ public class MainActivity extends ToolbarActivity {
         bm.compress(Bitmap.CompressFormat.PNG, 100, baos); // bm is the bitmap object
         byte[] b = baos.toByteArray();
         return Base64.encodeToString(b, Base64.DEFAULT);
+    }
+
+    @Override
+    protected void goActivitiesClicked() {
+        Intent i = new Intent(MainActivity.this, ActivityStreamActivity.class);
+        startActivity(i);
     }
 }

@@ -660,4 +660,9 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
 
 
     }
+    @Override
+    protected void goActivitiesClicked() {
+        Intent i = new Intent(ExploreActivity.this, ActivityStreamActivity.class);
+        startActivity(i);
+    }
 }

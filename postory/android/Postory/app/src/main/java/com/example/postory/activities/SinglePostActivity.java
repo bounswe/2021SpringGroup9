@@ -614,4 +614,10 @@ public class SinglePostActivity extends ToolbarActivity{
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         return formatter.format(d);
     }
+
+    @Override
+    protected void goActivitiesClicked() {
+        Intent i = new Intent(SinglePostActivity.this, ActivityStreamActivity.class);
+        startActivity(i);
+    }
 }
