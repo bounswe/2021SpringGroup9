@@ -6,9 +6,11 @@
     tools:context=".fragments.OwnActivityStreamFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ListView
+        android:id="@+id/list_activity_stream"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="FRAGMENT 1" />
+        android:layout_height="wrap_content">
+
+    </ListView>
 
 </FrameLayout>
