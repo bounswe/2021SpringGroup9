@@ -115,26 +115,32 @@ public class FollowRequestActivity extends ToolbarActivity {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 Gson gson = new Gson();
-                String respString = response.body().string();
-                UserModel[] requests = gson.fromJson(respString, UserModel[].class);
-                Log.i(TAG, "onResponse: ");
-                ArrayList<UserModel> requestArray = new ArrayList<>();
-                Collections.addAll(requestArray, requests);
-                if (requestArray.size() != 0) {
+                try {
+                    String respString = response.body().string();
+
+                    UserModel[] requests = gson.fromJson(respString, UserModel[].class);
+                    Log.i(TAG, "onResponse: ");
+                    ArrayList<UserModel> requestArray = new ArrayList<>();
+                    Collections.addAll(requestArray, requests);
+                    if (requestArray.size() != 0) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                noResultWarning.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                    RequestAdapter adapter = new RequestAdapter(FollowRequestActivity.this, requestArray);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            noResultWarning.setVisibility(View.GONE);
+                            requestsListView.setAdapter(adapter);
                         }
                     });
+                }catch(Exception e){
+
                 }
-                RequestAdapter adapter = new RequestAdapter(FollowRequestActivity.this, requestArray);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        requestsListView.setAdapter(adapter);
-                    }
-                });
+
             }
         });
 
