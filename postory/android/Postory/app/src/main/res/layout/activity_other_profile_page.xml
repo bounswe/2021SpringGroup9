@@ -138,7 +138,6 @@
             android:layout_height="20dp"
             android:background="@color/colorLightGray"
             android:gravity="center_horizontal"
-            android:text="23"
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toStartOf="@id/followedByHint"
             app:layout_constraintTop_toBottomOf="@id/followedByHint" />
@@ -162,7 +161,7 @@
             android:layout_height="20dp"
             android:background="@color/colorLightGray"
             android:gravity="center_horizontal"
-            android:text="25"
+
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toStartOf="@id/followingHint"
             app:layout_constraintTop_toBottomOf="@id/followingHint" />
@@ -186,7 +185,7 @@
             android:layout_height="20dp"
             android:background="@color/colorLightGray"
             android:gravity="center_horizontal"
-            android:text="3"
+
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toStartOf="@id/numPostsHint"
             app:layout_constraintTop_toBottomOf="@id/numPostsHint" />
