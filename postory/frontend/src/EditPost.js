@@ -239,8 +239,12 @@ class EditPost extends React.Component{
         if(!at_least_one)
             formData.set('images', []);
 
-
-        console.log(...formData);
+        
+        if(formData.getAll('tags').length == 0)
+            formData.set('tags', [])
+        if(formData.getAll('locations').length == 0)
+            formData.set('locations', []);
+        
         fetch(`http://${BACKEND_IP}:8000/api/post/put/${this.state.id}`, {
             method: 'PUT',
             headers: {
@@ -346,6 +350,7 @@ class EditPost extends React.Component{
                     <Alert onClose={this.handleSuccessClose} severity="error" sx={{ width: '100%' }}>
                         Your post could not be created. See below for the error message:
                         {this.state.creationError}
+                        Note: The post title and body fields in the Story tab should not be empty.
                     </Alert>
                 </Snackbar>
 

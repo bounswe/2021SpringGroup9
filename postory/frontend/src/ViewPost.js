@@ -105,7 +105,7 @@ class Comment extends React.Component{
                 <img class = "circle" width = "50px" height = "50px" src = "./static/media/postory_logo_no_text.ec3bad21.png" />
                 <a style = {{margin: "10px"}}>{this.state.userName}</a>
             </div>
-            <a class = "mainContent">{this.state.text}</a>
+            <a style = {{fontSize:'small'}}>{this.state.text}</a>
             </div>
         )
     }
@@ -181,7 +181,7 @@ const SliderComponent = (props ) => {
             });
         }
                 } path={mdiArrowLeftThick }
-                        title="Post"
+                        title="Slider"
                         size={2}
                         color="black"
                     />
@@ -193,7 +193,7 @@ const SliderComponent = (props ) => {
             });
         }
                 } path={mdiArrowRightThick }
-                        title="Post"
+                        title="Slider"
                         size={2}
                         color="black"
                     />

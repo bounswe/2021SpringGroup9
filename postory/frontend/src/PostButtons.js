@@ -72,6 +72,7 @@ class LikeButton extends React.Component {
         <Icon 
           path={this.state.iconPath} 
           size={2}
+          color = 'black'
           onClick={this.updateLikeNumber} 
         />
         <div>
@@ -101,12 +102,12 @@ class PostButtons extends React.Component {
     console.log(this.state);
   }
 
-  showPopup = () => {
-    this.setState({ popupState: true });
+  showPopup = (text) => {
+    this.setState({text:text, popupState: true });
   };
 
   closePopup = () => {
-    this.setState({ popupState: false });
+    this.setState(st => {return {...st, popupState: false }});
   };
 
   render(){
@@ -119,34 +120,48 @@ class PostButtons extends React.Component {
           <Link class = "push" to= {`/viewPost?id=${this.state.id}`}>
           <Icon 
             path={mdiCommentTextOutline} 
+            color = 'black'
             size={2}
           />
           </Link> : <Icon 
             path={mdiCommentTextOutline} 
+            color = 'black'
             size={2}
           />}
           <VerticalSeperator></VerticalSeperator>
           <Icon 
             path={mdiShareVariantOutline} 
             size={2}
-            onClick={this.showPopup} 
+            color = 'black'
+            onClick={() => {
+              navigator.clipboard.writeText(String(window.location).split('/')[2] + '/viewPost?id=' + this.state.id);
+              this.showPopup('The share link is copied to clipboard!');
+            }} 
           />
           <VerticalSeperator></VerticalSeperator>
           <Icon 
             path={mdiBookmarkOutline} 
             size={2}
-            onClick={this.showPopup} 
+            color = 'black'
+            onClick={() => {
+              requests.post_jwt(`/api/post/save/${this.state.id}`, {});
+              this.showPopup('The post is successfully saved.');
+            }} 
           />
           <VerticalSeperator></VerticalSeperator>
           <Icon 
             path={mdiAlertCircleOutline} 
             size={2}
-            onClick={this.showPopup} 
+            color = 'black'
+            onClick={() => {
+              requests.post_jwt(`/api/user/report/story/${this.state.id}`, {});
+              this.showPopup('The post is successfully reported. The admins will be notified of the report.');
+            }} 
           />
         </div>
         <Snackbar open={this.state.popupState} autoHideDuration={3000} onClose={this.closePopup} >
             <Alert onClose={this.closePopup} severity="info" sx={{ width: '100%' }}>
-              This feature is not available now and coming soon, thanks heaps for your patience!
+              {this.state.text}
             </Alert>
         </Snackbar>
       </div>);

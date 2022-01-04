@@ -21,7 +21,8 @@ class SignIn extends React.Component {
             password: null,
             incorrect: false,
             completed: false,
-            redirect: false
+            redirect: false,
+            banned: false,
         }
         this.handleButtonClick = this.handleButtonClick.bind(this)
     }
@@ -40,7 +41,10 @@ class SignIn extends React.Component {
                 password: this.state.password
             })
         })*/
-        requests.post_jwt(`/auth/jwt/create/`,{
+
+        let isBanned;
+
+        requests.post(`/auth/jwt/create/`,{
             email: this.state.email,
             password: this.state.password
         }).then(
@@ -49,11 +53,20 @@ class SignIn extends React.Component {
                     res.json().then(
                         data => {
                             const {refresh, access} = data
-                            localStorage.setItem('refresh', refresh)
-                            localStorage.setItem('access', access)
+                            requests.get_jwt('/api/user/banControl', {})
+                                .then(res => res.json())
+                                .then(data => {
+                                    isBanned = data.isBanned
+                                })
+                            if (isBanned) {
+                                this.setState(state => ({...state, banned: true}))
+                            } else {
+                                localStorage.setItem('refresh', refresh)
+                                localStorage.setItem('access', access)
+                            }
                         }
                     ).then(
-                        () => this.setState(state => ({...state, completed: true}))
+                        () => !isBanned && this.setState(state => ({...state, completed: true}))
                     )
                 } else {
                     this.setState(state => ({...state, incorrect: true}))
@@ -108,6 +121,12 @@ class SignIn extends React.Component {
                     { this.state.incorrect && <>
                     <span id={'signin-incorrect-text'} style={{fontSize: '50%'}}>
                         Incorrect username or password
+                    </span>
+                        <br />
+                    </>}
+                    { this.state.banned && <>
+                    <span id={'signin-banned-text'} style={{fontSize: '50%'}}>
+                        This user is banned!
                     </span>
                         <br />
                     </>}
