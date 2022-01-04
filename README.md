@@ -6,7 +6,7 @@
 We are a group of Boğaziçi University students taking the course Project Development in Software Engineering. We are developing a social media platform dedicated to share location-based stories. For more information about us or the project please visit our [wiki](https://github.com/bounswe/2021SpringGroup9/wiki).
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/56366573/141473223-51669bde-dfce-4671-ac2f-e81bffd6b937.png" width="300" height="300" />
+  <img src="https://user-images.githubusercontent.com/52619088/139734287-271be973-fb00-44c1-a1bc-d561cb6e8e42.jpeg" width="300" height="300" />
 </p>
 
 ## Group Members
@@ -29,7 +29,3 @@ We are a group of Boğaziçi University students taking the course Project Devel
  
 <s>[Kadir Kalkan](https://github.com/bounswe/2021SpringGroup9/wiki/Kadir-Kalkan)</s>
 
-## Technologies
-* Backend : Django, MongoDB
-* Frontend: React
-* Mobile: Java Android SDK

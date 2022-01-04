@@ -45,10 +45,10 @@ class TimeChooser extends React.Component {
                 <div style={{display: 'flex', flexDirection: 'row', gap: '20px'}}>
                     <input type="number" min="1900" max="2099" step="1" value={this.state.startYear || ""} onChange={
                         e => this.setState(state => ({...state, startYear: e.target.value.toString()}))
-                    }/>
+                    } alt="Starting year"/>
                     <input type="number" min="1900" max="2099" step="1" value={this.state.endYear || ""}  onChange={
                         e => this.setState(state => ({...state, endYear: e.target.value.toString()}))
-                    }/>
+                    } alt="Ending year"/>
                     <button onClick={() => {
                         this.setState(state => ({...state, startYear: null, endYear: null, startMonth: null, endMonth: null, startDay: null, endDay: null, startTime: null, endTime: null}))
                     }}>
@@ -60,10 +60,10 @@ class TimeChooser extends React.Component {
                 <div style={{display: 'flex', flexDirection: 'row', gap: '20px'}}>
                     <input type="number" min="1" max="12" step="1" value={this.state.startMonth || ""} onChange={
                         e => this.setState(state => ({...state, startMonth: e.target.value.toString()}))
-                    }/>
+                    } alt="Starting month"/>
                     <input type="number" min="1" max="12" step="1" value={this.state.endMonth || ""}  onChange={
                         e => this.setState(state => ({...state, endMonth: e.target.value.toString()}))
-                    }/>
+                    } alt="Ending month"/>
                     <button onClick={() => {
                         this.setState(state => ({...state, startMonth: null, endMonth: null, startDay: null, endDay: null, startTime: null, endTime: null}))
                     }}>
@@ -76,10 +76,10 @@ class TimeChooser extends React.Component {
                 <div style={{display: 'flex', flexDirection: 'row', gap: '20px'}}>
                     <input type="number" min="1" max="31" step="1" value={this.state.startDay || ""} onChange={
                         e => this.setState(state => ({...state, startDay: e.target.value.toString()}))
-                    }/>
+                    } alt="Starting day"/>
                     <input type="number" min="1" max="31" step="1" value={this.state.endDay || ""}  onChange={
                         e => this.setState(state => ({...state, endDay: e.target.value.toString()}))
-                    }/>
+                    } alt="Ending day"/>
                     <button onClick={() => {
                         this.setState(state => ({...state, startDay: null, endDay: null, startTime: null, endTime: null}))
                     }}>
@@ -92,10 +92,10 @@ class TimeChooser extends React.Component {
                 <div style={{display: 'flex', flexDirection: 'row', gap: '20px'}}>
                     <input type="time" value={this.state.startTime || ""} onChange={
                         e => this.setState(state => ({...state, startTime: e.target.value.toString()}))
-                    }/>
+                    } alt="Starting time"/>
                     <input type="time" value={this.state.endTime || ""}  onChange={
                         e => this.setState(state => ({...state, endTime: e.target.value.toString()}))
-                    }/>
+                    } alt="Ending time"/>
                     <button onClick={() => {
                         this.setState(state => ({...state, startTime: null, endTime: null}))
                     }}>

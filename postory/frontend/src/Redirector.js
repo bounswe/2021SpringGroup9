@@ -14,7 +14,7 @@ class Redirector extends React.Component{
         requests.get_jwt('/api/post/all',{}).
         then(resp => 
             this.setState( {hasJWT: (resp.status==200) && localStorage.getItem("access")})
-            ).catch(err => console.log(err));
+            ).catch(err => this.setState( {hasJWT: false}));
         
     }
 

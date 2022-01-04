@@ -197,6 +197,10 @@ class CreatePost extends React.Component{
         if(!at_least_one)
             formData.set('images', []);
 
+        if(formData.getAll('tags').length == 0)
+            formData.set('tags', [])
+        if(formData.getAll('locations').length == 0)
+            formData.set('locations', []);
         //formData.set('locations', formData.getAll('locations') || []);
         //formData.set('tags', formData.getAll('tags') || []);
         //requests.post_jwt(`/api/post/create`, formData)
@@ -302,6 +306,7 @@ class CreatePost extends React.Component{
                     <Alert onClose={this.handleSuccessClose} severity="error" sx={{ width: '100%' }}>
                         Your post could not be created. See below for the error message:
                         {this.state.creationError}
+                        Note: The post title and body fields in the Story tab should not be empty.
                     </Alert>
                 </Snackbar>
 
