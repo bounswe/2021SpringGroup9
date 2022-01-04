@@ -1,0 +1,41 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/refresh"
+        android:icon="@drawable/baseline_refresh_black_24dp"
+        android:title="Refresh"
+        />
+
+    <item
+        android:id="@+id/go_create_post"
+        android:icon="@drawable/baseline_add_circle_black_24dp"
+        android:title="Create Post"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/go_explore"
+        android:icon="@drawable/baseline_world_black_24dp"
+        android:title="TODO"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/go_home"
+        android:icon="@drawable/baseline_home_black_24dp"
+        android:title="TODO"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/go_profile"
+        android:icon="@drawable/baseline_person_outline_black_24dp"
+        android:title="Your Profile"
+        />
+
+    <item
+        android:id="@+id/logout"
+        android:icon="@drawable/baseline_refresh_black_24dp"
+        android:title="Logout"
+        />
+
+
+</menu>
