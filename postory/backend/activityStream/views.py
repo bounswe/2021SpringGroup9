@@ -81,15 +81,27 @@ def get_activity(activity):
     serializer = dict()
     user = User.objects.filter(id = activity.actor).first()
     if(activity.type.startswith("Post")):
-        story = Post.objects.filter(id = activity.object).first()
-        object = get_story(story)
+        try:
+            story = Post.objects.filter(id = activity.object).first()
+            object = get_story(story)
+        except:
+            object = {}
     elif(activity.type == "UserAddPhoto"):
-        image = Image.objects.filter(id = activity.object).first()
-        object = image.file.url
+        try:
+            image = Image.objects.filter(id = activity.object).first()
+            object = image.file.url
+        except:
+            object = {}
     elif(activity.type == "UserFollow"):
-        affectedUser = User.objects.filter(id = activity.object).first()
-        object = get_user(affectedUser)
-    serializer['actor'] = get_user(user)
+        try:
+            affectedUser = User.objects.filter(id = activity.object).first()
+            object = get_user(affectedUser)
+        except:
+            object = {}
+    try:
+        serializer['actor'] = get_user(user)
+    except:
+        serializer['actor'] = {}
     serializer['object'] = object
     serializer['type'] = activity.type
     serializer['date'] = activity.date
