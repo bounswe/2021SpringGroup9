@@ -85,10 +85,9 @@ public class ActivityStreamActivity extends ToolbarActivity  {
         ViewPagerAdapter vpAdapter = new ViewPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
         vpAdapter.addFragment(new OwnActivityStreamFragment(),"OWN");
-        vpAdapter.addFragment(new FollowedActivityStreamFragment(),"FOLLOWER");
+        vpAdapter.addFragment(new FollowedActivityStreamFragment(),"FOLLOWED");
 
         viewPager.setAdapter(vpAdapter);
-
 
 
     }
