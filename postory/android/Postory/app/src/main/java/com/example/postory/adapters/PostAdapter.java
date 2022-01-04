@@ -1,7 +1,10 @@
 package com.example.postory.adapters;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.util.Base64;
@@ -25,9 +28,14 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.postory.R;
 import com.example.postory.activities.CreatePostActivity;
 import com.example.postory.activities.MainActivity;
-import com.example.postory.models.PostModel;
+import com.example.postory.activities.OtherProfilePageActivity;
+import com.example.postory.activities.SelfProfilePageActivity;
+import com.example.postory.activities.SinglePostActivity;
+import com.example.postory.models.Post;
 
 import com.example.postory.models.TagItem;
+import com.example.postory.utils.TimeController;
+
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
@@ -36,19 +44,23 @@ import java.util.Date;
 import java.util.List;
 
 
-public class PostAdapter extends ArrayAdapter<PostModel> {
+public class PostAdapter extends ArrayAdapter<Post> {
     private String imageUrl;
     private String location;
     private Context context;
-    public PostAdapter(Context context, ArrayList<PostModel> posts) {
+    private String userId;
+
+    public PostAdapter(Context context, ArrayList<Post> posts) {
         super(context, 0, posts);
         this.context = context;
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MY_APP", MODE_PRIVATE);
+        userId = sharedPreferences.getString("user_id","");
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        final PostModel post = getItem(position);
+        final Post post = getItem(position);
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.single_post, parent, false);
         }
@@ -78,6 +90,8 @@ public class PostAdapter extends ArrayAdapter<PostModel> {
                 tagsList.add(new TagItem(tag));
             }
         }
+
+
         ArrayList<TagItem> locationList = new ArrayList<>();
         LocationAdapter locationsAdapter = new LocationAdapter(R.layout.single_tag,locationList);
         locationRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -89,9 +103,15 @@ public class PostAdapter extends ArrayAdapter<PostModel> {
         }
 
         ImageView postPicture = (ImageView) convertView.findViewById(R.id.post_photo);
+        ImageView profilePicture = (ImageView) convertView.findViewById(R.id.profile_picture);
         postPicture.setImageResource(R.drawable.placeholder);
         ImageView editText = (ImageView) convertView.findViewById(R.id.edit_text);
+        ImageView viewSinglePost = (ImageView) convertView.findViewById(R.id.view_single_post);
 
+
+        if(!post.getOwner().equals(userId)){
+            editText.setVisibility(View.INVISIBLE);
+        }
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,11 +148,96 @@ public class PostAdapter extends ArrayAdapter<PostModel> {
 
 
 
-        opName.setText(post.getOwner());
+        if(post.getUserPhoto() != "") {
+
+            Glide
+                    .with(getContext())
+                    .load(post.getUserPhoto())
+                    .placeholder(R.drawable.placeholder)
+                    .apply(new RequestOptions().override(400,400))
+                    .centerCrop()
+                    .into(profilePicture);
+
+
+        }
+
+        opName.setText(post.getUsername());
+        opName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i;
+                if (userId.equals(post.getOwner())){
+                    i = new Intent(context, SelfProfilePageActivity.class);
+                }
+                else{
+                    i = new Intent(context, OtherProfilePageActivity.class);
+                    i.putExtra("user_id",post.getOwner());
+                }
+                context.startActivity(i);
+            }
+        });
+
+        viewSinglePost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(context,SinglePostActivity.class);
+                i.putExtra("post_id",""+post.getId());
+                context.startActivity(i);
+            }
+        });
+
+
         postText.setText(post.getStory());
         opTitle.setText(post.getTitle());
-        dateText.setText(formatDate(post.getStoryDate()));
-        sharedDateText.setText(formatDate(post.getPostDate()));
+
+        List <Integer> yearList = post.getYear();
+        List <Integer> monthList = post.getMonth();
+        List <Integer> dayList = post.getDay();
+        List <Integer> hourList = post.getHour();
+        List <Integer> minuteList = post.getMinute();
+        TimeController t;
+        if(minuteList.size()>0){
+            t = new TimeController(yearList.get(0),yearList.get(1),
+                                   monthList.get(0),monthList.get(1),
+                                    dayList.get(0),dayList.get(1),
+                                    hourList.get(0),hourList.get(1),
+                                     minuteList.get(0),minuteList.get(1));
+            t.createDate();
+            String startDateString = t.getDateFormat().format(t.getStartDate());
+            String endDateString = t.getDateFormat().format(t.getEndDate());
+            dateText.setText(startDateString + " - " + endDateString);
+        }
+        else if(dayList.size()>0){
+            t = new TimeController(yearList.get(0),yearList.get(1),
+                    monthList.get(0),monthList.get(1),
+                    dayList.get(0),dayList.get(1));
+            t.createDate();
+            String startDateString = t.getDateFormat().format(t.getStartDate());
+            String endDateString = t.getDateFormat().format(t.getEndDate());
+            dateText.setText(startDateString + " - " + endDateString);
+        }
+        else if(monthList.size()>0){
+            t = new TimeController(yearList.get(0),yearList.get(1),
+                    monthList.get(0),monthList.get(1));
+            t.createDate();
+            String startDateString = t.getDateFormat().format(t.getStartDate());
+            String endDateString = t.getDateFormat().format(t.getEndDate());
+            dateText.setText(startDateString + " - " + endDateString);
+        }
+        else if(yearList.size()>0){
+            t = new TimeController(yearList.get(0),yearList.get(1));
+            t.createDate();
+            String startDateString = t.getDateFormat().format(t.getStartDate());
+            String endDateString = t.getDateFormat().format(t.getEndDate());
+            dateText.setText(startDateString + " - " + endDateString);
+        }
+        else{
+
+        }
+        if(post.getPostDate() != null) {
+            sharedDateText.setText(formatDate(post.getPostDate()));
+        }
+
         return convertView;
 
     }

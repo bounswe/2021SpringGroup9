@@ -1,0 +1,474 @@
+<LinearLayout android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <include layout="@layout/toolbar"></include>
+
+    <TextView
+        android:id="@+id/create_new_post"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:background="@drawable/post_border"
+        android:text="Explore The World"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:textStyle="bold"></TextView>
+
+    <FrameLayout
+        android:visibility="gone"
+        android:id="@+id/frame_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="600dp">
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:id="@+id/explore_std_layout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_marginTop="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:id="@+id/map"
+            tools:context=".activities.ExploreActivity"
+            android:name="com.google.android.gms.maps.SupportMapFragment" />
+
+        <TextView
+            android:id="@+id/enable_search"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/colorPrimary"
+            android:layout_gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Click for a detailed search">
+
+        </TextView>
+
+        <ScrollView
+            android:id="@+id/search_section"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp">
+                        <TextView
+                            android:layout_marginTop="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="# Tags"
+                            android:textColor="@color/colorBlack"
+                            android:textStyle="bold"
+                            android:layout_gravity="center_horizontal"
+                            >
+
+                        </TextView>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp">
+                            <EditText
+                                android:textSize="12sp"
+                                android:id="@+id/tag_edit"
+                                android:layout_weight="0.5"
+                                android:layout_marginTop="15dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                            </EditText>
+
+
+                            <Button
+                                android:id="@+id/add_tag"
+                                android:text="Add"
+                                android:layout_marginTop="15dp"
+                                android:layout_weight="1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                            </Button>
+
+                        </LinearLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/list_tags"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                        </androidx.recyclerview.widget.RecyclerView>
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp">
+
+                        <LinearLayout
+                            android:layout_marginTop="5dp"
+                            android:layout_gravity="center"
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:src="@drawable/location"
+                                android:layout_width="30dp"
+                                android:layout_height="match_parent">
+
+                            </ImageView>
+                            <TextView
+                                android:layout_marginStart="5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Area"
+                                android:textColor="@color/colorBlack"
+                                android:textStyle="bold"
+                                android:layout_gravity="center_horizontal"
+                                >
+
+                            </TextView>
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp">
+                            <EditText
+                                android:id="@+id/distance_field"
+                                android:textSize="12sp"
+                                android:layout_weight="0.5"
+                                android:hint="Enter km2"
+                                android:layout_marginTop="15dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                            </EditText>
+
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:textSize="11sp"
+                            android:textStyle="italic"
+                            android:textColor="@color/colorBlack"
+                            android:text="Long click on the map to put the blue marker on it, representing the center of the search area."
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                        </TextView>
+
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp">
+
+                        <LinearLayout
+                            android:layout_marginTop="5dp"
+                            android:layout_gravity="center"
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/pick_date_btn"
+                                android:src="@drawable/calendar_icon"
+                                android:layout_width="30dp"
+                                android:layout_height="match_parent">
+
+                            </ImageView>
+                            <TextView
+                                android:layout_marginStart="5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Date"
+                                android:textColor="@color/colorBlack"
+                                android:textStyle="bold"
+                                android:layout_gravity="center_horizontal"
+                                >
+
+                            </TextView>
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp">
+                            <TextView
+                                android:id="@+id/date_field"
+                                android:textSize="12sp"
+                                android:layout_weight="0.5"
+                                android:text="Pick Date"
+                                android:layout_marginTop="15dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                            </TextView>
+
+
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:textSize="11sp"
+                            android:textStyle="italic"
+                            android:textColor="@color/colorBlack"
+                            android:text="Choose an appropriate date by clicking on the calendar icon."
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                        </TextView>
+
+
+
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp">
+                        <LinearLayout
+                            android:layout_marginTop="5dp"
+                            android:layout_gravity="center"
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:src="@drawable/pen"
+                                android:layout_width="40dp"
+                                android:layout_height="match_parent">
+
+                            </ImageView>
+                            <TextView
+                                android:layout_marginStart="5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Keywords"
+                                android:textColor="@color/colorBlack"
+                                android:textStyle="bold"
+                                android:layout_gravity="center_horizontal"
+                                >
+
+                            </TextView>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp">
+                            <EditText
+                                android:textSize="12sp"
+                                android:id="@+id/keyword_edit"
+                                android:layout_weight="0.5"
+                                android:layout_marginTop="15dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                            </EditText>
+
+                            <Button
+                                android:id="@+id/add_keyword"
+                                android:text="Add"
+                                android:layout_marginTop="15dp"
+                                android:layout_weight="1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                            </Button>
+
+                        </LinearLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/list_keywords"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                        </androidx.recyclerview.widget.RecyclerView>
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp">
+
+                        <LinearLayout
+                            android:layout_marginTop="5dp"
+                            android:layout_gravity="center"
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:src="@drawable/profile"
+                                android:layout_width="40dp"
+                                android:layout_height="match_parent">
+
+                            </ImageView>
+                            <TextView
+                                android:layout_marginStart="5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="User"
+                                android:textColor="@color/colorBlack"
+                                android:textStyle="bold"
+                                android:layout_gravity="center_horizontal"
+                                >
+
+                            </TextView>
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp">
+                            <EditText
+                                android:id="@+id/user_field"
+                                android:textSize="12sp"
+                                android:layout_weight="0.5"
+                                android:hint="Enter a username"
+                                android:layout_marginTop="15dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                            </EditText>
+
+
+                        </LinearLayout>
+
+
+
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_gravity="center"
+                        android:orientation="horizontal"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp">
+
+                        <Button
+                            android:textSize="10dp"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/button_round"
+                            android:id="@+id/display_on_page"
+                            android:text="Show results"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp">
+
+                        </Button>
+
+                        <Button
+                            android:textSize="10dp"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/button_round"
+                            android:id="@+id/display_on_map"
+                            android:text="Filter and display on map"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp">
+
+                        </Button>
+
+                        <Button
+                            android:textSize="10dp"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/button_round_red"
+                            android:id="@+id/clear_filters"
+                            android:text="Clear filters"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp">
+
+                        </Button>
+
+
+
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>
