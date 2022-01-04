@@ -236,13 +236,12 @@ public class OtherProfilePageActivity extends ToolbarActivity {
     }
 
 
-    private void changeFollowStatus() {
-        followed = !followed;
+    private void unfollow() {
         if (followed) {
-            followButton.setText("Unfollow");
-        } else {
+            followed = false;
             followButton.setText("Follow");
         }
+
     }
 
 
@@ -282,7 +281,54 @@ public class OtherProfilePageActivity extends ToolbarActivity {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                changeFollowStatus();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!followed) {
+                            if (response.isSuccessful()) {
+                                if (thisUser.isPrivate()) {
+                                    SuperActivityToast.create(OtherProfilePageActivity.this, new Style(), Style.TYPE_BUTTON)
+                                            .setProgressBarColor(Color.WHITE)
+                                            .setText("Follow request is sent.")
+                                            .setDuration(Style.DURATION_LONG)
+                                            .setFrame(Style.FRAME_LOLLIPOP)
+                                            .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_BLUE))
+                                            .setAnimations(Style.ANIMATIONS_POP).show();
+                                } else {
+                                    SuperActivityToast.create(OtherProfilePageActivity.this, new Style(), Style.TYPE_BUTTON)
+                                            .setProgressBarColor(Color.WHITE)
+                                            .setText("You are now following this user.")
+                                            .setDuration(Style.DURATION_LONG)
+                                            .setFrame(Style.FRAME_LOLLIPOP)
+                                            .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_BLUE))
+                                            .setAnimations(Style.ANIMATIONS_POP).show();
+                                    followed = true;
+                                }
+                            } else {
+                                SuperActivityToast.create(OtherProfilePageActivity.this, new Style(), Style.TYPE_BUTTON)
+                                        .setProgressBarColor(Color.WHITE)
+                                        .setText("You have already sent a follow request.")
+                                        .setDuration(Style.DURATION_LONG)
+                                        .setFrame(Style.FRAME_LOLLIPOP)
+                                        .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
+                                        .setAnimations(Style.ANIMATIONS_POP).show();
+                            }
+                        } else {
+                            if (response.isSuccessful()) {
+                                SuperActivityToast.create(OtherProfilePageActivity.this, new Style(), Style.TYPE_BUTTON)
+                                        .setProgressBarColor(Color.WHITE)
+                                        .setText("User unfollowed.")
+                                        .setDuration(Style.DURATION_LONG)
+                                        .setFrame(Style.FRAME_LOLLIPOP)
+                                        .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_BLUE))
+                                        .setAnimations(Style.ANIMATIONS_POP).show();
+                            }
+                            unfollow();
+
+                        }
+                    }
+                });
+
             }
         });
     }
@@ -297,6 +343,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                if(response.isSuccessful()){
                 Log.i(TAG, "onResponse: ");
                 Gson gson = new Gson();
                 posts = gson.fromJson(response.body().string(), Post[].class);
@@ -315,7 +362,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
                         listView.setAdapter(postAdapter);
                     }
                 });
-            }
+            }}
         });
     }
     @Override
