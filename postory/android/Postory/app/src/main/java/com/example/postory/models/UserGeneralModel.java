@@ -2,7 +2,7 @@ package com.example.postory.models;
 
 import java.util.List;
 
-public class UserModel{
+public class UserGeneralModel {
 
     public int getId() {
         return id;
@@ -44,19 +44,19 @@ public class UserModel{
         this.email = email;
     }
 
-    public List<OtherUser> getFollowedUsers() {
+    public List<Integer> getFollowedUsers() {
         return followedUsers;
     }
 
-    public void setFollowedUsers(List<OtherUser> followedUsers) {
+    public void setFollowedUsers(List<Integer> followedUsers) {
         this.followedUsers = followedUsers;
     }
 
-    public List<OtherUser> getFollowerUsers() {
+    public List<Integer> getFollowerUsers() {
         return followerUsers;
     }
 
-    public void setFollowerUsers(List<OtherUser> followerUsers) {
+    public void setFollowerUsers(List<Integer> followerUsers) {
         this.followerUsers = followerUsers;
     }
 
@@ -138,8 +138,8 @@ public class UserModel{
     String name;
     String surname;
     String email;
-    List<OtherUser> followedUsers;
-    List<OtherUser> followerUsers;
+    List<Integer> followedUsers;
+    List<Integer> followerUsers;
     List<Integer> posts;
     List<Integer> savedPosts;
     List<Integer> likedPosts;
