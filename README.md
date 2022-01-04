@@ -3,7 +3,7 @@
 
 **CmpE 352/451 - Group 9**
 
-We are a group of Boğaziçi University students taking the course Project Development in Software Engineering. For more information about us or the project please visit our [wiki](https://github.com/bounswe/2021SpringGroup9/wiki).
+We are a group of Boğaziçi University students taking the course Project Development in Software Engineering. We are developing a social media platform dedicated to share location-based stories. For more information about us or the project please visit our [wiki](https://github.com/bounswe/2021SpringGroup9/wiki).
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/52619088/139734287-271be973-fb00-44c1-a1bc-d561cb6e8e42.jpeg" width="300" height="300" />
