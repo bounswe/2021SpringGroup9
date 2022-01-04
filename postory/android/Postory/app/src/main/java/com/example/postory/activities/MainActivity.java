@@ -150,4 +150,10 @@ public class MainActivity extends ToolbarActivity {
         byte[] b = baos.toByteArray();
         return Base64.encodeToString(b, Base64.DEFAULT);
     }
+
+    @Override
+    protected void goActivitiesClicked() {
+        Intent i = new Intent(MainActivity.this, ActivityStreamActivity.class);
+        startActivity(i);
+    }
 }

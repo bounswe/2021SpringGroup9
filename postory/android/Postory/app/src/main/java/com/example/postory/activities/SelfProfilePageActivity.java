@@ -178,6 +178,12 @@ public class SelfProfilePageActivity extends ToolbarActivity {
                     @Override
                     public void run() {
                         setUserFields();
+                        privateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                privateSwitchController(b);
+                            }
+                        });
                     }
                 });
             }
@@ -191,12 +197,7 @@ public class SelfProfilePageActivity extends ToolbarActivity {
             }
         });
 
-        privateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                privateSwitchController(b);
-            }
-        });
+
 
     }
 
@@ -519,5 +520,11 @@ public class SelfProfilePageActivity extends ToolbarActivity {
     @Override
     protected void goProfileClicked() {
         return;
+    }
+
+    @Override
+    protected void goActivitiesClicked() {
+        Intent i = new Intent(SelfProfilePageActivity.this, ActivityStreamActivity.class);
+        startActivity(i);
     }
 }
