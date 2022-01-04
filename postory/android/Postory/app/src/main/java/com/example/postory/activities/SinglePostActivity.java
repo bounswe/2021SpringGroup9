@@ -21,6 +21,7 @@ import com.example.postory.adapters.CommentsAdapter;
 import com.example.postory.adapters.LocationAdapter;
 import com.example.postory.adapters.PostAdapter;
 import com.example.postory.adapters.TagsAdapter;
+import com.example.postory.dialogs.DelayedProgressDialog;
 import com.example.postory.fragments.MapFragment;
 import com.example.postory.models.*;
 import com.example.postory.utils.TimeController;
@@ -81,6 +82,8 @@ public class SinglePostActivity extends ToolbarActivity{
     String selfId;
     int likeCount = 0;
     boolean liked = false;
+
+    private DelayedProgressDialog dialog;
 
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
@@ -164,6 +167,7 @@ public class SinglePostActivity extends ToolbarActivity{
         commentsList = (ListView) findViewById(R.id.comments_section);
         report = (ImageView) findViewById(R.id.report);
 
+        dialog = new DelayedProgressDialog();
 
         likeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -340,6 +344,7 @@ public class SinglePostActivity extends ToolbarActivity{
         report.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dialog.show(getSupportFragmentManager(),"The post is being reported.");
                 String url = BuildConfig.API_IP + "/user/report/story/" + postId ;
                 MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
                 MultipartBody.Builder builder = bodyBuilder.setType(MultipartBody.FORM);
@@ -354,6 +359,12 @@ public class SinglePostActivity extends ToolbarActivity{
                 client.newCall(reportRequest).enqueue(new Callback() {
                     @Override
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.cancel();
+                            }
+                        });
                         Log.i(TAG, "onFailure: ");
                     }
 
@@ -363,6 +374,7 @@ public class SinglePostActivity extends ToolbarActivity{
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    dialog.cancel();
                                     SuperActivityToast.create(SinglePostActivity.this, new Style(), Style.TYPE_BUTTON)
                                             .setProgressBarColor(Color.WHITE)
                                             .setText("The post is reported.")
