@@ -54,7 +54,7 @@
 
         <ScrollView
             android:id="@+id/search_section"
-            android:visibility="visible"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
