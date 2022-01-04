@@ -12,6 +12,9 @@ urlpatterns = [
     path('all/admin', GetAllPosts.as_view(), name="get_all_posts_admin"),
     path('all/user/<int:user_id>', GetUsersPosts.as_view(), name="get_all_posts_of_user"),
     path('all/discover',GetPostsDiscover.as_view(), name="discover"),
+    path('all/filter', GetPostsDiscoverFilter.as_view(), name="filter"),
     path('comment/<int:pk>', CommentRequest.as_view(), name="comment_post"),
     path('like/<int:pk>', LikeRequest.as_view(), name="like_post"),
+    path('related/<slug:query>', GetRelatedTags.as_view(), name="get_tags"),
+    path('save/<int:pk>', SavePost.as_view(), name="save_post"),
 ]
