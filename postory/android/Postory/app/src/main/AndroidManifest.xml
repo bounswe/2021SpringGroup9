@@ -37,7 +37,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="XXXXX" />
+            android:value="XXXX" />
 
         <activity
             android:name=".activities.SelfProfilePageActivity"

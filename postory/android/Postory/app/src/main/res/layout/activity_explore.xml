@@ -54,7 +54,7 @@
 
         <ScrollView
             android:id="@+id/search_section"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -416,7 +416,7 @@
                             android:layout_gravity="center"
                             android:background="@drawable/button_round"
                             android:id="@+id/display_on_page"
-                            android:text="Display results on another page"
+                            android:text="Show results"
                             android:layout_weight="1"
                             android:layout_width="match_parent"
                             android:layout_height="50dp">
@@ -430,7 +430,21 @@
                             android:layout_gravity="center"
                             android:background="@drawable/button_round"
                             android:id="@+id/display_on_map"
-                            android:text="Display results on the map"
+                            android:text="Filter and display on map"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp">
+
+                        </Button>
+
+                        <Button
+                            android:textSize="10dp"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/button_round_red"
+                            android:id="@+id/clear_filters"
+                            android:text="Clear filters"
                             android:layout_weight="1"
                             android:layout_width="match_parent"
                             android:layout_height="50dp">
