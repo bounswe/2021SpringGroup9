@@ -509,9 +509,9 @@ class GetPostsDiscoverFilter(GenericAPIView):
                     posts_story = (posts_story | posts.filter(story__icontains=keyword)).distinct()
             for index, keyword in enumerate(keywords):
                 if index == 0:
-                    posts_title = posts.filter(story__icontains=keyword)
+                    posts_title = posts.filter(title__icontains=keyword)
                 else:
-                    posts_title = (posts_title | posts.filter(story__icontains=keyword)).distinct()
+                    posts_title = (posts_title | posts.filter(title__icontains=keyword)).distinct()
             post_story_title = (posts_story | posts_title).distinct()
             posts = (posts & post_story_title)
                         
