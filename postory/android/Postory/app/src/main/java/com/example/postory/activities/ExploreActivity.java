@@ -247,6 +247,7 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
                 keywordsRecyclerView.setItemAnimator(new DefaultItemAnimator());
                 keywordsRecyclerView.setAdapter(keywordAdapter);
 
+                callAllPosts();
 
             }
         });
@@ -499,15 +500,28 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
 
 
     private void callAllPosts(){
+        dialog.show(getSupportFragmentManager(), "Filtering posts...");
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Log.i(TAG, "onFailure: ");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.cancel();
+                    }
+                });
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 Log.i(TAG, "onResponse: ");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.cancel();
+                    }
+                });
                 Gson gson = new Gson();
                 posts = gson.fromJson(response.body().string(), Post[].class);
                 Log.i(TAG, "onResponse: ");
