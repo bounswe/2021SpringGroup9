@@ -81,6 +81,7 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
     private Button addKeyword;
     private Button displayOnMap;
     private Button displayAnotherPage;
+    private Button clearFilters;
     private ImageView pickDate;
     private EditText addedTag;
     private EditText addedKeyword;
@@ -201,6 +202,7 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
         addKeyword = (Button) findViewById(R.id.add_keyword);
         displayOnMap = (Button) findViewById(R.id.display_on_map);
         displayAnotherPage = (Button) findViewById(R.id.display_on_page);
+        clearFilters = (Button) findViewById(R.id.clear_filters);
         pickDate = (ImageView) findViewById(R.id.pick_date_btn);
         dialog = new DelayedProgressDialog();
 
@@ -223,6 +225,31 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
 
         tagsRecyclerView.setLayoutManager(tagLayoutManager);
         keywordsRecyclerView.setLayoutManager(keywordLayoutManager);
+
+        clearFilters.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterId  ="";
+                for(Marker marker : markers){
+                    marker.remove();
+                }
+                markers.clear();
+                tagsList.clear();
+                keywords.clear();
+                tagAdapter = new TagFilterAdapter(R.layout.single_keyword,tagsList, ExploreActivity.this);
+                tagsRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                tagsRecyclerView.setAdapter(tagAdapter);
+                userField.setText("");
+                distanceField.setText("");
+                t = null;
+                dateText.setText("Pick Date");
+                keywordAdapter = new KeywordAdapter(R.layout.single_keyword,keywords, ExploreActivity.this);
+                keywordsRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                keywordsRecyclerView.setAdapter(keywordAdapter);
+
+
+            }
+        });
         
         displayAnotherPage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -612,7 +639,7 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
                 return null;
             }
         });
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(41.085097, 29.043101), 10));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(41.085097, 29.043101), 4));
         mMap.setOnMarkerClickListener(ExploreActivity.this);
         mMap.setOnMapLongClickListener(ExploreActivity.this);
     }
