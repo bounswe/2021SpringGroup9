@@ -78,6 +78,7 @@ public class SelfProfilePageActivity extends ToolbarActivity {
     private TextView numPosts;
     private ImageView profilePicture;
     private SwitchCompat privateSwitch;
+    private Button followRequestsButton;
 
     private SharedPreferences sharedPreferences;
     private String userId;
@@ -148,6 +149,7 @@ public class SelfProfilePageActivity extends ToolbarActivity {
         numPosts = (TextView) findViewById(R.id.numPosts);
         profilePicture = (ImageView) findViewById(R.id.profilePicture);
         privateSwitch = (SwitchCompat) findViewById(R.id.privateSwitch);
+        followRequestsButton = (Button) findViewById(R.id.followRequestButton);
 
         sharedPreferences = getSharedPreferences("MY_APP", MODE_PRIVATE);
         accessToken = sharedPreferences.getString("access_token", "");
@@ -194,6 +196,14 @@ public class SelfProfilePageActivity extends ToolbarActivity {
             @Override
             public void onClick(View view) {
                 setProfilePicture();
+            }
+        });
+
+        followRequestsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(SelfProfilePageActivity.this,FollowRequestActivity.class);
+                startActivity(i);
             }
         });
 
