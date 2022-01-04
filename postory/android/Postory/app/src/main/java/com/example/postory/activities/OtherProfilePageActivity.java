@@ -1,11 +1,8 @@
 package com.example.postory.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,19 +16,24 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.postory.BuildConfig;
 import com.example.postory.R;
 import com.example.postory.adapters.PostAdapter;
+import com.example.postory.models.OtherUser;
 import com.example.postory.models.Post;
 import com.example.postory.models.UserModel;
+import com.example.postory.models.UserGeneralModel;
+import com.example.postory.utils.UserModelConverter;
 import com.github.johnpersano.supertoasts.library.Style;
 import com.github.johnpersano.supertoasts.library.SuperActivityToast;
 import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
-import org.w3c.dom.Text;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -45,7 +47,8 @@ public class OtherProfilePageActivity extends ToolbarActivity {
     private PostAdapter postAdapter;
     private Request requestPosts;
     private Request requestUserData;
-    private UserModel thisUser;
+    private UserModel thisUserHelper;
+    private UserGeneralModel thisUser;
     private OkHttpClient client;
     private Button followButton;
 
@@ -144,7 +147,19 @@ public class OtherProfilePageActivity extends ToolbarActivity {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 Gson gson = new Gson();
                 String respString = response.body().string();
-                thisUser = gson.fromJson(respString, UserModel.class);
+                try {
+                    JSONObject jsonResponse = new JSONObject(respString);
+                    if(jsonResponse.getBoolean("isPrivate")){
+                        thisUser = gson.fromJson(respString, UserGeneralModel.class);
+                    }
+                    else{
+                        thisUserHelper = gson.fromJson(respString,UserModel.class);
+                        thisUser = UserModelConverter.convert(thisUserHelper);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -239,14 +254,19 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         username.setText(thisUser.getUsername());
         followedBy.setText("" + thisUser.getFollowerUsers().size());
         following.setText("" + thisUser.getFollowedUsers().size());
-        numPosts.setText("" + thisUser.getPosts().size());
-        Glide
-                .with(OtherProfilePageActivity.this)
-                .load(thisUser.getUserPhoto())
-                .placeholder(R.drawable.placeholder)
-                .apply(new RequestOptions().override(400, 400))
-                .centerCrop()
-                .into(profilePicture);
+        try {
+            numPosts.setText("" + thisUser.getPosts().size());
+            Glide
+                    .with(OtherProfilePageActivity.this)
+                    .load(thisUser.getUserPhoto())
+                    .placeholder(R.drawable.placeholder)
+                    .apply(new RequestOptions().override(400, 400))
+                    .centerCrop()
+                    .into(profilePicture);
+        }catch(Exception e){
+
+        }
+
     }
 
     private void followButtonClicked() {
@@ -291,6 +311,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
                                             .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_BLUE))
                                             .setAnimations(Style.ANIMATIONS_POP).show();
                                     followed = true;
+                                    followButton.setText("Unfollow");
                                 }
                             } else {
                                 SuperActivityToast.create(OtherProfilePageActivity.this, new Style(), Style.TYPE_BUTTON)
