@@ -1,0 +1,14 @@
+#astream {
+    width: 800px;
+    height: 500px;
+    background-color: rgb(235, 235, 235);
+    padding: 10px;
+    overflow: auto;
+}
+
+.astream-link {
+    font-size: 50%;
+    text-decoration: underline;
+    cursor: pointer;
+}
+

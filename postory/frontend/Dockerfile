@@ -6,15 +6,18 @@ WORKDIR /app
 
 # add `/app/node_modules/.bin` to $PATH
 ENV PATH /app/node_modules/.bin:$PATH
+ARG REACT_APP_GOOGLE_API_KEY
 
 # install app dependencies
 COPY package.json ./
 COPY package-lock.json ./
 RUN npm install --silent
-RUN npm install react-scripts@3.4.1 -g --silent
+RUN npm install serve --silent
 
 # add app
-COPY . ./
+COPY . .
+RUN REACT_APP_GOOGLE_API_KEY=$REACT_APP_GOOGLE_API_KEY npm run build
+
 
 # start app
-CMD ["npm", "start"]
+CMD serve -s build

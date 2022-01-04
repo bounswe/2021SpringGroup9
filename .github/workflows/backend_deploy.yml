@@ -56,4 +56,6 @@ jobs:
               --env AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
               --env AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
               --env AWS_STORAGE_BUCKET_NAME=${{ secrets.AWS_STORAGE_BUCKET_NAME }} \
-              ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest bash -c "python manage.py makemigrations post_endpoint && python manage.py migrate && python manage.py runserver 0.0.0.0:8000" || true
+              --env EMAIL=${{ secrets.EMAIL }} \
+              --env EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }} \
+              ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest || true

@@ -1,0 +1,354 @@
+[
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_outline_remove_red_eye_black_24dp.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\outline_remove_red_eye_black_24dp.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_postory_logo_no_text.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\postory_logo_no_text.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_postory_logo_foreground.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-xxxhdpi\\postory_logo_foreground.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-anydpi-v26_postory_logo_round.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-anydpi-v26\\postory_logo_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_baseline_photo_size_select_actual_black_24dp.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\baseline_photo_size_select_actual_black_24dp.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_baseline_add_photo_alternate_black_24dp.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\baseline_add_photo_alternate_black_24dp.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi_postory_logo_round.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-xxhdpi\\postory_logo_round.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_baseline_add_circle_black_24dp.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\baseline_add_circle_black_24dp.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_tag_border.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\tag_border.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_launcher_background.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\ic_launcher_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_button_round_red.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\button_round_red.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_other_profile_page.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\activity_other_profile_page.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_fragment_own_activity_stream.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\fragment_own_activity_stream.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\xml_searcable.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\xml\\searcable.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_create_post.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\activity_create_post.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v24_ic_launcher_foreground.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable-v24\\ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_map_fragment.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\map_fragment.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi_postory_logo_foreground.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-xxhdpi\\postory_logo_foreground.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_postory_logo.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-mdpi\\postory_logo.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_explore.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\activity_explore.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi_postory_logo.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-xxhdpi\\postory_logo.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_single_tag.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\single_tag.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_user_info.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\user_info.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_postory_logo_foreground.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-mdpi\\postory_logo_foreground.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi_postory_logo_round.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-hdpi\\postory_logo_round.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_paris.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\paris.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi_postory_logo_foreground.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-xhdpi\\postory_logo_foreground.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_activity_stream.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\activity_activity_stream.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_dialog_progress.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\dialog_progress.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_fragment_followed_activity_stream.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\fragment_followed_activity_stream.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-anydpi-v26\\ic_launcher.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_baseline_report_black_24dp.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\baseline_report_black_24dp.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_baseline_refresh_black_24dp.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\baseline_refresh_black_24dp.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_register.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\activity_register.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_login.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\activity_login.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_single_post_preview.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\single_post_preview.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_single_activity_stream.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\single_activity_stream.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_baseline_home_black_24dp.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\baseline_home_black_24dp.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_user_search.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\activity_user_search.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_postory_logo.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-xxxhdpi\\postory_logo.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_rectangle.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\rectangle.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_outline_edit_black_24dp.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\outline_edit_black_24dp.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi_postory_logo.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-xhdpi\\postory_logo.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_single_comment.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\single_comment.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_follow_request.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\activity_follow_request.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_button_round.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\button_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_single_keyword.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\single_keyword.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_baseline_world_black_24dp.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\baseline_world_black_24dp.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_pen.jpeg.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\pen.jpeg"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_filter_posts.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\activity_filter_posts.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_self_profile_page.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\activity_self_profile_page.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_postory_logo_round.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-xxxhdpi\\postory_logo_round.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi_postory_logo_round.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-xhdpi\\postory_logo_round.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-anydpi-v26_postory_logo.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-anydpi-v26\\postory_logo.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_calendar_icon.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\calendar_icon.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_fragment_time_chooser.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\fragment_time_chooser.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_single_post.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\activity_single_post.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_placeholder.jpeg.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\placeholder.jpeg"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_outline_location_on_black_24dp.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\outline_location_on_black_24dp.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-anydpi-v26\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\menu_toolbar_menu.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\menu\\toolbar_menu.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi_postory_logo_foreground.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-hdpi\\postory_logo_foreground.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_orange_line.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\orange_line.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_postory_logo_round.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-mdpi\\postory_logo_round.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_single_post.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\single_post.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi_postory_logo.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-hdpi\\postory_logo.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_profile.jpeg.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\profile.jpeg"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_post_picture_example.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\post_picture_example.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_toolbar.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\toolbar.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_baseline_calendar_today_black_24dp.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\baseline_calendar_today_black_24dp.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_baseline_person_outline_black_24dp.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\baseline_person_outline_black_24dp.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_baseline_label_black_24dp.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\baseline_label_black_24dp.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_rock_pushing.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\rock_pushing.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_post_border.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\post_border.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\drawable_location.png.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\drawable\\location.png"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_forgot_password.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\activity_forgot_password.xml"
+    },
+    {
+        "merged": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\build\\intermediates\\res\\merged\\debug\\layout_single_follow_request.xml.flat",
+        "source": "C:\\Users\\niyaz\\AndroidStudioProjects\\451\\2021SpringGroup9\\postory\\android\\Postory\\app\\src\\main\\res\\layout\\single_follow_request.xml"
+    }
+]
