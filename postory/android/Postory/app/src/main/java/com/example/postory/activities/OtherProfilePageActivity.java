@@ -1,5 +1,6 @@
 package com.example.postory.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -149,11 +150,15 @@ public class OtherProfilePageActivity extends ToolbarActivity {
                 String respString = response.body().string();
                 try {
                     JSONObject jsonResponse = new JSONObject(respString);
-                    if(jsonResponse.getBoolean("isPrivate")){
-                        thisUser = gson.fromJson(respString, UserGeneralModel.class);
-                    }
-                    else{
-                        thisUserHelper = gson.fromJson(respString,UserModel.class);
+                    if (jsonResponse.getBoolean("isPrivate")) {
+                        try {
+                            thisUser = gson.fromJson(respString, UserGeneralModel.class);
+                        } catch (Exception e) {
+                            thisUserHelper = gson.fromJson(respString, UserModel.class);
+                            thisUser = UserModelConverter.convert(thisUserHelper);
+                        }
+                    } else {
+                        thisUserHelper = gson.fromJson(respString, UserModel.class);
                         thisUser = UserModelConverter.convert(thisUserHelper);
                     }
                 } catch (JSONException e) {
@@ -238,11 +243,32 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         callAllPosts();
     }
 
+    @SuppressLint("DefaultLocale")
+    private void quickFollow() {
+        if (!followed) {
+            followed = true;
+            followButton.setText("Unfollow");
+            try {
+                String followedCount = followedBy.getText().toString();
+                followedBy.setText(String.format("%d", Integer.parseInt(followedCount) + 1));
+            } catch (Exception ignored) {
 
+            }
+
+        }
+    }
+
+    @SuppressLint("DefaultLocale")
     private void unfollow() {
         if (followed) {
             followed = false;
             followButton.setText("Follow");
+            try {
+                String followedCount = followedBy.getText().toString();
+                followedBy.setText(String.format("%d", Integer.parseInt(followedCount) - 1));
+            } catch (Exception ignored) {
+
+            }
         }
 
     }
@@ -263,7 +289,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
                     .apply(new RequestOptions().override(400, 400))
                     .centerCrop()
                     .into(profilePicture);
-        }catch(Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -302,6 +328,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
                                             .setFrame(Style.FRAME_LOLLIPOP)
                                             .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_BLUE))
                                             .setAnimations(Style.ANIMATIONS_POP).show();
+                                    followButton.setVisibility(View.INVISIBLE);
                                 } else {
                                     SuperActivityToast.create(OtherProfilePageActivity.this, new Style(), Style.TYPE_BUTTON)
                                             .setProgressBarColor(Color.WHITE)
@@ -310,13 +337,12 @@ public class OtherProfilePageActivity extends ToolbarActivity {
                                             .setFrame(Style.FRAME_LOLLIPOP)
                                             .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_BLUE))
                                             .setAnimations(Style.ANIMATIONS_POP).show();
-                                    followed = true;
-                                    followButton.setText("Unfollow");
+                                    quickFollow();
                                 }
                             } else {
                                 SuperActivityToast.create(OtherProfilePageActivity.this, new Style(), Style.TYPE_BUTTON)
                                         .setProgressBarColor(Color.WHITE)
-                                        .setText("You have already sent a follow request.")
+                                        .setText("You cannot send a follow request.")
                                         .setDuration(Style.DURATION_LONG)
                                         .setFrame(Style.FRAME_LOLLIPOP)
                                         .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
@@ -331,8 +357,8 @@ public class OtherProfilePageActivity extends ToolbarActivity {
                                         .setFrame(Style.FRAME_LOLLIPOP)
                                         .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_BLUE))
                                         .setAnimations(Style.ANIMATIONS_POP).show();
+                                unfollow();
                             }
-                            unfollow();
 
                         }
                     }
@@ -352,28 +378,30 @@ public class OtherProfilePageActivity extends ToolbarActivity {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                if(response.isSuccessful()){
-                Log.i(TAG, "onResponse: ");
-                Gson gson = new Gson();
-                posts = gson.fromJson(response.body().string(), Post[].class);
-                Log.i(TAG, "onResponse: ");
-                ArrayList<Post> arrayOfPosts = new ArrayList<Post>();
+                if (response.isSuccessful()) {
+                    Log.i(TAG, "onResponse: ");
+                    Gson gson = new Gson();
+                    posts = gson.fromJson(response.body().string(), Post[].class);
+                    Log.i(TAG, "onResponse: ");
+                    ArrayList<Post> arrayOfPosts = new ArrayList<Post>();
 
-                for (Post post : posts) {
-                    arrayOfPosts.add(post);
-                }
-                Collections.reverse(arrayOfPosts);
-                postAdapter = new PostAdapter(OtherProfilePageActivity.this, arrayOfPosts);
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        listView.setAdapter(postAdapter);
+                    for (Post post : posts) {
+                        arrayOfPosts.add(post);
                     }
-                });
-            }}
+                    Collections.reverse(arrayOfPosts);
+                    postAdapter = new PostAdapter(OtherProfilePageActivity.this, arrayOfPosts);
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            listView.setAdapter(postAdapter);
+                        }
+                    });
+                }
+            }
         });
     }
+
     @Override
     protected void goActivitiesClicked() {
         Intent i = new Intent(OtherProfilePageActivity.this, ActivityStreamActivity.class);
