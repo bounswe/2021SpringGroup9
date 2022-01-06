@@ -13,6 +13,9 @@ import jwt
 import json
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
+from rest_framework.decorators import api_view
+from rest_framework.decorators import APIView
+from drf_yasg.utils import swagger_auto_schema
 
 def createActivity(actor,summary,object,url,type,success):
     data = dict()
@@ -27,8 +30,14 @@ def createActivity(actor,summary,object,url,type,success):
         serializer.save()
     return
 
-class GetAllActivities(GenericAPIView):
+class GetAllActivities(APIView):
 
+    @swagger_auto_schema(
+    method='get',
+    operation_description="Get all activities",
+    responses={200: ActivityStreamSerializer(many=True)}
+    )
+    @api_view(['GET'])
     def get(self,request,format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
@@ -44,8 +53,14 @@ class GetAllActivities(GenericAPIView):
                 pass
         return Response(serializer.values(), status=200)    
 
-class GetOwnActivities(GenericAPIView):
+class GetOwnActivities(APIView):
 
+    @swagger_auto_schema(
+    method='get',
+    operation_description="Get own activities",
+    responses={200: ActivityStreamSerializer(many=True)}
+    )
+    @api_view(['GET'])
     def get(self,request,format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
@@ -60,8 +75,14 @@ class GetOwnActivities(GenericAPIView):
                 pass
         return Response(serializer.values(), status=200)
 
-class GetFollowedActivities(GenericAPIView):
+class GetFollowedActivities(APIView):
 
+    @swagger_auto_schema(
+    method='get',
+    operation_description="Get followed users' activities",
+    responses={200: ActivityStreamSerializer(many=True)}
+    )
+    @api_view(['GET'])
     def get(self,request,format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]

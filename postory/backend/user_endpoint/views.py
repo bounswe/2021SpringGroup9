@@ -1,5 +1,6 @@
 from django.http import Http404
 from django.http import HttpResponse
+from drf_yasg.utils import swagger_auto_schema
 
 from django.shortcuts import render
 from rest_framework.generics import GenericAPIView
@@ -9,6 +10,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
+from rest_framework.decorators import APIView
 
 from .serializers import UserSerializer, FollowRequestSerializer, UserReportSerializer, StoryReportSerializer
 from post_endpoint.models import Post, Image
@@ -23,17 +25,34 @@ from .models import User, FollowRequest, StoryReport, UserReport
 import jwt
 from django.urls.base import resolve
 from django.urls import reverse
+from drf_yasg import openapi
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-class AddPhoto(GenericAPIView):
+class AddPhoto(APIView):
     def get_object(self, pk):
         try:
             return User.objects.get(pk=pk)
         except Post.DoesNotExist:
             raise Http404
 
+    param_photo = openapi.Parameter('photo file', openapi.IN_QUERY, description="profile photo", type=openapi.TYPE_FILE)
+
+    image_schema = openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'file': openapi.Schema(type=openapi.TYPE_FILE, description='image file')
+        },
+        required=['file']
+    )
+
+    @swagger_auto_schema(
+    method='post',
+    request_body=image_schema,
+    operation_description="Add profile photo",
+    )
+    @api_view(['POST'])
     def post(self, request, format=None):
         userid = request.auth['user_id']
         data = dict(request.data)
@@ -51,13 +70,18 @@ class AddPhoto(GenericAPIView):
             activityStream.createActivity(userid,"added photo","None",resolve(request.path_info).route,"UserAddPhoto",False)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-class ChangePrivate(GenericAPIView):
+class ChangePrivate(APIView):
     def get_object(self, pk):
         try:
             return User.objects.get(pk=pk)
         except User.DoesNotExist:
             raise Http404
 
+    @swagger_auto_schema(
+    method='put',
+    operation_description="Change privacy settings"
+    )
+    @api_view(['PUT'])
     def put(self, request, format = None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
@@ -75,8 +99,14 @@ class ChangePrivate(GenericAPIView):
             activityStream.createActivity(user.id,"changed profile settings",user.id,resolve(request.path_info).route,"UserChangePrivate",False) 
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
-class SearchUser(GenericAPIView):
+class SearchUser(APIView):
 
+    @swagger_auto_schema(
+    method='post',
+    operation_description="Search users",
+    responses={200: UserSerializer(many=True)}
+    )
+    @api_view(['POST'])
     def post(self, request, term, format=None):
         userid = request.auth['user_id']
         users = User.objects.filter(username__contains=term)
@@ -88,7 +118,7 @@ class SearchUser(GenericAPIView):
         return Response(values, status=200)
         
     
-class UserFollowing(GenericAPIView):
+class UserFollowing(APIView):
 
     def get_object(self, pk):
         try:
@@ -96,6 +126,11 @@ class UserFollowing(GenericAPIView):
         except User.DoesNotExist:
             raise Http404
     
+    @swagger_auto_schema(
+    method='post',
+    operation_description="Follow users or send follow request to users",
+    )
+    @api_view(['POST'])
     def post(self, request, pk, format=None):
         data = dict([])
 
@@ -159,7 +194,14 @@ class UserFollowing(GenericAPIView):
                 activityStream.createActivity(user1.id,"followed",user2.id,resolve(request.path_info).route,"UserFollow",False) 
                 return Response({"message": "follow failed"}, status=status.HTTP_400_BAD_REQUEST)
 
-class FollowRequests(GenericAPIView):
+class FollowRequests(APIView):
+
+    @swagger_auto_schema(
+    method='post',
+    operation_description="Get pending follow requests",
+    responses={200: FollowRequestSerializer(many=True)}
+    )
+    @api_view(['POST'])
     def get(self, request, format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
@@ -181,13 +223,18 @@ class FollowRequests(GenericAPIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
     
-class AcceptFollowRequest(GenericAPIView):
+class AcceptFollowRequest(APIView):
     def get_object(self, pk):
         try:
             return User.objects.get(pk=pk)
         except User.DoesNotExist:
             raise Http404
 
+    @swagger_auto_schema(
+    method='post',
+    operation_description="Accept follow request"
+    )
+    @api_view(['POST'])
     def post(self, request, pk, format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
@@ -216,13 +263,18 @@ class AcceptFollowRequest(GenericAPIView):
         activityStream.createActivity(user1.id,"accepted request from",user2.id,resolve(request.path_info).route,"UserAcceptRequest",False)
         return Response({"message": f"no follow request from {user2.id}"}, status=status.HTTP_400_BAD_REQUEST)
 
-class DeclineFollowRequest(GenericAPIView):
+class DeclineFollowRequest(APIView):
     def get_object(self, pk):
         try:
             return User.objects.get(pk=pk)
         except User.DoesNotExist:
             raise Http404
 
+    @swagger_auto_schema(
+    method='post',
+    operation_description="Decline follow request"
+    )
+    @api_view(['POST'])
     def post(self, request, pk, format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
@@ -245,13 +297,19 @@ class DeclineFollowRequest(GenericAPIView):
         return Response({"message": f"no follow request from {user2.id}"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserGet(GenericAPIView):
+class UserGet(APIView):
     def get_object(self, pk):
         try:
             return User.objects.get(pk=pk)
         except User.DoesNotExist:
             raise Http404
     
+    @swagger_auto_schema(
+    method='get',
+    operation_description="Get users",
+    responses={200: UserSerializer}
+    )
+    @api_view(['GET'])
     def get(self, request, pk, format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
@@ -277,13 +335,18 @@ class UserGet(GenericAPIView):
                 activityStream.createActivity(requester_user.id,"requested user",requested_user.id,resolve(request.path_info).route,"UserRequest",False)
                 return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-class ReportUser(GenericAPIView):
+class ReportUser(APIView):
     def get_object(self, pk):
         try:
             return User.objects.get(pk=pk)
         except User.DoesNotExist:
             raise Http404
-    
+
+    @swagger_auto_schema(
+    method='post',
+    operation_description="Report users"
+    )
+    @api_view(['POST'])
     def post(self, request, pk, format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
@@ -296,7 +359,6 @@ class ReportUser(GenericAPIView):
 
         subject = "User Reported"
         content = f"User with id {user_id} reported user with id {pk}. \nVisit the website for more details: http://3.67.83.253:8000/admin. \n\n- The Postory team"
-    
     
         try:
             data['fromUser'] = user_id
@@ -321,13 +383,18 @@ class ReportUser(GenericAPIView):
             activityStream.createActivity(user.id,"reported user",pk ,resolve(request.path_info).route,"UserReport",False)
             return Response({"message": "report failed"}, status=status.HTTP_400_BAD_REQUEST)
 
-class ReportStory(GenericAPIView):
+class ReportStory(APIView):
     def get_object(self, pk):
         try:
             return User.objects.get(pk=pk)
         except User.DoesNotExist:
             raise Http404
     
+    @swagger_auto_schema(
+    method='post',
+    operation_description="Report stories"
+    )
+    @api_view(['POST'])
     def post(self, request, pk, format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
@@ -363,8 +430,23 @@ class ReportStory(GenericAPIView):
             activityStream.createActivity(user.id,"reported story",pk ,resolve(request.path_info).route,"StoryReport",False)
             return Response({"message": "report failed"}, status=status.HTTP_400_BAD_REQUEST)
         
-class BanControl(GenericAPIView):
-    
+class BanControl(APIView):
+
+    ban_schema_response = {
+        status.HTTP_200_OK: openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+            'isBanned': openapi.Schema(type=openapi.TYPE_BOOLEAN)
+            }
+        )
+    }
+
+    @swagger_auto_schema(
+    method='get',
+    operation_description="Get the ban information of user",
+    responses=ban_schema_response
+    )
+    @api_view(['GET'])
     def get(self, request, format=None):
         userid = request.auth['user_id']
         user = User.objects.get(id = userid)

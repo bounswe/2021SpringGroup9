@@ -10,6 +10,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from rest_framework.decorators import api_view
+from rest_framework.decorators import APIView
+from drf_yasg.utils import swagger_auto_schema
 
 import urllib.parse as urlparse
 from urllib.parse import urlencode
@@ -29,16 +31,23 @@ import jwt
 import string
 import re
 from geopy import distance
+from drf_yasg import openapi
 
 import activityStream.views as activityStream
 from django.urls import reverse
 
-class GetAllPosts(GenericAPIView):
+class GetAllPosts(APIView):
     """
     Get all posts from the database. 
     """
     serializer_class = PostSerializer
 
+    @swagger_auto_schema(
+    method='get',
+    operation_description="Get all posts from the database",
+    responses={200: PostSerializer(many=True)}
+    )
+    @api_view(['GET'])
     def get(self, request, format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
@@ -59,10 +68,15 @@ class GetAllPosts(GenericAPIView):
 env = environ.Env(DEBUG=(bool, True))
 environ.Env.read_env('.env')
 
-class PostCreate(GenericAPIView):
-
+class PostCreate(APIView):
     serializer_class = PostSerializer
 
+    @swagger_auto_schema(
+    method='post',
+    request_body=PostSerializer,
+    operation_description="Create a story",
+    )
+    @api_view(['POST'])
     def post(self, request, format=None):
         userid = request.auth['user_id']
         data = dict(request.data)
@@ -126,7 +140,7 @@ class PostCreate(GenericAPIView):
         activityStream.createActivity(user.id,"created a post","None",resolve(request.path_info).route,"PostCreate",False)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class PostListDetail(GenericAPIView):
+class PostListDetail(APIView):
     """
     Retrieve, update or delete a story instance.
     """
@@ -136,7 +150,13 @@ class PostListDetail(GenericAPIView):
             return Post.objects.get(pk=pk)
         except Post.DoesNotExist:
             raise Http404
-
+    
+    @swagger_auto_schema(
+    method='get',
+    operation_description="Get posts of allowed users",
+    responses={200: PostSerializer}
+    )
+    @api_view(['GET'])
     def get(self, request, pk, format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
@@ -157,7 +177,7 @@ class PostListDetail(GenericAPIView):
             activityStream.createActivity(user1.id,"requested post",story.id,resolve(request.path_info).route,"PostRequest",False)
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         
-class PostUpdate(GenericAPIView):
+class PostUpdate(APIView):
     """
     Retrieve, update or delete a story instance.
     """
@@ -168,6 +188,13 @@ class PostUpdate(GenericAPIView):
         except Post.DoesNotExist:
             raise Http404
     
+    @swagger_auto_schema(
+    method='put',
+    request_body=PostSerializer,
+    operation_description="Update a story",
+    responses={200: PostSerializer}
+    )
+    @api_view(['PUT'])
     def put(self, request, pk, format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
@@ -240,7 +267,7 @@ class PostUpdate(GenericAPIView):
             activityStream.createActivity(user1.id,"updated post",story.id,resolve(request.path_info).route,"PostUpdate",False)
             return Response(status=status.HTTP_401_UNAUTHORIZED)
     
-class PostDelete(GenericAPIView):
+class PostDelete(APIView):
     """
     Retrieve, update or delete a story instance.
     """
@@ -250,7 +277,12 @@ class PostDelete(GenericAPIView):
             return Post.objects.get(pk=pk)
         except Post.DoesNotExist:
             raise Http404
-    
+
+    @swagger_auto_schema(
+    method='delete',
+    operation_description="Delete a story"
+    )
+    @api_view(['DELETE'])
     def delete(self, request, pk, format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
@@ -266,7 +298,14 @@ class PostDelete(GenericAPIView):
         story.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-class GetUsersPosts(GenericAPIView):
+class GetUsersPosts(APIView):
+
+    @swagger_auto_schema(
+    method='get',
+    operation_description="Get a followed's, public's or own stories",
+    responses={200: PostSerializer(many=True)}
+    )
+    @api_view(['GET'])
     def get(self, request, user_id, format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
@@ -288,7 +327,13 @@ class GetUsersPosts(GenericAPIView):
             return Response(status = 401)
 
 
-class GetFollowedUsersPosts(GenericAPIView):
+class GetFollowedUsersPosts(APIView):
+    @swagger_auto_schema(
+    method='get',
+    operation_description="Get followed users' stories",
+    responses={200: PostSerializer(many=True)}
+    )
+    @api_view(['GET'])
     def get(self,request,format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
@@ -310,7 +355,13 @@ class GetFollowedUsersPosts(GenericAPIView):
         return Response(serializer.values(), status=200)
 
 
-class GetPostsDiscover(GenericAPIView):
+class GetPostsDiscover(APIView):
+    @swagger_auto_schema(
+    method='get',
+    operation_description="Get all stories of public or followed users",
+    responses={200: PostSerializer(many=True)}
+    )
+    @api_view(['GET'])
     def get(self,request,format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
@@ -333,7 +384,7 @@ class GetPostsDiscover(GenericAPIView):
         activityStream.createActivity(user_id,"requested posts for discover","allDiscover",resolve(request.path_info).route,"PostRequestDiscover",True)
         return Response(serializer.values(), status=200)
 
-class CommentRequest(GenericAPIView):
+class CommentRequest(APIView):
 
     def get_object(self, pk):
         try:
@@ -341,6 +392,21 @@ class CommentRequest(GenericAPIView):
         except Post.DoesNotExist:
             raise Http404
 
+    comment_schema = openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'comment': openapi.Schema(type=openapi.TYPE_STRING, description='comment content')
+        },
+        required=['comment']
+    )
+
+    @swagger_auto_schema(
+    method='post',
+    request_body=comment_schema,
+    responses={200: PostSerializer},
+    operation_description="Send comment"
+    )
+    @api_view(['POST'])
     def post(self, request, pk, format=None):
         userid = request.auth['user_id']
         data = dict(request.data)
@@ -365,7 +431,7 @@ class CommentRequest(GenericAPIView):
             activityStream.createActivity(userid,"commented on post",story.id,resolve(request.path_info).route,"PostComment",False)
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
-class LikeRequest(GenericAPIView):
+class LikeRequest(APIView):
 
     def get_object(self, pk):
         try:
@@ -373,6 +439,12 @@ class LikeRequest(GenericAPIView):
         except Post.DoesNotExist:
             raise Http404
 
+    @swagger_auto_schema(
+    method='post',
+    responses={200: PostSerializer},
+    operation_description="Like story"
+    )
+    @api_view(['POST'])
     def post(self, request, pk, format=None):
         userid = request.auth['user_id']
         user = User.objects.get(id = userid)
@@ -397,8 +469,34 @@ class LikeRequest(GenericAPIView):
             activityStream.createActivity(userid,"liked post",story.id,resolve(request.path_info).route,"PostLike",False)
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
-class GetPostsDiscoverFilter(GenericAPIView):
+class GetPostsDiscoverFilter(APIView):
     
+    param_user = openapi.Parameter('user', openapi.IN_QUERY, description="username", type=openapi.TYPE_STRING)
+    param_startYear = openapi.Parameter('startYear', openapi.IN_QUERY, description="start year", type=openapi.TYPE_INTEGER)
+    param_endYear = openapi.Parameter('endYear', openapi.IN_QUERY, description="end year", type=openapi.TYPE_INTEGER)
+    param_startMonth = openapi.Parameter('startMonth', openapi.IN_QUERY, description="start month", type=openapi.TYPE_INTEGER)
+    param_endMonth = openapi.Parameter('endMonth', openapi.IN_QUERY, description="end month", type=openapi.TYPE_INTEGER)
+    param_startDay = openapi.Parameter('startDay', openapi.IN_QUERY, description="start day", type=openapi.TYPE_INTEGER)
+    param_endDay = openapi.Parameter('endDay', openapi.IN_QUERY, description="end day", type=openapi.TYPE_INTEGER)
+    param_startHour = openapi.Parameter('startHour', openapi.IN_QUERY, description="start hour", type=openapi.TYPE_INTEGER)
+    param_endHour = openapi.Parameter('endHour', openapi.IN_QUERY, description="end hour", type=openapi.TYPE_INTEGER)
+    param_startMinute = openapi.Parameter('startMinute', openapi.IN_QUERY, description="start minute", type=openapi.TYPE_INTEGER)
+    param_endMinute = openapi.Parameter('endMinute', openapi.IN_QUERY, description="end minute", type=openapi.TYPE_INTEGER)
+    param_tag = openapi.Parameter('tag', openapi.IN_QUERY, description="tag", type=openapi.TYPE_STRING)
+    param_related = openapi.Parameter('related', openapi.IN_QUERY, description="related tags", type=openapi.TYPE_BOOLEAN)
+    param_keyword = openapi.Parameter('keyword', openapi.IN_QUERY, description="multiple keywords", type=openapi.TYPE_STRING)
+    param_latitude = openapi.Parameter('latitude', openapi.IN_QUERY, description="latitude", type=openapi.TYPE_NUMBER)
+    param_longitude = openapi.Parameter('longitude', openapi.IN_QUERY, description="longitude", type=openapi.TYPE_NUMBER)
+    param_distance = openapi.Parameter('distance', openapi.IN_QUERY, description="distance", type=openapi.TYPE_INTEGER)
+
+    @swagger_auto_schema(
+    method='get',
+    operation_description="Filter stories",
+    manual_parameters=[param_user, param_startYear, param_endYear, param_startMonth, param_endMonth, param_startDay, param_endDay, 
+    param_startHour, param_endHour, param_startMinute, param_endMinute, param_tag, param_related, param_keyword, param_latitude, 
+    param_longitude, param_distance]
+    )
+    @api_view(['GET'])
     def get(self,request,format=None):
         # users = User.objects.filter(username__contains=term)
         userid = request.auth['user_id']
@@ -530,7 +628,12 @@ class GetPostsDiscoverFilter(GenericAPIView):
         activityStream.createActivity(userid,"filtered posts","allFilter",resolve(request.path_info).route,"PostFilter",True)
         return Response(serializer, status=200)
 
-class GetRelatedTags(GenericAPIView):
+class GetRelatedTags(APIView):
+    @swagger_auto_schema(
+    method='get',
+    operation_description="Get related tags"
+    )
+    @api_view(['GET'])
     def get(self, request, query, format=None):
         userid = request.auth['user_id']
         if request.auth:
@@ -545,8 +648,13 @@ class GetRelatedTags(GenericAPIView):
             activityStream.createActivity(userid,"got related tags","related",resolve(request.path_info).route,"GetRelatedTags",False)
             return Response(status = 401)
         
-class SavePost(GenericAPIView):
+class SavePost(APIView):
     
+    @swagger_auto_schema(
+    method='post',
+    operation_description="Save story"
+    )
+    @api_view(['POST'])
     def post(self, request, pk, format=None):
         userid = request.auth['user_id']
         user = User.objects.get(id = userid)
