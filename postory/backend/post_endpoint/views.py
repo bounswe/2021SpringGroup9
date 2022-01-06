@@ -45,7 +45,7 @@ class GetAllPosts(APIView):
     @swagger_auto_schema(
     method='get',
     operation_description="Get all posts from the database",
-    responses={200: PostSerializer(many=True)}
+    responses={200: PostSerializer(many=True), 401: openapi.Schema(type=openapi.TYPE_OBJECT, description="Unauthorized")}
     )
     @api_view(['GET'])
     def get(self, request, format=None):
@@ -75,6 +75,7 @@ class PostCreate(APIView):
     method='post',
     request_body=PostSerializer,
     operation_description="Create a story",
+    responses={200: PostSerializer, 400: openapi.Schema(type=openapi.TYPE_OBJECT, description="Bad request")}
     )
     @api_view(['POST'])
     def post(self, request, format=None):
@@ -154,7 +155,7 @@ class PostListDetail(APIView):
     @swagger_auto_schema(
     method='get',
     operation_description="Get posts of allowed users",
-    responses={200: PostSerializer}
+    responses={200: PostSerializer, 401: openapi.Schema(type=openapi.TYPE_OBJECT, description="Unauthorized")}
     )
     @api_view(['GET'])
     def get(self, request, pk, format=None):
@@ -192,7 +193,7 @@ class PostUpdate(APIView):
     method='put',
     request_body=PostSerializer,
     operation_description="Update a story",
-    responses={200: PostSerializer}
+    responses={200: PostSerializer, 401: openapi.Schema(type=openapi.TYPE_OBJECT, description="Unauthorized")}
     )
     @api_view(['PUT'])
     def put(self, request, pk, format=None):
@@ -280,7 +281,8 @@ class PostDelete(APIView):
 
     @swagger_auto_schema(
     method='delete',
-    operation_description="Delete a story"
+    operation_description="Delete a story",
+    responses={204: openapi.Schema(type=openapi.TYPE_OBJECT, description="No content"), 401:openapi.Schema(type=openapi.TYPE_OBJECT, description="Unauthorized")}
     )
     @api_view(['DELETE'])
     def delete(self, request, pk, format=None):
@@ -303,7 +305,7 @@ class GetUsersPosts(APIView):
     @swagger_auto_schema(
     method='get',
     operation_description="Get a followed's, public's or own stories",
-    responses={200: PostSerializer(many=True)}
+    responses={200: PostSerializer(many=True), 401:openapi.Schema(type=openapi.TYPE_OBJECT, description="Unauthorized")}
     )
     @api_view(['GET'])
     def get(self, request, user_id, format=None):
@@ -403,7 +405,7 @@ class CommentRequest(APIView):
     @swagger_auto_schema(
     method='post',
     request_body=comment_schema,
-    responses={200: PostSerializer},
+    responses={200: PostSerializer, 400:openapi.Schema(type=openapi.TYPE_OBJECT, description="Bad request")},
     operation_description="Send comment"
     )
     @api_view(['POST'])
@@ -441,7 +443,7 @@ class LikeRequest(APIView):
 
     @swagger_auto_schema(
     method='post',
-    responses={200: PostSerializer},
+    responses={200: PostSerializer, 400:openapi.Schema(type=openapi.TYPE_OBJECT, description="Bad request")},
     operation_description="Like story"
     )
     @api_view(['POST'])
@@ -494,7 +496,8 @@ class GetPostsDiscoverFilter(APIView):
     operation_description="Filter stories",
     manual_parameters=[param_user, param_startYear, param_endYear, param_startMonth, param_endMonth, param_startDay, param_endDay, 
     param_startHour, param_endHour, param_startMinute, param_endMinute, param_tag, param_related, param_keyword, param_latitude, 
-    param_longitude, param_distance]
+    param_longitude, param_distance], 
+    responses={200: PostSerializer(many=True), 400:openapi.Schema(type=openapi.TYPE_OBJECT, description="Bad request")}
     )
     @api_view(['GET'])
     def get(self,request,format=None):

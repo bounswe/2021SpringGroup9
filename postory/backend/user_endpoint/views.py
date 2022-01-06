@@ -51,6 +51,7 @@ class AddPhoto(APIView):
     method='post',
     request_body=image_schema,
     operation_description="Add profile photo",
+    responses={200: openapi.Schema(type=openapi.TYPE_OBJECT, description="OK"), 400: openapi.Schema(type=openapi.TYPE_OBJECT, description="Bad Request")}
     )
     @api_view(['POST'])
     def post(self, request, format=None):
@@ -79,7 +80,8 @@ class ChangePrivate(APIView):
 
     @swagger_auto_schema(
     method='put',
-    operation_description="Change privacy settings"
+    operation_description="Change privacy settings",
+    responses={200: openapi.Schema(type=openapi.TYPE_OBJECT, description="OK"), 400: openapi.Schema(type=openapi.TYPE_OBJECT, description="Bad Request")}
     )
     @api_view(['PUT'])
     def put(self, request, format = None):
@@ -129,6 +131,7 @@ class UserFollowing(APIView):
     @swagger_auto_schema(
     method='post',
     operation_description="Follow users or send follow request to users",
+    responses={200: openapi.Schema(type=openapi.TYPE_OBJECT, description="OK"), 400: openapi.Schema(type=openapi.TYPE_OBJECT, description="Bad Request")}
     )
     @api_view(['POST'])
     def post(self, request, pk, format=None):
@@ -199,7 +202,7 @@ class FollowRequests(APIView):
     @swagger_auto_schema(
     method='post',
     operation_description="Get pending follow requests",
-    responses={200: FollowRequestSerializer(many=True)}
+    responses={200: FollowRequestSerializer(many=True), 400: openapi.Schema(type=openapi.TYPE_OBJECT, description="Bad Request")}
     )
     @api_view(['POST'])
     def get(self, request, format=None):
@@ -232,7 +235,8 @@ class AcceptFollowRequest(APIView):
 
     @swagger_auto_schema(
     method='post',
-    operation_description="Accept follow request"
+    operation_description="Accept follow request", 
+    responses={200: openapi.Schema(type=openapi.TYPE_OBJECT, description="OK"), 400: openapi.Schema(type=openapi.TYPE_OBJECT, description="Bad Request")}
     )
     @api_view(['POST'])
     def post(self, request, pk, format=None):
@@ -272,7 +276,8 @@ class DeclineFollowRequest(APIView):
 
     @swagger_auto_schema(
     method='post',
-    operation_description="Decline follow request"
+    operation_description="Decline follow request",
+    responses={200: openapi.Schema(type=openapi.TYPE_OBJECT, description="OK"), 400: openapi.Schema(type=openapi.TYPE_OBJECT, description="Bad Request")}
     )
     @api_view(['POST'])
     def post(self, request, pk, format=None):
@@ -307,7 +312,7 @@ class UserGet(APIView):
     @swagger_auto_schema(
     method='get',
     operation_description="Get users",
-    responses={200: UserSerializer}
+    responses={200: UserSerializer, 401: openapi.Schema(type=openapi.TYPE_OBJECT, description="Unauthorized")}
     )
     @api_view(['GET'])
     def get(self, request, pk, format=None):
@@ -344,7 +349,8 @@ class ReportUser(APIView):
 
     @swagger_auto_schema(
     method='post',
-    operation_description="Report users"
+    operation_description="Report users",
+    responses={200: openapi.Schema(type=openapi.TYPE_OBJECT, description="OK"), 400: openapi.Schema(type=openapi.TYPE_OBJECT, description="Bad Request")}
     )
     @api_view(['POST'])
     def post(self, request, pk, format=None):
@@ -392,7 +398,8 @@ class ReportStory(APIView):
     
     @swagger_auto_schema(
     method='post',
-    operation_description="Report stories"
+    operation_description="Report stories",
+    responses={200: openapi.Schema(type=openapi.TYPE_OBJECT, description="OK"), 400: openapi.Schema(type=openapi.TYPE_OBJECT, description="Bad Request")}
     )
     @api_view(['POST'])
     def post(self, request, pk, format=None):
