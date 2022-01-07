@@ -61,7 +61,9 @@ env = environ.Env(DEBUG=(bool, True))
 environ.Env.read_env('.env')
 
 class PostCreate(GenericAPIView):
-
+    """
+    Create a post.
+    """
     serializer_class = PostSerializer
 
     def post(self, request, format=None):
@@ -129,7 +131,7 @@ class PostCreate(GenericAPIView):
 
 class PostListDetail(GenericAPIView):
     """
-    Retrieve, update or delete a story instance.
+    Retrieve a story instance.
     """
 
     def get_object(self, pk):
@@ -160,7 +162,7 @@ class PostListDetail(GenericAPIView):
         
 class PostUpdate(GenericAPIView):
     """
-    Retrieve, update or delete a story instance.
+    Update a story instance.
     """
 
     def get_object(self, pk):
@@ -243,7 +245,7 @@ class PostUpdate(GenericAPIView):
     
 class PostDelete(GenericAPIView):
     """
-    Retrieve, update or delete a story instance.
+    Delete a story instance.
     """
 
     def get_object(self, pk):
@@ -346,7 +348,9 @@ class GetPostsDiscover(GenericAPIView):
         return Response(serializer.values(), status=200)
 
 class CommentRequest(GenericAPIView):
-
+    """
+    Creates a comment for specified story id.
+    """ 
     def get_object(self, pk):
         try:
             return Post.objects.get(pk=pk)
@@ -378,7 +382,9 @@ class CommentRequest(GenericAPIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
 class LikeRequest(GenericAPIView):
-
+    """
+    Likes the post of specified story id
+    """
     def get_object(self, pk):
         try:
             return Post.objects.get(pk=pk)
@@ -410,7 +416,12 @@ class LikeRequest(GenericAPIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
 class GetPostsDiscoverFilter(GenericAPIView):
-    
+    """
+    Returns the filtered posts.
+    Posts are filtered according to their user, title, story, time, location and tag.
+    Related tags can be found by using wikidata.
+    This is used for discovery page.
+    """
     def get(self,request,format=None):
         # users = User.objects.filter(username__contains=term)
         userid = request.auth['user_id']
@@ -543,6 +554,9 @@ class GetPostsDiscoverFilter(GenericAPIView):
         return Response(serializer, status=200)
 
 class GetRelatedTags(GenericAPIView):
+    """
+    Gets related for speficied keyword from wikidata.
+    """
     def get(self, request, query, format=None):
         userid = request.auth['user_id']
         if request.auth:
@@ -558,7 +572,10 @@ class GetRelatedTags(GenericAPIView):
             return Response(status = 401)
         
 class SavePost(GenericAPIView):
-    
+    """
+    Saves story for user.
+    The story id is stored in user.
+    """
     def post(self, request, pk, format=None):
         userid = request.auth['user_id']
         user = User.objects.get(id = userid)
@@ -574,7 +591,11 @@ class SavePost(GenericAPIView):
             activityStream.createActivity(userid,"unsaved post",post.id,resolve(request.path_info).route,"PostSave",True)
             user.savedPosts.add(post)
         return Response(status=200)
-                
+        
+"""
+Returns related tags from wiki data.
+Multiple keywords can be passed.
+"""      
 def getRelatedTags(query, all_tags):
     if all_tags == None:
         all_tags = []
@@ -648,6 +669,10 @@ def getRelatedTags(query, all_tags):
         
     return all_tags
 
+"""
+Gets the query set of nearby stories.
+This is used in filter function.
+"""
 def getQuerySetOfNearby(posts, latitude, longitude, distance):
     requestedDistance = float(distance)
     pinPoint = [float(latitude),float(longitude)]
@@ -662,7 +687,6 @@ def getQuerySetOfNearby(posts, latitude, longitude, distance):
         if(not toBeReturned):
             posts = posts.exclude(id = story.id)
     return posts
-
 def getDistanceBetween(loc1,loc2):
     lat1 = loc1[0]
     lon1 = loc1[1]
@@ -670,6 +694,11 @@ def getDistanceBetween(loc1,loc2):
     lon2 = loc2[1]
     return distance.distance((lat1,lon1),(lat2,lon2)).km
 
+"""
+Return the detailed information about story object.
+In some fields, the id of other objects are stored. They are retrieved by this function.
+All the information about the story object is returned as JSON format.
+"""
 def get_story(story):
     username = story.username
     user = User.objects.filter(username = username).first()

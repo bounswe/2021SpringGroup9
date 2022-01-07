@@ -83,7 +83,10 @@ class ChangePrivate(GenericAPIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
 class SearchUser(GenericAPIView):
-
+    """
+    Searches users by using the term parameter.
+    Returns users that containes the term parameter.
+    """
     def post(self, request, term, format=None):
         userid = request.auth['user_id']
         users = User.objects.filter(username__contains=term)
