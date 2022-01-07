@@ -34,11 +34,17 @@ After building, the docker image should be pushed to docker repository by using 
 docker push <REPOSITORY-NAME>/backend:latest
 ```
 
-Now, the docker image is on our docker repository and we can deploy it wherever we want. The database image should be deployed before our application. While deploying our application the environment variables should be pass. You should change the environment variables according the new deployment environment. Following commands should be executed in order to deploy backend:
+Now, the docker image is on our docker repository and we can deploy it wherever we want. The database image should be deployed before our application. The dump restoration should be made after database image is created. While deploying our application the environment variables should be pass. You should change the environment variables according the new deployment environment. Following commands should be executed in order to deploy backend.
 
 ```
 docker run -d --restart always -p 2717:27017 --volume mongo_database:/data/db --env MONGO_INITDB_ROOT_USERNAME=<MONGO_USERNAME> --env MONGO_INITDB_ROOT_PASSWORD=<MONGO_PASSWORD> --name mongo mongo:latest
-docker run -d --restart always -p 8000:8000 --link mongo --name backend \
+docker network create myNetwork
+docker network connect myNetwork mongo
+docker cp </file/path/to/dump/directory> <MONGO-CONTAINER-ID>:/
+docker exec -it <MONGO-CONTAINER-ID> bash
+    mongorestore -u <MONGO_USERNAME> -p <MONGO_PASSWORD>
+    exit
+docker run -d --restart always -p 8000:8000 --network myNetwork --name backend \
               --env MONGO_USERNAME=<MONGO_USERNAME }} \
               --env MONGO_PASSWORD=<MONGO_PASSWORD }} \
               --env SECRET_KEY="<SECRET_KEY>" \
@@ -54,4 +60,7 @@ docker run -d --restart always -p 8000:8000 --link mongo --name backend \
               <REPOSITORY-NAME>/backend:latest
 ```
               
-After executing these commands, backend will start to run on the machine.
+After executing these commands, backend will start to run on the machine with the restored dump.
+
+IMPORTANT NOTE: The dump restoration should be made after the mongo container created.
+
