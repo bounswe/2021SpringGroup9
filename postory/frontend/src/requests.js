@@ -1,4 +1,4 @@
-const BACKEND_URL = 'http://' + '3.67.83.253' + ':8000'
+const BACKEND_URL = 'http://' + (process.env.REACT_APP_BACKEND_API ? process.env.REACT_APP_BACKEND_API : '3.67.83.253') + ':8000'
 
 export function post(url, body_json) {
     if (url.startsWith('/')) {
