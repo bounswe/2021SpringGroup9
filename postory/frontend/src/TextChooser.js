@@ -3,6 +3,11 @@ import Icon from '@mdi/react'
 import { mdiPlus } from '@mdi/js';
 import './TextChooser.css'
 
+/**
+ * @class TextChooser
+ * Lets user enter title and body of their story.
+ * Sends parent the entered info whenever needed.
+ */
 class TextChooser extends React.Component {
     constructor(props) {
         super(props);

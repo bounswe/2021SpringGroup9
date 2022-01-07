@@ -7,10 +7,20 @@ import * as requests from './requests';
 
 const BACKEND_URL = 'http://' + '3.67.83.253' + ':8000'
 
+/**
+ * Checks whether a given input string is an e-mail
+ * @param str
+ * @returns {boolean}
+ */
 function isEmail(str) {
     return /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(str)
 }
 
+/**
+ * Returns error string of a given username, or '' if there is no error
+ * @param username
+ * @returns {string}
+ */
 function getUsernameProblem(username) {
     if (username.length < 6) {
         return "Username should be 6 characters or longer";
@@ -20,6 +30,11 @@ function getUsernameProblem(username) {
     return ""
 }
 
+/**
+ * Returns error string of a given password, or '' if there is no error
+ * @param password
+ * @returns {string}
+ */
 function getPasswordProblem(password) {
     if (password.length < 8) {
         return "Password should be 8 characters or longer"
@@ -35,6 +50,11 @@ function getPasswordProblem(password) {
     return ""
 }
 
+/**
+ * @class SignUp
+ * Has fields for username, password, password confirmation, e-mail, name, and surname
+ * Checks validity of input and sends the backend a sign up request with the entered input.
+ */
 class SignUp extends React.Component {
     constructor(props) {
         super(props);

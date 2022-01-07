@@ -32,6 +32,10 @@ const imageStyle = {
     maxWidth: '100%'
 }
 
+/**
+ * @class SearchBar
+ * Search bar component that we show at the top of the website.
+ */
 class SearchBar extends React.Component {
     constructor(props) {
         super(props);

@@ -6,6 +6,11 @@ import TopBar from './TopBar'
 
 const BACKEND_URL = 'http://' + window.location.hostname + ':8000'
 
+/**
+ * @class Activation
+ * Sends necessary backend requests to complete activation of the user.
+ * Notifies user accordingly.
+ */
 class Activation extends React.Component {
     constructor(props) {
         super(props);
