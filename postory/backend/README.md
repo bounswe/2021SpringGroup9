@@ -64,3 +64,17 @@ After executing these commands, backend will start to run on the machine with th
 
 IMPORTANT NOTE: The dump restoration should be made after the mongo container created.
 
+## ENVIRONMENT VARIABLES
+
+* SECRET_KEY: Django secret key.
+* MONGO_USERNAME: Username for mongo.
+* MONGO_PASSWORD: Password for mongo.
+* GOOGLE_MAPS_API_KEY: API key for google maps.
+* MONGO_CONTAINER_NAME: Mongo host name. It should be mongo.
+* MONGO_PORT: Mongo port. It should be 27017.
+* AWS_ACCESS_KEY_ID: AWS User access key.
+* AWS_SECRET_ACCESS_KEY: AWS User secret key.
+* AWS_STORAGE_BUCKET_NAME: AWS S3 bucket name.
+* EMAIL: System email.
+* EMAIL_PASSWORD: Email password for the system email.
+* HOST: The IP of the host machine.
