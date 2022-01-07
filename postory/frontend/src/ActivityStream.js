@@ -6,6 +6,12 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 
+/**
+ * @class Activity
+ * Represents an activity in the ActivityStream, or a follow request.
+ * An activity is interactable (i.e: user can go to actor and object by clicking).
+ * Additionally, a follow request has buttons for accepting and rejecting the request.
+ */
 class Activity extends React.Component {
     constructor(props) {
         super(props);
@@ -99,7 +105,12 @@ class Activity extends React.Component {
     }
 }
 
-
+/**
+ * @class ActivityStream
+ * ActivityStream shows activities of the user, activities of the followed users,
+ * all public activities, and follow requests; all in separate tabs.
+ * At every tab there is a list of Activity objects.
+ */
 class ActivityStream extends React.Component {
     constructor(props) {
         super(props);

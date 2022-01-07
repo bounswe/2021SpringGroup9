@@ -8,6 +8,11 @@ function isEmail(str) {
 
 const BACKEND_URL = 'http://' + (process.env.REACT_APP_BACKEND_API ? process.env.REACT_APP_BACKEND_API : '3.67.83.253') + ':8000'
 
+/**
+ * @class ForgotPassword
+ * Gets e-mail of the user and sends backend a request to reset password of user with that e-mail.
+ * Notifies user on invalid input.
+ */
 class ForgotPassword extends React.Component {
     constructor(props) {
         super(props);

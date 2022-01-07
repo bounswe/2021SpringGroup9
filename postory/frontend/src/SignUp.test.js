@@ -17,11 +17,25 @@ afterEach(() => {
     container = null;
 });
 
+/*
+    ID            : TC_F_30
+    Title         : Rendering of SignUp component
+    Test Priority : High
+    Module Name   : Frontend - Sign Up page
+    Description   : Checks whether the SignUp component renders successfully.
+*/
 test('SignUp component renders successfully', () => {
     render(<SignUp />, container);
     expect(screen.getByText('Enter your new password', {exact: false})).not.toThrow()
 });
 
+/*
+    ID            : TC_F_31
+    Title         : Invalid input check of SignUp component
+    Test Priority : High
+    Module Name   : Frontend - Sign Up page
+    Description   : Checks whether the SignUp component disables the submit button on invalid input
+*/
 test('Invalid input keeps the button disabled', () => {
     render(<SignUp />, container);
 
@@ -59,6 +73,13 @@ test('Invalid input keeps the button disabled', () => {
     enter(emailField, 'ahmetttt')
 })
 
+/*
+    ID            : TC_F_32
+    Title         : Valid input check of SignUp component
+    Test Priority : High
+    Module Name   : Frontend - Sign Up page
+    Description   : Checks whether the SignUp component enables the submit button on valid input
+*/
 test('Valid input makes the button enabled', () => {
     render(<SignUp />, container);
 
