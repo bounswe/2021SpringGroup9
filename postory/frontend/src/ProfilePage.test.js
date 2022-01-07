@@ -23,7 +23,7 @@ afterEach(() => {
 describe('Profile page tests', () => {
   test('Profile page components render successfully', () => {
     /*
-    ID            : TC_UI_F_1
+    ID            : TC_F_1
     Title         : Profile Page - Render Test
     Test Priority : High
     Module Name   : Frontend - Profile Page
@@ -36,7 +36,7 @@ describe('Profile page tests', () => {
 
   test('On click follow button successfully', () => {
     /*
-    ID            : TC_UI_F_2
+    ID            : TC_F_2
     Title         : Profile Page - Follow Button Test
     Test Priority : High
     Module Name   : Frontend - Profile Page
@@ -50,7 +50,7 @@ describe('Profile page tests', () => {
 
   test('fetches mock user info', () => {
     /*
-    ID            : TC_UI_F_3
+    ID            : TC_F_3
     Title         : Profile Page - Fetch User Data Test
     Test Priority : Medium
     Module Name   : Frontend - Profile Page
