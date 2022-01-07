@@ -29,6 +29,10 @@ def createActivity(actor,summary,object,url,type,success):
 
 class GetAllActivities(GenericAPIView):
 
+    """
+        Returns public users' activities.
+    """
+
     def get(self,request,format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
@@ -46,6 +50,11 @@ class GetAllActivities(GenericAPIView):
 
 class GetOwnActivities(GenericAPIView):
 
+    """
+        Returns activities of the requester. 
+        Requester user id is taken from jwt key.
+    """
+
     def get(self,request,format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
@@ -61,6 +70,11 @@ class GetOwnActivities(GenericAPIView):
         return Response(serializer.values(), status=200)
 
 class GetFollowedActivities(GenericAPIView):
+
+    """
+        Returns activites of followed users of requester user.
+        Requester user id is taken from jwt key.
+    """
 
     def get(self,request,format=None):
         authorization = request.headers['Authorization']

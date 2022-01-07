@@ -35,7 +35,8 @@ from django.urls import reverse
 
 class GetAllPosts(GenericAPIView):
     """
-    Get all posts from the database. 
+        Get all posts of every user.
+        Can be used by admin only.
     """
     serializer_class = PostSerializer
 
@@ -267,6 +268,9 @@ class PostDelete(GenericAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
 class GetUsersPosts(GenericAPIView):
+    """
+        Return posts of specific user given in the url.
+    """
     def get(self, request, user_id, format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
@@ -289,6 +293,10 @@ class GetUsersPosts(GenericAPIView):
 
 
 class GetFollowedUsersPosts(GenericAPIView):
+    """
+        Return posts of followed users' posts. 
+        This is used for main page posts.
+    """
     def get(self,request,format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
@@ -311,6 +319,10 @@ class GetFollowedUsersPosts(GenericAPIView):
 
 
 class GetPostsDiscover(GenericAPIView):
+    """
+        Return public users' and followed users' posts.
+        This is used for discovery page.
+    """
     def get(self,request,format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
