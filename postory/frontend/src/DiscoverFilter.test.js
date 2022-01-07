@@ -20,11 +20,11 @@ afterEach(() => {
 
 test('Filtering components render successfully', () => {
     /*
-    ID            : TC_UI_F_4
+    ID            : TC_F_4
     Title         : Discover/Filter - Render Test 
-    Test Priority : Medium
+    Test Priority : High
     Module Name   : Frontend - Discover/Filter
-    Description   : Creates a fake user and tries to fetch to, just like it would be fetched from backend.
+    Description   : Checks whether the discovery page and filter components have been rendered successfully.
     */
     render(<DiscoverFilter />, container);
     expect(screen.getByText('Tags')).toBeInTheDocument();
@@ -36,11 +36,11 @@ test('Filtering components render successfully', () => {
 
 test('Enters a tag successfully', () => {
     /*
-    ID            : TC_UI_F_5
-    Title         : Discover/Filter - Fetch User Data Test
-    Test Priority : Medium
+    ID            : TC_F_5
+    Title         : Discover/Filter - Input Filter Test
+    Test Priority : High
     Module Name   : Frontend - Discover/Filter
-    Description   : Creates a fake user and tries to fetch to, just like it would be fetched from backend.
+    Description   : Simulates a user and tries to enter a tag as input
     */
     render(<DiscoverFilter />, container);
     const input = screen.getByPlaceholderText('Enter a tag')
@@ -50,11 +50,11 @@ test('Enters a tag successfully', () => {
 
 test('Clicks on add a tag successfully', () => {
     /*
-    ID            : TC_UI_F_6
-    Title         : Discover/Filter - Fetch User Data Test
-    Test Priority : Medium
+    ID            : TC_F_6
+    Title         : Discover/Filter - Add Filter Test 1 
+    Test Priority : High
     Module Name   : Frontend - Discover/Filter
-    Description   : Creates a fake user and tries to fetch to, just like it would be fetched from backend.
+    Description   : Simulates a user, tries to enter a tag as input and then by clicking add button adds it.
     */
     render(<DiscoverFilter />, container);
     const input = screen.getByPlaceholderText('Enter a tag')
@@ -65,11 +65,11 @@ test('Clicks on add a tag successfully', () => {
 
 test('Clicks on add a keyword successfully', () => {
     /*
-    ID            : TC_UI_F_7
-    Title         : Discover/Filter - Fetch User Data Test
-    Test Priority : Medium
+    ID            : TC_F_7
+    Title         : Discover/Filter - Add Filter Test 2
+    Test Priority : High
     Module Name   : Frontend - Discover/Filter
-    Description   : Creates a fake user and tries to fetch to, just like it would be fetched from backend.
+    Description   : Simulates a user, tries to enter a keyword as input and then by clicking add button adds it.
     */
     render(<DiscoverFilter />, container);
     const input_keyword = screen.getByPlaceholderText('Enter a keyword')
@@ -80,11 +80,11 @@ test('Clicks on add a keyword successfully', () => {
 
 test('Clicks on add a user successfully', () => {
     /*
-    ID            : TC_UI_F_8
-    Title         : Discover/Filter - Fetch User Data Test
-    Test Priority : Medium
+    ID            : TC_F_8
+    Title         : Discover/Filter - Add Filter Test 3 
+    Test Priority : High
     Module Name   : Frontend - Discover/Filter
-    Description   : Creates a fake user and tries to fetch to, just like it would be fetched from backend.
+    Description   : Simulates a user, tries to enter a user as input and then by clicking add button adds it.
     */
     render(<DiscoverFilter />, container);
     const input_user = screen.getByPlaceholderText('Enter a user')
@@ -95,11 +95,11 @@ test('Clicks on add a user successfully', () => {
 
 test('Clicks on clear filters and clears the filters successfully', () => {
     /*
-    ID            : TC_UI_F_9
-    Title         : Discover/Filter - Fetch User Data Test
+    ID            : TC_F_9
+    Title         : Discover/Filter - Clear Filters Test
     Test Priority : Medium
     Module Name   : Frontend - Discover/Filter
-    Description   : Creates a fake user and tries to fetch to, just like it would be fetched from backend.
+    Description   : Simulates a user and clicks on clear filters button. Expects all filters to be cleared.
     */
     render(<DiscoverFilter />, container);
     const input = screen.getByPlaceholderText('Enter a tag')
