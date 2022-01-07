@@ -155,8 +155,8 @@ export const ProfilePageUpper = () => {
                                 'Authorization': `JWT ${localStorage.getItem('access')}`
                             },
                             body: formData
-                                }).then(window.location.reload());
-                            setPhoto(st => !st);}
+                                }).then(() => window.location.reload()).then(() => setPhoto(st => !st));
+                            }
                         }
                             type="file" id="file" accept=".jpg, .png"/>
                             </div>}

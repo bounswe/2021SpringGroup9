@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 /**
  * A component that renders various links on the application.
- * It is located on the top right of every app on the application.
+ * It is located on the top right of every page on the application.
  * @param {*} props 
  * @returns 
  */
