@@ -6,6 +6,11 @@ import * as requests from './requests';
 import {Navigate} from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * The component that is used for searching users by typing up the username or the actual name of the User.
+ * @param {*} props 
+ * @returns 
+ */
 const SearchUserComponent = (props) => {
     const [value, setValue] = React.useState('');
     const [users, setUsers] = React.useState([]);
@@ -14,6 +19,9 @@ const SearchUserComponent = (props) => {
     const [req, setReq] = React.useState(null);
     const navigate = useNavigate();
 
+    /**
+     * Makes a request to the backend after the user enters some text and waits 500ms.
+     */
     useEffect(() => {
         if(req != null){
             clearTimeout(req);

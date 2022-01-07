@@ -85,6 +85,13 @@ afterEach(() => {
   });
 
 test('Successfully renders the post title after waiting for the dummy post to fetch', async () => {
+    /*
+    ID            : TC_F_10
+    Title         : View Post Page/Renders a post after fetching it from the api
+    Test Priority : High
+    Module Name   : Frontend - View Post Page
+    Description   : Checks whether the post is fetched and rendered properly
+    */
     render(<MemoryRouter> <ViewPost /> </MemoryRouter>, container);
     
     //Wait for the post to be fetched
@@ -96,6 +103,13 @@ test('Successfully renders the post title after waiting for the dummy post to fe
 );
 
 test('Type and send two comments', async () => {
+    /*
+    ID            : TC_F_11
+    Title         : View Post Page/Commenting
+    Test Priority : High
+    Module Name   : Frontend - View Post Page
+    Description   : Checks whether a comment is created after typing and clicking the submit button.
+    */
     render(<MemoryRouter> <ViewPost /> </MemoryRouter>, container);
     
     //Wait for the post to be fetched

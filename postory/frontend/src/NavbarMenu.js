@@ -2,6 +2,14 @@ import React from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
+
+/**
+ * A component that renders various links on the application.
+ * It is located on the top right of every page on the application.
+ * @param {*} props 
+ * @returns 
+ */
+
 const NavbarMenu = (props) => { 
     const navigate = useNavigate();
     return(<Dropdown.Menu show >

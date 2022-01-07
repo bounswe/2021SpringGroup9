@@ -11,6 +11,12 @@ import Col from 'react-bootstrap/Col';
 
 
 class Post extends React.Component{
+  /**
+   * Used for representing a story post. 
+   * Uses PostButtons component to represent lower post buttons. 
+   * PostUpper is used to represent the other fields of a post.
+   * @param {*} props 
+   */
     constructor(props){
       super(props);
       this.props = props;
@@ -21,6 +27,12 @@ class Post extends React.Component{
 }
 
 class PostUpper extends React.Component{
+  /**
+   * Represents a posts fields other than the lower buttons.
+   * Shows post title and text, post time in year, post tags and post location names.
+   * Shows the posting users username and profile picture.
+   * @param {*} props 
+   */
   constructor(props){
     super(props);
 
@@ -34,6 +46,9 @@ class PostUpper extends React.Component{
     this.getMoreContent = this.getMoreContent.bind(this);
   }
 
+  /**
+   * Click to read more functionality.
+   */
   getMoreContent(){
     this.setState(state =>{
       //let newState = JSON.parse(JSON.stringify(state));
