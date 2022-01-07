@@ -1,6 +1,6 @@
 # HOW TO RUN LOCALLY
 
-First, clone our github repository. Then, put the ".env" file that we provided to this path. You should be on this path as well. Run:
+First, clone our github repository. Then, put the ".env" file that we provided to this path. You should be on /postory/backend path. Run:
 
 ```
 docker compose up
@@ -16,7 +16,7 @@ It will start to run on port 8000.
 
 # HOW TO DEPLOY
 
-First, you should login to docker repository. It will ask username and password. Username is also repository name. Login command:
+First, clone our github repository. You should be on /postory/backend path. You should login to docker repository. It will ask username and password. Username is also repository name. Login command:
 
 ```
 docker login
@@ -63,6 +63,10 @@ docker run -d --restart always -p 8000:8000 --network myNetwork --name backend \
 After executing these commands, backend will start to run on the machine with the restored dump.
 
 IMPORTANT NOTE: The dump restoration should be made after the mongo container created.
+
+# DEPLOY USING GITHUB
+
+You can use GitHub for deployment by using workflows. If you change the secret variables of this [workflow](https://github.com/bounswe/2021SpringGroup9/blob/master/.github/workflows/backend_deploy.yml), you can deploy the backend to an instance.
 
 ## ENVIRONMENT VARIABLES
 
