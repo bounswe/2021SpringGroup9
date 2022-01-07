@@ -6,6 +6,9 @@ import Alert from '@material-ui/lab/Alert';
 
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps";
 
+/**
+ * A component for adding removing marker by clicking on a map for the LocationMap component.
+ */
 const MapComponent = withScriptjs(withGoogleMap((props) =>{
     const [markers, setMarkers] = React.useState([]);
     const [tooManyMarkers, setTooManyMarkers] = React.useState(false);
@@ -67,6 +70,11 @@ return(<div>
 
 
 class LocationChooser extends React.Component{
+    /**
+     * This component is used on create/edit post pages to select a Post's locations.
+     * It uses the MapComponent to render the markers on the page.
+     * @param {*} props 
+     */
     constructor(props){
         super(props);
 

@@ -29,11 +29,25 @@ afterEach(() => {
 //It is not easy to test react-google-maps javascript api with jest because it uses internal functions that are not transparent.
 
 test('Renders the page without errors', () => {
+    /*
+    ID            : TC_F_12
+    Title         : Create Post Page/Render test
+    Test Priority : High
+    Module Name   : Frontend - Create Post Page
+    Description   : Checks whether the create post page is rendered without errors.
+    */
     render(<MemoryRouter><CreatePost /></MemoryRouter>, container);
   }
 );
 
 test('Sends post creation request', async () => {
+  /*
+    ID            : TC_F_13
+    Title         : Create Post Page/Post creation test
+    Test Priority : High
+    Module Name   : Frontend - Create Post Page
+    Description   : Checks whether the user is able to create a post by writing the post title and body.
+    */
     render(<MemoryRouter><CreatePost /></MemoryRouter>, container);
     let title = screen.getByLabelText('Post title');
     let body = screen.getByLabelText('Post body');

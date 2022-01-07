@@ -17,6 +17,11 @@ import * as requests from './requests'
 const BACKEND_IP = process.env.REACT_APP_BACKEND_API ? process.env.REACT_APP_BACKEND_API : '3.67.83.253';
 
 class EditPost extends React.Component{
+    /**
+     * This component represents the Edit Post page of the application.
+     * Story title and text, locations,  time,  tags and images of a post can be edited on this page.
+     * @param {*} props 
+     */
     constructor(props){
         super(props);
 

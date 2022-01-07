@@ -15,12 +15,16 @@ import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-map
 
 
 class ViewPost extends React.Component{
+    /**
+     * The component that represents the whole viewPost page.
+     * It renders a Post component, the Comments component, a map for showing the locations, a Slider component for showing the Post images.
+     * @param {*} props 
+     */
     constructor(props){
         super(props);
         let dummyPost = {story : "Praesent eu libero et diam mollis placerat sed eget eros. Curabitur commodo purus in lorem fermentum, a suscipit tellus faucibus. Morbi justo nibh, iaculis sed porttitor id, faucibus in lorem. Aenean porttitor imperdiet velit id laoreet. Mauris tortor urna, fermentum eu eros vel, vestibulum malesuada mi. Vivamus venenatis magna nec eleifend hendrerit. Morbi lacinia ligula a quam varius, ac pretium libero semper. Fusce ultrices arcu ut augue sodales vehicula. Fusce pellentesque urna vel arcu facilisis, sed consectetur enim mollis. Nam suscipit euismod elit, ac cursus ex tempor eget. Curabitur aliquet ante orci, at vestibulum leo finibus vel. Praesent ullamcorper pharetra rhoncus. Vestibulum euismod nulla in ligula bibendum aliquam. Curabitur nec varius ligula. Duis feugiat mi risus, eget auctor lacus scelerisque sit amet.",
         owner : "Daniel Jones", locations: ["The World", "Ankara"], storyDate: "2021", tags: ["Cool"] };
 
-        //TODO: change this?
         const regex = /id=/g;
         const url = window.location.href;
         const idx = url.search(regex);
@@ -90,6 +94,11 @@ class ViewPost extends React.Component{
 }
 
 class Comment extends React.Component{
+    /**
+     * This component represents a Comment on the CommentContainer component.
+     * @param {*} props 
+     */
+    
     constructor(props){
         super(props);
         //get profile pic from the backend using username
@@ -113,6 +122,10 @@ class Comment extends React.Component{
 }
 
 class CommentContainer extends React.Component{
+    /**
+     * This component lets the user see the comments of a post and add comments to the same post on the view post page.
+     * @param {*} props 
+     */
     constructor(props){
         super(props);
         //get all comments of post from backend
@@ -167,6 +180,11 @@ class CommentContainer extends React.Component{
     }
 }
 
+/**
+ * This component renders the posts images. It lets the user search through the images using the left/right arrows.
+ * @param {*} props 
+ * @returns 
+ */
 
 const SliderComponent = (props ) => {
     const [curIdx, setCurIdx] = React.useState(0);
@@ -201,8 +219,9 @@ const SliderComponent = (props ) => {
     </div>);
 }
 
-
-
+/**
+ * Google maps component that show the Post's locations on a map.
+ */
 const MapComponent = withScriptjs(withGoogleMap((props) =>{
 
 return(<div>

@@ -18,6 +18,11 @@ import * as requests from './requests';
 const BACKEND_IP = process.env.REACT_APP_BACKEND_API ? process.env.REACT_APP_BACKEND_API : '3.67.83.253';
 
 class CreatePost extends React.Component{
+    /**
+     * This component represents the Create Post page of the application.
+     * Story title and text, locations,  time,  tags and images can be added to a post to be created on this page.
+     * @param {*} props 
+     */
     constructor(props){
         super(props);
         
@@ -47,7 +52,11 @@ class CreatePost extends React.Component{
         this.handleInfoClose = this.handleInfoClose.bind(this);
         this.prepareObjectToSend = this.prepareObjectToSend.bind(this);
     }
-
+    /**
+     * Get information from the children components
+     * @param {*} whichComponent 
+     * @param {*} childObj 
+     */
     handleChildObjectSend(whichComponent, childObj){
         const infoDict = {
             "textChooser": "Story text Content",
@@ -74,7 +83,6 @@ class CreatePost extends React.Component{
 
         
     }
-
     select(obj){
         this.setState(state => {
             //let newObj =  JSON.parse(JSON.stringify(state));
@@ -108,7 +116,10 @@ class CreatePost extends React.Component{
             };
         });
     }
-
+    /**
+     * Prepare the object that is going to be posted to the backend API.
+     * @returns 
+     */
     prepareObjectToSend(){
         /*
         if(this.state.postData["timeChooser"]["startDate"] == null){
@@ -157,7 +168,9 @@ class CreatePost extends React.Component{
     }
 
 
-
+    /**
+     * Prepare and send the prepared post using a FormData object to the backend.
+     */
     sendToBackend(){
         // send this.state.postData to backend
         
@@ -364,7 +377,9 @@ class ImageComponent extends React.Component{
     }
 }
 
-
+/**
+ * A component that enables the user to preview the post on a Post component before sending it to the backend.
+ */
 class PostPreviewComponent extends React.Component{
     constructor(props){
         super(props);

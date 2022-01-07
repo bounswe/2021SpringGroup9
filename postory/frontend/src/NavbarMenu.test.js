@@ -23,6 +23,13 @@ afterEach(() => {
   });
 
 test('Renders the menu', () => {
+  /*
+    ID            : TC_F_14
+    Title         : Navbar Menu/Render test
+    Test Priority : High
+    Module Name   : Frontend - Navbar Menu (all pages)
+    Description   : Checks if the necessary links on the navbar menu is rendered properly
+    */
   //MemoryRouter is needed because of useNavigate hook.
     render(<MemoryRouter>
       <NavbarMenu noNavigate/>
