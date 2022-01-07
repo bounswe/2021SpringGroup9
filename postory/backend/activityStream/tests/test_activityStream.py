@@ -7,6 +7,9 @@ from rest_framework.test import APIClient, APITestCase
 
 class GetActivities(APITestCase):
     def setUp(self):
+        """
+            Users information.
+        """
         apiClient = APIClient()
         user1 = {
             "name": "Name1",
@@ -40,24 +43,44 @@ class GetActivities(APITestCase):
             "password": "PASSword123*",
             "re_password": "PASSword123*"
         }
+
+        """
+            Create users.
+        """
         apiClient.post("/auth/users/",user1)
         apiClient.post("/auth/users/",user2)
         apiClient.post("/auth/users/",user3)
         apiClient.post("/auth/users/",user4)
+        """
+            Get users instances.
+        """
         self.user1Object = User.objects.filter(username = "user1").first()
         self.user2Object = User.objects.filter(username = "user2").first()
         self.user3Object = User.objects.filter(username = "user3").first()
         self.user4Object = User.objects.filter(username = "user4").first()
+        """
+            Activate users.
+            User 4 is private.
+        """
         self.user1Object.is_active = True
         self.user2Object.is_active = True
         self.user3Object.is_active = True
         self.user4Object.is_active = True
         self.user4Object.isPrivate = True
+        """
+            User 1 follows User 3.
+        """
         self.user3Object.followedUsers.set([self.user1Object])
+        """
+            Save instances.
+        """
         self.user1Object.save()
         self.user2Object.save()
         self.user3Object.save()
         self.user4Object.save()
+        """
+            Create posts.
+        """
         post1_1 = Post.objects.create(
             id = 1,
             title = "Title1_1",
@@ -107,6 +130,13 @@ class GetActivities(APITestCase):
             owner = self.user4Object.id
         )
 
+    """
+        ID              : TC_B_A_1
+        Title           : Activity Stream - Get Public Activities
+        Test Priority   : High
+        Module          : Backend - Get Public Activities
+        Description     : Test of all activities endpoint. 3 activities should be stored.
+    """
     def test_GetAll(self):
         apiClient = APIClient()
         resp = apiClient.post("/auth/jwt/create",{"email":"user1@mail.com","password":"PASSword123*"})
@@ -126,6 +156,13 @@ class GetActivities(APITestCase):
         activities = resp.json()
         assert len(activities) == 3
 
+    """
+        ID              : TC_B_A_2
+        Title           : Activity Stream - Get Followed Activities
+        Test Priority   : High
+        Module          : Backend - Get Followed Activities
+        Description     : Test of followed activities endpoint. If any non followed user's activity is returned, false.
+    """
     def test_GetFollowed(self):
         apiClient = APIClient()
         resp = apiClient.post("/auth/jwt/create",{"email":"user1@mail.com","password":"PASSword123*"})
@@ -149,7 +186,13 @@ class GetActivities(APITestCase):
                 followedOnly = False
         assert followedOnly
 
-
+    """
+        ID              : TC_B_A_3
+        Title           : Activity Stream - Get Own Activities
+        Test Priority   : High
+        Module          : Backend - Get Own Activities
+        Description     : Test of own activities endpoint. If any non own activity is returned, false.
+    """
     def test_GetOwn(self):
         apiClient = APIClient()
         resp = apiClient.post("/auth/jwt/create",{"email":"user1@mail.com","password":"PASSword123*"})
