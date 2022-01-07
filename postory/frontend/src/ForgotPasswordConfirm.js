@@ -2,7 +2,7 @@ import React from 'react'
 import './ForgotPasswordConfirm.css'
 import {Link, Navigate} from "react-router-dom";
 
-const BACKEND_URL = 'http://' + window.location.hostname + ':8000'
+const BACKEND_URL = 'http://' + (process.env.REACT_APP_BACKEND_API ? process.env.REACT_APP_BACKEND_API : '3.67.83.253') + ':8000'
 
 class ForgotPasswordConfirm extends React.Component {
     constructor(props) {

@@ -1,0 +1,9 @@
+services:
+  frontend:
+    build:
+      context: .
+      args:
+        REACT_APP_BACKEND_API: ${REACT_APP_BACKEND_API}
+        REACT_APP_GOOGLE_API_KEY: ${REACT_APP_GOOGLE_API_KEY}
+    ports:
+      - "3000:3000"

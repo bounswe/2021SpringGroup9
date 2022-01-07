@@ -15,7 +15,7 @@ import {TextField, Snackbar} from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import * as requests from './requests';
 
-const BACKEND_IP = '3.67.83.253';
+const BACKEND_IP = process.env.REACT_APP_BACKEND_API ? process.env.REACT_APP_BACKEND_API : '3.67.83.253';
 
 class CreatePost extends React.Component{
     constructor(props){
