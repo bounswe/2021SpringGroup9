@@ -1,6 +1,4 @@
-import { mdiAccount } from '@mdi/js';
 import Button from 'react-bootstrap/Button';
-import Icon from '@mdi/react';
 import React, { useEffect } from "react";
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -8,37 +6,37 @@ import Col from 'react-bootstrap/Col'
 import Post from './Post';
 import {Snackbar} from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
-
 import plus_thick from './plus-thick.png'
-
 import * as requests from './requests'
 
 
 const BACKEND_IP = '3.67.83.253';
 
 export const ProfilePageUpper = () => {
-    const [followingCount, setFollowingCount] = React.useState(0);
-    const [followerCount, setFollowerCount] = React.useState(0);
-    const [postCount, setPostCount] = React.useState(0);
-    const [userPosts, setUserPosts] = React.useState([]);
-    const [fetchedPosts, setFetchedPosts] = React.useState(false);
-    const [showFollowButton, setShowFollowButton] = React.useState(true);
-    const [userID, setUserID] = React.useState();
-    const [sessionUserID, setSessionUserID] = React.useState();
-    const [username, setUsername] = React.useState();
-    const [popupState, setPopupState] = React.useState(false);
+    /* Profile page component. Fetches the profile information of users (e.g., follower count, posts, username, profile picture etc.)
+    and renders them. */
+    const [followingCount, setFollowingCount] = React.useState(0); // Stores the number of users a user follows
+    const [followerCount, setFollowerCount] = React.useState(0); // Stores the number of users a user is followed by
+    const [postCount, setPostCount] = React.useState(0); // Stores the number of posts a user has
+    const [userPosts, setUserPosts] = React.useState([]); // Stores the posts of a user in a list
+    const [fetchedPosts, setFetchedPosts] = React.useState(false); // True if posts of a users have been fetched succesfully, false otherwise
+    const [showFollowButton, setShowFollowButton] = React.useState(true); // False if users sees her own profile page, true otherwise
+    const [userID, setUserID] = React.useState(); // User ID of the profile page owner
+    const [sessionUserID, setSessionUserID] = React.useState(); // User ID of the user currently logged in
+    const [username, setUsername] = React.useState(); // Username of the profile page owner
+    const [popupState, setPopupState] = React.useState(false); // True when pop up is displayed, false otherwise
     const [photo, setPhoto] = React.useState(false);
     const [profilePhoto, setProfilePhoto] = React.useState(false);
-    const [followText, setFollowText] = React.useState('Follow');
-
-    const [hoverPhoto, setHoverPhoto] = React.useState(false);
-
-    const [isPrivate, setIsPrivate] = React.useState(false);
+    const [followText, setFollowText] = React.useState('Follow'); // Text to be displayed on follow button
+    const [hoverPhoto, setHoverPhoto] = React.useState(false); // True when user hovers on profile picture, false otherwise
+    const [isPrivate, setIsPrivate] = React.useState(false); // Fetched from backend, tue if the user's account is private, false otherwise
     const [bEnabled, setbEnabled] = React.useState(true);
     const [followbuttonEnabled, setFollowbuttonEnabled] = React.useState(true);
 
 
     useEffect(() => {
+        /* Called on mount. Fetches the posts of the user and assings them to proper states so that
+        they can be used in render. */
         fetch(`http://${BACKEND_IP}:8000/api/post/all/user/${userID}`, {
             method: 'GET',
             headers: {
@@ -52,11 +50,13 @@ export const ProfilePageUpper = () => {
                 setUserPosts(data);
                 setPostCount(data.length);
                 setFetchedPosts(true);
-                console.log('TEEEEESTS',data);
+                console.log('User posts: ',data);
             })
     }, [userID])
 
     useEffect(() => {
+        /* Called on mount. Fetches the profile information of the user and assings them to proper states so that
+        they can be used in render. */
         fetch(`http://${BACKEND_IP}:8000/api/user/get/${userID}`, {
             method: 'GET',
             headers: {
@@ -74,20 +74,20 @@ export const ProfilePageUpper = () => {
                 for(let i =0 ; i< data.followerUsers.length; i++){
                     if(data.followerUsers[i].id == sessionUserID){
                         closePopup();
-                        //setShowFollowButton(false);
                     }
                 }
-                console.log(data);
+                console.log('User data: ',data);
         })
     }, [userID, showFollowButton])
 
     useEffect(() => {
+        /* Called on mount. Gets the user ID of the user currently logged in from local storage, and checks whether
+        it is same with the user ID of the porfile page owner. Sets follow button state accordingly. */
         setUserID( () => {
             var regex = /id=/g;
             var url = window.location.href;
             var idx = url.search(regex);
             var id = parseInt(url.slice(idx+3));
-            //var decoded = jwt_decode(localStorage.getItem('access'));
 
             console.log("ID: " + id);
             console.log("Decoded: " + localStorage.getItem('userID'));
@@ -100,6 +100,8 @@ export const ProfilePageUpper = () => {
     }, [])
 
     const onClickFollow = () =>{
+        /* Called when user clicks on . Gets the user ID of the user currently logged in from local storage, and checks whether
+        it is same with the user ID of the porfile page owner. Sets follow button state accordingly. */
         setFollowbuttonEnabled(false);
         fetch(`http://${BACKEND_IP}:8000/api/user/follow/${userID}`, {
             method: 'POST',
@@ -114,6 +116,7 @@ export const ProfilePageUpper = () => {
     }
 
     const closePopup = () => {
+        /* Called when pop up is closed. Sets the follow button configuration (i.e., follow text and button enable/disable) */
         setPopupState(false);
         if(!isPrivate)
             setFollowbuttonEnabled(true);
@@ -124,9 +127,9 @@ export const ProfilePageUpper = () => {
             setFollowText('Unfollow');
         else
             setFollowText('Follow');
-      };
+    };
 
-      useEffect(()=> {
+    useEffect(()=> {
         console.log('test');
         if(photo && (parseInt(localStorage.getItem('userID')) == userID))
             console.log(document.getElementById('file').click());
