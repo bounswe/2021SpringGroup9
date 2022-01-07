@@ -58,4 +58,5 @@ jobs:
               --env AWS_STORAGE_BUCKET_NAME=${{ secrets.AWS_STORAGE_BUCKET_NAME }} \
               --env EMAIL=${{ secrets.EMAIL }} \
               --env EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }} \
+              --env HOST=${{ secrets.HOST }} \
               ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest || true
