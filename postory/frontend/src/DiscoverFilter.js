@@ -19,29 +19,33 @@ import Alert from '@material-ui/lab/Alert';
 import { mdiPound, mdiCalendarRange, mdiFountainPenTip, mdiAccount, mdiMapMarkerRadius } from '@mdi/js';
 
 const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
-    const [selectedPost, setSelectedPost] = React.useState(null);
-    const [currentLocation, setCurrentLocation] = React.useState({ lat: 41.048, lng: 29.0510 });
-    const [searchLocation, setSearchLocation] = React.useState({ lat: 43, lng: 25 });
-    const [displayPost, setDisplayPost] = React.useState(false);
-    const [clickCount, setClickCount] = React.useState(0);
-    const [clearInfoBox, setClearInfoBox] = React.useState(0);
-    const [displayInfoBox, setDisplayInfoBox] = React.useState(false);
+    /* Google Map component. This component renders the map, captures the user inputs (e.g., dragging marker),
+    and take actions accordingly */
+    const [selectedPost, setSelectedPost] = React.useState(null); // Post whose marker has been clicked on last, by the user
+    const [currentLocation, setCurrentLocation] = React.useState({ lat: 41.048, lng: 29.0510 }); // Location info of the blue marker (i.e., the center of the area search)
+    const [searchLocation, setSearchLocation] = React.useState({ lat: 43, lng: 25 }); //
+    const [clickCount, setClickCount] = React.useState(0); // Used to toggle the information box of a marker
+    const [clearInfoBox, setClearInfoBox] = React.useState(0); // True when a marker is clicked on twice, false otherwise
+    const [displayInfoBox, setDisplayInfoBox] = React.useState(false); // True when a marker is clicked on, false otherwise
 
 
 
     useEffect(() => {
+        /* Called when user clicks on any marker, set the information box's on/off state  */
         if (selectedPost != null){
             setDisplayInfoBox(false);
             setTimeout(() => {setDisplayInfoBox(true)}, 500);
         }
-        console.log("Selected post has been changed");
     }, [clickCount])
 
     useEffect(() => {
-        setDisplayInfoBox(false);
+        /* Called when information box of a marker needs to be closed */
+        setDisplayInfoBox(!displayInfoBox);
     }, [clearInfoBox])
 
     const onClickMarker = (index, obj) =>{
+        /* Called when user clicks on any marker. If user clicks on the same marker twice, the information box's status will be toggled.
+        Else, the current infobox will be closed, selected post will be changed and the infobox for the last clicked marker will be displayed. */
         if (obj.lat==currentLocation.lat & obj.lng==currentLocation.lng){
             setClearInfoBox(clearInfoBox + 1);
         }else {
@@ -53,7 +57,6 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
                         newPost = props.posts[i];
                     }
                 }
-                console.log(newPost);
                 setClickCount(clickCount + 1);
                 return newPost;
             });    
@@ -61,29 +64,22 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
     }
 
     const onDragMarkerSearch = (t) =>{
+        /* Called when the blue marker is dragged. It updates its location and sends it to parent component. */
         setSearchLocation({lat: t.latLng.lat(), lng : t.latLng.lng()}); 
-        console.log(t.latLng.lat());    
-        console.log(t.latLng.lng());
         props.searchCenter({lat: t.latLng.lat(), lng : t.latLng.lng()})
     }
 
-    const onClickInfoBox = () =>{
-        if (selectedPost != null){
-            setDisplayPost(false);
-            setTimeout(() => {setDisplayPost(true)}, 500);
-        }  
-    }
 
     return( <GoogleMap
                 defaultZoom={6}
                 defaultCenter={{ lat: 41.048, lng: 29.0510 }}
                 >
-                {displayInfoBox && 
+                {displayInfoBox && selectedPost &&
                 <InfoBox
                 defaultPosition={{lat:currentLocation.lat, lng:currentLocation.lng}}
                 options={{ closeBoxURL: ``, enableEventPropagation: true }}
                 >
-                    <div style={{ backgroundColor: `white`, opacity: 1, padding: `12px` }} onClick = {() => onClickInfoBox()} >
+                    <div style={{ backgroundColor: `white`, opacity: 1, padding: `12px` }} >
                         <div style={{ fontSize: `16px`, fontColor: `#08233B`, fontWeight: `bold` }}>
                             {selectedPost.title}
                         </div>
@@ -114,6 +110,7 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>{
 ))
 
 class DiscoverPage extends React.Component{
+    /* Discovery page component.  */
     constructor(props){
         super(props);
         this.state = {
@@ -123,8 +120,8 @@ class DiscoverPage extends React.Component{
             selectedTags: [], // Holds all the tags that are entered by the user
             userValue: '', // Holds the last entered user as an input
             selectedUsers: [], // Holds all the users that are entered by the user
-            keyword: '',
-            selectedKeywords: [],
+            keyword: '', // Holds the last entered keyword as an input
+            selectedKeywords: [], // Holds all the keywords that are entered by the user
             startYear: null,
             endYear: null,
             startMonth: null,
@@ -146,13 +143,15 @@ class DiscoverPage extends React.Component{
     }
 
     componentDidMount() {
+        /* Called on mount. It fetches all the posts from discover endpoint without applying any filter.
+        It creates a location list which contains the (lat, long) tuples of all posts that are fetched.
+        This location list then passed to map component, via props, to add those locations as markes on the map.*/
         requests.get_jwt('/api/post/all/discover',{})
             .then(response => response.json())
             .then( (data) => {
                 this.setState({ posts: data });
                 const markerList = [];
                 for(let i = 0; i < data.length; i++) {
-                    console.log(data[i]);
                     let id = data[i].id;
                     for(let j = 0; j < data[i].locations.length; j++) {
                         let lat = data[i].locations[j][1];
@@ -160,12 +159,15 @@ class DiscoverPage extends React.Component{
                         markerList.push({id: id, lat: lat, lng: lng});
                     }
                 }
-                console.log(markerList);
                 this.setState({ markerList: markerList });
         })
     }
 
     onClickBrowse = () => {
+        /* Called when user clicks on browse button. It fetches all the posts from discover endpoint applying all the filters.
+        It simply add all the fiters to the endpoint URL, then fetches the posts.
+        It creates a location list which contains the (lat, long) tuples of all posts that are fetched.
+        This location list then passed to map component, via props, to add those locations as markes on the map.*/
         var filterURL = 'filter?'
 
         for(let k = 0; k < this.state.selectedKeywords.length; k++){
@@ -229,7 +231,6 @@ class DiscoverPage extends React.Component{
                 this.setState({ posts: data });
                 const markerList = [];
                 for(let i = 0; i < data.length; i++) {
-                    console.log(data[i]);
                     let id = data[i].id;
                     for(let j = 0; j < data[i].locations.length; j++) {
                         let lat = data[i].locations[j][1];
@@ -237,12 +238,14 @@ class DiscoverPage extends React.Component{
                         markerList.push({id: id, lat: lat, lng: lng});
                     }
                 }
-                console.log(markerList);
                 this.setState({ markerList: markerList });
         })
     };
 
     onClickNewPage = () => {
+        /* Called when user clicks on see posts button. It fetches all the posts from discover endpoint applying all the filters.
+        It simply add all the fiters to the endpoint URL, then fetches the posts. It adds those resulting posts to local storage set
+        different page state to true. Component then navigates to a new page from render, and that page extracts the posts from local storage.*/
         var filterURL = 'filter?'
 
         for(let k = 0; k < this.state.selectedKeywords.length; k++){
@@ -300,12 +303,9 @@ class DiscoverPage extends React.Component{
         }
 
         filterURL = filterURL.slice(0, -1);
-        console.log(filterURL)
-        console.log(`/api/post/all/${filterURL}`)
         requests.get_jwt(`/api/post/all/${filterURL}`,{})
             .then(response => response.json())
             .then( (data) => {
-                console.log(data)
                 localStorage.setItem('filteredPosts', JSON.stringify(data));
                 this.setState({ differentPage: true });
                 
@@ -315,10 +315,12 @@ class DiscoverPage extends React.Component{
 
 
     onChangeRelatedCheckbox = () => {
+        /* Called when user checks the checkbox. Sets the isRelatedSearch state to true.*/
         this.setState({ isRelatedSearch: !this.state.isRelatedSearch });
     }
 
     clearFilters = () => {
+        /* Called when user clicks clear filters button. Sets all the filter related states to their initial default values.*/
         this.setState({ 
             isRelatedSearch: !this.state.isRelatedSearch,
             selectedPost: null,
@@ -347,10 +349,11 @@ class DiscoverPage extends React.Component{
     }
 
     onClickTag = (tag) => {
+        /* Called when user clicks on a tag. It fetches related wiki data about that tag value and
+        displays it in a pop up at the bottom of the screen. */
         requests.get_jwt(`/api/post/related/${tag}`,{})
             .then(response => response.json())
             .then( (data) => {
-                console.log(data);
                 var wikiResponse = ''
                 for(let i = 0; i < data.length; i++){
                     wikiResponse += data[i] + ' - '
@@ -364,6 +367,7 @@ class DiscoverPage extends React.Component{
     }
 
     closeWikiData = () => {
+        /* Closes the wiki data pop up. */
         this.setState({ showWikiData: false });
     };
 
@@ -420,8 +424,8 @@ class DiscoverPage extends React.Component{
     };
 
     removeKeyword = i => {
-        {/* Called when user clicks on x button next to each tag added previously to the post.
-            It filters the tag that wanted to be removed from selectedTags array returns it */}
+        {/* Called when user clicks on x button next to each keyword added previously to the post.
+            It filters the tag that wanted to be removed from selectedKeywords array returns it */}
         this.setState(state => {
           const selectedKeywords = state.selectedKeywords.filter((item, j) => i !== j);
      
