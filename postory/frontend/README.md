@@ -1,12 +1,24 @@
 # Building and running the app
-The app can be built and run using only one command with docker compose. 
-If you want to build and run seperately you can use the below commands.
+The app can be built and run with docker compose. 
+
+## Requirements
+
+* Docker _(available [here](https://docs.docker.com/get-docker/)_)
+* docker-compose _(available [here](https://docs.docker.com/compose/install/)_)
+* git _(available [here](https://git-scm.com/downloads)_)
+* The provided .env file of the frontend.
+* Change the `REACT_APP_BACKEND_API` variable on the .env file if needed.
 
 ## Build and run the app using docker compose
-You first should have a configuration file named .env (on the same directory as the docker-compose.yml file) that has the necessary lines:\
-\
-REACT_APP_GOOGLE_API_KEY=\<Your google maps javascript api key\> \
-REACT_APP_BACKEND_API=\<Ip of the backend. Example: 3.67.83.253\>
+You first should have a configuration file named .env (on the same directory as the docker-compose.yml file - /2021SpringGroup9/postory/frontend) that has the necessary lines:
+
+```
+REACT_APP_GOOGLE_API_KEY=<Your google maps javascript api key> 
+REACT_APP_BACKEND_API=<Ip of the backend. Example: 3.67.83.253>
+```
+We are going to provide the file so just copy it into 2021SpringGroup9/postory/frontend.\
+Open up a terminal in the same directory.
+
 
 Then you can run the command (on the same directory as the docker-compose.yml file) to run your application:
 
@@ -22,6 +34,10 @@ docker-compose up
 
 
 
+
+After running these commands, the frontend will be available at: http://localhost:3000/. 
+
+
 ## Build and run without docker-compose
 ### Build the image
 ```
@@ -33,7 +49,7 @@ docker run -p 3000:3000 frontend
 ```
 
 
-# Getting Started with Create React App
+# Running the application without docker.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
