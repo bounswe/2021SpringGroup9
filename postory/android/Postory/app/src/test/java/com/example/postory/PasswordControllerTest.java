@@ -8,6 +8,11 @@ import org.junit.Test;
  * Example local unit test, which will execute on the development machine (host).
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ * @author niyaziulke */
+
+/*
+    ID            : TC_A_2
+    Description   : Tests whether PasswordController detects passwords with insufficient strength.
  */
 public class PasswordControllerTest {
     String shortPass = "A1b2_2";

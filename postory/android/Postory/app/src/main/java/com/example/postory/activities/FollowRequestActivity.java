@@ -31,6 +31,12 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * The activity for accepting or declining follow requests. It can be reached from SelfProfilePageActivity.
+ * If there are no pending requests for the user, the user is warned that there is no follow request.
+ * Uses the toolbar.
+ * @author niyaziulke
+ */
 public class FollowRequestActivity extends ToolbarActivity {
     private SharedPreferences sharedPreferences;
     private ListView requestsListView;
@@ -90,6 +96,10 @@ public class FollowRequestActivity extends ToolbarActivity {
         startActivity(i);
     }
 
+    /**
+     * Triggered when the activity is first created, sets things up.
+     * @param savedInstanceState The state of instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +110,7 @@ public class FollowRequestActivity extends ToolbarActivity {
         requestsListView = (ListView) findViewById(R.id.requestList);
 
         client = new OkHttpClient();
+        // api request url
         String url = BuildConfig.API_IP+"/user/getRequests";
         Request getRequests = new Request.Builder()
                 .url(url)
@@ -118,6 +129,7 @@ public class FollowRequestActivity extends ToolbarActivity {
                 try {
                     String respString = response.body().string();
 
+                    // Convert the json to UserModel class
                     UserModel[] requests = gson.fromJson(respString, UserModel[].class);
                     Log.i(TAG, "onResponse: ");
                     ArrayList<UserModel> requestArray = new ArrayList<>();
@@ -126,6 +138,7 @@ public class FollowRequestActivity extends ToolbarActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                // No need for this warning
                                 noResultWarning.setVisibility(View.GONE);
                             }
                         });
@@ -134,6 +147,7 @@ public class FollowRequestActivity extends ToolbarActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            // Set the adapter for the ListView
                             requestsListView.setAdapter(adapter);
                         }
                     });

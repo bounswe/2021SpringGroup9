@@ -2,6 +2,10 @@ package com.example.postory.utils;
 
 import java.util.List;
 
+/**
+ * Class that converts list of strings to a single string with line breaks
+ * @author niyaziulke
+ */
 public class StringListHandler {
 
     private StringListHandler(){}

@@ -7,6 +7,10 @@ import com.example.postory.models.UserModel;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class to convert public user model to private user model.
+ * @author niyaziulke
+ */
 public  class UserModelConverter {
     public static UserGeneralModel convert(UserModel thisUserHelper){
         UserGeneralModel thisUser = new UserGeneralModel();

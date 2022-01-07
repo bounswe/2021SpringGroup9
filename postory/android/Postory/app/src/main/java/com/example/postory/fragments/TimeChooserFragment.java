@@ -30,6 +30,9 @@ import java.util.Calendar;
  * A simple {@link Fragment} subclass.
  * Use the {@link TimeChooserFragment#newInstance} factory method to
  * create an instance of this fragment.
+ *
+ * Allows the user to pick the time with the desired precision.
+ * @author niyaziulke
  */
 public class TimeChooserFragment extends Fragment {
 
@@ -133,6 +136,7 @@ public class TimeChooserFragment extends Fragment {
         startDayEditText = view.findViewById(R.id.startDay);
         endDayEditText = view.findViewById(R.id.endDay);
 
+        // Set the listener for the switch that enables month precision.
         monthSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -140,6 +144,7 @@ public class TimeChooserFragment extends Fragment {
             }
         });
 
+        // Set the listener for the switch that enables day precision.
         daySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -147,6 +152,7 @@ public class TimeChooserFragment extends Fragment {
             }
         });
 
+        // Set the listener for the switch that enables time precision.
         timeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -182,6 +188,10 @@ public class TimeChooserFragment extends Fragment {
 
         return view;
     }
+
+    /**
+     * Dialog for picking the time (hour and minute).
+     */
     private void startTimePickerClick(){
         TimePickerDialog tp1 = new TimePickerDialog(getContext(),new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -197,6 +207,10 @@ public class TimeChooserFragment extends Fragment {
         tp1.setButton(TimePickerDialog.BUTTON_NEGATIVE, "Cancel", tp1);
         tp1.show();
     }
+
+    /**
+     * Ends the time picking operation.
+     */
     private void endTimePickerClick(){
         TimePickerDialog tp1 = new TimePickerDialog(getContext(),new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -211,6 +225,11 @@ public class TimeChooserFragment extends Fragment {
         tp1.show();
 
     }
+
+    /**
+     * User confirms that the dates are completed.
+     * Checks for validity of the input.
+     */
     private void confirmButtonClick(){
 
 

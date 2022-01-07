@@ -29,12 +29,21 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * The activity for resetting passwords. It can be reached from LoginActivity.
+ * It sends a request to the API for password reset, and the backend sends an email for password reset operation.
+ * @author niyaziulke
+ */
 public class ForgotPasswordActivity extends AppCompatActivity {
     Button resetButton;
     Button cancelButton;
     EditText resetMail;
 
     @Override
+    /**
+     * Triggered when the activity is first created, sets things up.
+     * @param savedInstanceState The state of instance
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
@@ -56,6 +65,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * Handles the operation when reset button is clicked. It sends a request to the API for password reset operation.
+     */
     private void resetButtonClick(){
         String mailString = resetMail.getText().toString();
         if(resetMail.getText().toString().contains("@")){
@@ -82,6 +95,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         @Override
                         public void run() {
 
+                            // Dialog for accepting or rejecting password reset.
                             AlertDialog.Builder builder1 = new AlertDialog.Builder(ForgotPasswordActivity.this);
                             builder1.setTitle("Password reset link has been sent.");
                             builder1.setMessage("Please use the link to reset your password.");
@@ -104,6 +118,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
         }
         else{
+            // Warns user that the email address is not valid.
             SuperActivityToast.create(ForgotPasswordActivity.this, new Style(), Style.TYPE_BUTTON)
                     .setProgressBarColor(Color.WHITE)
                     .setText("The email address is not valid.")
@@ -114,6 +129,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Handles the operation when cancel button is clicked. Goes back to the LoginActivity
+     */
     private void cancelButtonClick(){
         onBackPressed();
     }

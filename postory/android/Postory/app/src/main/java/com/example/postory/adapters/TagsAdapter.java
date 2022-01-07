@@ -14,6 +14,10 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
+/**
+ * Lists the tags of a post.
+ * @author niyaziulke
+ */
 public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ViewHolder> {
     public static final String TAG = "";
     private int listItemLayout;
