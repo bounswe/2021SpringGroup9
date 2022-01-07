@@ -1,5 +1,6 @@
 # Building and running the app
 The app can be built and run with docker compose. 
+You can access the system manual here: https://github.com/bounswe/2021SpringGroup9/wiki/System-Manual
 
 ## Requirements
 
