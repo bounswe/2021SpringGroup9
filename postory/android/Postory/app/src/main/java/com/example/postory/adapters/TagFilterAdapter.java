@@ -35,6 +35,14 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+
+
+/**
+ * The adapter to display data dynamically on the tags listview.
+ *
+ * @author melihozcan
+ *
+ */
 public class TagFilterAdapter extends RecyclerView.Adapter<TagFilterAdapter.ViewHolder> {
     public static final String TAG = "TagFilterAdapter";
     private int listItemLayout;
@@ -48,12 +56,25 @@ public class TagFilterAdapter extends RecyclerView.Adapter<TagFilterAdapter.View
     private String accessToken;
     private DelayedProgressDialog dialog;
 
+    /**
+     * The constructor for the adapter.
+     * @param context the activity context
+     * @param layoutId 0
+     * @param itemList the arraylist of models to populate the listview.
+     */
     public TagFilterAdapter(int layoutId, ArrayList<TagItem> itemList, Context context) {
         listItemLayout = layoutId;
         this.itemList = itemList;
         this.context = context;
     }
 
+
+    /**
+     * Get the view from the parent, initalize a viewholder with it.
+     * @param parent The parent view.
+     * @param viewType
+     * @return the viewholder
+     */
     @NonNull
     @NotNull
     @Override
@@ -66,6 +87,13 @@ public class TagFilterAdapter extends RecyclerView.Adapter<TagFilterAdapter.View
         return myViewHolder;
     }
 
+
+
+    /**
+     * Set OnClickListeners on the items.
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         Button item = holder.tag;
@@ -142,12 +170,19 @@ public class TagFilterAdapter extends RecyclerView.Adapter<TagFilterAdapter.View
 
     }
 
+    /**
+     *
+     * @return the count of items on the arraylist
+     */
     @Override
     public int getItemCount() {
         return itemList == null ? 0 : itemList.size();
     }
 
 
+    /**
+     * Hold the children views and initialize them
+     */
     static class ViewHolder extends RecyclerView.ViewHolder {
         public Button tag;
         public Button removeTag;

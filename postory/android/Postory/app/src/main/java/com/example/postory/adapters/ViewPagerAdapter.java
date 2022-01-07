@@ -8,6 +8,10 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
 
+
+/**
+ * The viewpager which holds the two fragments which will be displayed for each tab on the activity stream.
+ */
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
 

@@ -24,6 +24,18 @@ import java.util.List;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
+
+
+/**
+ *
+ * This is a Test class which checks whether an example JSON response returned from our backend
+ * is parsed correctly by comparing each field with a model that we know has the true values for it.
+ *
+ * @author melihozcan
+ *
+ *
+ */
+
 public class PostModelConverterTest {
 
     Post modelGround = new Post();

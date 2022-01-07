@@ -19,11 +19,24 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
+
+/**
+ * The fragment which contains the map. This fragment is used in the create/edit post page, to enable users to choose a location and name it.
+ */
 public class MapFragment extends Fragment {
 
     AlertDialog alertDialog;
     GoogleMap map;
     LatLng locationChosen;
+
+    /**
+     * Inflate the view, enable the user to long click on the map to specify a location and
+     * then name it. The user is then returned to the create post activity.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override

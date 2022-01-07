@@ -27,11 +27,25 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
+
+/**
+ * The adapter to display data dynamically on the listview.
+ *
+ * @author melihozcan
+ *
+ */
 public class ActivityStreamAdapter extends ArrayAdapter<ActorObjectGeneralModel> {
     ArrayList<ActorObjectGeneralModel> objects;
     private SharedPreferences sharedPreferences;
     private Context context;
     String selfId;
+
+    /**
+     * The constructor for the adapter.
+     * @param context the activity context
+     * @param resource 0
+     * @param objects the arraylist of models to populate the listview.
+     */
     public ActivityStreamAdapter(@NonNull Context context, int resource, @NonNull ArrayList<ActorObjectGeneralModel> objects) {
         super(context, resource, objects);
         sharedPreferences = context.getSharedPreferences("MY_APP",context.MODE_PRIVATE);
@@ -40,6 +54,17 @@ public class ActivityStreamAdapter extends ArrayAdapter<ActorObjectGeneralModel>
         this.objects = objects;
     }
 
+
+    /**
+     *
+     * This method formats each childview according to the model at that position.
+     *
+     *
+     * @param position the position of the item
+     * @param convertView the view for each item position
+     * @param parent the parent view
+     * @return the formatted view
+     */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -111,6 +136,12 @@ public class ActivityStreamAdapter extends ArrayAdapter<ActorObjectGeneralModel>
         return  convertView;
     }
 
+
+    /**
+     * Format the string for the messages to be displayed on the activity stream page.
+     * @param type the activity type
+     * @return the message which will be shown
+     */
     private String formatString(String type) {
         String formatted = "";
         switch (type){

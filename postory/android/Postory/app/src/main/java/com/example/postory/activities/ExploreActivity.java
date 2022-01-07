@@ -59,6 +59,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+
+/**
+ * The activity for the Discovery page. Here a map is shown on which markers of all public users' posts are marked.
+ * If the user wishes to filter posts further, he/she can click the blue text "Click for an advanced search"
+ * This opens another scrollable view from which the user can specify various parameters for the search.
+ * @author melihozcan
+ *
+ */
 public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapLongClickListener {
 
 
@@ -111,6 +119,10 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
     private ArrayList<TagItem> tagsList = new ArrayList<>();
     private ArrayList<TagItem> keywords = new ArrayList<>();
 
+
+    /**
+     * Sends the user to the homepage.
+     */
     @Override
     protected void goHomeClicked() {
         Intent i = new Intent(ExploreActivity.this, MainActivity.class);
@@ -119,6 +131,11 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
 
     }
 
+
+
+    /**
+     * Sends the user to the create post page.
+     */
     @Override
     protected void goCreatePostClicked() {
         Intent createPostIntent = new Intent(ExploreActivity.this, CreatePostActivity.class);
@@ -137,12 +154,20 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
 
         return;
     }
+    /**
+     * Sends the user to the profile page.
+     */
     @Override
     protected void goProfileClicked() {
         Intent i = new Intent(ExploreActivity.this, SelfProfilePageActivity.class);
         startActivity(i);
     }
 
+    /**
+     * Logs out the user by clearing the entries in the shared preferences, this way app doesn't redirect the user to
+     * home page, instead user is prompted to enter the credentials.
+     *
+     */
     @Override
     protected void logoutClicked() {
         sharedPreferences = getSharedPreferences("MY_APP",MODE_PRIVATE);
@@ -156,6 +181,11 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
         startActivity(i);
     }
 
+    /**
+     * Remove a tag from the list of tags from the UI and from the tagsList arraylist.
+     *
+     * @param i the position of the tag
+     */
     public void removeTag (int i) {
         tagsList.remove(i);
         tagAdapter = new TagFilterAdapter(R.layout.single_keyword,tagsList, this);
@@ -164,6 +194,11 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
 
     }
 
+    /**
+     * Remove a keyword from the list of keywords from the UI and from the keywords arraylist.
+     *
+     * @param i the position of the keyword
+     */
     public void removeKeyword (int i) {
         keywords.remove(i);
         keywordAdapter = new KeywordAdapter(R.layout.single_keyword,keywords, this);
@@ -172,6 +207,10 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
 
     }
 
+    /**
+     * Clear all the markers from the map provided by Google Maps Android SDK. (Except the blue marker which denotes
+     * the area of focus which the user specifies for his/her search.)
+     */
     public void clearAllMarkers() {
         Marker excls = null;
         for(Marker mrk : markers) {
@@ -190,6 +229,10 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
     }
 
 
+    /**
+     * All the views are created and initiated here.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -226,6 +269,9 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
         tagsRecyclerView.setLayoutManager(tagLayoutManager);
         keywordsRecyclerView.setLayoutManager(keywordLayoutManager);
 
+        /**
+         * Clear all the filters. Take the map back to the default state.
+         */
         clearFilters.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -251,7 +297,10 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
 
             }
         });
-        
+
+        /**
+         * Show the results of the posts on another page.
+         */
         displayAnotherPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -266,6 +315,10 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
             }
         });
 
+
+        /**
+         * Display the results of the filtering on the map.
+         */
         displayOnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -275,6 +328,9 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
             }
         });
 
+        /**
+         * Pick a date to narrow down your search. Directs you to the TimeChooserFragment.
+         */
         pickDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -289,6 +345,9 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
             }
         });
 
+        /**
+         * Add keyword by clicking on this button. An adapter is used to show added keywords.
+         */
         addKeyword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -301,6 +360,9 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
             }
         });
 
+        /**
+         * Add a tag by clicking on this button. An adapter is used to show added tags.
+         */
         addTag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -313,12 +375,16 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
             }
         });
 
+        /**
+         * Make the search layout visible.
+         */
         enableSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 searchSection.setVisibility(View.VISIBLE);
             }
         });
+
 
         accessToken = sharedPreferences.getString("access_token","");
 
@@ -341,6 +407,11 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
        
 
     }
+
+    /**
+     * Build a request with the input values gotten from the user.
+     * @return a HttpUrl.
+     */
     
     public HttpUrl buildRequest() {
         HttpUrl.Builder urlBuilder = HttpUrl.parse(urlFilter).newBuilder();
@@ -446,6 +517,12 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
         return urlBuilder.build();
     }
 
+
+    /**
+     * A call to get filtered posts. The url given here is already edited before according to the values input by the
+     * user.
+     * @param url The given HttpUrl, which is built by adding different input values gotten from the UI as parameters
+     */
     public void filterCall(HttpUrl url) {
 
         requestFilter = new Request.Builder()
@@ -499,6 +576,9 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
     }
 
 
+    /**
+     * Get all the posts
+     */
     private void callAllPosts(){
         dialog.show(getSupportFragmentManager(), "Filtering posts...");
         client.newCall(request).enqueue(new Callback() {
@@ -522,6 +602,10 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
                         dialog.cancel();
                     }
                 });
+
+                /**
+                 * Display the results on the map.
+                 */
                 Gson gson = new Gson();
                 posts = gson.fromJson(response.body().string(), Post[].class);
                 Log.i(TAG, "onResponse: ");
@@ -538,6 +622,9 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
     }
 
 
+    /**
+     * Display all the returned posts on the map, by adding markers to the corresponding positions.
+     */
     public void displayOnMap() {
 
         arrayOfPosts = new ArrayList<Post>();
@@ -573,6 +660,11 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
 
     }
 
+
+    /**
+     * Hides the keyboards.
+     * @param activity
+     */
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         View view = activity.getCurrentFocus();
@@ -658,6 +750,12 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
         mMap.setOnMapLongClickListener(ExploreActivity.this);
     }
 
+
+    /**
+     * When a marker is clicked, show the related post preview.
+     * @param marker the marker clicked
+     * @return
+     */
     @Override
     public boolean onMarkerClick(@NonNull @NotNull Marker marker) {
 
@@ -668,6 +766,11 @@ public class ExploreActivity extends  ToolbarActivity implements OnMapReadyCallb
         return  true;
     }
 
+    /**
+     * On longer click to the map, a blue marker is added to the map which denotes the center of the search for
+     * the user.
+     * @param latLng
+     */
     @Override
     public void onMapLongClick(@NonNull @NotNull LatLng latLng) {
 

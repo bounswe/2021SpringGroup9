@@ -44,12 +44,23 @@ import java.util.Date;
 import java.util.List;
 
 
+/**
+ * The adapter to display data dynamically on the posts listview, which is shown on the home page.
+ *
+ *
+ * @author melihozcan
+ */
 public class PostAdapter extends ArrayAdapter<Post> {
     private String imageUrl;
     private String location;
     private Context context;
     private String userId;
 
+    /**
+     * The constructor for the adapter.
+     * @param context the activity context
+     * @param posts the arraylist of models to populate the listview.
+     */
     public PostAdapter(Context context, ArrayList<Post> posts) {
         super(context, 0, posts);
         this.context = context;

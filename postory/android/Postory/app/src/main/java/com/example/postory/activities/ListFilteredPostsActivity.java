@@ -25,6 +25,15 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+
+/**
+ * The activity, which lists the posts that are returned from the previous explore activities filtering.
+ * Works very similar to the MainActivity
+ * @see MainActivity
+ *
+ *
+ * @author melihozcan
+ */
 public class ListFilteredPostsActivity extends ToolbarActivity{
 
     private SharedPreferences sharedPreferences;
@@ -45,11 +54,18 @@ public class ListFilteredPostsActivity extends ToolbarActivity{
 
         sharedPreferences = getSharedPreferences("MY_APP",MODE_PRIVATE);
 
+        /**
+         *  The url that we made the call with in the previous activity.
+         */
+
         url = getIntent().getStringExtra("request_url");
 
         accessToken = sharedPreferences.getString("access_token","");
 
         client = new OkHttpClient();
+        /**
+         * Build a request with the results of the last filtering query.
+         */
         request = new Request.Builder()
                 .addHeader("Authorization", "JWT " + accessToken)
                 .url(url)
@@ -62,6 +78,10 @@ public class ListFilteredPostsActivity extends ToolbarActivity{
 
     }
 
+    /**
+     * Get the filtered posts with the call we made on the explore page. Display them on the
+     * page using an adapter.
+     */
     private void callFilteredPosts() {
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -95,11 +115,19 @@ public class ListFilteredPostsActivity extends ToolbarActivity{
         });
     }
 
+    /**
+     * Sends the user to the Profile page.
+     */
     protected void goProfileClicked() {
         Intent i = new Intent(ListFilteredPostsActivity.this, SelfProfilePageActivity.class);
         startActivity(i);
     }
 
+    /**
+     * Logs out the user by clearing the entries in the shared preferences, this way app doesn't redirect the user to
+     * home page, instead user is prompted to enter the credentials.
+     *
+     */
     @Override
     protected void logoutClicked() {
         sharedPreferences = getSharedPreferences("MY_APP",MODE_PRIVATE);
@@ -112,6 +140,9 @@ public class ListFilteredPostsActivity extends ToolbarActivity{
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
     }
+    /**
+     * Sends the user to the homepage.
+     */
     @Override
     protected void goHomeClicked() {
 
@@ -121,6 +152,10 @@ public class ListFilteredPostsActivity extends ToolbarActivity{
 
     }
 
+
+    /**
+     * Sends the user to the create post activity.
+     */
     @Override
     protected void goCreatePostClicked() {
         Intent createPostIntent = new Intent(ListFilteredPostsActivity.this, CreatePostActivity.class);
@@ -133,6 +168,9 @@ public class ListFilteredPostsActivity extends ToolbarActivity{
         return;
     }
 
+    /**
+     * Sends the user to the explore page.
+     */
     @Override
     protected void goExploreClicked() {
 
@@ -140,6 +178,9 @@ public class ListFilteredPostsActivity extends ToolbarActivity{
         startActivity(intent);
     }
 
+    /**
+     * Sends the user to the activity stream page.
+     */
     @Override
     protected void goActivitiesClicked() {
         Intent i = new Intent(ListFilteredPostsActivity.this, ActivityStreamActivity.class);

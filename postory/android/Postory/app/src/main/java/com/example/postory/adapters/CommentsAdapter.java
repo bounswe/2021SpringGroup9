@@ -17,6 +17,13 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * The adapter to display data dynamically on the comments listview.
+ *
+ * @author melihozcan
+ *
+ */
 public class CommentsAdapter extends ArrayAdapter<CommentModel> {
 
     private Context context;
