@@ -17,11 +17,25 @@ afterEach(() => {
     container = null;
 });
 
+/*
+    ID            : TC_F_27
+    Title         : Rendering of SignIn component
+    Test Priority : High
+    Module Name   : Frontend - Sign In page
+    Description   : Checks whether the SignIn component renders successfully.
+*/
 test('SignIn component renders successfully', () => {
     render(<SignIn />, container);
     expect(screen.getByText('Enter your new password', {exact: false})).not.toThrow()
 });
 
+/*
+    ID            : TC_F_28
+    Title         : Unsuccessful login check of SignIn component
+    Test Priority : High
+    Module Name   : Frontend - Sign In page
+    Description   : Checks whether the SignIn component notifies the user on incorrect login.
+*/
 test('Incorrect username & password doesnt result with success', async () => {
     render(<SignIn />, container);
     fireEvent.change(
@@ -36,6 +50,13 @@ test('Incorrect username & password doesnt result with success', async () => {
     await screen.findByText('Incorrect username or password')
 })
 
+/*
+    ID            : TC_F_29
+    Title         : Successful login check of SignIn component
+    Test Priority : High
+    Module Name   : Frontend - Sign In page
+    Description   : Checks whether the SignIn component notifies the user on correct login.
+*/
 test('Correct username & password results with success', async () => {
     render(<SignIn />, container);
     fireEvent.change(

@@ -17,11 +17,25 @@ afterEach(() => {
     container = null;
 });
 
+/*
+    ID            : TC_F_22
+    Title         : Rendering of ForgotPassword component
+    Test Priority : High
+    Module Name   : Frontend - Forgot Password page
+    Description   : Checks whether the ForgotPassword component renders successfully.
+*/
 test('ForgotPassword component renders successfully', () => {
     render(<ForgotPassword />, container);
     expect(screen.getByText('E-mail of your account', {exact: false})).not.toThrow()
 });
 
+/*
+    ID            : TC_F_23
+    Title         : Incorrect e-mail notice of ForgotPassword component
+    Test Priority : High
+    Module Name   : Frontend - Forgot Password page
+    Description   : Checks whether the ForgotPassword component notifies user on invalid e-mail input
+*/
 test('User is notified at incorrect e-mail', () => {
     render(<ForgotPassword />, container);
     fireEvent.change(

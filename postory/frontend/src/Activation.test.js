@@ -17,6 +17,13 @@ afterEach(() => {
     container = null;
 });
 
+/*
+    ID            : TC_F_17
+    Title         : Rendering of Activation component
+    Test Priority : High
+    Module Name   : Frontend - Activation page
+    Description   : Checks whether the Activation component renders successfully.
+*/
 test('Activation component renders successfully', () => {
     render(<Activation />, container);
     expect(screen.getByText('Activating your account', {exact: false})).not.toThrow()

@@ -18,11 +18,25 @@ afterEach(() => {
     container = null;
 });
 
+/*
+    ID            : TC_F_35
+    Title         : Rendering of TimeChooser component
+    Test Priority : High
+    Module Name   : Frontend - Create Post page
+    Description   : Checks whether the TimeChooser component renders successfully.
+*/
 test('TimeChooser component renders successfully', () => {
     render(<TimeChooser />, container)
     expect(screen.getByText('Choose start and end years', {exact: false})).not.toThrow()
 })
 
+/*
+    ID            : TC_F_36
+    Title         : Progressive time selection check of TimeChooser component
+    Test Priority : High
+    Module Name   : Frontend - Create Post page
+    Description   : Checks whether the time selections appears progressively.
+*/
 test('Month selection appears only after selecting start and end years', () => {
     render(<TimeChooser />, container)
 
