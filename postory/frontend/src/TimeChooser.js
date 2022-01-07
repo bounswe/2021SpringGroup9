@@ -3,6 +3,13 @@ import Icon from '@mdi/react'
 import { mdiPlus } from '@mdi/js';
 import './TimeChooser.css'
 
+/**
+ * @class TimeChooser
+ *
+ * Lets user enter time of their story. Sends entered input to parent component whenever needed.
+ * User can enter starting/ending years/months/days/times of their story.
+ * More specific time unit (e.g: month) appears only after entering less specific time unit (e.g: year)
+ */
 class TimeChooser extends React.Component {
     constructor(props) {
         super(props);

@@ -57,6 +57,11 @@ const textStyle = {
 }
 
 
+/**
+ * @class TopBar
+ *
+ * The bar that we show at the top of our application.
+ */
 class TopBar extends React.Component {
     constructor(props) {
         super(props);

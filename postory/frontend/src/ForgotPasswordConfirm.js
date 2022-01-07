@@ -4,6 +4,12 @@ import {Link, Navigate} from "react-router-dom";
 
 const BACKEND_URL = 'http://' + (process.env.REACT_APP_BACKEND_API ? process.env.REACT_APP_BACKEND_API : '3.67.83.253') + ':8000'
 
+/**
+ * @class ForgotPasswordConfirm
+ * Makes user choose their new password, and sends appropriate request to backend in order to set the new passwords
+ * as user's password.
+ * Notifies user on invalid input.
+ */
 class ForgotPasswordConfirm extends React.Component {
     constructor(props) {
         super(props);

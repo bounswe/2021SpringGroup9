@@ -6,12 +6,23 @@ import jwt_decode from "jwt-decode";
 import {Link, Navigate} from "react-router-dom";
 import * as requests from './requests'
 
+/**
+ * Checks whether a given input string is an e-mail
+ * @param str
+ * @returns {boolean}
+ */
 function isEmail(str) {
     return /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(str)
 }
 
 const BACKEND_URL = 'http://' + (process.env.REACT_APP_BACKEND_API ? process.env.REACT_APP_BACKEND_API : '3.67.83.253') + ':8000'
 
+/**
+ * @class SignIn
+ * Component for making user sign in to the application. Has fields for entering username/e-mail and password.
+ * After user enters their input, checks the input for validation, then sends a login request to backend
+ * Notifies user on success / fail. On success, also sets the JWT token of the user.
+ */
 class SignIn extends React.Component {
     constructor(props) {
         super(props);

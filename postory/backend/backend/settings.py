@@ -32,7 +32,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-CORS_ALLOWED_ORIGINS = ['http://3.67.83.253:3000', 'http://3.67.83.253:8000', 'http://localhost:3000', 'http://localhost:8000']
+CORS_ALLOWED_ORIGINS = [f'http://{env("HOST")}:3000', f'http://{env("HOST")}:8000']
 
 CORS_ALLOW_CREDENTIALS = True
 

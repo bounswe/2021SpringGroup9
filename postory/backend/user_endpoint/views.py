@@ -329,7 +329,7 @@ class ReportUser(GenericAPIView):
         data = dict([])
 
         subject = "User Reported"
-        content = f"User with id {user_id} reported user with id {pk}. \nVisit the website for more details: http://3.67.83.253:8000/admin. \n\n- The Postory team"
+        content = f"User with id {user_id} reported user with id {pk}. \nVisit the website for more details: http://(our domain IP):8000/admin. \n\n- The Postory team"
     
     
         try:
@@ -377,7 +377,7 @@ class ReportStory(GenericAPIView):
         data = dict([])
 
         subject = "Story Reported"
-        content = f"User with id {user_id} reported story with id {pk}. \nVisit the website for more details: http://3.67.83.253:8000/admin. \n\n- The Postory team"
+        content = f"User with id {user_id} reported story with id {pk}. \nVisit the website for more details: http://(our domain IP):8000/admin. \n\n- The Postory team"
     
         try:
             data['fromStory'] = user_id
