@@ -1,5 +1,4 @@
 // References: https://reactjs.org/docs/testing-recipes.html#data-fetching
-
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { unmountComponentAtNode } from "react-dom";
@@ -23,12 +22,26 @@ afterEach(() => {
 
 describe('Profile page tests', () => {
   test('Profile page components render successfully', () => {
+    /*
+    ID            : TC_UI_F_1
+    Title         : Profile Page - Render Test
+    Test Priority : High
+    Module Name   : Frontend - Profile Page
+    Description   : Checks whether the profile page components have been rendered successfully.
+    */
     render(<ProfilePage.ProfilePageUpper />, container);
     expect(screen.getByText('Follow')).toBeInTheDocument();
     expect(screen.getByRole('button')).toBeInTheDocument();
   });
 
   test('On click follow button successfully', () => {
+    /*
+    ID            : TC_UI_F_2
+    Title         : Profile Page - Follow Button Test
+    Test Priority : High
+    Module Name   : Frontend - Profile Page
+    Description   : Simulates user click on follow button and checks whether the program acts as expected. 
+    */
     render(<ProfilePage.ProfilePageUpper />, container);
 
     userEvent.click(screen.getByText('Follow'))
@@ -36,6 +49,13 @@ describe('Profile page tests', () => {
   });
 
   test('fetches mock user info', () => {
+    /*
+    ID            : TC_UI_F_3
+    Title         : Profile Page - Fetch User Data Test
+    Test Priority : Medium
+    Module Name   : Frontend - Profile Page
+    Description   : Creates a fake user and tries to fetch to, just like it would be fetched from backend.
+    */
     const fakeUser = {
         "id": 555555,
         "username": "mock_test_user",
