@@ -8,6 +8,12 @@ import org.junit.Test;
  * Example local unit test, which will execute on the development machine (host).
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ *
+ * @author niyaziulke */
+
+/*
+    ID            : TC_A_1
+    Description   : Tests whether HourMinuteHandler creates correct time strings.
  */
 public class HourMinuteHandlerTest {
     String hourString1 = "01";

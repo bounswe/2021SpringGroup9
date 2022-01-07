@@ -25,6 +25,10 @@ import com.example.postory.models.UserModel;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Lists the resulting users for UserSearchActivity
+ * @author niyaziulke
+ */
 public class UserAdapter extends ArrayAdapter<UserModel> {
     private Context context;
     private ImageView profilePicture;

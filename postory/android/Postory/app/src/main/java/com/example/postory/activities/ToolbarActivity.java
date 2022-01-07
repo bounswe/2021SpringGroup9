@@ -25,18 +25,39 @@ public abstract class ToolbarActivity extends AppCompatActivity {
     protected SearchView searchView;
     protected SearchManager searchManager;
 
+    /**
+     * Leads to the home page.
+     */
     protected abstract void goHomeClicked();
 
+    /**
+     * Leads to the create post page.
+     */
     protected abstract void goCreatePostClicked();
 
+    /**
+     * Refreshes the page.
+     */
     protected abstract void refreshClicked();
 
+    /**
+     * Leads to the explore page.
+     */
     protected abstract void goExploreClicked();
 
+    /**
+     * Leads to the user's own profile page.
+     */
     protected abstract void goProfileClicked();
 
+    /**
+     * Signs the user out.
+     */
     protected abstract void logoutClicked();
 
+    /**
+     * Leads to the Activity Stream Page.
+     */
     protected abstract void goActivitiesClicked();
 
 
@@ -45,6 +66,11 @@ public abstract class ToolbarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     *  Inflates the menu; this adds items to the action bar if it is present.
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -74,6 +100,11 @@ public abstract class ToolbarActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Method for handling the selection of menu items.
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -108,6 +139,9 @@ public abstract class ToolbarActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Initializes the toolbar.
+     */
     public void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.custom_toolbar);
         setSupportActionBar(toolbar);

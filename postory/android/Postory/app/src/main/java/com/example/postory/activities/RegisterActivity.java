@@ -33,6 +33,12 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
+/**
+ * Activity for users sign up operation.
+ * Can be accessed from LoginActivity
+ * Checks if the data of user is valid, with PasswordController class.
+ * @author niyaziulke
+ */
 public class RegisterActivity extends AppCompatActivity {
     TextInputEditText name;
     TextInputEditText surname;
@@ -43,6 +49,10 @@ public class RegisterActivity extends AppCompatActivity {
     Button signUpButton;
     DelayedProgressDialog dialog;
 
+    /**
+     * Triggered when the activity is first created, sets things up.
+     * @param savedInstanceState The state of instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,10 +77,14 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * @return if the password satisfy requirements.
+     */
     protected boolean passwordCheck() {
         String passwordText = password.getText().toString();
         String repeatPasswordText = repeatPassword.getText().toString();
         if (!passwordText.equals(repeatPasswordText)) {
+            // Warn the user that repeated password does not match.
             SuperActivityToast.create(RegisterActivity.this, new Style(), Style.TYPE_BUTTON)
                     .setProgressBarColor(Color.WHITE)
                     .setText("The passwords do not match.")
@@ -84,6 +98,7 @@ public class RegisterActivity extends AppCompatActivity {
             List<String> errors = passwordController.getErrors();
             if (errors.size() > 0) {
                 String singleStringError = StringListHandler.listToSingleString(errors);
+                // Dialog to show all the errors related to the password.
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(RegisterActivity.this);
                 builder1.setTitle("Your password is not secure.");
                 builder1.setMessage(singleStringError);
@@ -104,6 +119,9 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * The method that sends the request for sign up operation.
+     */
     protected void sendSignUp() {
         final OkHttpClient client = new OkHttpClient();
         String url = "http://3.67.83.253:8000/auth/users/";
@@ -114,6 +132,7 @@ public class RegisterActivity extends AppCompatActivity {
         String passwordString = password.getText().toString();
         String repeatPasswordString = password.getText().toString();
 
+        // Check if any required field is empty.
         if (nameString.equals("") || surnameString.equals("") || mailString.equals("") || usernameString.equals("")
                 || passwordString.equals("") || repeatPasswordString.equals("")) {
             SuperActivityToast.create(RegisterActivity.this, new Style(), Style.TYPE_BUTTON)
@@ -145,6 +164,7 @@ public class RegisterActivity extends AppCompatActivity {
                     .post(requestBody)
                     .build();
 
+            // Send request for sign up.
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {

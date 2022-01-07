@@ -1,5 +1,9 @@
 package com.example.postory.utils;
 
+/**
+ * Class with static methods that builds time strings from hour and minute.
+ * @author niyaziulke
+ */
 public class HourMinuteHandler {
 
     public static String intToString(int i){

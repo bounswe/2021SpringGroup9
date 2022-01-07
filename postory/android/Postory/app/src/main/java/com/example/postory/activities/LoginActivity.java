@@ -46,6 +46,15 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
+/**
+ * The activity for users to sign in. It can be accessed directly at the beginning.
+ * If the user has logged in during the last 23 hours, she can automatically sign in.
+ * Otherwise she needs to write her email and password.
+ * The activity checks whether the email and password is accurate by sending a request to the API.
+ * If they are valid, the token of the user is stored.
+ * Otherwise, it warns the user.
+ * @author niyaziulke
+ */
 public class LoginActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
@@ -58,6 +67,10 @@ public class LoginActivity extends AppCompatActivity {
     Handler handler;
 
 
+    /**
+     * Triggered when the activity is first created, sets things up.
+     * @param savedInstanceState The state of instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +84,7 @@ public class LoginActivity extends AppCompatActivity {
         handler = new Handler();
         sharedPreferences = getSharedPreferences("MY_APP",MODE_PRIVATE);
         try {
+            // Check if the last login is at most 23 hours before.
             String validDateString = sharedPreferences.getString("valid_until","");
             Date validDate = dateFormat.parse(validDateString);
             if(validDate.compareTo(Calendar.getInstance().getTime())>0){
@@ -86,6 +100,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
+        // Button for sign in onClick defined
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        // Button for forgot password onClick defined
         forgotPasswordText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,6 +120,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        // Button for sign up onClick defined.
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,6 +130,10 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * The method to check syntactic validity of user email and password at the sign in.
+     * @return if the input email and password is syntactically correct.
+     */
     protected boolean checkSignIn() {
         String mailString = mail.getText().toString();
         String passwordString = password.getText().toString();
@@ -142,6 +163,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Sends the sign in request to the backend
+     */
     protected void sendSignIn() {
         final OkHttpClient client = new OkHttpClient();
         String url = "http://3.67.83.253:8000/auth/jwt/create";
@@ -177,8 +201,10 @@ public class LoginActivity extends AppCompatActivity {
                     try {
                         JSONObject json = new JSONObject(signInResponseString);
                         String accessToken = json.getString("access");
+                        // Save the access token in SharedPreferences
                         preferences.edit().putString("access_token", accessToken).apply();
                         JWT jwt = new JWT(accessToken);
+                        // Get the user id
                         Claim userIdClaim = jwt.getClaim("user_id");
 
                         String userId = userIdClaim.asString();
@@ -191,6 +217,7 @@ public class LoginActivity extends AppCompatActivity {
                         endTime.setTime(endTime.getTime()+hours_23);
                         String endDateString = dateFormat.format(endTime);
 
+                        // Put the end time of validity of this login (23 hours)
                         preferences.edit().putString("valid_until",endDateString).apply();
 
                         Intent intent = new Intent(LoginActivity.this,MainActivity.class);

@@ -44,7 +44,13 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
+/**
+ * The activity for profile pages of other users.
+ * The users can send other people's posts, number of followers, number of followings, number of posts, etc.
+ * The users can send the other user follow request or report her.
+ * Uses the toolbar.
+ * @author niyaziulke
+ */
 public class OtherProfilePageActivity extends ToolbarActivity {
     private PostAdapter postAdapter;
     private Request requestPosts;
@@ -72,12 +78,18 @@ public class OtherProfilePageActivity extends ToolbarActivity {
 
     private DelayedProgressDialog dialog;
 
+    /**
+     * Check ToolbarActivity
+     */
     @Override
     protected void goProfileClicked() {
         Intent i = new Intent(OtherProfilePageActivity.this, SelfProfilePageActivity.class);
         startActivity(i);
     }
 
+    /**
+     * Check ToolbarActivity
+     */
     @Override
     protected void logoutClicked() {
         sharedPreferences = getSharedPreferences("MY_APP", MODE_PRIVATE);
@@ -91,12 +103,18 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         startActivity(i);
     }
 
+    /**
+     * Check ToolbarActivity
+     */
     @Override
     protected void goHomeClicked() {
         Intent intent = new Intent(OtherProfilePageActivity.this, MainActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Check ToolbarActivity
+     */
     @Override
     protected void goCreatePostClicked() {
         Intent intent = new Intent(OtherProfilePageActivity.this, CreatePostActivity.class);
@@ -104,6 +122,9 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         startActivity(intent);
     }
 
+    /**
+     * Check ToolbarActivity
+     */
     @Override
     protected void refreshClicked() {
         return;
@@ -115,6 +136,10 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         startActivity(intent);
     }
 
+    /**
+     * Triggered when the activity is first created, sets things up.
+     * @param savedInstanceState The state of instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,10 +163,12 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         int viewerId = Integer.parseInt(sharedPreferences.getString("user_id", ""));
         String url1 = BuildConfig.API_IP + "/user/get/" + userId;
         client = new OkHttpClient();
+        // Request to get the data of the user.
         requestUserData = new Request.Builder()
                 .url(url1)
                 .addHeader("Authorization", "JWT " + accessToken)
                 .build();
+        // Make the request.
         client.newCall(requestUserData).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -172,7 +199,9 @@ public class OtherProfilePageActivity extends ToolbarActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        // Fill the layout according to the fields.
                         setUserFields();
+                        // Check if the user can follow or unfollow and change the layout accordingly.
                         if (thisUser.getFollowerUsers().contains(viewerId)) {
                             followed = true;
                             followButton.setText("Unfollow");
@@ -186,6 +215,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
             }
         });
 
+        // Make a request to the backend for the posts of this user.
         callForPosts();
         followButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,6 +223,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
                 followButtonClicked();
             }
         });
+        // Report icon onClick defined
         report.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -208,6 +239,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
                         .addHeader("Authorization", "JWT " + accessToken)
                         .build();
 
+                // Send the report request.
                 client.newCall(reportRequest).enqueue(new Callback() {
                     @Override
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -244,6 +276,9 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         });
     }
 
+    /**
+     * Makes an API call for posts of this user.
+     */
     private void callForPosts() {
         String url2 = BuildConfig.API_IP + "/post/all/user/" + userId;
 
@@ -255,6 +290,9 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         callAllPosts();
     }
 
+    /**
+     * If the profile of the user is public, quickly follows it without sending a request.
+     */
     @SuppressLint("DefaultLocale")
     private void quickFollow() {
         if (!followed) {
@@ -262,6 +300,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
             followButton.setText("Unfollow");
             try {
                 String followedCount = followedBy.getText().toString();
+                // Update followed by info.
                 followedBy.setText(String.format("%d", Integer.parseInt(followedCount) + 1));
             } catch (Exception ignored) {
 
@@ -271,6 +310,9 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         }
     }
 
+    /**
+     * Unfollows the user.
+     */
     @SuppressLint("DefaultLocale")
     private void unfollow() {
         if (followed) {
@@ -287,6 +329,9 @@ public class OtherProfilePageActivity extends ToolbarActivity {
     }
 
 
+    /**
+     * Fills the layout according to the information that comes from the API.
+     */
     private void setUserFields() {
         name.setText(thisUser.getName());
         surname.setText(thisUser.getSurname());
@@ -295,6 +340,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         following.setText("" + thisUser.getFollowedUsers().size());
         try {
             numPosts.setText("" + thisUser.getPosts().size());
+            // If the user has a profile image, show it.
             Glide
                     .with(OtherProfilePageActivity.this)
                     .load(thisUser.getUserPhoto())
@@ -308,6 +354,9 @@ public class OtherProfilePageActivity extends ToolbarActivity {
 
     }
 
+    /**
+     * Handles follow button click operation
+     */
     private void followButtonClicked() {
         String url = BuildConfig.API_IP + "/user/follow/" + userId;
         MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
@@ -320,6 +369,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
                 .addHeader("Authorization", "JWT " + accessToken)
                 .build();
 
+        // Send the follow request.
         client.newCall(followRequest).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -334,6 +384,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
                         if (!followed) {
                             if (response.isSuccessful()) {
                                 if (thisUser.isPrivate()) {
+                                    // Inform the user that follow request is successfully sent.
                                     SuperActivityToast.create(OtherProfilePageActivity.this, new Style(), Style.TYPE_BUTTON)
                                             .setProgressBarColor(Color.WHITE)
                                             .setText("Follow request is sent.")
@@ -343,6 +394,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
                                             .setAnimations(Style.ANIMATIONS_POP).show();
                                     followButton.setVisibility(View.INVISIBLE);
                                 } else {
+                                    // Inform the user that the user now follows the owner of this profile.
                                     SuperActivityToast.create(OtherProfilePageActivity.this, new Style(), Style.TYPE_BUTTON)
                                             .setProgressBarColor(Color.WHITE)
                                             .setText("You are now following this user.")
@@ -355,6 +407,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
 
                                 }
                             } else {
+                                // Inform the user that the follow request could not be sent because of a pending request.
                                 SuperActivityToast.create(OtherProfilePageActivity.this, new Style(), Style.TYPE_BUTTON)
                                         .setProgressBarColor(Color.WHITE)
                                         .setText("You cannot send a follow request.")
@@ -365,6 +418,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
                             }
                         } else {
                             if (response.isSuccessful()) {
+                                // Inform the user that unfollow operation is successful.
                                 SuperActivityToast.create(OtherProfilePageActivity.this, new Style(), Style.TYPE_BUTTON)
                                         .setProgressBarColor(Color.WHITE)
                                         .setText("User unfollowed.")
@@ -386,6 +440,9 @@ public class OtherProfilePageActivity extends ToolbarActivity {
     }
 
 
+    /**
+     * Method that calls for all the posts of this user.
+     */
     private void callAllPosts() {
         client.newCall(requestPosts).enqueue(new Callback() {
             @Override
@@ -413,6 +470,7 @@ public class OtherProfilePageActivity extends ToolbarActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            // Put the posts to the listView.
                             listView.setAdapter(postAdapter);
                         }
                     });
@@ -422,6 +480,9 @@ public class OtherProfilePageActivity extends ToolbarActivity {
         });
     }
 
+    /**
+     * Check ToolbarActivity
+     */
     @Override
     protected void goActivitiesClicked() {
         Intent i = new Intent(OtherProfilePageActivity.this, ActivityStreamActivity.class);

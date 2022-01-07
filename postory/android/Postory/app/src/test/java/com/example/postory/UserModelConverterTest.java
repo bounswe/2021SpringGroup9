@@ -17,6 +17,11 @@ import java.util.List;
  * Example local unit test, which will execute on the development machine (host).
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ * @author niyaziulke */
+
+/*
+    ID            : TC_A_4
+    Description   : Tests whether public user model is correctly converted to the private.
  */
 public class UserModelConverterTest {
 

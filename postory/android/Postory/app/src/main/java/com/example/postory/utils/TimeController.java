@@ -7,6 +7,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Class that handles complex time structures with different precision levels.
+ * @author niyaziulke
+ */
 public class TimeController {
 
     public static final int YEAR_PRECISION = 1;
@@ -198,10 +202,16 @@ public class TimeController {
         this.precision = YEAR_PRECISION;
     }
 
+    /**
+     * @return if the dates are valid
+     */
     public boolean checkValidity() {
         return startDate.compareTo(endDate) <= 0;
     }
 
+    /**
+     * Creates dateformat strings from the complex data structure.
+     */
     @SuppressLint("SimpleDateFormat")
     public void createDate() {
         switch (this.precision) {

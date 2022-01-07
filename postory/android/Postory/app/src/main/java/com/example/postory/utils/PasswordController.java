@@ -3,6 +3,10 @@ package com.example.postory.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class that controls the validity of passwords during sign up process.
+ * @author niyaziulke
+ */
 public class PasswordController {
     final int MIN_PASSWORD_LENGTH = 8;
     String password;

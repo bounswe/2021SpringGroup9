@@ -64,6 +64,12 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * Activity for seeing own profile page.
+ * The user can set the privacy option of her profile, access the follow requests and see her posts.
+ * Uses toolbar.
+ * @author niyaziulke
+ */
 public class SelfProfilePageActivity extends ToolbarActivity {
     private PostAdapter postAdapter;
     private Request requestPosts;
@@ -97,12 +103,18 @@ public class SelfProfilePageActivity extends ToolbarActivity {
     public static final int PICK_GALLERY = 1;
     private final int CAMERA_PERMISSION_REQUEST = 1000;
 
+    /**
+     * Check ToolbarActivity
+     */
     @Override
     protected void goHomeClicked() {
         Intent intent = new Intent(SelfProfilePageActivity.this, MainActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Check ToolbarActivity
+     */
     @Override
     protected void goCreatePostClicked() {
         Intent intent = new Intent(SelfProfilePageActivity.this, CreatePostActivity.class);
@@ -110,17 +122,26 @@ public class SelfProfilePageActivity extends ToolbarActivity {
         startActivity(intent);
     }
 
+    /**
+     * Check ToolbarActivity
+     */
     @Override
     protected void refreshClicked() {
         return;
     }
 
+    /**
+     * Check ToolbarActivity
+     */
     @Override
     protected void goExploreClicked() {
         Intent intent = new Intent(SelfProfilePageActivity.this, ExploreActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Check ToolbarActivity
+     */
     @Override
     protected void logoutClicked() {
         sharedPreferences = getSharedPreferences("MY_APP", MODE_PRIVATE);
@@ -133,7 +154,10 @@ public class SelfProfilePageActivity extends ToolbarActivity {
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
     }
-
+    /**
+     * Triggered when the activity is first created, sets things up.
+     * @param savedInstanceState The state of instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,6 +180,7 @@ public class SelfProfilePageActivity extends ToolbarActivity {
         userId = sharedPreferences.getString("user_id", "");
         String url1 = BuildConfig.API_IP + "/user/get/" + userId;
         final OkHttpClient client = new OkHttpClient();
+        // Request to get the data of the user.
         requestUserData = new Request.Builder()
                 .url(url1)
                 .addHeader("Authorization", "JWT " + accessToken)
@@ -179,6 +204,7 @@ public class SelfProfilePageActivity extends ToolbarActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        // Fill the layout according to the user info.
                         setUserFields();
                         privateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
@@ -211,11 +237,17 @@ public class SelfProfilePageActivity extends ToolbarActivity {
 
     }
 
+    /**
+     * Changes the profile picture of the user after verifying permissions.
+     */
     private void setProfilePicture() {
         verifyStoragePermissions(SelfProfilePageActivity.this);
         addImage();
     }
 
+    /**
+     * Makes a call to the API for the posts of this specific user.
+     */
     private void callForPosts() {
         String url2 = BuildConfig.API_IP + "/post/all/user/" + userId;
 
@@ -228,6 +260,9 @@ public class SelfProfilePageActivity extends ToolbarActivity {
     }
 
 
+    /**
+     * Fills the layout with the information of the user.
+     */
     private void setUserFields() {
         name.setText(thisUser.getName());
         surname.setText(thisUser.getSurname());
@@ -247,6 +282,9 @@ public class SelfProfilePageActivity extends ToolbarActivity {
     }
 
 
+    /**
+     * Calls for all the posts of this user.
+     */
     private void callAllPosts() {
         final OkHttpClient client = new OkHttpClient();
         client.newCall(requestPosts).enqueue(new Callback() {
@@ -280,6 +318,9 @@ public class SelfProfilePageActivity extends ToolbarActivity {
         });
     }
 
+    /**
+     * Method for adding image from camera or gallery, the user chooses it.
+     */
     protected void addImage() {
         final CharSequence[] options = {"Take Photo with Camera", "Choose from Gallery", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(SelfProfilePageActivity.this);
@@ -311,6 +352,11 @@ public class SelfProfilePageActivity extends ToolbarActivity {
         builder.show();
     }
 
+    /**
+     * Saves the image bitmap to a location.
+     * @param image
+     * @return directory of image
+     */
     private String saveImage(Bitmap image) {
         String path = null;
         String imageFileName = "JPEG_" + "FILE_NAME" + ".jpg";
@@ -364,6 +410,12 @@ public class SelfProfilePageActivity extends ToolbarActivity {
 
     }
 
+    /**
+     * Handles the result of the called activity, gallery or camera.
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -522,16 +574,28 @@ public class SelfProfilePageActivity extends ToolbarActivity {
         });
     }
 
+    /**
+     * Handles the result of permission request.
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
+    /**
+     * Check ToolbarActivity
+     */
     @Override
     protected void goProfileClicked() {
         return;
     }
 
+    /**
+     * Check ToolbarActivity
+     */
     @Override
     protected void goActivitiesClicked() {
         Intent i = new Intent(SelfProfilePageActivity.this, ActivityStreamActivity.class);

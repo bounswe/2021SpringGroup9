@@ -33,6 +33,11 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * Searches for users with a close nickname.
+ * Uses toolbar.
+ * @author niyaziulke
+ */
 public class UserSearchActivity extends ToolbarActivity {
     private String apiString;
     private String accessToken;
@@ -84,6 +89,10 @@ public class UserSearchActivity extends ToolbarActivity {
         startActivity(intent);
     }
 
+    /**
+     * Triggered when the activity is first created, sets things up.
+     * @param savedInstanceState The state of instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +104,7 @@ public class UserSearchActivity extends ToolbarActivity {
         apiString = BuildConfig.API_IP + "/user/search/";
 
         SharedPreferences sharedPreferences = getSharedPreferences("MY_APP", MODE_PRIVATE);
+        // Access token of the user.
         accessToken = sharedPreferences.getString("access_token", "");
         client = new OkHttpClient();
         Intent intent = getIntent();
@@ -140,6 +150,7 @@ public class UserSearchActivity extends ToolbarActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        // Set the adapter to list resulting users.
                         userList.setAdapter(adapter);
                     }
                 });

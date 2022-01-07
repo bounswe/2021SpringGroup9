@@ -34,6 +34,10 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * Adapter to list the received follow requests at FollowRequestActivity
+ * @author niyaziulke
+ */
 public class RequestAdapter extends ArrayAdapter<UserModel> {
     private Context context;
     private TextView username;
