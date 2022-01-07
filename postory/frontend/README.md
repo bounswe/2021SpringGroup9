@@ -10,13 +10,28 @@ REACT_APP_BACKEND_API=\<Ip of the backend. Example: 3.67.83.253\>
 
 Then you can run the command (on the same directory as the docker-compose.yml file) to run your application:
 
->> docker-compose up
+```
+docker-compose up
+```
 
-## Build the image
->> docker build -t frontend --build-arg REACT_APP_GOOGLE_API_KEY=\<Your-GOOGLE-MAPS-JAVASCRIPT-API-KEY\> --build-arg REACT_APP_BACKEND_API=\<IP-ADDRESS-OF-BACKEND\> .
+If you want to run the application again after changing the .env variables please run these commands:
+```
+docker-compose build
+docker-compose up
+```
 
-## Run the image
->> docker run -p 3000:3000 frontend
+
+
+## Build and run without docker-compose
+### Build the image
+```
+docker build -t frontend --build-arg REACT_APP_GOOGLE_API_KEY=<Your-GOOGLE-MAPS-JAVASCRIPT-API-KEY> --build-arg REACT_APP_BACKEND_API=<IP-ADDRESS-OF-BACKEND> .
+```
+### Run the image
+```
+docker run -p 3000:3000 frontend
+```
+
 
 # Getting Started with Create React App
 
