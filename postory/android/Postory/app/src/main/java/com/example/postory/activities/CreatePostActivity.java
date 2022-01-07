@@ -72,7 +72,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * The activity for Create Post page. Users can edit posts and create new posts by using this activity.
+ * @author melihozcan
+ *
+ */
 public class CreatePostActivity extends ToolbarActivity {
+
 
 
     TimeController t;
@@ -90,7 +97,6 @@ public class CreatePostActivity extends ToolbarActivity {
     Handler handler;
     EditText titleEditText;
     EditText storyEditText;
-
     EditText tagEditText;
     public TextView locationEditText;
     TextView title;
@@ -138,6 +144,14 @@ public class CreatePostActivity extends ToolbarActivity {
     private SimpleDateFormat formatFromString;
     private SimpleDateFormat formatToDate;
 
+    /**
+     * All the views are loaded here.
+     * If the purpose is to edit a post, a request is sent to get that post's json information.
+     * The information is then displayed on the page.
+     *
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -190,6 +204,9 @@ public class CreatePostActivity extends ToolbarActivity {
                     .build();
             dialog.show(getSupportFragmentManager(), "ASDASD");
 
+            /**
+             * Request to get a specific post
+             */
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -212,6 +229,9 @@ public class CreatePostActivity extends ToolbarActivity {
                         }
                     });
 
+                    /**
+                     * Fill the fields
+                     */
                     Log.i(TAG, "onResponse: ");
                     Gson gson = new Gson();
                     post = gson.fromJson(response.body().string(), Post.class);
@@ -299,6 +319,10 @@ public class CreatePostActivity extends ToolbarActivity {
 
 
         postImage = (ImageView) findViewById(R.id.post_photo);
+
+        /**
+         * Directs users to the TimeChooserFragment to choose their desired time for the post.
+         */
 
         timeChoose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -535,6 +559,10 @@ public class CreatePostActivity extends ToolbarActivity {
     }
 
 
+    /**
+     * Change the location edit text field according to the latest state of the locations arraylist
+     */
+
     public void refreshLocations() {
         String locationString = "";
         for(LocationModel loco : locations) {
@@ -544,6 +572,14 @@ public class CreatePostActivity extends ToolbarActivity {
         locationEditText.setText(locationString);
 
     };
+
+    /**
+     * This method builds a OkHttp Request by taking the necessary inputs from the fields changed by the user and
+     * the file which holds the image.
+     * @param url The endpoint URL
+     * @param file The image file
+     * @return the request
+     */
     private Request buildEditCreateRequest(String url, File file) {
         RequestBody requestBody = null;
         int [] years = new int[2];
@@ -690,6 +726,11 @@ public class CreatePostActivity extends ToolbarActivity {
         return request;
     }
 
+    /**
+     * Save the given image to the device and return the path
+     * @param image the bitmap image
+     * @return path of stored location
+     */
     private String saveImage(Bitmap image) {
         String path = null;
         String imageFileName = "JPEG_" + "FILE_NAME" + ".jpg";
@@ -714,6 +755,10 @@ public class CreatePostActivity extends ToolbarActivity {
         return path;
     }
 
+    /**
+     * Handles the storage permission and prompts the user to give permissions if necessary.
+     * @param activity the activity
+     */
     public static void verifyStoragePermissions(Activity activity) {
         // Check if we have write permission
         int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -727,6 +772,14 @@ public class CreatePostActivity extends ToolbarActivity {
             );
         }
     }
+
+    /**
+     *
+     * When clicked on the Image, gives the user the ability to choose between pick an image from gallery,
+     * take a photo with the camera or cancel the action.
+     * According to the response, takes necessary action.
+     *
+     */
 
     protected void addImage() {
         final CharSequence[] options = {"Take Photo with Camera", "Choose from Gallery", "Cancel"};
@@ -775,11 +828,21 @@ public class CreatePostActivity extends ToolbarActivity {
         builder.show();
     }
 
+    /**
+     * Add a location the arraylist
+     * @param model the location model to be added
+     */
     public void  addLocation(LocationModel model) {
         locations.add(model);
         Log.i(TAG, "addLocation: ");
     };
 
+    /**
+     * Get Image uri from the bitmap
+     * @param inContext the context
+     * @param inImage the input bitmap
+     * @return the URI
+     */
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
@@ -787,6 +850,14 @@ public class CreatePostActivity extends ToolbarActivity {
         return Uri.parse(path);
     }
 
+
+    /**
+     * Handles the cases where the user picks a gallery from the phone or takes a photo with the camera.
+     * Necessary action is taken according to th response from the intent.
+     * @param requestCode The code for the sent request
+     * @param resultCode The returned result from the request
+     * @param data The data returned from the activity
+     */
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -847,12 +918,23 @@ public class CreatePostActivity extends ToolbarActivity {
 
     }
 
+    /**
+     * Handles the app permissions
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
 
+    /**
+     * Checks whether the title or the story fields are empty.
+     *
+     * @return false if fields are empty
+     */
     protected boolean checkNecessaryData() {
         if (titleEditText.getText().toString().trim().equals("")) {
             return false;
@@ -864,6 +946,14 @@ public class CreatePostActivity extends ToolbarActivity {
         return true;
     }
 
+    /**
+     *
+     * Rotate a bitmap by a given degree
+     *
+     * @param bm the bitmap
+     * @param orientation the degree of rotation
+     * @return the resulting bitmap
+     */
     protected Bitmap rotateBitmap(Bitmap bm, int orientation) {
         Matrix matrix = new Matrix();
 
@@ -879,6 +969,11 @@ public class CreatePostActivity extends ToolbarActivity {
 
     }
 
+    /**
+     * Extract the real path from a given URI.
+     * @param contentURI the Uri from which the string path is extracted
+     * @return the real path
+     */
     private String getRealPathFromURI(Uri contentURI) {
         String result;
         Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
@@ -903,23 +998,33 @@ public class CreatePostActivity extends ToolbarActivity {
         return;
     }
 
+
+
+    /**
+     * Sends the user to the Explore page.
+     */
+
     @Override
     protected void goExploreClicked() {
-        SuperActivityToast.create(CreatePostActivity.this, new Style(), Style.TYPE_BUTTON)
-                .setProgressBarColor(Color.WHITE)
-                .setText("This feature is not available now.")
-                .setDuration(Style.DURATION_LONG)
-                .setFrame(Style.FRAME_LOLLIPOP)
-                .setColor(PaletteUtils.getSolidColor(PaletteUtils.MATERIAL_RED))
-                .setAnimations(Style.ANIMATIONS_POP).show();
+        Intent intent = new Intent(CreatePostActivity.this, ExploreActivity.class);
+        startActivity(intent);
     }
 
+
+    /**
+     * Sends the user to the Profile page.
+     */
     @Override
     protected void goProfileClicked() {
         Intent i = new Intent(CreatePostActivity.this, SelfProfilePageActivity.class);
         startActivity(i);
     }
 
+    /**
+     * Logs out the user by clearing the entries in the shared preferences, this way app doesn't redirect the user to
+     * home page, instead user is prompted to enter the credentials.
+     *
+     */
     @Override
     protected void logoutClicked() {
         sharedPreferences = getSharedPreferences("MY_APP",MODE_PRIVATE);
@@ -933,12 +1038,19 @@ public class CreatePostActivity extends ToolbarActivity {
         startActivity(i);
     }
 
+    /**
+     * Sends the user to the Activity Stream page.
+     */
     @Override
     protected void goActivitiesClicked() {
         Intent i = new Intent(CreatePostActivity.this, ActivityStreamActivity.class);
         startActivity(i);
     }
 
+
+    /**
+     * Sends the user to the Home page
+     */
     @Override
     protected void goHomeClicked() {
         Intent i = new Intent(CreatePostActivity.this, MainActivity.class);

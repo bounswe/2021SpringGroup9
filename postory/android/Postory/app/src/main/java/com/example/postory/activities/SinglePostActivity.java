@@ -41,6 +41,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
+/**
+ * This is the activity for the single post page, where users can like posts, comment on them. See them in more detail.
+ *
+ * @author melihozcan
+ *
+ */
 public class SinglePostActivity extends ToolbarActivity{
     public static final String TAG ="SinglePostActivity";
 
@@ -89,12 +96,22 @@ public class SinglePostActivity extends ToolbarActivity{
             = MediaType.parse("application/json; charset=utf-8");
 
 
+    /**
+     * Sends the user to the profile page.
+     */
     @Override
     protected void goProfileClicked() {
         Intent i = new Intent(SinglePostActivity.this, SelfProfilePageActivity.class);
         startActivity(i);
     }
 
+
+
+    /**
+     * Logs out the user by clearing the entries in the shared preferences, this way app doesn't redirect the user to
+     * home page, instead user is prompted to enter the credentials.
+     *
+     */
     @Override
     protected void logoutClicked() {
         sharedPreferences = getSharedPreferences("MY_APP",MODE_PRIVATE);
@@ -115,6 +132,9 @@ public class SinglePostActivity extends ToolbarActivity{
         startActivity(i);
     }
 
+    /**
+     * Sends the user to the create post page.
+     */
     @Override
     protected void goCreatePostClicked() {
         Intent createPostIntent = new Intent(SinglePostActivity.this, CreatePostActivity.class);
@@ -129,6 +149,9 @@ public class SinglePostActivity extends ToolbarActivity{
 
     }
 
+    /**
+     * Sends the user to the explore page.
+     */
     @Override
     protected void goExploreClicked() {
         Intent intent = new Intent(SinglePostActivity.this, ExploreActivity.class);
@@ -137,6 +160,10 @@ public class SinglePostActivity extends ToolbarActivity{
 
     }
 
+    /**
+     * Views are initialized and OnClickListeners are set.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -169,6 +196,10 @@ public class SinglePostActivity extends ToolbarActivity{
 
         dialog = new DelayedProgressDialog();
 
+
+        /**
+         * The heart is filled with an animation.
+         */
         likeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -176,6 +207,9 @@ public class SinglePostActivity extends ToolbarActivity{
             }
         });
 
+        /**
+         * Expand the post to see all of the story.
+         */
         continueReading.setOnClickListener(new View.OnClickListener() {
                                                @Override
                                                public void onClick(View view) {
@@ -187,7 +221,9 @@ public class SinglePostActivity extends ToolbarActivity{
         setContinueReadingVisibility(postText,continueReading);
 
 
-
+        /**
+         * Send post to edit.
+         */
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -210,6 +246,11 @@ public class SinglePostActivity extends ToolbarActivity{
 
 
         EditText editText = new EditText(this);
+
+        /**
+         * Leave a comment, a request is sent and the page is refreshed.
+         */
+
         alertDialogComment = new AlertDialog.Builder(SinglePostActivity.this)
                 .setTitle("Leave A Comment")
                 .setView(editText)
@@ -288,6 +329,7 @@ public class SinglePostActivity extends ToolbarActivity{
 
 
 
+
         commentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -296,6 +338,9 @@ public class SinglePostActivity extends ToolbarActivity{
             }
         });
 
+        /**
+         * Send like request. A request is sent to the backend. Page is refreshed.
+         */
         likeButton.setOnLikeListener(new OnLikeListener() {
             @Override
             public void liked(LikeButton likeButton) {
@@ -318,6 +363,10 @@ public class SinglePostActivity extends ToolbarActivity{
                 });
             }
 
+            /**
+             * Unlike post.
+             * @param likeButton The like button
+             */
             @Override
             public void unLiked(LikeButton likeButton) {
                 Log.i(TAG, "unLiked: ");
@@ -341,6 +390,9 @@ public class SinglePostActivity extends ToolbarActivity{
             }
         });
 
+        /**
+         * Report a post. A request is sent to the backend.
+         */
         report.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -394,7 +446,10 @@ public class SinglePostActivity extends ToolbarActivity{
     }
 
 
-
+    /**
+     * Refreshes the page. Sends a request to the backend to get the single post response JSON. Parse it
+     * and fill in the UI elements.
+     */
     public void sendRefreshRequest() {
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -581,6 +636,9 @@ public class SinglePostActivity extends ToolbarActivity{
     }
 
 
+    /**
+     * Perform changes on the UI according to the like count.
+     */
     public void setLikeCount() {
 
         runOnUiThread(new Runnable() {
@@ -605,6 +663,7 @@ public class SinglePostActivity extends ToolbarActivity{
 
     }
 
+
     public void setContinueReadingVisibility(final TextView postText, final Button continueReading) {
         postText.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
@@ -622,11 +681,20 @@ public class SinglePostActivity extends ToolbarActivity{
         }
     }
 
+    /**
+     * Formats the date.
+     * @param d the date to be formatted.
+     * @return A string of date.
+     */
+
     public String formatDate(Date d) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         return formatter.format(d);
     }
 
+    /**
+     * Sends the user to the Activity Stream page.
+     */
     @Override
     protected void goActivitiesClicked() {
         Intent i = new Intent(SinglePostActivity.this, ActivityStreamActivity.class);

@@ -18,18 +18,35 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
+/**
+ * The adapter to display data dynamically on the keywords listview.
+ *
+ * @author melihozcan
+ *
+ */
 public class KeywordAdapter extends RecyclerView.Adapter<KeywordAdapter.ViewHolder> {
     public static final String TAG = "";
     private int listItemLayout;
     private ArrayList<TagItem> itemList;
     static Context context;
-
+    /**
+     * The constructor for the adapter.
+     * @param context the activity context
+     * @param layoutId 0
+     * @param itemList the arraylist of models to populate the listview.
+     */
     public KeywordAdapter(int layoutId, ArrayList<TagItem> itemList, Context context) {
         listItemLayout = layoutId;
         this.itemList = itemList;
         this.context = context;
     }
 
+    /**
+     * Get the view from the parent, initalize a viewholder with it.
+     * @param parent The parent view.
+     * @param viewType
+     * @return the viewholder
+     */
     @NonNull
     @NotNull
     @Override
@@ -39,6 +56,11 @@ public class KeywordAdapter extends RecyclerView.Adapter<KeywordAdapter.ViewHold
         return myViewHolder;
     }
 
+    /**
+     * Set OnClickListener on the remove tag button.
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         Button item = holder.tag;
@@ -54,12 +76,19 @@ public class KeywordAdapter extends RecyclerView.Adapter<KeywordAdapter.ViewHold
 
     }
 
+    /**
+     *
+     * @return the count of items in the list
+     */
     @Override
     public int getItemCount() {
         return itemList == null ? 0 : itemList.size();
     }
 
 
+    /**
+     * Hold the children views and initialize them
+     */
     static class ViewHolder extends RecyclerView.ViewHolder {
         public Button tag;
         public Button removeTag;

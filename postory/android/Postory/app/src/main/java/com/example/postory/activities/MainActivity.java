@@ -34,6 +34,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 
+/**
+ * This is the activity for our homepage. Here all the posts that are available to a user are displayed in a
+ * scrollable view.
+ *
+ * @author melihozcan
+ */
 public class MainActivity extends ToolbarActivity {
 
     private PostAdapter postAdapter;
@@ -46,12 +52,22 @@ public class MainActivity extends ToolbarActivity {
     private Post[] posts;
     private SharedPreferences sharedPreferences;
     private String accessToken;
+
+    /**
+     * Sends the user to a profile page.
+     */
     @Override
     protected void goProfileClicked() {
         Intent i = new Intent(MainActivity.this, SelfProfilePageActivity.class);
         startActivity(i);
     }
 
+
+    /**
+     * Logs out the user by clearing the entries in the shared preferences, this way app doesn't redirect the user to
+     * home page, instead user is prompted to enter the credentials.
+     *
+     */
     @Override
     protected void logoutClicked() {
         sharedPreferences = getSharedPreferences("MY_APP",MODE_PRIVATE);
@@ -69,6 +85,10 @@ public class MainActivity extends ToolbarActivity {
         return;
     }
 
+
+    /**
+     * Sends the user to the create posts page.
+     */
     @Override
     protected void goCreatePostClicked() {
         Intent createPostIntent = new Intent(MainActivity.this, CreatePostActivity.class);
@@ -76,12 +96,18 @@ public class MainActivity extends ToolbarActivity {
         startActivity(createPostIntent);
     }
 
+    /**
+     * Refreshes the page.
+     */
     @Override
     protected void refreshClicked() {
         postAdapter.clear();
         callAllPosts();
     }
 
+    /**
+     * Sends the user to the explore  page.
+     */
     @Override
     protected void goExploreClicked() {
 
@@ -89,6 +115,10 @@ public class MainActivity extends ToolbarActivity {
       startActivity(intent);
     }
 
+    /**
+     * In this method, all views are initialized and onCLickListeners are set.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +140,15 @@ public class MainActivity extends ToolbarActivity {
         callAllPosts();
     }
 
+
+    /**
+     * Make a call to get all the posts visible to the user, parse the JSON responses into appropriate models
+     * using GSON.
+     * @see Gson
+     * Add the models to an arraylist and feed this arraylist into an adapter.
+     * @see PostAdapter
+     * Set adapter on the listview.
+     */
     private void callAllPosts(){
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -143,14 +182,10 @@ public class MainActivity extends ToolbarActivity {
         });
 
     }
-    private String toBase64(Bitmap bm) {
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.PNG, 100, baos); // bm is the bitmap object
-        byte[] b = baos.toByteArray();
-        return Base64.encodeToString(b, Base64.DEFAULT);
-    }
-
+    /**
+     * Sends the user to the ActivityStreamPage.
+     */
     @Override
     protected void goActivitiesClicked() {
         Intent i = new Intent(MainActivity.this, ActivityStreamActivity.class);

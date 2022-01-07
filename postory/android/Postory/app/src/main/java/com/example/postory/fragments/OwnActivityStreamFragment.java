@@ -35,6 +35,11 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
+/**
+ * See your own activity stream displayed as scrollable list.
+ *
+ * @author melihozcan
+ */
 public class OwnActivityStreamFragment extends Fragment {
     private static final String TAG ="OwnActivityFragment";
     private String accessToken;
@@ -49,6 +54,13 @@ public class OwnActivityStreamFragment extends Fragment {
     private ActorObjectModel[] actions;
     private ArrayList<ActorObjectGeneralModel> generalModel = new ArrayList<>();
 
+    /**
+     * Inflate the view and return it.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return the view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -58,6 +70,12 @@ public class OwnActivityStreamFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Initialize all the views. Call the method callActivityStreamAPI()
+     *
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -75,6 +93,9 @@ public class OwnActivityStreamFragment extends Fragment {
 
     }
 
+    /**
+     * Get a JsonArray of actor, object and type. Parse them and fill the UI elements according to the responses.
+     */
     private void callActivityStreamAPI() {
         client.newCall(request).enqueue(new Callback() {
             @Override

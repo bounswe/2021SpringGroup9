@@ -33,6 +33,13 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
+/**
+ * The fragment for the activity stream of the people you follow. See
+ * @see OwnActivityStreamFragment
+ * for more information.
+ *
+ * @author melihozcan
+ */
 public class FollowedActivityStreamFragment extends Fragment {
     private static final String TAG ="OwnActivityFragment";
     private String accessToken;
