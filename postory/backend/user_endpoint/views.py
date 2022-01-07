@@ -28,6 +28,10 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class AddPhoto(GenericAPIView):
+    """
+    Creates an image object given the input image file. 
+    Adds the image to the user object whose id is taken from jwt token. 
+    """
     def get_object(self, pk):
         try:
             return User.objects.get(pk=pk)
@@ -52,6 +56,9 @@ class AddPhoto(GenericAPIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class ChangePrivate(GenericAPIView):
+    """
+    Change profile settings private to public or public to private
+    """
     def get_object(self, pk):
         try:
             return User.objects.get(pk=pk)
@@ -76,7 +83,10 @@ class ChangePrivate(GenericAPIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
 class SearchUser(GenericAPIView):
-
+    """
+    Searches users by using the term parameter.
+    Returns users that containes the term parameter.
+    """
     def post(self, request, term, format=None):
         userid = request.auth['user_id']
         users = User.objects.filter(username__contains=term)
@@ -89,7 +99,11 @@ class SearchUser(GenericAPIView):
         
     
 class UserFollowing(GenericAPIView):
-
+    """
+    Follows other users if they have public account. If they have private accounts, sends follow request. 
+    A user cannot follow herselfs/himself.
+    Returns a message and an HTTP status code
+    """
     def get_object(self, pk):
         try:
             return User.objects.get(pk=pk)
@@ -160,6 +174,10 @@ class UserFollowing(GenericAPIView):
                 return Response({"message": "follow failed"}, status=status.HTTP_400_BAD_REQUEST)
 
 class FollowRequests(GenericAPIView):
+    """
+    Returns a user's pending follow requests.
+    Gets the user_id from the jwt key.
+    """
     def get(self, request, format=None):
         authorization = request.headers['Authorization']
         token = authorization.split()[1]
@@ -182,6 +200,10 @@ class FollowRequests(GenericAPIView):
 
     
 class AcceptFollowRequest(GenericAPIView):
+    """
+    Removes the pending request and adds the user to the follower list. 
+    Returns a message and an HTTP status.
+    """
     def get_object(self, pk):
         try:
             return User.objects.get(pk=pk)
@@ -217,6 +239,10 @@ class AcceptFollowRequest(GenericAPIView):
         return Response({"message": f"no follow request from {user2.id}"}, status=status.HTTP_400_BAD_REQUEST)
 
 class DeclineFollowRequest(GenericAPIView):
+    """
+    Removes the pending request. 
+    Returns a message and an HTTP status.
+    """
     def get_object(self, pk):
         try:
             return User.objects.get(pk=pk)
@@ -246,6 +272,10 @@ class DeclineFollowRequest(GenericAPIView):
 
 
 class UserGet(GenericAPIView):
+    """
+    Returns the user with the given id. 
+    If the requested user is public, it returns every field in user. If not, it returns every field except posts, savedPosts, likedPosts, and comments. 
+    """
     def get_object(self, pk):
         try:
             return User.objects.get(pk=pk)
@@ -278,6 +308,10 @@ class UserGet(GenericAPIView):
                 return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 class ReportUser(GenericAPIView):
+    """
+    Creates a Report object from the jwt authorized user to the given user with id.
+    Generates an email and sends it using Django's send_mail function. 
+    """
     def get_object(self, pk):
         try:
             return User.objects.get(pk=pk)
@@ -322,6 +356,10 @@ class ReportUser(GenericAPIView):
             return Response({"message": "report failed"}, status=status.HTTP_400_BAD_REQUEST)
 
 class ReportStory(GenericAPIView):
+    """
+    Creates a Report object from the jwt authorized user to the given story with id.
+    Generates an email and sends it using Django's send_mail function. 
+    """
     def get_object(self, pk):
         try:
             return User.objects.get(pk=pk)
@@ -364,7 +402,10 @@ class ReportStory(GenericAPIView):
             return Response({"message": "report failed"}, status=status.HTTP_400_BAD_REQUEST)
         
 class BanControl(GenericAPIView):
-    
+    """
+    Checks whether the requested user is banned or not. 
+    Returns the isBanned of the user object. 
+    """
     def get(self, request, format=None):
         userid = request.auth['user_id']
         user = User.objects.get(id = userid)

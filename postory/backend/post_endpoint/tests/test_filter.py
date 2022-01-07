@@ -7,6 +7,10 @@ from django.urls import reverse
 class TestFollow(APITestCase):
     def setUp(self):
         self.client = APIClient()
+        
+        """
+        Create users
+        """
         user1_info = {
             "name": "Name1",
             "surname": "Surname1",
@@ -59,11 +63,18 @@ class TestFollow(APITestCase):
         self.user3.followerUsers.set([self.user2])
         self.user4.followedUsers.set([])
         self.user4.followerUsers.set([])
+        
+        """
+        Save users
+        """
         self.user1.save()
         self.user2.save()
         self.user3.save()
         self.user4.save()
 
+        """
+        Create posts
+        """
         self.post1_1 = Post.objects.create(
             id = 1,
             title = "Title1_1",
@@ -113,6 +124,13 @@ class TestFollow(APITestCase):
             owner = self.user4.id
         )
 
+    """
+    ID            : TC_B_P_4
+    Title         : Posts Endpoint - Posts Filter
+    Test Priority : High
+    Module Name   : Frontend - Get Filtered Posts
+    Description   : Checks whether the filtered posts return successfully.
+    """
     def test_search_and_filter(self):
         token = self.client.post("/auth/jwt/create",{"email":"user1@email.com","password":"Password123%"})
         assert token.status_code==200
