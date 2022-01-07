@@ -3,16 +3,17 @@ The app can be built and run using only one command with docker compose.
 If you want to build and run seperately you can use the below commands.
 
 ## Build and run the app using docker compose
-You first should have a configuration file named .env that has the necessary lines:\
-REACT_APP_GOOGLE_API_KEY=Your google maps javascript api key \
-REACT_APP_BACKEND_API=Ip of the backend. Example: 3.67.83.253 
+You first should have a configuration file named .env (on the same directory as the docker-compose.yml file) that has the necessary lines:\
+\
+REACT_APP_GOOGLE_API_KEY=\<Your google maps javascript api key\> \
+REACT_APP_BACKEND_API=\<Ip of the backend. Example: 3.67.83.253\>
 
-Then you can run the command to run your application:
+Then you can run the command (on the same directory as the docker-compose.yml file) to run your application:
 
 >> docker-compose up
 
 ## Build the image
->> docker build -t frontend --build-arg REACT_APP_GOOGLE_API_KEY=<GOOGLE-MAPS-JAVASCRIPT-API-KEY> --build-arg REACT_APP_BACKEND_API=<IP-ADDRESS-OF-BACKEND> .
+>> docker build -t frontend --build-arg REACT_APP_GOOGLE_API_KEY=\<Your-GOOGLE-MAPS-JAVASCRIPT-API-KEY\> --build-arg REACT_APP_BACKEND_API=\<IP-ADDRESS-OF-BACKEND\> .
 
 ## Run the image
 >> docker run -p 3000:3000 frontend
