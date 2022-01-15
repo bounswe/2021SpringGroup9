@@ -9,6 +9,10 @@ We are a group of Boğaziçi University students taking the course Project Devel
   <img src="https://user-images.githubusercontent.com/52619088/139734287-271be973-fb00-44c1-a1bc-d561cb6e8e42.jpeg" width="300" height="300" />
 </p>
 
+## Try Postory
+
+Click [here](http://3.67.83.253:3000/signIn) to experience Postory, to read some stories about places you know or never heard before!
+
 ## Group Members
 
 [Mert Alkan](https://github.com/mertlkn)
